@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{CB3D421C-797F-400E-BF1E-713D7646A547}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9C47A3D0-AA3A-4128-ABC1-00F3DB514AF0}"
+	ProjectSection(SolutionItems) = preProject
+		docs\todo.md = docs\todo.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{82E5A090-89F1-4B9F-9670-0A8E8D514EB7}"
 EndProject
