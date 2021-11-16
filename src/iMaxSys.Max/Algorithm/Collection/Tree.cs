@@ -21,25 +21,25 @@ namespace iMaxSys.Max.Algorithm.Collection
     {
         public long Id { get; set; }
 
-        public string Code { get; set; }
+        public string? Code { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
-        public string Style { get; set; }
+        public string? Style { get; set; }
 
-        public string Data { get; set; }
+        public string? Data { get; set; }
 
-        public string Action { get; set; }
+        public string? Action { get; set; }
 
-        public string Ext { get; set; }
+        public string? Ext { get; set; }
 
         public int Status { get; set; }
 
-        public List<ITreeNode> Nodes { get; set; }
+        public List<ITreeNode>? Nodes { get; set; }
     }
 
     public class TreeNode : ITreeNode
