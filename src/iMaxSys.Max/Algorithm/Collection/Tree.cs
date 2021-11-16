@@ -19,7 +19,7 @@ namespace iMaxSys.Max.Algorithm.Collection
 {
     public interface ITreeNode
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         public string? Code { get; set; }
 
