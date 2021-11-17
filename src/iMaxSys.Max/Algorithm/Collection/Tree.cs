@@ -316,9 +316,9 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// 构造
         /// </summary>
         /// <param name="stores">节点存储集</param>
-        public Tree(IList<ITreeStore>? stores)
+        public Tree(IList<ITreeStore> stores)
         {
-            if (stores?.Count > 0)
+            if (stores.Count > 0)
             {
                 Stores = stores;
                 Nodes = GetTree(stores)?.Nodes;
@@ -328,10 +328,27 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// <summary>
         /// 构造
         /// </summary>
+        /// <param name="root">根节点</param>
+        public Tree(ITreeNode root)
+        {
+            if (root.Nodes?.Count > 0)
+            {
+                Nodes = root.Nodes;
+                Stores = GetStore(Nodes);
+            }
+        }
+
+        /// <summary>
+        /// 构造
+        /// </summary>
         /// <param name="stores">节点集</param>
         public Tree(IList<ITreeNode> nodes)
         {
-            Nodes = nodes;
+            if (nodes.Count > 0)
+            {
+                Nodes = nodes;
+                Stores = GetStore(Nodes);
+            }
         }
 
         /// <summary>
@@ -341,6 +358,7 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// <returns></returns>
         public ITreeNode? GetTree(IList<ITreeStore> stores)
         {
+            //获取root store
             var store = stores.FirstOrDefault(x => x.Lv == 0);
             if (store != null)
             {
@@ -383,7 +401,7 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// </summary>
         /// <param name="store">树形存储</param>
         /// <returns></returns>
-        private ITreeNode MakeNode(ITreeStore store)
+        private static ITreeNode MakeNode(ITreeStore store)
         {
             return new TreeNode
             {
@@ -407,8 +425,8 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// <returns></returns>
         public IList<ITreeStore> GetStore(ITreeNode tree)
         {
-            List<ITreeStore> stores = new();
-            SetNodeStore(stores, tree, 0, 0);
+            IList<ITreeStore> stores = new List<ITreeStore>();
+            SetNodeStore(stores, tree);
             return stores;
         }
 
@@ -423,21 +441,20 @@ namespace iMaxSys.Max.Algorithm.Collection
             {
                 Name = "root",
                 Description = "",
-                Nodes = new List<ITreeNode>()
+                Nodes = nodes
             };
-            tree.Nodes = nodes;
             return GetStore(tree);
         }
 
         /// <summary>
-        /// 
+        /// 设置节点存储
         /// </summary>
         /// <param name="stores"></param>
         /// <param name="node"></param>
         /// <param name="lv"></param>
         /// <param name="deep"></param>
         /// <returns></returns>
-        private int SetNodeStore(IList<ITreeStore> stores, ITreeNode node, int lv, int deep)
+        private int SetNodeStore(IList<ITreeStore> stores, ITreeNode node, int lv = 0, int deep = 0)
         {
             int rv = lv + 1;
 
