@@ -11,13 +11,10 @@
 //日期：2021-11-16
 //----------------------------------------------------------------
 
-//https://www.sohu.com/a/347132712_468635
-
-using System.Linq;
-using System.Collections.Generic;
-
 namespace iMaxSys.Max.Algorithm.Collection
 {
+    #region ITreeNode
+
     /// <summary>
     /// ITreeNode
     /// </summary>
@@ -27,6 +24,16 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// Id
         /// </summary>
         public long Id { get; set; }
+
+        /// <summary>
+        /// Index
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        /// IsLeaf
+        /// </summary>
+        public bool IsLeaf { get; set; }
 
         /// <summary>
         /// Code
@@ -90,6 +97,16 @@ namespace iMaxSys.Max.Algorithm.Collection
         public long Id { get; set; }
 
         /// <summary>
+        /// Index
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        /// IsLeaf
+        /// </summary>
+        public bool IsLeaf { get; set; }
+
+        /// <summary>
         /// Code
         /// </summary>
         public string? Code { get; set; }
@@ -149,6 +166,16 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// Id
         /// </summary>
         public long Id { get; set; }
+
+        /// <summary>
+        /// Index
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        /// IsLeaf
+        /// </summary>
+        public bool IsLeaf { get; set; }
 
         /// <summary>
         /// Code
@@ -222,6 +249,16 @@ namespace iMaxSys.Max.Algorithm.Collection
         public long Id { get; set; }
 
         /// <summary>
+        /// Index
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        /// IsLeaf
+        /// </summary>
+        public bool IsLeaf { get; set; }
+
+        /// <summary>
         /// Code
         /// </summary>
         public string? Code { get; set; }
@@ -282,15 +319,27 @@ namespace iMaxSys.Max.Algorithm.Collection
         public int Status { get; set; }
     }
 
+    #endregion
+
     /// <summary>
     /// Tree
     /// </summary>
     public class Tree
     {
         /// <summary>
+        /// 根
+        /// </summary>
+        public ITreeNode? Root { get; set; }
+
+        /// <summary>
         /// 深度
         /// </summary>
         public int Deep { get; set; } = 0;
+
+        /// <summary>
+        /// 索引数
+        /// </summary>
+        public int IndexCount { get; set; } = 0;
 
         /// <summary>
         /// 节点数
@@ -303,14 +352,19 @@ namespace iMaxSys.Max.Algorithm.Collection
         public int LeafCount { get; set; } = 0;
 
         /// <summary>
-        /// 节点
+        /// 节点集
         /// </summary>
-        public IList<ITreeNode>? Nodes { get; set; }
+        public IEnumerable<ITreeNode>? NodeSet { get { return _nodeSet ??= GetAll(); } }
 
         /// <summary>
         /// 节点存储
         /// </summary>
-        public IList<ITreeStore>? Stores { get; set; }
+        public IList<ITreeStore>? Stores { get; }
+
+        /// <summary>
+        /// 节点集
+        /// </summary>
+        private IEnumerable<ITreeNode>? _nodeSet;
 
         /// <summary>
         /// 构造
@@ -321,7 +375,8 @@ namespace iMaxSys.Max.Algorithm.Collection
             if (stores.Count > 0)
             {
                 Stores = stores;
-                Nodes = GetTree(stores)?.Nodes;
+                Root = GetRoot(stores);
+                IndexCount = stores.Count;
             }
         }
 
@@ -333,21 +388,9 @@ namespace iMaxSys.Max.Algorithm.Collection
         {
             if (root.Nodes?.Count > 0)
             {
-                Nodes = root.Nodes;
-                Stores = GetStore(Nodes);
-            }
-        }
-
-        /// <summary>
-        /// 构造
-        /// </summary>
-        /// <param name="stores">节点集</param>
-        public Tree(IList<ITreeNode> nodes)
-        {
-            if (nodes.Count > 0)
-            {
-                Nodes = nodes;
-                Stores = GetStore(Nodes);
+                Root = root;
+                Stores = GetStore(root);
+                IndexCount = Stores.Count;
             }
         }
 
@@ -356,15 +399,15 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// </summary>
         /// <param name="stores">树形存储集合</param>
         /// <returns></returns>
-        public ITreeNode? GetTree(IList<ITreeStore> stores)
+        private ITreeNode? GetRoot(IList<ITreeStore> stores)
         {
             //获取root store
             var store = stores.FirstOrDefault(x => x.Lv == 0);
             if (store != null)
             {
-                ITreeNode root = MakeNode(store);
-                SetNodes(stores, root);
-                return root;
+                Root = MakeNode(store);
+                SetNodes(stores, Root);
+                return Root;
             }
             else
             {
@@ -406,6 +449,8 @@ namespace iMaxSys.Max.Algorithm.Collection
             return new TreeNode
             {
                 Id = store.Id,
+                Index = store.Index,
+                IsLeaf = store.IsLeaf,
                 Code = store.Code,
                 Name = store.Name,
                 Description = store.Description,
@@ -419,31 +464,39 @@ namespace iMaxSys.Max.Algorithm.Collection
         }
 
         /// <summary>
-        /// 获取树型结构数据存储
+        /// 生成存错
         /// </summary>
-        /// <param name="tree"></param>
+        /// <param name="store">树形节点</param>
         /// <returns></returns>
-        public IList<ITreeStore> GetStore(ITreeNode tree)
+        private static ITreeStore MakeStore(ITreeNode node)
         {
-            IList<ITreeStore> stores = new List<ITreeStore>();
-            SetNodeStore(stores, tree);
-            return stores;
+            return new TreeStore
+            {
+                Id = node.Id,
+                Index = node.Index,
+                IsLeaf = node.IsLeaf,
+                Code = node.Code,
+                Name = node.Name,
+                Description = node.Description,
+                Icon = node.Icon,
+                Style = node.Style,
+                Data = node.Data,
+                Action = node.Action,
+                Ext = node.Ext,
+                Status = node.Status,
+            };
         }
 
         /// <summary>
         /// 获取树型结构数据存储
         /// </summary>
-        /// <param name="nodes"></param>
+        /// <param name="root"></param>
         /// <returns></returns>
-        public IList<ITreeStore> GetStore(IList<ITreeNode> nodes)
+        public IList<ITreeStore> GetStore(ITreeNode root)
         {
-            ITreeNode tree = new TreeNode
-            {
-                Name = "root",
-                Description = "",
-                Nodes = nodes
-            };
-            return GetStore(tree);
+            IList<ITreeStore> stores = new List<ITreeStore>();
+            SetNodeStore(stores, root);
+            return stores;
         }
 
         /// <summary>
@@ -458,21 +511,9 @@ namespace iMaxSys.Max.Algorithm.Collection
         {
             int rv = lv + 1;
 
-            ITreeStore store = new TreeStore()
-            {
-                Id = node.Id,
-                Code = node.Code,
-                Name = node.Name,
-                Description = node.Description,
-                Icon = node.Icon,
-                Style = node.Style,
-                Lv = lv,
-                Deep = deep,
-                Data = node.Data,
-                Action = node.Action,
-                Ext = node.Ext,
-                Status = node.Status
-            };
+            ITreeStore store = MakeStore(node);
+            store.Lv = lv;
+            store.Deep = deep;
 
             stores.Add(store);
 
@@ -487,6 +528,75 @@ namespace iMaxSys.Max.Algorithm.Collection
             store.Rv = rv;
 
             return rv;
+        }
+
+        /// <summary>
+        /// 获取所有节点
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ITreeNode>? GetAll()
+        {
+            return Root?.Nodes != null && Root!.Nodes.Count > 0 ? GetAll(Root!.Nodes) : null;
+        }
+
+        /// <summary>
+        /// 获取所有节点
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <returns></returns>
+        private IEnumerable<ITreeNode> GetAll(IEnumerable<ITreeNode> nodes)
+        {
+            IEnumerable<ITreeNode> list = new List<ITreeNode>();
+
+            foreach (var item in nodes)
+            {
+                list = list.Append(item);
+                if (item.Nodes != null && item.Nodes.Any())
+                {
+                    list = list.Concat(GetAll(item.Nodes));
+                }
+                //加完直接点后是否要清楚nodes属性
+                //item.Nodes.Clear();
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 新增节点
+        /// </summary>
+        /// <param name="index">索引位置</param>
+        /// <param name="treeNode">节点</param>
+        public void Add(int index, ITreeNode treeNode)
+        {
+
+        }
+
+        /// <summary>
+        /// 新增子节点
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="treeNode"></param>
+        public void AddSub(int index, ITreeNode treeNode)
+        {
+        }
+
+        /// <summary>
+        /// 移除节点
+        /// </summary>
+        /// <param name="index"></param>
+        public void Remove(int index)
+        {
+
+        }
+
+        /// <summary>
+        /// 移动节点
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="indexy"></param>
+        public void Move(int index, int indexy)
+        {
+
         }
     }
 }

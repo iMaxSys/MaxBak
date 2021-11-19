@@ -8,5 +8,3 @@ public interface ITree
 
     public void Remove(int index);
 }
-
-
