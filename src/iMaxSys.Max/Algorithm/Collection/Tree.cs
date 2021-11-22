@@ -721,9 +721,9 @@ namespace iMaxSys.Max.Algorithm.Collection
         /// <summary>
         /// 移动节点
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="index"></param>
-        /// <param name="indexy"></param>
-        public void Move(int index, int indexy)
+        public void Move(int id, int index)
         {
 
         }
