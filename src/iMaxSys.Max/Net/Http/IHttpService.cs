@@ -44,7 +44,7 @@ namespace iMaxSys.Max.Net.Http
         /// <typeparam name="T"></typeparam>
         /// <param name="url"></param>
         /// <returns></returns>
-        Task<T> GetAsync<T>(string url);
+        Task<T?> GetAsync<T>(string url) where T : class;
 
         /// <summary>
         /// GetAsync
@@ -53,7 +53,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        Task<T> GetAsync<T>(string url, bool isSnakeFormatter);
+        Task<T?> GetAsync<T>(string url, bool isSnakeFormatter) where T : class;
 
         /// <summary>
         /// GetAsync
@@ -62,7 +62,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        Task<T> GetAsync<T>(string url, Dictionary<string, string> data);
+        Task<T?> GetAsync<T>(string url, Dictionary<string, string> data) where T : class;
 
         /// <summary>
         /// GetAsync
@@ -72,7 +72,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="data"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        Task<T> GetAsync<T>(string url, Dictionary<string, string> data, bool isSnakeFormatter);
+        Task<T?> GetAsync<T>(string url, Dictionary<string, string> data, bool isSnakeFormatter) where T : class;
 
         /// <summary>
         /// PostAsync
@@ -112,7 +112,7 @@ namespace iMaxSys.Max.Net.Http
         /// <typeparam name="T"></typeparam>
         /// <param name="url"></param>
         /// <returns></returns>
-        Task<T> PostAsync<T>(string url);
+        Task<T?> PostAsync<T>(string url) where T : class;
 
         /// <summary>
         /// PostAsync
@@ -121,7 +121,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        Task<T> PostAsync<T>(string url, bool isSnakeFormatter);
+        Task<T?> PostAsync<T>(string url, bool isSnakeFormatter) where T : class;
 
         /// <summary>
         /// PostAsync
@@ -131,7 +131,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="credentials"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        Task<T> PostAsync<T>(string url, string credentials, bool isSnakeFormatter);
+        Task<T?> PostAsync<T>(string url, string credentials, bool isSnakeFormatter) where T : class;
 
         /// <summary>
         /// PostAsync
@@ -140,25 +140,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        Task<T> PostAsync<T>(string url, Dictionary<string, string> data);
-
-        /// <summary>
-        /// PostAsync
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="url"></param>
-        /// <param name="data"></param>
-        /// <param name="credentials"></param>
-        /// <returns></returns>
-        Task<T> PostAsync<T>(string url, Dictionary<string, string> data, string credentials);
-
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="url"></param>
-        /// <param name="data"></param>
-        /// <param name="isSnakeFormatter"></param>
-        /// <returns></returns>
-        Task<T> PostAsync<T>(string url, Dictionary<string, string> data, bool isSnakeFormatter);
+        Task<T?> PostAsync<T>(string url, Dictionary<string, string> data) where T : class;
 
         /// <summary>
         /// PostAsync
@@ -167,9 +149,27 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <param name="credentials"></param>
+        /// <returns></returns>
+        Task<T?> PostAsync<T>(string url, Dictionary<string, string> data, string credentials) where T : class;
+
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        Task<T> PostAsync<T>(string url, Dictionary<string, string> data, string credentials, bool isSnakeFormatter);
+        Task<T?> PostAsync<T>(string url, Dictionary<string, string> data, bool isSnakeFormatter) where T : class;
+
+        /// <summary>
+        /// PostAsync
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <param name="credentials"></param>
+        /// <param name="isSnakeFormatter"></param>
+        /// <returns></returns>
+        Task<T?> PostAsync<T>(string url, Dictionary<string, string> data, string credentials, bool isSnakeFormatter) where T : class;
 
         /// <summary>
         /// PostJson
@@ -178,7 +178,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="json"></param>
         /// <returns></returns>
-        Task<T> PostJson<T>(string url, string json);
+        Task<T?> PostJsonAsync<T>(string url, string json) where T : class;
 
         /// <summary>
         /// PostJson
@@ -188,7 +188,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="json"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        Task<T> PostJson<T>(string url, string json, bool isSnakeFormatter);
+        Task<T?> PostJsonAsync<T>(string url, string json, bool isSnakeFormatter) where T : class;
 
         /// <summary>
         /// PostXml
@@ -196,6 +196,6 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="xml"></param>
         /// <returns></returns>
-        Task<string> PostXml(string url, string xml);
+        Task<string> PostXmlAsync(string url, string xml);
     }
 }
