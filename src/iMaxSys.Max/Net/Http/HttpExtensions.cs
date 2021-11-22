@@ -11,20 +11,29 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using System.Net.Http;
-using System.Threading.Tasks;
+namespace iMaxSys.Max.Net.Http;
 
-using Newtonsoft.Json;
-
-namespace iMaxSys.Max.Net.Http
+public static class HttpExtensions
 {
-    public static class HttpExtensions
+    /// <summary>
+    /// 读取Json反序列化对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="content"></param>
+    /// <returns></returns>
+    public static T? ReadAsJson<T>(this HttpContent content)
     {
-        public static async Task<T> ReadAsJsonAsync<T>(this HttpContent content)
-        {
-            string json = await content.ReadAsStringAsync();
-            T value = JsonConvert.DeserializeObject<T>(json);
-            return value;
-        }
+        return JsonSerializer.Deserialize<T>(content.ReadAsStream());
+    }
+
+    /// <summary>
+    /// 异步读取Json反序列化对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="content"></param>
+    /// <returns></returns>
+    public static async Task<T?> ReadAsJsonAsync<T>(this HttpContent content)
+    {
+        return await JsonSerializer.DeserializeAsync<T>(await content.ReadAsStreamAsync());
     }
 }

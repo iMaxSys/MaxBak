@@ -50,7 +50,7 @@ namespace iMaxSys.Max.Net.Http
             return await Post(url, null, data);
         }
 
-        public static async Task<T> Get<T>(string url, bool isSnakeFormatter)
+        public static async Task<T?> Get<T>(string url, bool isSnakeFormatter)
         {
             using (var client = new System.Net.Http.HttpClient())
             {
@@ -103,7 +103,7 @@ namespace iMaxSys.Max.Net.Http
             return await Post<T>(url, null, data, isSnakeFormatter);
         }
 
-        public static async Task<T> Post<T>(string url, string credentials, Dictionary<string, string> data, bool isSnakeFormatter)
+        public static async Task<T?> Post<T>(string url, string credentials, Dictionary<string, string> data, bool isSnakeFormatter)
         {
             using (var client = new System.Net.Http.HttpClient())
             {
@@ -148,7 +148,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static async Task<T> PostJson<T>(string url, string json, bool isSnakeFormatter)
+        public static async Task<T?> PostJson<T>(string url, string json, bool isSnakeFormatter)
         {
             using (var client = new System.Net.Http.HttpClient())
             {

@@ -36,26 +36,23 @@ namespace iMaxSys.Max.Net.Http
         private readonly IHttpClientFactory _httpClientFactory;
 
         //静态for性能
-        private static JsonSerializerOptions _jsonSerializerOptions;
-        private static JsonSerializerOptions _snakeJsonSerializerOptions;
+        private static JsonSerializerOptions _jsonSerializerOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All),
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        private static JsonSerializerOptions _snakeJsonSerializerOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All),
+            PropertyNamingPolicy = new SnakeCaseNamingPolicy()
+        };
 
         public HttpService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-
-            _jsonSerializerOptions ??= new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All),
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
-
-            _snakeJsonSerializerOptions ??= new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All),
-                PropertyNamingPolicy = new SnakeCaseNamingPolicy()
-            };
         }
 
         /// <summary>
@@ -74,9 +71,9 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public async Task<string> GetAsync(string url, Dictionary<string, string> data)
+        public async Task<string> GetAsync(string url, Dictionary<string, string>? data)
         {
-            string uri = "";
+            string uri = String.Empty;
             if (data != null && data.Count > 0)
             {
                 string query = string.Join("&", data.Select(x => $"{x.Key}={x.Value}"));
@@ -126,6 +123,7 @@ namespace iMaxSys.Max.Net.Http
             return await GetAsync<T>(url, data, false);
         }
 
+
         /// <summary>
         /// GetAsync
         /// </summary>
@@ -134,10 +132,10 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="data"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        public async Task<T> GetAsync<T>(string url, Dictionary<string, string> data, bool isSnakeFormatter)
+        public async Task<T?> GetAsync<T>(string url, Dictionary<string, string>? data, bool isSnakeFormatter)
         {
-            var result = await GetAsync(url, data);
-            return JsonSerializer.Deserialize<T>(result, isSnakeFormatter ? _snakeJsonSerializerOptions : _jsonSerializerOptions);
+            //var result = await GetAsync(url, data);
+            return JsonSerializer.Deserialize<T>("", isSnakeFormatter ? _snakeJsonSerializerOptions : _jsonSerializerOptions);
         }
 
         /// <summary>
@@ -274,7 +272,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="data"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        public async Task<T> PostAsync<T>(string url, Dictionary<string, string> data, bool isSnakeFormatter)
+        public async Task<T?> PostAsync<T>(string url, Dictionary<string, string> data, bool isSnakeFormatter) where T : class
         {
             return await PostAsync<T>(url, data, null, isSnakeFormatter);
         }
@@ -288,7 +286,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="credentials"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        public async Task<T> PostAsync<T>(string url, Dictionary<string, string> data, string credentials, bool isSnakeFormatter)
+        public async Task<T?> PostAsync<T>(string url, Dictionary<string, string> data, string? credentials, bool isSnakeFormatter) where T : class
         {
             var result = await PostAsync(url, data, credentials);
             return JsonSerializer.Deserialize<T>(result, isSnakeFormatter ? _snakeJsonSerializerOptions : _jsonSerializerOptions);
@@ -301,9 +299,9 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="json"></param>
         /// <returns></returns>
-        public async Task<T> PostJson<T>(string url, string json)
+        public async Task<T?> PostJsonAsync<T>(string url, string json) where T : class
         {
-            return await PostJson<T>(url, json, false);
+            return await PostJsonAsync<T>(url, json, false);
         }
 
         /// <summary>
@@ -314,24 +312,23 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="json"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        public async Task<T> PostJson<T>(string url, string json, bool isSnakeFormatter)
+        public async Task<T?> PostJsonAsync<T>(string url, string json, bool isSnakeFormatter) where T : class
         {
             using var httpClient = _httpClientFactory.CreateClient();
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+            StringContent content = new(json, Encoding.UTF8, "application/json");
             var response = await httpClient.PostAsync(url, content);
+            Stream result;
 
-            string result;
             if (response.IsSuccessStatusCode)
             {
-                result = await response.Content.ReadAsStringAsync();
+                result = await response.Content.ReadAsStreamAsync();
             }
             else
             {
                 throw new MaxException(response.StatusCode);
             }
 
-            return JsonSerializer.Deserialize<T>(result, isSnakeFormatter ? _snakeJsonSerializerOptions : _jsonSerializerOptions);
+            return await JsonSerializer.DeserializeAsync<T>(result, isSnakeFormatter ? _snakeJsonSerializerOptions : _jsonSerializerOptions);
         }
 
         /// <summary>
@@ -340,10 +337,10 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="url"></param>
         /// <param name="xml"></param>
         /// <returns></returns>
-        public async Task<string> PostXml(string url, string xml)
+        public async Task<string> PostXmlAsync(string url, string xml)
         {
             using var httpClient = _httpClientFactory.CreateClient();
-            StringContent content = new StringContent(xml, Encoding.UTF8, "application/xml");
+            StringContent content = new(xml, Encoding.UTF8, "application/xml");
 
             var response = await httpClient.PostAsync(url, content);
 
