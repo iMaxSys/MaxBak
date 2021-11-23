@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 
 namespace iMaxSys.Max.Json.Converters
 {
+
     /// <summary>
     /// 日期时间转换器
     /// </summary>
@@ -24,7 +25,7 @@ namespace iMaxSys.Max.Json.Converters
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return DateTime.Parse(reader.GetString());
+            return reader.GetDateTime();
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
@@ -40,7 +41,7 @@ namespace iMaxSys.Max.Json.Converters
     {
         public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return string.IsNullOrEmpty(reader.GetString()) ? default(DateTime?) : DateTime.Parse(reader.GetString());
+            return reader.TryGetDateTime(out DateTime result) ? result : null;
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)

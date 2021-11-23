@@ -24,7 +24,7 @@ namespace iMaxSys.Max.Json.Converters
     {
         public override Decimal Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return Decimal.Parse(reader.GetString());
+            return reader.GetDecimal();
         }
 
         public override void Write(Utf8JsonWriter writer, Decimal value, JsonSerializerOptions options)
@@ -40,7 +40,7 @@ namespace iMaxSys.Max.Json.Converters
     {
         public override Decimal? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return string.IsNullOrEmpty(reader.GetString()) ? default(Decimal?) : Decimal.Parse(reader.GetString());
+            return reader.TryGetDecimal(out decimal result) ? result : null;
         }
 
         public override void Write(Utf8JsonWriter writer, Decimal? value, JsonSerializerOptions options)

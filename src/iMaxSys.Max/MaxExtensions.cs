@@ -11,6 +11,10 @@
 //日期：2021-10-20
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Options;
+using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Max.Exceptions;
+
 namespace iMaxSys.Max;
 
 /// <summary>
@@ -52,9 +56,8 @@ public static class MaxExtensions
     public static IApplicationBuilder UseMax(this IApplicationBuilder builder)
     {
         //IdWorker初始
-        MaxOption option = builder.ApplicationServices.GetService<IOptions<MaxOption>>().Value;
+        MaxOption option = builder.ApplicationServices.GetService<IOptions<MaxOption>>()!.Value;
         IdWorker.Init(option.Network.ServerId, option.Network.DataCenterId);
-
         //异常&身份中间件
         return builder.UseMiddleware<ExceptionHandlingMiddleware>();
     }

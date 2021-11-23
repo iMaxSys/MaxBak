@@ -19,9 +19,8 @@ namespace iMaxSys.Max.Json.NamingPolicy
             {
                 n = Regex.Replace(name, @"((?<=.)[A-Z][a-z]*)", @"_$1").ToLower();
             }
-            catch (Exception ex)
+            catch
             {
-                var e = ex;
             }
             return n;
         }
@@ -34,13 +33,7 @@ namespace iMaxSys.Max.Json.NamingPolicy
     {
         public override string ConvertName(string name)
         {
-            return string.Concat(
-                name.Select(
-                    (x, i) => i > 0 && char.IsUpper(x)
-                        ? "_" + x
-                        : x.ToString()
-                        )
-                ).ToLower();
+            return string.Concat(name.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x : x.ToString())).ToLower();
         }
     }
 }

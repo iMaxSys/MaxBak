@@ -43,9 +43,9 @@ namespace iMaxSys.Max.Exceptions
         private readonly RequestDelegate _next;
         private readonly ExceptionHandlingOptions _options;
 
-        static JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All) };
+        static JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All) };
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ExceptionHandlingOptions options = default)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ExceptionHandlingOptions options)
         {
             _next = next;
             _options = options ?? new ExceptionHandlingOptions();

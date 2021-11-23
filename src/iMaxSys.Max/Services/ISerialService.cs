@@ -1,4 +1,6 @@
-﻿namespace iMaxSys.Max.Services;
+﻿using iMaxSys.Max.DependencyInjection;
+
+namespace iMaxSys.Max.Services;
 
 /// <summary>
 /// 序列号服务

@@ -329,7 +329,7 @@ namespace iMaxSys.Max.Data.EFCore
         /// <param name="id"></param>
         /// <param name="noTracking"></param>
         /// <returns></returns>
-        public virtual async Task<T> GetAsync(long id, bool noTracking = true)
+        public virtual async Task<T?> GetAsync(long id, bool noTracking = true)
         {
             IQueryable<T> query = _dbContext.Set<T>();
 
@@ -341,12 +341,12 @@ namespace iMaxSys.Max.Data.EFCore
             return await query.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public virtual async Task<T> FindAsync(params object[] keyValues)
+        public virtual async Task<T?> FindAsync(params object[] keyValues)
         {
             return await _dbContext.Set<T>().FindAsync(keyValues).ConfigureAwait(false);
         }
 
-        public async Task<T> FindAsync(object[] keyValues, bool noTracking = true, CancellationToken cancellationToken = default)
+        public async Task<T?> FindAsync(object[] keyValues, bool noTracking = true, CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<T>().FindAsync(keyValues, cancellationToken).ConfigureAwait(false);
         }
@@ -356,7 +356,7 @@ namespace iMaxSys.Max.Data.EFCore
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        public virtual async Task<T> FirstOrDefaultAsync(ISpecification<T> spec = null)
+        public virtual async Task<T?> FirstOrDefaultAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
@@ -366,17 +366,17 @@ namespace iMaxSys.Max.Data.EFCore
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        public virtual async Task<T> LastOrDefaultAsync(ISpecification<T> spec = null)
+        public virtual async Task<T?> LastOrDefaultAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).LastOrDefaultAsync();
         }
 
-        public virtual async Task<T> GetSingleOrDefaultAsync(ISpecification<T> spec = null)
+        public virtual async Task<T?> GetSingleOrDefaultAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).SingleOrDefaultAsync();
         }
 
-        public virtual IQueryable<T> GetFromSql(string sql, params object[] parameters)
+        public virtual IQueryable<T?> GetFromSql(string sql, params object[] parameters)
         {
             return _dbContext.Set<T>().FromSqlRaw<T>(sql, parameters);
         }
@@ -407,7 +407,7 @@ namespace iMaxSys.Max.Data.EFCore
         /// <summary>
         /// GetListAsync
         /// </summary>
-        public virtual async Task<List<T>> GetListAsync(ISpecification<T> spec = null)
+        public virtual async Task<List<T>> GetListAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
         }
@@ -426,7 +426,7 @@ namespace iMaxSys.Max.Data.EFCore
         /// <param name="spec"></param>
         /// <param name="noTracking"></param>
         /// <returns></returns>
-        public virtual async Task<IPagedList<T>> GetPagedListAsync(ISpecification<T> spec = null)
+        public virtual async Task<IPagedList<T>> GetPagedListAsync(ISpecification<T> spec)
         {
             return await ApplyPagedSpecification(spec);
         }

@@ -11,7 +11,8 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-namespace iMaxSys.Max.Web.Mvc.ApplicatonModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 /// <summary>
 /// ApiExplorerPostOnlyConvention
@@ -21,6 +22,21 @@ public class ApiExplorerPostOnlyConvention : IActionModelConvention
     public static void Apply(ActionModel action)
     {
         //action.ApiExplorer.IsVisible = action.Attributes.OfType<HttpPostAttribute>().Any();
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override string? ToString()
+    {
+        return base.ToString();
     }
 }
 

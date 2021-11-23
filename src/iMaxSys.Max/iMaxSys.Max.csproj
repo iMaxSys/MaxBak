@@ -29,5 +29,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Net\Http\HttpClient.cs" />
+    <Compile Remove="Media\Extensions.cs" />
+    <Compile Remove="Media\WatermarkPosition.cs" />
+    <Compile Remove="Media\ThumbnailCutMode.cs" />
+    <Compile Remove="Media\ImageWatermarker.cs" />
+    <Compile Remove="Media\ImageUtilities.cs" />
+    <Compile Remove="Media\Mime\ContentType.cs" />
+    <Compile Remove="Media\Mime\ContentTypeFilter.cs" />
+    <Compile Remove="Media\Mime\DefaultMimeItems.cs" />
+    <Compile Remove="Media\Mime\IMimeMapper.cs" />
+    <Compile Remove="Media\Mime\MimeMapper.cs" />
+    <Compile Remove="Media\Mime\MimeMappingItem.cs" />
   </ItemGroup>
 </Project>

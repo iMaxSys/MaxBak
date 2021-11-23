@@ -11,6 +11,8 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.DependencyInjection;
+
 namespace iMaxSys.Max.Services;
 /// <summary>
 /// IIdGenerationService(Singleton)

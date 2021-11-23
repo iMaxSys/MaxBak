@@ -1,4 +1,6 @@
 ﻿
+using iMaxSys.Max.Caching;
+
 namespace iMaxSys.Max.Services.Increase;
 
 public class DayIncreaseService : ISerialService

@@ -24,7 +24,7 @@ namespace iMaxSys.Max.Json.Converters
     {
         public override int Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return int.Parse(reader.GetString());
+            return reader.GetInt32();
         }
 
         public override void Write(Utf8JsonWriter writer, int value, JsonSerializerOptions options)
@@ -40,7 +40,7 @@ namespace iMaxSys.Max.Json.Converters
     {
         public override int? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return string.IsNullOrEmpty(reader.GetString()) ? default(int?) : int.Parse(reader.GetString());
+            return reader.TryGetInt32(out int result) ? result : null;
         }
 
         public override void Write(Utf8JsonWriter writer, int? value, JsonSerializerOptions options)

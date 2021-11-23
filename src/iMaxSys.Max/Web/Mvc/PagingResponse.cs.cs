@@ -11,6 +11,8 @@
 //日期：2021-10-12
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Collection;
+
 namespace iMaxSys.Max.Web.Mvc;
 
 /// <summary>

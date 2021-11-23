@@ -172,21 +172,21 @@ namespace iMaxSys.Max.Data
         /// <param name="id"></param>
         /// <param name="noTracking"></param>
         /// <returns></returns>
-        Task<T> GetAsync(long id, bool noTracking = true);
+        Task<T?> GetAsync(long id, bool noTracking = true);
 
         /// <summary>
         /// FirstOrDefaultAsync
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        Task<T> FirstOrDefaultAsync(ISpecification<T> spec = null);
+        Task<T?> FirstOrDefaultAsync(ISpecification<T> spec);
 
         /// <summary>
         /// LastOrDefaultAsync
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        Task<T> LastOrDefaultAsync(ISpecification<T> spec = null);
+        Task<T?> LastOrDefaultAsync(ISpecification<T> spec);
 
         /// <summary>
         /// GetAllAsync
@@ -207,7 +207,7 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        Task<List<T>> GetListAsync(ISpecification<T> spec = null);
+        Task<List<T>> GetListAsync(ISpecification<T> spec);
 
         /// <summary>
         /// GetListAsync
@@ -219,7 +219,7 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        Task<IPagedList<T>> GetPagedListAsync(ISpecification<T> spec = null);
+        Task<IPagedList<T>> GetPagedListAsync(ISpecification<T> spec);
 
         /// <summary>
         /// GetPagedListAsync

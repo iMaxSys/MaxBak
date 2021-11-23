@@ -78,7 +78,7 @@ namespace iMaxSys.Max.Data.EFCore
                         for (var i = 0; i < reader.FieldCount; i++)
                         {
                             var name = reader.GetName(i);
-                            PropertyInfo prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                            PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
                             if (prop == null)
                             {
                                 continue;
@@ -119,7 +119,7 @@ namespace iMaxSys.Max.Data.EFCore
                         for (var i = 0; i < reader.FieldCount; i++)
                         {
                             var name = reader.GetName(i);
-                            PropertyInfo prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                            PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
                             if (prop == null)
                             {
                                 continue;
@@ -142,7 +142,7 @@ namespace iMaxSys.Max.Data.EFCore
         /// <param name="db"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static async Task<T> QueryAsync<T>(this DbContext dbContext, string sql, MySqlParameter[] parameters) where T : class, new()
+        public static async Task<T> QueryAsync<T>(this DbContext dbContext, string sql, DbParameter[] parameters) where T : class, new()
         {
             using (var command = dbContext.Database.GetDbConnection().CreateCommand())
             {
@@ -161,7 +161,7 @@ namespace iMaxSys.Max.Data.EFCore
                         for (var i = 0; i < reader.FieldCount; i++)
                         {
                             var name = reader.GetName(i);
-                            PropertyInfo prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                            PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
                             if (prop == null)
                             {
                                 continue;
@@ -203,7 +203,7 @@ namespace iMaxSys.Max.Data.EFCore
                         for (var i = 0; i < reader.FieldCount; i++)
                         {
                             var name = reader.GetName(i);
-                            PropertyInfo prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                            PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
                             if (prop == null)
                             {
                                 continue;
@@ -226,7 +226,7 @@ namespace iMaxSys.Max.Data.EFCore
         /// <param name="db"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static List<T> QueryList<T>(this DbContext dbContext, string sql, MySqlParameter[] parameters) where T : class, new()
+        public static List<T> QueryList<T>(this DbContext dbContext, string sql, DbParameter[] parameters) where T : class, new()
         {
             using (var command = dbContext.Database.GetDbConnection().CreateCommand())
             {
@@ -246,7 +246,7 @@ namespace iMaxSys.Max.Data.EFCore
                         for (var i = 0; i < reader.FieldCount; i++)
                         {
                             var name = reader.GetName(i);
-                            PropertyInfo prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                            PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
                             if (prop == null)
                             {
                                 continue;
@@ -288,7 +288,7 @@ namespace iMaxSys.Max.Data.EFCore
                         for (var i = 0; i < reader.FieldCount; i++)
                         {
                             var name = reader.GetName(i);
-                            PropertyInfo prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                            PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
                             if (prop == null)
                             {
                                 continue;
@@ -311,7 +311,7 @@ namespace iMaxSys.Max.Data.EFCore
         /// <param name="db"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static async Task<List<T>> QueryListAsync<T>(this DbContext dbContext, string sql, MySqlParameter[] parameters) where T : class, new()
+        public static async Task<List<T>> QueryListAsync<T>(this DbContext dbContext, string sql, DbParameter[] parameters) where T : class, new()
         {
             using (var command = dbContext.Database.GetDbConnection().CreateCommand())
             {
@@ -331,7 +331,7 @@ namespace iMaxSys.Max.Data.EFCore
                         for (var i = 0; i < reader.FieldCount; i++)
                         {
                             var name = reader.GetName(i);
-                            PropertyInfo prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                            PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
                             if (prop == null)
                             {
                                 continue;
@@ -359,12 +359,12 @@ namespace iMaxSys.Max.Data.EFCore
             return await dbContext.Database.ExecuteSqlRawAsync(sql, parameters).ConfigureAwait(false);
         }
 
-        public static async Task<int> ExecuteCommandAsync(this DbContext dbContext, string sql, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<int> ExecuteCommandAsync(this DbContext dbContext, string sql, CancellationToken cancellationToken = default)
         {
             return await dbContext.Database.ExecuteSqlRawAsync(sql, cancellationToken).ConfigureAwait(false);
         }
 
-        public static async Task<int> ExecuteCommandAsync(this DbContext dbContext, string sql, IEnumerable<object> parameters, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<int> ExecuteCommandAsync(this DbContext dbContext, string sql, IEnumerable<object> parameters, CancellationToken cancellationToken = default)
         {
             return await dbContext.Database.ExecuteSqlRawAsync(sql, parameters, cancellationToken).ConfigureAwait(false);
         }

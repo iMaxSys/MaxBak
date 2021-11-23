@@ -59,7 +59,7 @@ namespace iMaxSys.Max.Data
             return _context.Set<TEntity>();
         }
 
-        public IRepository<TEntity> GetRepo<TEntity>() where TEntity : Entity
+        public IRepository<TEntity>? GetRepo<TEntity>() where TEntity : Entity
         {
             try
             {
@@ -67,7 +67,7 @@ namespace iMaxSys.Max.Data
                 var repo = _serviceProvider.GetServices(typeof(IRepository<TEntity>));
                 return _serviceProvider.GetServices<IRepository<TEntity>>().FirstOrDefault(x => x.Code == _context.GetType().GetHashCode());
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }

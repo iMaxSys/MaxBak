@@ -22,7 +22,7 @@ namespace iMaxSys.Max.Exceptions
     /// </summary>
     public static class ExceptionHandlingExtensions
     {
-        public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder app, Action<ExceptionHandlingOptions> optionsAction = null)
+        public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder app, Action<ExceptionHandlingOptions> optionsAction)
         {
             var options = new ExceptionHandlingOptions();
             optionsAction(options);

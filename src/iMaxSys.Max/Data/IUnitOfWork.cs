@@ -55,7 +55,7 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        IRepository<TEntity> GetRepo<TEntity>() where TEntity : Entity;
+        IRepository<TEntity>? GetRepo<TEntity>() where TEntity : Entity;
     }
 
     /// <summary>
