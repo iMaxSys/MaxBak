@@ -58,3 +58,4 @@ using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Collection;
 using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Max.Json.NamingPolicy;

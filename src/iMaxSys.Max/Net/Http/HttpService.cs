@@ -11,18 +11,6 @@
 //日期：2020-05-01
 //----------------------------------------------------------------
 
-using System.Text;
-
-using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
-using System.Text.Unicode;
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using System.Text.Encodings.Web;
-using System.Collections.Generic;
-
-
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Json.NamingPolicy;
 
@@ -36,14 +24,14 @@ namespace iMaxSys.Max.Net.Http
         private readonly IHttpClientFactory _httpClientFactory;
 
         //静态for性能
-        private static JsonSerializerOptions _jsonSerializerOptions = new()
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
         {
             PropertyNameCaseInsensitive = true,
             Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All),
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        private static JsonSerializerOptions _snakeJsonSerializerOptions = new()
+        private static readonly JsonSerializerOptions _snakeJsonSerializerOptions = new()
         {
             PropertyNameCaseInsensitive = true,
             Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All),
@@ -286,7 +274,7 @@ namespace iMaxSys.Max.Net.Http
         /// <param name="credentials"></param>
         /// <param name="isSnakeFormatter"></param>
         /// <returns></returns>
-        public async Task<T?> PostAsync<T>(string url, Dictionary<string, string> data, string? credentials, bool isSnakeFormatter) where T : class
+        public async Task<T?> PostAsync<T>(string url, Dictionary<string, string>? data, string? credentials, bool isSnakeFormatter) where T : class
         {
             string? result = await PostAsync(url, data, credentials);
             return JsonSerializer.Deserialize<T>(result, isSnakeFormatter ? _snakeJsonSerializerOptions : _jsonSerializerOptions);
