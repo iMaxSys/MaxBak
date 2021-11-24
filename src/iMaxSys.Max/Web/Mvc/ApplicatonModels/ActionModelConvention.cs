@@ -45,7 +45,7 @@ public class ActionModelConventionOnlyFromBody : IActionModelConvention
             //if (typeof(RequestObject).IsAssignableFrom((parameter.ParameterInfo.ParameterType)))
             if (parameter.ParameterInfo.ParameterType.IsClass && !parameter.ParameterInfo.ParameterType.IsSealed)
             {
-                parameter.BindingInfo = parameter.BindingInfo ?? new BindingInfo();
+                parameter.BindingInfo ??= new BindingInfo();
                 parameter.BindingInfo.BindingSource = BindingSource.Body;
             }
         }
