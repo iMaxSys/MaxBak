@@ -92,12 +92,12 @@ namespace iMaxSys.Max.Domain
         /// Android
         /// </summary>
         [Description("Android")]
-        Android = 30,
+        Android = 80,
         /// <summary>
         /// iOS
         /// </summary>
         [Description("iOS")]
-        iOS = 31,
+        iOS = 90,
     }
 
     /// <summary>
@@ -159,6 +159,11 @@ namespace iMaxSys.Max.Domain
     /// </summary>
     public enum TakeTime
     {
+        /// <summary>
+        /// 无
+        /// </summary>
+        [Description("无")]
+        None = 0,
         /// <summary>
         /// 上午
         /// </summary>

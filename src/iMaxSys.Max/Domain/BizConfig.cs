@@ -21,31 +21,31 @@ namespace iMaxSys.Max.Domain
         /// <summary>
         /// 应用Id
         /// </summary>
-        public long XappId { get; set; }
+        public long? XappId { get; set; }
 
         /// <summary>
         /// 应用名称
         /// </summary>
-        public string XappName { get; set; }
+        public string? XappName { get; set; }
 
         /// <summary>
         /// TenantId
         /// </summary>
-        public long TenantId { get; set; }
+        public long? TenantId { get; set; }
 
         /// <summary>
         /// TenantName
         /// </summary>
-        public string TenantName { get; set; }
+        public string? TenantName { get; set; }
 
         /// <summary>
         /// 业务Id
         /// </summary>
-        public long BizId { get; set; }
+        public long? BizId { get; set; }
 
         /// <summary>
         /// 业务名称
         /// </summary>
-        public string BizName { get; set; }
+        public string? BizName { get; set; }
     }
 }

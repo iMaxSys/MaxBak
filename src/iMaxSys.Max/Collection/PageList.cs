@@ -26,22 +26,22 @@ namespace iMaxSys.Max.Collection
         /// <summary>
         /// Gets the page index (current).
         /// </summary>
-        public int Index { get; set; }
+        public int Index { get; }
 
         /// <summary>
         /// Gets the page size.
         /// </summary>
-        public int Size { get; set; }
+        public int Size { get; }
 
         /// <summary>
         /// Gets the total count of the list of type <typeparamref name="T"/>
         /// </summary>
-        public int Total { get; set; }
+        public int Total { get; }
 
         /// <summary>
         /// Gets the total pages.
         /// </summary>
-        public int TotalPages { get; set; }
+        public int TotalPages { get; }
 
         /// <summary>
         /// Gets the has previous page.
@@ -58,7 +58,12 @@ namespace iMaxSys.Max.Collection
         /// <summary>
         /// Gets the current page items. 考虑性能问题，不用IList用List
         /// </summary>
-        public List<T> Items { get; set; }
+        public IList<T> Items { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PagedList{T}" /> class.
+        /// </summary>
+        public PagedList() => Items = new List<T>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PagedList{T}" /> class.
@@ -66,14 +71,14 @@ namespace iMaxSys.Max.Collection
         /// <param name="source">The source.</param>
         /// <param name="index">The index of the page.</param>
         /// <param name="size">The size of the page.</param>
-        internal PagedList(IEnumerable<T> source, int index, int size)
+        public PagedList(IEnumerable<T> source, int index, int size)
         {
             if (source is IQueryable<T> querable)
             {
                 Index = index;
                 Size = size;
                 Total = querable.Count();
-                TotalPages = (int)Math.Ceiling(Total / (double)Size);
+                TotalPages = Total / Size;
                 Items = querable.Skip((Index * Size)).Take(Size).ToList();
             }
             else
@@ -81,8 +86,7 @@ namespace iMaxSys.Max.Collection
                 Index = index;
                 Size = size;
                 Total = source.Count();
-                TotalPages = (int)Math.Ceiling(Total / (double)Size);
-
+                TotalPages = Total / Size;
                 Items = source.Skip((Index * Size)).Take(Size).ToList();
             }
         }
@@ -90,6 +94,18 @@ namespace iMaxSys.Max.Collection
         /// <summary>
         /// Initializes a new instance of the <see cref="PagedList{T}" /> class.
         /// </summary>
-        internal PagedList() => Items = new List<T>();
+        /// <param name="current"></param>
+        /// <param name="index"></param>
+        /// <param name="size"></param>
+        /// <param name="total"></param>
+        /// <param name="totalPages"></param>
+        public PagedList(IEnumerable<T> current, int index, int size, int total)
+        {
+            Index = index;
+            Size = size;
+            Total = total;
+            TotalPages = Total / Size;
+            Items = current.ToList();
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace iMaxSys.Max.Collection
         /// <param name="items">The items.</param>
         /// <param name="predicate">The predicate.</param>
         /// <returns></returns>
-        public static T Find<T>(this T[] items, Predicate<T> predicate)
+        public static T? Find<T>(this T[] items, Predicate<T> predicate)
         {
             return Array.Find(items, predicate);
         }
@@ -79,7 +79,7 @@ namespace iMaxSys.Max.Collection
         }
 
         /// <summary>
-        ///     Checks whether or not collection is null or empty. Assumes colleciton can be safely enumerated multiple times.
+        /// Checks whether or not collection is null or empty. Assumes colleciton can be safely enumerated multiple times.
         /// </summary>
         /// <param name="this">The this.</param>
         /// <returns>
@@ -91,7 +91,6 @@ namespace iMaxSys.Max.Collection
             {
                 return !@this.GetEnumerator().MoveNext();
             }
-
             return true;
         }
     }

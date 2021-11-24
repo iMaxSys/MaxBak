@@ -11,8 +11,6 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System;
-
 using iMaxSys.Max.Extentions;
 
 namespace iMaxSys.Max.Algorithm

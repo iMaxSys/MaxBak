@@ -54,8 +54,8 @@ namespace iMaxSys.Max.Collection
         bool HasNext { get; }
 
         /// <summary>
-        /// Gets the current page items. 考虑性能问题，不用IList用List
+        /// Gets the current page items.
         /// </summary>
-        List<T> Items { get; }
+        IList<T> Items { get; }
     }
 }

@@ -8,11 +8,8 @@
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2017-11-15
+//日期：2021-11-15
 //----------------------------------------------------------------
-
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace iMaxSys.Max.Web.Mvc.ApplicationModels;
 
@@ -23,7 +20,7 @@ public class ApiExplorerPostOnlyConvention : IActionModelConvention
 {
     public void Apply(ActionModel action)
     {
-        //action.ApiExplorer.IsVisible = action.Attributes.OfType<HttpPostAttribute>().Any();
+        action.ApiExplorer.IsVisible = action.Attributes.OfType<HttpPostAttribute>().Any();
     }
 }
 
