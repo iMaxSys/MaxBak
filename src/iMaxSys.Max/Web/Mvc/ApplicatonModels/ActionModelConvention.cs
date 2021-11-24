@@ -19,24 +19,9 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 /// </summary>
 public class ApiExplorerPostOnlyConvention : IActionModelConvention
 {
-    public static void Apply(ActionModel action)
+    public void Apply(ActionModel action)
     {
         //action.ApiExplorer.IsVisible = action.Attributes.OfType<HttpPostAttribute>().Any();
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return base.Equals(obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-
-    public override string? ToString()
-    {
-        return base.ToString();
     }
 }
 
@@ -45,7 +30,7 @@ public class ApiExplorerPostOnlyConvention : IActionModelConvention
 /// </summary>
 public class ActionModelConventionOnlyFromBody : IActionModelConvention
 {
-    public static void Apply(ActionModel action)
+    public void Apply(ActionModel action)
     {
         if (action == null)
         {
