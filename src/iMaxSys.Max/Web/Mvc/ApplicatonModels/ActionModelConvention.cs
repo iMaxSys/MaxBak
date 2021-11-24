@@ -14,6 +14,8 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
+namespace iMaxSys.Max.Web.Mvc.ApplicationModels;
+
 /// <summary>
 /// ApiExplorerPostOnlyConvention
 /// </summary>
