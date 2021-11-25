@@ -25,7 +25,7 @@ namespace iMaxSys.Max.DependencyInjection
         /// <summary>
         /// IServiceProvider
         /// </summary>
-        public static IServiceProvider ServiceProvider { get; private set; }
+        public static IServiceProvider? ServiceProvider { get; private set; }
 
         /// <summary>
         /// 设置ServiceProvider
@@ -41,7 +41,7 @@ namespace iMaxSys.Max.DependencyInjection
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T GetService<T>()
+        public static T? GetService<T>()
         {
             return ServiceProvider.GetService<T>();
         }
