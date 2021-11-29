@@ -29,7 +29,7 @@ namespace iMaxSys.Max.Security.Cryptography
         /// <returns></returns>
         public static string Hash(string source)
         {
-            byte[] bout = (new SHA1CryptoServiceProvider()).ComputeHash(UTF8Encoding.Default.GetBytes(source));
+            byte[] bout = new SHA1CryptoServiceProvider().ComputeHash(UTF8Encoding.Default.GetBytes(source));
             return BitConverter.ToString(bout).Replace("-", "");
         }
     }
