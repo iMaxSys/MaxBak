@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Max.Environment
+namespace iMaxSys.Max.Environment.Access
 {
     /// <summary>
     /// WorkContext
@@ -29,12 +29,12 @@ namespace iMaxSys.Max.Environment
         private readonly IApplication _application;
         private readonly ISession _session;
 
-        private IAccessChain _accessChain;
+        private IAccessChain? _accessChain;
 
         /// <summary>
         /// 访问链
         /// </summary>
-        public IAccessChain AccessChain
+        public IAccessChain? AccessChain
         {
             get
             {
@@ -43,7 +43,6 @@ namespace iMaxSys.Max.Environment
             set
             {
                 _accessChain = value;
-                _session.Id = value?.AccessSession?.Token;
             }
         }
 
@@ -60,23 +59,20 @@ namespace iMaxSys.Max.Environment
         /// <summary>
         /// IP
         /// </summary>
-        public string IP { get; set; }
-
-        public WorkContext()
-        {
-        }
+        public string? IP { get; set; }
 
         /// <summary>
         /// 构造
         /// </summary>
         /// <param name="httpContextAccessor"></param>
+        /// <param name="application"></param>
         /// <param name="session"></param>
         public WorkContext(IHttpContextAccessor httpContextAccessor, IApplication application, ISession session)
         {
             _httpContextAccessor = httpContextAccessor;
             _application = application;
             _session = session;
-            IP = _httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress.ToString();
+            IP = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
         }
 
         /// <summary>
@@ -84,7 +80,7 @@ namespace iMaxSys.Max.Environment
         /// </summary>
         /// <typeparam name="T">The type of service object to get.</typeparam>
         /// <returns></returns>
-        public T GetService<T>()
+        public T? GetService<T>()
         {
             var provider = _httpContextAccessor?.HttpContext?.RequestServices;
             if (provider == null)
@@ -92,7 +88,7 @@ namespace iMaxSys.Max.Environment
                 throw new ArgumentNullException(nameof(provider));
             }
 
-            return (T)provider.GetService(typeof(T));
+            return provider.GetService<T>();
         }
 
         /// <summary>

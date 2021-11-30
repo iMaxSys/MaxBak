@@ -48,42 +48,42 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Token
         /// </summary>
-        string Token { get; set; }
+        string? Token { get; set; }
 
         /// <summary>
         /// 第三方平台原始Id
         /// </summary>
-        string AccountId { get; set; }
+        string? AccountId { get; set; }
 
         /// <summary>
         /// 第三方平台App
         /// </summary>
-        string AppId { get; set; }
+        string? AppId { get; set; }
 
         /// <summary>
         /// 第三方平台Id
         /// </summary>
-        string OpenId { get; set; }
+        string? OpenId { get; set; }
 
         /// <summary>
         /// SessionKey
         /// </summary>
-        string SessionKey { get; set; }
+        string? SessionKey { get; set; }
 
         /// <summary>
         /// 名字
         /// </summary>
-        string Name { get; set; }
+        string? Name { get; set; }
 
         /// <summary>
         /// 头像
         /// </summary>
-        string Avatar { get; set; }
+        string? Avatar { get; set; }
 
         /// <summary>
         /// 第三方平台统一Id
         /// </summary>
-        string UnionId { get; set; }
+        string? UnionId { get; set; }
 
         /// <summary>
         /// Token过期时间

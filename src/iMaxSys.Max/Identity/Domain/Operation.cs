@@ -33,32 +33,32 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Code
         /// </summary>
-        public string Code { get; set; }
+        public string? Code { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Descripton
         /// </summary>
-        public string Descripton { get; set; }
+        public string? Descripton { get; set; }
 
         /// <summary>
         /// Icon
         /// </summary>
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
         /// Style
         /// </summary>
-        public string Style { get; set; }
+        public string? Style { get; set; }
 
         /// <summary>
         /// Router
         /// </summary>
-        public string Router { get; set; }
+        public string? Router { get; set; }
 
         /// <summary>
         /// Status

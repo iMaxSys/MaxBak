@@ -14,7 +14,7 @@
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
 
-namespace iMaxSys.Max.Environment
+namespace iMaxSys.Max.Environment.Access
 {
     /// <summary>
     /// IWorkContext

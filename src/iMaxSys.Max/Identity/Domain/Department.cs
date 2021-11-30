@@ -25,17 +25,17 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// 别名
         /// </summary>
-        public string Alias { get; set; }
+        public string? Alias { get; set; }
 
         /// <summary>
         /// 描述
         /// </summary>
-        public string Descripton { get; set; }
+        public string? Descripton { get; set; }
 
         /// <summary>
         /// 状态

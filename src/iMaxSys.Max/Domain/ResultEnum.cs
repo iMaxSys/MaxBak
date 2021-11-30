@@ -56,9 +56,9 @@ namespace iMaxSys.Max.Domain
         [Description("需要提供Token")]
         NeedToken = 1000,
         /// <summary>
-        /// token为空不可设置Session
+        /// id为空不可设置Session
         /// </summary>
-        [Description("token为空不可设置Session")]
+        [Description("id为空不可设置Session")]
         CantSetSession = 1001,
         /// <summary>
         /// 请求数据为空

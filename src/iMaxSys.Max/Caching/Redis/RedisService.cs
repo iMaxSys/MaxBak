@@ -57,18 +57,16 @@ namespace iMaxSys.Max.Caching.Redis
             return await _database.KeyExistsAsync(GetKey(key, global));
         }
 
-        public T Get<T>(string key, bool global = false)
+        public T? Get<T>(string key, bool global =  false)
         {
             var value = _database.StringGet(GetKey(key, global));
             return value.IsNull ? default : JsonSerializer.Deserialize<T>(value);
         }
 
-        public async Task<T> GetAsync<T>(string key, bool global = false)
+        public async Task<T?> GetAsync<T>(string key, bool global = false)
         {
             var value = await _database.StringGetAsync(GetKey(key, global));
             return value.IsNull ? default : JsonSerializer.Deserialize<T>(value);
-
-            //return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(value, _jsonConfig);
         }
 
         public void Set(string key, object value, bool global = false)
@@ -107,7 +105,7 @@ namespace iMaxSys.Max.Caching.Redis
             HashEntry[] hashEntries = new HashEntry[ht.Keys.Count];
             foreach (var k in ht.Keys)
             {
-                hashEntries[i++] = new HashEntry(k.ToString(), ht[k].ToString());
+                hashEntries[i++] = new HashEntry(k.ToString(), ht[k]?.ToString());
             }
             await _database.HashSetAsync(GetKey(key, global), hashEntries);
         }

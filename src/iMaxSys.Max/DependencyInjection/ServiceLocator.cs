@@ -43,7 +43,7 @@ namespace iMaxSys.Max.DependencyInjection
         /// <returns></returns>
         public static T? GetService<T>()
         {
-            return ServiceProvider.GetService<T>();
+            return ServiceProvider!.GetService<T>();
         }
     }
 }

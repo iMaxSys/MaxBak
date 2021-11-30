@@ -36,7 +36,7 @@ namespace iMaxSys.Max.Caching
         /// <param name="key"></param>
         /// <param name="global"></param>
         /// <returns></returns>
-        T Get<T>(string key, bool global = false);
+        T? Get<T>(string key, bool global = false);
 
         /// <summary>
         /// 获取
@@ -45,7 +45,7 @@ namespace iMaxSys.Max.Caching
         /// <param name="key"></param>
         /// <param name="global"></param>
         /// <returns></returns>
-        Task<T> GetAsync<T>(string key, bool global = false);
+        Task<T?> GetAsync<T>(string key, bool global = false);
 
         /// <summary>
         /// 设置

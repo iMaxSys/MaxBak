@@ -12,49 +12,59 @@
 //----------------------------------------------------------------
 using System;
 using System.Threading.Tasks;
-
 using Microsoft.Extensions.Options;
 
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Caching.Redis;
 
-namespace iMaxSys.Max.Environment
+namespace iMaxSys.Max.Environment.Access
 {
     /// <summary>
     /// Application
     /// </summary>
     public class Application : IApplication
     {
-        const string TAG_APP = "c:";
+        private readonly IApplication _application;
 
-        private readonly ICache _cache;
-        private readonly MaxOption _maxOption;
 
-        public Application(IOptions<MaxOption> maxOption, IGenericCache cache)
+        public Application(IApplication application)
         {
-            _maxOption = maxOption.Value;
-            _cache = cache;
+            _application = application;
         }
 
-        public T Get<T>(string key)
+        public T? Get<T>(string key)
         {
-            return _cache.Get<T>($"{TAG_APP}{key}");
+            return _application.Get<T>(key);
         }
 
-        public async Task<T> GetAsync<T>(string key)
+        public async Task<T?> GetAsync<T>(string key)
         {
-            return await _cache.GetAsync<T>($"{TAG_APP}{key}");
+            return await _application.GetAsync<T>(key);
         }
 
         public void Set(string key, object data)
         {
-            _cache.Set($"{TAG_APP}{key}", data);
+            _application.Set(key, data);
         }
 
         public async Task SetAsync(string key, object data)
         {
-            await _cache.SetAsync($"{TAG_APP}{key}", data);
+            await _application.SetAsync(key, data);
+        }
+
+        public void Clear()
+        {
+            _application.Clear();
+        }
+
+        /// <summary>
+        /// 清除指定key
+        /// </summary>
+        /// <param name="key"></param>
+        public void Remove(string key)
+        {
+            _application.Remove(key);
         }
     }
 }

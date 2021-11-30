@@ -34,7 +34,7 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 姓名
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// 性别(0男,1女,2未知)
@@ -49,27 +49,27 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 登录名/用户名
         /// </summary>
-        public string LoginName { get; set; }
+        public string? LoginName { get; set; }
 
         /// <summary>
         /// 昵称
         /// </summary>
-        public string NickName { get; set; }
+        public string? NickName { get; set; }
 
         /// <summary>
         /// 手机号码
         /// </summary>
-        public string Mobile { get; set; }
+        public string? Mobile { get; set; }
 
         /// <summary>
         /// 电子邮箱
         /// </summary>
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// 头像
         /// </summary>
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         /// <summary>
         /// 类型
@@ -119,17 +119,17 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 加入Ip
         /// </summary>
-        public string JoinIp { get; set; }
+        public string? JoinIp { get; set; }
 
         /// <summary>
         /// 最后登录时间
         /// </summary>
-        public DateTime LastLogin { get; set; }
+        public DateTime? LastLogin { get; set; }
 
         /// <summary>
         /// 最后登录IP
         /// </summary>
-        public string LastIp { get; set; }
+        public string? LastIp { get; set; }
 
         /// <summary>
         /// 是否正式
@@ -144,12 +144,12 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 用户json string
         /// </summary>
-        public string UserJson { get; set; }
+        public string? UserJson { get; set; }
 
         /// <summary>
         /// 用户
         /// </summary>
-        public object User { get; set; }
+        public object? User { get; set; }
 
         /// <summary>
         /// 状态
@@ -174,6 +174,6 @@ namespace iMaxSys.Max.Identity.Domain
 
     public class Member<T> : Member, IMember<T>
     {
-        public T Info { get; set; }
+        public T? Info { get; set; }
     }
 }

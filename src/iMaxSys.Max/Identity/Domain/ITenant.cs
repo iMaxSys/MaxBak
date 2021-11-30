@@ -30,12 +30,12 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Name
         /// </summary>
-        string Name { get; set; }
+        string? Name { get; set; }
 
         /// <summary>
         /// 别名
         /// </summary>
-        string Alias { get; set; }
+        string? Alias { get; set; }
 
         /// <summary>
         /// Start
@@ -62,6 +62,6 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 更多信息
         /// </summary>
-        T Info { get; set; }
+        T? Info { get; set; }
     }
 }

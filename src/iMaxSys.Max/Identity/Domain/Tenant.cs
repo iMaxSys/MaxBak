@@ -27,12 +27,12 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Name
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// 别名
         /// </summary>
-        public string Alias { get; set; }
+        public string? Alias { get; set; }
 
         /// <summary>
         /// Start
@@ -52,6 +52,6 @@ namespace iMaxSys.Max.Identity.Domain
 
     public class Tenant<T> : Tenant, ITenant<T>
     {
-        public T Info { get; set; }
+        public T? Info { get; set; }
     }
 }

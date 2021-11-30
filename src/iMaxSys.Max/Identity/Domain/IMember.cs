@@ -36,7 +36,7 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 姓名
         /// </summary>
-        string Name { get; set; }
+        string? Name { get; set; }
 
         /// <summary>
         /// 性别(0男,1女,2未知)
@@ -51,27 +51,27 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 登录名
         /// </summary>
-        string LoginName { get; set; }
+        string? LoginName { get; set; }
 
         /// <summary>
         /// 昵称
         /// </summary>
-        string NickName { get; set; }
+        string? NickName { get; set; }
 
         /// <summary>
         /// 手机号码
         /// </summary>
-        string Mobile { get; set; }
+        string? Mobile { get; set; }
 
         /// <summary>
         /// 电子邮箱
         /// </summary>
-        string Email { get; set; }
+        string? Email { get; set; }
 
         /// <summary>
         /// 头像
         /// </summary>
-        string Avatar { get; set; }
+        string? Avatar { get; set; }
 
         /// <summary>
         /// 类型
@@ -121,17 +121,17 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 加入Ip
         /// </summary>
-        string JoinIp { get; set; }
+        string? JoinIp { get; set; }
 
         /// <summary>
         /// 最后登录时间
         /// </summary>
-        DateTime LastLogin { get; set; }
+        DateTime? LastLogin { get; set; }
 
         /// <summary>
         /// 最后登录IP
         /// </summary>
-        string LastIp { get; set; }
+        string? LastIp { get; set; }
 
         /// <summary>
         /// 是否正式
@@ -146,12 +146,12 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 用户json string
         /// </summary>
-        string UserJson { get; set; }
+        string? UserJson { get; set; }
 
         /// <summary>
         /// 用户
         /// </summary>
-        object User { get; set; }
+        object? User { get; set; }
 
         /// <summary>
         /// 状态

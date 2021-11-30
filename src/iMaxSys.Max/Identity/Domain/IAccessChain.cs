@@ -21,12 +21,12 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// AccessSession
         /// </summary>
-        IAccessSession AccessSession { get; set; }
+        IAccessSession? AccessSession { get; set; }
 
         /// <summary>
         /// Member
         /// </summary>
-        IMember Member { get; set; }
+        IMember? Member { get; set; }
 
         /// <summary>
         /// 真实用户

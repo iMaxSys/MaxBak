@@ -27,32 +27,32 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Code
         /// </summary>
-        public string Code { get; set; }
+        public string? Code { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Icon
         /// </summary>
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
         /// Style
         /// </summary>
-        public string Style { get; set; }
+        public string? Style { get; set; }
 
         /// <summary>
         /// Router
         /// </summary>
-        public string Router { get; set; }
+        public string? Router { get; set; }
 
         /// <summary>
         /// Status
@@ -62,12 +62,12 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Menus
         /// </summary>
-        public List<IMenu> Menus { get; set; }
+        public List<IMenu>? Menus { get; set; }
 
         /// <summary>
         /// Operations
         /// </summary>
-        public List<IOperation> Operations { get; set; }
+        public List<IOperation>? Operations { get; set; }
     }
 
     /// <summary>
@@ -83,32 +83,32 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Code
         /// </summary>
-        public string Code { get; set; }
+        public string? Code { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Icon
         /// </summary>
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
         /// Style
         /// </summary>
-        public string Style { get; set; }
+        public string? Style { get; set; }
 
         /// <summary>
         /// Router
         /// </summary>
-        public string Router { get; set; }
+        public string? Router { get; set; }
 
         /// <summary>
         /// Status
@@ -118,11 +118,11 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Menus
         /// </summary>
-        public List<MenuShadow> Menus { get; set; }
+        public List<MenuShadow>? Menus { get; set; }
 
         /// <summary>
         /// Operations
         /// </summary>
-        public List<Operation> Operations { get; set; }
+        public List<Operation>? Operations { get; set; }
     }
 }

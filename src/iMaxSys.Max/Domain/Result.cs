@@ -38,7 +38,7 @@ namespace iMaxSys.Max.Domain
         /// <summary>
         /// 数据
         /// </summary>
-        public virtual object Data { get; set; } = null;
+        public virtual object? Data { get; set; }
     }
 
     /// <summary>
@@ -65,6 +65,6 @@ namespace iMaxSys.Max.Domain
         /// <summary>
         /// 数据
         /// </summary>
-        public T Data { get; set; } = default;
+        public T? Data { get; set; }
     }
 }

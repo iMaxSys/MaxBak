@@ -27,32 +27,32 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Code
         /// </summary>
-        string Code { get; set; }
+        string? Code { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
-        string Name { get; set; }
+        string? Name { get; set; }
 
         /// <summary>
         /// Descripton
         /// </summary>
-        string Description { get; set; }
+        string? Description { get; set; }
 
         /// <summary>
         /// Icon
         /// </summary>
-        string Icon { get; set; }
+        string? Icon { get; set; }
 
         /// <summary>
         /// Style
         /// </summary>
-        string Style { get; set; }
+        string? Style { get; set; }
 
         /// <summary>
         /// Router
         /// </summary>
-        string Router { get; set; }
+        string? Router { get; set; }
 
         /// <summary>
         /// Status
@@ -62,11 +62,11 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Menus
         /// </summary>
-        List<IMenu> Menus { get; set; }
+        List<IMenu>? Menus { get; set; }
 
         /// <summary>
         /// Operations
         /// </summary>
-        List<IOperation> Operations { get; set; }
+        List<IOperation>? Operations { get; set; }
     }
 }

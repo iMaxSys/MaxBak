@@ -25,6 +25,7 @@ using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Environment;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Max.Environment.Access;
 
 namespace iMaxSys.Max.Web.Mvc;
 
@@ -43,17 +44,17 @@ public abstract class MaxController : Controller
     /// <summary>
     /// Application
     /// </summary>
-    public IApplication Application { get => WorkContext.Application; }
+    public IApplication Application { get => WorkContext!.Application; }
 
     /// <summary>
     /// Session
     /// </summary>
-    public Environment.ISession Session { get => WorkContext.Session; }
+    public Environment.Access.ISession Session { get => WorkContext!.Session; }
 
     /// <summary>
     /// 访问凭据串
     /// </summary>
-    protected IAccessChain AccessChain { get => WorkContext.AccessChain; }
+    protected IAccessChain AccessChain { get => WorkContext!.AccessChain; }
 
     /// <summary>
     /// WorkContext

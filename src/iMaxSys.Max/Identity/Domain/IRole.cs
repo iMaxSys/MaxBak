@@ -37,32 +37,32 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Name
         /// </summary>
-        string Name { get; set; }
+        string? Name { get; set; }
 
         /// <summary>
         /// Descripton
         /// </summary>
-        string Descripton { get; set; }
+        string? Descripton { get; set; }
 
         /// <summary>
         /// Icon
         /// </summary>
-        string Icon { get; set; }
+        string? Icon { get; set; }
 
         /// <summary>
         /// Style
         /// </summary>
-        string Style { get; set; }
+        string? Style { get; set; }
 
         /// <summary>
         /// Menus("45675,45677")
         /// </summary>
-        long[] MenuIds { get; set; }
+        long[]? MenuIds { get; set; }
 
         /// <summary>
         /// Operations("45675,45677")
         /// </summary>
-        long[] OperationIds { get; set; }
+        long[]? OperationIds { get; set; }
 
         /// <summary>
         /// Start
@@ -82,6 +82,6 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Menu
         /// </summary>
-        IMenu Menu { get; set; }
+        IMenu? Menu { get; set; }
     }
 }

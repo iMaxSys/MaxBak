@@ -23,9 +23,12 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Microsoft.Extensions.DependencyModel" />
+    <None Remove="Microsoft.Extensions.Caching.StackExchangeRedis" />
+    <None Remove="Environment\Access\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Net\Http\HttpClient.cs" />
@@ -40,5 +43,8 @@
     <Compile Remove="Media\Mime\IMimeMapper.cs" />
     <Compile Remove="Media\Mime\MimeMapper.cs" />
     <Compile Remove="Media\Mime\MimeMappingItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Environment\Access\" />
   </ItemGroup>
 </Project>

@@ -35,12 +35,12 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 姓名
         /// </summary>
-        string Name { get; set; }
+        string? Name { get; set; }
 
         /// <summary>
         /// 速查码
         /// </summary>
-        string QuickCode { get; set; }
+        string? QuickCode { get; set; }
 
         /// <summary>
         /// 性别(0男,1女,2未知)
@@ -55,22 +55,22 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 昵称
         /// </summary>
-        string NickName { get; set; }
+        string? NickName { get; set; }
 
         /// <summary>
         /// 手机号码
         /// </summary>
-        string Mobile { get; set; }
+        string? Mobile { get; set; }
 
         /// <summary>
         /// 电子邮箱
         /// </summary>
-        string Email { get; set; }
+        string? Email { get; set; }
 
         /// <summary>
         /// 头像
         /// </summary>
-        string Avatar { get; set; }
+        string? Avatar { get; set; }
 
         /// <summary>
         /// 启用时间

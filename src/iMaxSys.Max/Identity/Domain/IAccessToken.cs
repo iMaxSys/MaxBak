@@ -23,7 +23,7 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 令牌
         /// </summary>
-        string Token { get; set; }
+        string? Token { get; set; }
 
         /// <summary>
         /// 过期时间

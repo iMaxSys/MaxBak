@@ -23,11 +23,11 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// Menus
         /// </summary>
-        public IMenu Menu { get; set; }
+        public IMenu? Menu { get; set; }
 
         /// <summary>
         /// Roles
         /// </summary>
-        public IList<IRole> Roles { get; set; }
+        public IList<IRole>? Roles { get; set; }
     }
 }
