@@ -532,11 +532,16 @@ namespace iMaxSys.Max.Data
         /// Updates the specified entities.
         /// </summary>
         /// <param name="entities">The entities.</param>
-        /// <param name="cancellationToken">
-        ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
-        /// </param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous update operation.</returns>
-        Task UpdateAsync(params TEntity[] entities, CancellationToken cancellationToken = default);
+        Task UpdateAsync(params TEntity[] entities);
+
+        /// <summary>
+        /// Updates the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous insert operation.</returns>
+        Task UpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the entity by the specified primary key.
