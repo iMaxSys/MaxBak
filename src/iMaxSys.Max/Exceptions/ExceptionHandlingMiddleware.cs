@@ -106,7 +106,7 @@ namespace iMaxSys.Max.Exceptions
         /// </summary>
         /// <param name="ex"></param>
         /// <returns></returns>
-        private string GetDetail(Exception ex)
+        private static string? GetDetail(Exception? ex)
         {
             return null == ex ? "" : $"[message:{ex.Message};inner:{ex.InnerException?.Message};source:{ex.Source};trace:{ex.StackTrace}]";
         }

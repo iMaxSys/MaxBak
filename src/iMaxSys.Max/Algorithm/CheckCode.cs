@@ -13,22 +13,21 @@
 
 using iMaxSys.Max.Extentions;
 
-namespace iMaxSys.Max.Algorithm
-{
-    /// <summary>
-    /// 验证码类
-    /// </summary>
-    public static class CheckCode
-    {
-        const int LENGTH = 6;
+namespace iMaxSys.Max.Algorithm;
 
-        /// <summary>
-        /// 获取新数字验证码
-        /// </summary>
-        /// <returns></returns>
-        public static string Next(int length = LENGTH)
-        {
-            return new Random().Next().ToString("000000").Left(length > LENGTH ? LENGTH : length);
-        }
+/// <summary>
+/// 验证码类
+/// </summary>
+public static class CheckCode
+{
+    const int LENGTH = 6;
+
+    /// <summary>
+    /// 获取新数字验证码
+    /// </summary>
+    /// <returns></returns>
+    public static string Next(int length = LENGTH)
+    {
+        return new Random().Next().ToString("000000").Left(length > LENGTH ? LENGTH : length);
     }
 }

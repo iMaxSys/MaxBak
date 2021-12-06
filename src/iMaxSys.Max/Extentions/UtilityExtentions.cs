@@ -95,12 +95,12 @@ namespace iMaxSys.Max.Extentions
             return value.ToString("f1");
         }
 
-        public static string ToIntMoneyString(this decimal? value)
+        public static string? ToIntMoneyString(this decimal? value)
         {
             return value?.ToString("f0");
         }
 
-        public static string ToMoneyString(this decimal? value)
+        public static string? ToMoneyString(this decimal? value)
         {
             return value?.ToString("f2");
         }
@@ -135,7 +135,7 @@ namespace iMaxSys.Max.Extentions
             return dateTime.ToString(FORMAT_TIME);
         }
 
-        public static string ToNormalString(this DateTime? dateTime)
+        public static string? ToNormalString(this DateTime? dateTime)
         {
             return dateTime?.ToString(FORMAT_TIME);
         }
@@ -175,7 +175,7 @@ namespace iMaxSys.Max.Extentions
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public static string ToDateShortTimeString(this DateTime? dateTime)
+        public static string? ToDateShortTimeString(this DateTime? dateTime)
         {
             return dateTime?.ToString(FORMAT_DATESHORTTIME);
         }
@@ -362,7 +362,7 @@ namespace iMaxSys.Max.Extentions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Dictionary<string, string> ToStringDictionary(this string source)
+        public static Dictionary<string, string>? ToStringDictionary(this string source)
         {
             return string.IsNullOrWhiteSpace(source) ? null : source.Split(SEPARATER).Select(x => x.Split(":")).ToDictionary(x => x[0], x => x.Count() > 1 ? x[1] : x[0]);
         }
@@ -468,7 +468,7 @@ namespace iMaxSys.Max.Extentions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToNullableString(this string source)
+        public static string? ToNullable(this string source)
         {
             return string.IsNullOrWhiteSpace(source) ? null : source;
         }

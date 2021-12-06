@@ -17,7 +17,7 @@ public class DayIncreaseService : ISerialService
     public async Task<int> Next(string id)
     {
 
-        DaySerail serial = await _cache.GetAsync<DaySerail>($"{KEY}{id}");
+        DaySerail? serial = await _cache.GetAsync<DaySerail>($"{KEY}{id}");
         if (serial == null)
         {
             serial = new DaySerail

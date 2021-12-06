@@ -12,23 +12,19 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 using iMaxSys.Max.Data.Entities;
 
-namespace iMaxSys.Max.Data.EFCore.Configurations
+namespace iMaxSys.Max.Data.EFCore.Configurations;
+
+public abstract class MasterEntityConfiguration<T> : SingleEntityConfiguration<T> where T : MasterEntity
 {
-    public abstract class MasterEntityConfiguration<T> : SingleEntityConfiguration<T> where T : MasterEntity
+    protected override void Configures(EntityTypeBuilder<T> builder)
     {
-        protected override void Configures(EntityTypeBuilder<T> builder)
-        {
-            base.Configures(builder);
-            builder.Property(x => x.CreatorId).HasColumnName("creator_id").IsRequired();
-            builder.Property(x => x.Creator).HasColumnName("creator").IsRequired().HasMaxLength(50);
-            builder.Property(x => x.ReviserId).HasColumnName("reviser_id").IsRequired();
-            builder.Property(x => x.Reviser).HasColumnName("reviser").IsRequired().HasMaxLength(50);
-            builder.Property(x => x.ReviseTime).HasColumnName("revise_time").IsRequired();
-        }
-    } 
+        base.Configures(builder);
+        builder.Property(x => x.CreatorId).HasColumnName("creator_id").IsRequired();
+        builder.Property(x => x.Creator).HasColumnName("creator").IsRequired().HasMaxLength(50);
+        builder.Property(x => x.ReviserId).HasColumnName("reviser_id").IsRequired();
+        builder.Property(x => x.Reviser).HasColumnName("reviser").IsRequired().HasMaxLength(50);
+        builder.Property(x => x.ReviseTime).HasColumnName("revise_time").IsRequired();
+    }
 }

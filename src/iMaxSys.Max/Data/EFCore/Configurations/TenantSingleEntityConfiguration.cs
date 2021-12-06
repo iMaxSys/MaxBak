@@ -11,21 +11,17 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 using iMaxSys.Max.Data.Entities;
 
-namespace iMaxSys.Max.Data.EFCore.Configurations
+namespace iMaxSys.Max.Data.EFCore.Configurations;
+
+public abstract class TenantSingleEntityConfiguration<T> : SingleEntityConfiguration<T> where T : TenantSingleEntity
 {
-    public abstract class TenantSingleEntityConfiguration<T> : SingleEntityConfiguration<T> where T : TenantSingleEntity
+    protected override void Configures(EntityTypeBuilder<T> builder)
     {
-        protected override void Configures(EntityTypeBuilder<T> builder)
-        {
-            base.Configures(builder);
-            builder.Property(x => x.TenantId).HasColumnName("tenant_id").IsRequired();
-            //索引
-            builder.HasIndex(x => new { x.TenantId });
-        }
+        base.Configures(builder);
+        builder.Property(x => x.TenantId).HasColumnName("tenant_id").IsRequired();
+        //索引
+        builder.HasIndex(x => new { x.TenantId });
     }
 }

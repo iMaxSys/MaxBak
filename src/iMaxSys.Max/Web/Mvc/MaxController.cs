@@ -192,8 +192,8 @@ public abstract class MaxController : Controller
     /// <summary>
     /// 获取member,便于本地调试用,可不用
     /// </summary>
-    protected virtual IMember GetMember()
+    protected virtual IMember? GetMember()
     {
-        return WorkContext.AccessChain.Member;
+        return WorkContext?.AccessChain.Member;
     }
 }

@@ -11,21 +11,20 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-namespace iMaxSys.Max.Data.Entities
+namespace iMaxSys.Max.Data.Entities;
+
+/// <summary>
+/// 实体模型基类
+/// </summary>
+public abstract class Entity
 {
     /// <summary>
-    /// 实体模型基类
+    /// 主键
     /// </summary>
-    public abstract class Entity
-    {
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public long Id { get; set; }
+    public long Id { get; set; }
 
-        /// <summary>
-        /// 软删除标志(0:未删除,1:已删除)
-        /// </summary>
-        public bool IsDeleted { get; set; } = false;
-    }
+    /// <summary>
+    /// 软删除标志(0:未删除,1:已删除)
+    /// </summary>
+    public bool IsDeleted { get; set; } = false;
 }

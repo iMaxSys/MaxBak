@@ -182,7 +182,7 @@ namespace iMaxSys.Max.GIS
         /// </summary>
         /// <param name="geohash"></param>
         /// <returns></returns>
-        public static String[] getGeoHashExpand(String geohash)
+        public static String[]? GetGeoHashExpand(String geohash)
         {
 
             try

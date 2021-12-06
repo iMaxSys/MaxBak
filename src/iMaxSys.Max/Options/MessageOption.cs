@@ -21,12 +21,12 @@ namespace iMaxSys.Max.Options
         /// <summary>
         /// 连接
         /// </summary>
-        public string Connection { get; set; } = null;
+        public string Connection { get; set; } = String.Empty;
 
         /// <summary>
         /// 重试次数
         /// </summary>
-        public int RetryCount { get; set; } = 3;
+        public int RetryCount { get; set; } = 0;
 
         /// <summary>
         /// 是否开启

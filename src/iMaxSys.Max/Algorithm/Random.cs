@@ -11,22 +11,19 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System;
+namespace iMaxSys.Max.Algorithm;
 
-namespace iMaxSys.Max.Algorithm
+/// <summary>
+/// 随机类
+/// </summary>
+public static class MaxRandom
 {
     /// <summary>
-    /// 随机类
+    /// 随机整数
     /// </summary>
-    public static class MaxRandom
+    /// <returns></returns>
+    public static double Next()
     {
-        /// <summary>
-        /// 随机整数
-        /// </summary>
-        /// <returns></returns>
-        public static double Next()
-        {
-            return new Random().NextDouble();
-        }
+        return new Random().NextDouble();
     }
 }

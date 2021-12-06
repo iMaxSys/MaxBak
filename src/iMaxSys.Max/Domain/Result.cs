@@ -30,11 +30,11 @@ namespace iMaxSys.Max.Domain
         /// <summary>
         /// 信息
         /// </summary>
-        public string Message { get; set; } = string.Empty;
+        public string? Message { get; set; }
         /// <summary>
         /// 详情
         /// </summary>
-        public string Detail { get; set; } = string.Empty;
+        public string? Detail { get; set; }
         /// <summary>
         /// 数据
         /// </summary>

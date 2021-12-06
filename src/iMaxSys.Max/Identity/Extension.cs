@@ -29,7 +29,7 @@ namespace iMaxSys.Max.Identity
         /// <param name="member"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static object GetUser(this IMember member, Type type)
+        public static object? GetUser(this IMember member, Type type)
         {
             //if (member.User != null)
             //{
@@ -54,7 +54,7 @@ namespace iMaxSys.Max.Identity
         /// <typeparam name="T"></typeparam>
         /// <param name="member"></param>
         /// <returns></returns>
-        public static object User<T>(this IMember member)
+        public static object? User<T>(this IMember member)
         {
             if (member.User != null)
             {

@@ -1,5 +1,4 @@
-﻿
-//----------------------------------------------------------------
+﻿//----------------------------------------------------------------
 //Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
@@ -12,18 +11,14 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 using iMaxSys.Max.Data.Entities;
 
-namespace iMaxSys.Max.Data.EFCore.Configurations
+namespace iMaxSys.Max.Data.EFCore.Configurations;
+
+public abstract class SingleEntityConfiguration<T> : EntityConfiguration<T> where T : SingleEntity
 {
-    public abstract class SingleEntityConfiguration<T> : EntityConfiguration<T> where T : SingleEntity
+    protected override void Configures(EntityTypeBuilder<T> builder)
     {
-        protected override void Configures(EntityTypeBuilder<T> builder)
-        {
-            builder.Property(x => x.CreateTime).HasColumnName("create_time").IsRequired();
-        }
+        builder.Property(x => x.CreateTime).HasColumnName("create_time").IsRequired();
     }
 }

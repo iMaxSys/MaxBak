@@ -11,18 +11,14 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using Microsoft.Extensions.Options;
-
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Caching.Redis;
-using iMaxSys.Max.DependencyInjection;
 
-namespace iMaxSys.Max.Caching
+namespace iMaxSys.Max.Caching;
+
+public class GenericCache : RedisService, IGenericCache
 {
-    public class GenericCache : RedisService, IGenericCache
+    public GenericCache(IOptions<MaxOption> option) : base(option.Value.Caching!.Connection, option.Value.AppId)
     {
-        public GenericCache(IOptions<MaxOption> option) : base(option.Value.Caching.Connection, option.Value.AppId)
-        {
-        }
     }
 }

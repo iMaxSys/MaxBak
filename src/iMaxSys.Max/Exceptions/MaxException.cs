@@ -23,7 +23,7 @@ namespace iMaxSys.Max.Exceptions
         /// <summary>
         /// Code
         /// </summary>
-        public int Code { get; set; } = 0;
+        public int Code { get; set; }
 
         /// <summary>
         /// Info
@@ -33,16 +33,13 @@ namespace iMaxSys.Max.Exceptions
         /// <summary>
         /// InnerMaxException
         /// </summary>
-        public MaxException InnerMaxException { get; set; }
+        public MaxException? InnerMaxException { get; set; }
 
         /// <summary>
         /// HttpStatusCode
         /// </summary>
         public HttpStatusCode HttpStatusCode { get; set; } = HttpStatusCode.OK;
 
-        public MaxException()
-        {
-        }
 
         public MaxException(Enum value, string more)
         {

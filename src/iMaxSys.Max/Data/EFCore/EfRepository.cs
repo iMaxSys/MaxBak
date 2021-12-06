@@ -13,28 +13,25 @@
 
 using iMaxSys.Max.Collection;
 using iMaxSys.Max.Data.Entities;
-using iMaxSys.Max.Data.Specifications;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace iMaxSys.Max.Data.EFCore
 {
-    public class EfRepository<T> : IRepository<T> where T : Entity
+    public class EfRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {
         protected readonly DbContext _dbContext;
+        protected readonly DbSet<TEntity> _dbSet;
 
         public EfRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
+            _dbSet = _dbContext.Set<TEntity>();
         }
 
         public int Code => _dbContext.GetType().GetHashCode();
 
+        /// <summary>
+        /// 自动提交
+        /// </summary>
         public virtual bool AutoCommit { get; set; } = false;
 
         /// <summary>
@@ -343,7 +340,7 @@ namespace iMaxSys.Max.Data.EFCore
 
         public virtual async Task<T?> FindAsync(params object[] keyValues)
         {
-            return await _dbContext.Set<T>().FindAsync(keyValues).ConfigureAwait(false);
+            return await _dbContext.Set<T>().AllAsync(keyValues).ConfigureAwait(false);
         }
 
         public async Task<T?> FindAsync(object[] keyValues, bool noTracking = true, CancellationToken cancellationToken = default)

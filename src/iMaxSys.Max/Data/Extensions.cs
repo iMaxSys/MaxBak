@@ -67,7 +67,7 @@ namespace iMaxSys.Max.Data
                 var serviceTypes = assignedType.GetInterfaces().Where(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == root));
                 foreach (var serviceType in serviceTypes)
                 {
-                    st = serviceType.IsGenericType ? (serviceType.GenericTypeArguments.Count() > 0 && serviceType.GenericTypeArguments[0].IsGenericParameter ? serviceType.GetGenericTypeDefinition() : serviceType) : serviceType;
+                    st = serviceType.IsGenericType ? (serviceType.GenericTypeArguments.Length > 0 && serviceType.GenericTypeArguments[0].IsGenericParameter ? serviceType.GetGenericTypeDefinition() : serviceType) : serviceType;
                     services.AddScoped(st, assignedType);
                 }
             }

@@ -11,39 +11,30 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
+namespace iMaxSys.Max.Data.EFCore;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyModel;
-
-namespace iMaxSys.Max.Data.EFCore
+public class MaxDbContext : DbContext
 {
-    public class MaxDbContext : DbContext
+    public string? ConnectionString { get; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public string ConnectionString { get; }
+        base.OnModelCreating(modelBuilder);
+        ApplyConfigurations(modelBuilder);
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    /// <summary>
+    /// 注册映射配置
+    /// </summary>
+    /// <param name="modelBuilder">ModelBuilder</param>
+    private void ApplyConfigurations(ModelBuilder modelBuilder)
+    {
+        var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains(AppDomain.CurrentDomain.FriendlyName[..AppDomain.CurrentDomain.FriendlyName.IndexOf('.')]));
+
+        foreach (var item in cls)
         {
-            base.OnModelCreating(modelBuilder);
-            ApplyConfigurations(modelBuilder);
-        }
-
-        /// <summary>
-        /// 注册映射配置
-        /// </summary>
-        /// <param name="modelBuilder">ModelBuilder</param>
-        private void ApplyConfigurations(ModelBuilder modelBuilder)
-        {
-            var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains(AppDomain.CurrentDomain.FriendlyName.Substring(0, AppDomain.CurrentDomain.FriendlyName.IndexOf('.'))));
-
-            foreach (var item in cls)
-            {
-                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(item.Name));
-                modelBuilder.ApplyConfigurationsFromAssembly(assembly);
-            }
+            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(item.Name));
+            modelBuilder.ApplyConfigurationsFromAssembly(assembly);
         }
     }
 }

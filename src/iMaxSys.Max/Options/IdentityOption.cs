@@ -21,7 +21,7 @@ namespace iMaxSys.Max.Options
         /// <summary>
         /// 连接
         /// </summary>
-        public string Connection { get; set; } = null;
+        public string Connection { get; set; } = string.Empty;
 
         /// <summary>
         /// 全局标志,默认否

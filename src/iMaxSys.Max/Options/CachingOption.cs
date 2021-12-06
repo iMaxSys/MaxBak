@@ -21,7 +21,7 @@ namespace iMaxSys.Max.Options
         /// <summary>
         /// Connection
         /// </summary>
-        public string Connection { get; set; }
+        public string Connection { get; set; } = String.Empty;
 
         /// <summary>
         /// 过期时间(分钟)

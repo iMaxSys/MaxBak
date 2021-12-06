@@ -18,12 +18,12 @@ namespace iMaxSys.Max.Options
         /// <summary>
         /// 连接
         /// </summary>
-        public string Connection { get; set; }
+        public string Connection { get; set; } = String.Empty;
 
         /// <summary>
         /// 数据库类型
         /// 0:MariaDB,1:MySQL,2:SqlServer,3:Oracle,4:Sybase
         /// </summary>
-        public int Type { get; set; }
+        public int Type { get; set; } = 0;
     }
 }

@@ -26,41 +26,41 @@ namespace iMaxSys.Max.Options
         /// <summary>
         /// 应用名称
         /// </summary>
-        public string AppName { get; set; }
+        public string AppName { get; set; } = String.Empty;
 
         /// <summary>
         /// 应用版本
         /// </summary>
-        public string Version { get; set; }
+        public string Version { get; set; } = String.Empty;
 
         /// <summary>
         /// 核心
         /// </summary>
-        public CoreOption Core { get; set; }
+        public CoreOption Core { get; set; } = new CoreOption();
 
         /// <summary>
         /// 网络
         /// </summary>
-        public NetworkOption Network { get; set; }
+        public NetworkOption Network { get; set; } = new();
 
         /// <summary>
         /// 缓存
         /// </summary>
-        public CachingOption Caching { get; set; }
+        public CachingOption Caching { get; set; } = new();
 
         /// <summary>
         /// 身份认证
         /// </summary>
-        public IdentityOption Identity { get; set; }
+        public IdentityOption Identity { get; set; } = new();
 
         /// <summary>
         /// 消息
         /// </summary>
-        public MessageOption Message { get; set; }
+        public MessageOption Message { get; set; } = new();
 
         /// <summary>
         /// 日志
         /// </summary>
-        public LoggingOption Logging { get; set; }
+        public LoggingOption Logging { get; set; } = new();
     }
 }

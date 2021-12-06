@@ -30,6 +30,7 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <returns></returns>
         int SaveChanges();
+
         /// <summary>
         /// 提交
         /// </summary>
@@ -49,13 +50,6 @@ namespace iMaxSys.Max.Data
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
         DbSet<TEntity> GetRepository<TEntity>() where TEntity : class;
-
-        /// <summary>
-        /// 获取仓储
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <returns></returns>
-        IRepository<TEntity>? GetRepo<TEntity>() where TEntity : Entity;
     }
 
     /// <summary>

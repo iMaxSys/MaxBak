@@ -13,36 +13,35 @@
 
 using System;
 
-namespace iMaxSys.Max.Data.Entities
+namespace iMaxSys.Max.Data.Entities;
+
+/// <summary>
+/// 主实体基类
+/// </summary>
+public abstract class MasterEntity : SingleEntity
 {
     /// <summary>
-    /// 主实体基类
+    /// 创建者标识
     /// </summary>
-    public abstract class MasterEntity : SingleEntity
-    {
-        /// <summary>
-        /// 创建者标识
-        /// </summary>
-        public long CreatorId { get; set; } = 0;
+    public long CreatorId { get; set; } = 0;
 
-        /// <summary>
-        /// 创建者名称
-        /// </summary>
-        public string Creator { get; set; } = "sys";
+    /// <summary>
+    /// 创建者名称
+    /// </summary>
+    public string Creator { get; set; } = "sys";
 
-        /// <summary>
-        /// 修改者标识
-        /// </summary>
-        public long ReviserId { get; set; } = 0;
+    /// <summary>
+    /// 修改者标识
+    /// </summary>
+    public long ReviserId { get; set; } = 0;
 
-        /// <summary>
-        /// 修改者名称
-        /// </summary>
-        public string Reviser { get; set; } = "sys";
+    /// <summary>
+    /// 修改者名称
+    /// </summary>
+    public string Reviser { get; set; } = "sys";
 
-        /// <summary>
-        /// 修改时间
-        /// </summary>
-        public DateTime? ReviseTime { get; set; } = DateTime.Now;
-    }
+    /// <summary>
+    /// 修改时间
+    /// </summary>
+    public DateTime? ReviseTime { get; set; } = DateTime.Now;
 }

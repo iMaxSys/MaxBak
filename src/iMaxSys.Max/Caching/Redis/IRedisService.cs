@@ -13,12 +13,11 @@
 
 using iMaxSys.Max.DependencyInjection;
 
-namespace iMaxSys.Max.Caching.Redis
+namespace iMaxSys.Max.Caching.Redis;
+
+/// <summary>
+/// IRedisService
+/// </summary>
+public interface IRedisService : ICache
 {
-    /// <summary>
-    /// IRedisService
-    /// </summary>
-    public interface IRedisService : ICache
-    {
-    }
 }
