@@ -209,8 +209,6 @@ namespace iMaxSys.Max.Data
             bool ignoreQueryFilters = false,
             CancellationToken cancellationToken = default);
 
-        
-
         /// <summary>
         /// Uses raw SQL queries to fetch the specified <typeparamref name="TEntity" /> data.
         /// </summary>
@@ -303,7 +301,7 @@ namespace iMaxSys.Max.Data
         /// </param>
         /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
         /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
-        Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        Task<IList<TEntity>> AllAsync(Expression<Func<TEntity, bool>>? predicate = null,
                                                   Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
                                                   Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
                                                   bool disableTracking = true,
@@ -324,7 +322,7 @@ namespace iMaxSys.Max.Data
         /// </param>
         /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
         /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
-        Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Task<IList<TResult>> AllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
             Expression<Func<TEntity, bool>>? predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
@@ -540,14 +538,14 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <param name="entities">The entities.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous insert operation.</returns>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous update operation.</returns>
         Task UpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the entity by the specified primary key.
         /// </summary>
         /// <param name="id">The primary key value.</param>
-        void Delete(object id);
+        void Delete(long id);
 
         /// <summary>
         /// Deletes the specified entity.
@@ -566,6 +564,92 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Delete(IEnumerable<TEntity> entities);
+
+        /// <summary>
+        /// Deletes the entity by the specified primary key.
+        /// </summary>
+        /// <param name="id">The primary key value.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous delete operation.</returns>
+        Task DeletAsync(long id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Deletes the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity to delete.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous delete operation.</returns>
+        Task DeletAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Deletes the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous delete operation.</returns>
+        Task DeletAsync(params TEntity[] entities);
+
+        /// <summary>
+        /// Deletes the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous delete operation.</returns>
+        Task DeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Soft deletes the entity by the specified primary key.
+        /// </summary>
+        /// <param name="id">The primary key value.</param>
+        void Remove(long id);
+
+        /// <summary>
+        /// Soft deletes the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity to delete.</param>
+        void Remove(TEntity entity);
+
+        /// <summary>
+        /// Soft deletes the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        void Remove(params TEntity[] entities);
+
+        /// <summary>
+        /// DeleSoft deletestes the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        void Remove(IEnumerable<TEntity> entities);
+
+        /// <summary>
+        /// Soft deletes the entity by the specified primary key.
+        /// </summary>
+        /// <param name="id">The primary key value.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous soft delete operation.</returns>
+        Task RemoveAsync(long id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Soft deletes the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity to delete.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous soft delete operation.</returns>
+        Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Soft deletes the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous soft delete operation.</returns>
+        Task RemoveAsync(params TEntity[] entities);
+
+        /// <summary>
+        /// Soft deletes the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous soft delete operation.</returns>
+        Task RemoveAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Change entity state for patch method on web api.
