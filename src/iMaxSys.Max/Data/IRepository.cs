@@ -143,7 +143,7 @@ namespace iMaxSys.Max.Data
         /// <param name="ignoreQueryFilters">Ignore query filters</param>
         /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
         /// <remarks>This method defaults to a read-only, no-tracking query.</remarks>
-        TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>>? predicate = null,
+        TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>>? predicate = null,
                                   Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
                                   Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
                                   bool disableTracking = true,
@@ -160,7 +160,7 @@ namespace iMaxSys.Max.Data
         /// <param name="ignoreQueryFilters">Ignore query filters</param>
         /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
         /// <remarks>This method defaults to a read-only, no-tracking query.</remarks>
-        TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
+        TResult? GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
                                            Expression<Func<TEntity, bool>>? predicate = null,
                                            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
                                            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
@@ -180,7 +180,7 @@ namespace iMaxSys.Max.Data
         /// </param>
         /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
         /// <remarks>Ex: This method defaults to a read-only, no-tracking query. </remarks>
-        Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
             bool disableTracking = true,
@@ -201,7 +201,7 @@ namespace iMaxSys.Max.Data
         /// </param>
         /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
         /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
-        Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Task<TResult?> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
             Expression<Func<TEntity, bool>>? predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
@@ -222,14 +222,14 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
         /// <returns>The found entity or null.</returns>
-        TEntity Find(params object[] keyValues);
+        TEntity? Find(params object[] keyValues);
 
         /// <summary>
         /// Finds an entity with the given primary key values. If found, is attached to the context and returned. If no entity is found, then null is returned.
         /// </summary>
         /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
         /// <returns>A <see cref="Task{TEntity}"/> that represents the asynchronous find operation. The task result contains the found entity or null.</returns>
-        ValueTask<TEntity> FindAsync(params object[] keyValues);
+        ValueTask<TEntity?> FindAsync(params object[] keyValues);
 
         /// <summary>
         /// Finds an entity with the given primary key values. If found, is attached to the context and returned. If no entity is found, then null is returned.
@@ -237,7 +237,7 @@ namespace iMaxSys.Max.Data
         /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         /// <returns>A <see cref="Task{TEntity}"/> that represents the asynchronous find operation. The task result contains the found entity or null.</returns>
-        ValueTask<TEntity> FindAsync(object[] keyValues, CancellationToken cancellationToken = default);
+        ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets all entities. This method is not recommended
@@ -359,7 +359,7 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <param name="predicate"></param>
         /// <param name="cancellationToken">
-        ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
         /// </param>
         /// <returns></returns>
         Task<long> LongCountAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default);
@@ -368,20 +368,68 @@ namespace iMaxSys.Max.Data
         /// Gets the max based on a predicate.
         /// </summary>
         /// <param name="predicate"></param>
-        ///  /// <param name="selector"></param>
         /// <returns>decimal</returns>
-        T Max<T>(Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, T>>? selector = null);
+        TEntity? Max(Expression<Func<TEntity, bool>>? predicate = null);
 
         /// <summary>
-        /// Gets the async max based on a predicate.
+        /// Gets the max based on a predicate.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <returns>decimal</returns>
+        T? Max<T>(Expression<Func<TEntity, T>> selector);
+
+        /// <summary>
+        /// Gets the max based on a predicate.
         /// </summary>
         /// <param name="predicate"></param>
-        ///  /// <param name="selector"></param>
+        /// <param name="selector"></param>
+        /// <returns>decimal</returns>
+        T? Max<T>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, T>> selector);
+
+        /// <summary>
+        /// Gets the max based on a predicate.
+        /// </summary>
+        /// <param name="predicate"></param>
         /// <param name="cancellationToken">
-        ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
         /// </param>
         /// <returns>decimal</returns>
-        Task<T> MaxAsync<T>(Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, T>>? selector = null, CancellationToken cancellationToken = default);
+        Task<TEntity?> MaxAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the max based on a predicate.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// </param>
+        /// <returns>decimal</returns>
+        Task<T?> MaxAsync<T>(Expression<Func<TEntity, T>> selector, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the max based on a predicate.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="selector"></param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// </param>
+        /// <returns>decimal</returns>
+        Task<T?> MaxAsync<T>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, T>> selector, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the min based on a predicate.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns>decimal</returns>
+        TEntity? Min(Expression<Func<TEntity, bool>>? predicate = null);
+
+        /// <summary>
+        /// Gets the min based on a predicate.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <returns>decimal</returns>
+        T? Min<T>(Expression<Func<TEntity, T>> selector);
 
         /// <summary>
         /// Gets the min based on a predicate.
@@ -389,18 +437,45 @@ namespace iMaxSys.Max.Data
         /// <param name="predicate"></param>
         /// <param name="selector"></param>
         /// <returns>decimal</returns>
-        T Min<T>(Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, T>>? selector = null);
+        T? Min<T>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, T>> selector);
 
         /// <summary>
-        /// Gets the async min based on a predicate.
+        /// Gets the min based on a predicate.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// </param>
+        /// <returns>decimal</returns>
+        Task<TEntity?> MinAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the min based on a predicate.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// </param>
+        /// <returns>decimal</returns>
+        Task<T?> MinAsync<T>(Expression<Func<TEntity, T>> selector, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the min based on a predicate.
         /// </summary>
         /// <param name="predicate"></param>
         /// <param name="selector"></param>
         /// <param name="cancellationToken">
-        ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
         /// </param>
         /// <returns>decimal</returns>
-        Task<T> MinAsync<T>(Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, T>>? selector = null, CancellationToken cancellationToken = default);
+        Task<T?> MinAsync<T>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, T>> selector, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the average based on a predicate.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <returns>decimal</returns>
+        decimal Average(Expression<Func<TEntity, decimal>> selector);
 
         /// <summary>
         /// Gets the average based on a predicate.
@@ -408,18 +483,35 @@ namespace iMaxSys.Max.Data
         /// <param name="predicate"></param>
         ///  /// <param name="selector"></param>
         /// <returns>decimal</returns>
-        decimal Average(Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, decimal>>? selector = null);
+        decimal Average(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, decimal>> selector);
 
         /// <summary>
-        /// Gets the async average based on a predicate.
+        /// Gets the average based on a predicate.
         /// </summary>
-        /// <param name="predicate"></param>
-        ///  /// <param name="selector"></param>
+        /// <param name="selector"></param>
         /// <param name="cancellationToken">
-        ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
         /// </param>
         /// <returns>decimal</returns>
-        Task<decimal> AverageAsync(Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, decimal>>? selector = null, CancellationToken cancellationToken = default);
+        Task<decimal> AverageAsync(Expression<Func<TEntity, decimal>> selector, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the average based on a predicate.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="selector"></param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// </param>
+        /// <returns>decimal</returns>
+        Task<decimal> AverageAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, decimal>> selector, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the sum based on a predicate.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <returns>decimal</returns>
+        decimal Sum(Expression<Func<TEntity, decimal>> selector);
 
         /// <summary>
         /// Gets the sum based on a predicate.
@@ -427,18 +519,28 @@ namespace iMaxSys.Max.Data
         /// <param name="predicate"></param>
         ///  /// <param name="selector"></param>
         /// <returns>decimal</returns>
-        decimal Sum(Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, decimal>>? selector = null);
+        decimal Sum(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, decimal>> selector);
 
         /// <summary>
-        /// Gets the async sum based on a predicate.
+        /// Gets the sum based on a predicate.
         /// </summary>
-        /// <param name="predicate"></param>
-        ///  /// <param name="selector"></param>
+        /// <param name="selector"></param>
         /// <param name="cancellationToken">
-        ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
         /// </param>
         /// <returns>decimal</returns>
-        Task<decimal> SumAsync(Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, decimal>>? selector = null, CancellationToken cancellationToken = default);
+        Task<decimal> SumAsync(Expression<Func<TEntity, decimal>> selector, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the sum based on a predicate.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="selector"></param>
+        /// <param name="cancellationToken">
+        /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+        /// </param>
+        /// <returns>decimal</returns>
+        Task<decimal> SumAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, decimal>> selector, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the Exists record based on a predicate.
@@ -487,13 +589,6 @@ namespace iMaxSys.Max.Data
         /// Add a range of entities asynchronously.
         /// </summary>
         /// <param name="entities">The entities to insert.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous insert operation.</returns>
-        Task AddAsync(params TEntity[] entities);
-
-        /// <summary>
-        /// Add a range of entities asynchronously.
-        /// </summary>
-        /// <param name="entities">The entities to insert.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous insert operation.</returns>
         Task AddAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
@@ -502,7 +597,7 @@ namespace iMaxSys.Max.Data
         /// Updates the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        void Update(TEntity entity);
+        TEntity Update(TEntity entity);
 
         /// <summary>
         /// Updates the specified entities.
@@ -517,41 +612,16 @@ namespace iMaxSys.Max.Data
         void Update(IEnumerable<TEntity> entities);
 
         /// <summary>
-        /// Updates the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="cancellationToken">
-        ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
-        /// </param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous update operation.</returns>
-        Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Updates the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous update operation.</returns>
-        Task UpdateAsync(params TEntity[] entities);
-
-        /// <summary>
-        /// Updates the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous update operation.</returns>
-        Task UpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Deletes the entity by the specified primary key.
         /// </summary>
         /// <param name="id">The primary key value.</param>
-        void Delete(long id);
+        Entity? Delete(object id);
 
         /// <summary>
         /// Deletes the specified entity.
         /// </summary>
         /// <param name="entity">The entity to delete.</param>
-        void Delete(TEntity entity);
+        Entity Delete(TEntity entity);
 
         /// <summary>
         /// Deletes the specified entities.
@@ -564,37 +634,6 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Delete(IEnumerable<TEntity> entities);
-
-        /// <summary>
-        /// Deletes the entity by the specified primary key.
-        /// </summary>
-        /// <param name="id">The primary key value.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous delete operation.</returns>
-        Task DeletAsync(long id, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Deletes the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity to delete.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous delete operation.</returns>
-        Task DeletAsync(TEntity entity, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Deletes the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous delete operation.</returns>
-        Task DeletAsync(params TEntity[] entities);
-
-        /// <summary>
-        /// Deletes the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous delete operation.</returns>
-        Task DeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Soft deletes the entity by the specified primary key.
@@ -655,7 +694,7 @@ namespace iMaxSys.Max.Data
         /// Change entity state for patch method on web api.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        /// /// <param name="state">The entity state.</param>
+        /// <param name="state">The entity state.</param>
         void ChangeEntityState(TEntity entity, EntityState state);
     }
 }

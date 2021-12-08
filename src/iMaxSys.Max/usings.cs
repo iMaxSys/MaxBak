@@ -55,6 +55,7 @@ global using Microsoft.EntityFrameworkCore.Query.Internal;
 global using Microsoft.EntityFrameworkCore.Infrastructure;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using Microsoft.EntityFrameworkCore.ValueGeneration;
+global using Microsoft.EntityFrameworkCore.Metadata;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 global using AutoMapper;
