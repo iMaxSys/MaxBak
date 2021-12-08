@@ -20,17 +20,27 @@ namespace iMaxSys.Max.Security.Cryptography
     /// <summary>
     /// SHA1
     /// </summary>
-    public static class Sha1
+    public static class Sh1
     {
         /// <summary>
-        /// SHA1 Hash
+        /// 用SHA1加密字符串
         /// </summary>
-        /// <param name="source"></param>
+        /// <param name="source">要扩展的对象</param>
+        /// <param name="isReplace">是否替换掉加密后的字符串中的"-"字符</param>
+        /// <param name="isToLower">是否把加密后的字符串转小写</param>
         /// <returns></returns>
-        public static string Hash(string source)
+        public static string Hash(this string source, bool isReplace = true, bool isToLower = false)
         {
-            byte[] bout = new SHA1CryptoServiceProvider().ComputeHash(UTF8Encoding.Default.GetBytes(source));
-            return BitConverter.ToString(bout).Replace("-", "");
+            string shastring = BitConverter.ToString(SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(source)));
+            if (isReplace)
+            {
+                shastring = shastring.Replace("-", "");
+            }
+            if (isToLower)
+            {
+                shastring = shastring.ToLower();
+            }
+            return shastring;
         }
     }
 }

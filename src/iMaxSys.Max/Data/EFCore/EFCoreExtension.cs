@@ -49,36 +49,32 @@ public static class EFCoreExtension
     /// <returns></returns>
     public static T Query<T>(this DbContext dbContext, string sql) where T : class, new()
     {
-        using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+        using var command = dbContext.Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+
+        dbContext.Database.OpenConnection();
+
+        using var reader = command.ExecuteReader();
+        var newObject = new T();
+        var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
+        while (reader.Read())
         {
-            command.CommandText = sql;
-            command.CommandType = CommandType.Text;
-
-            dbContext.Database.OpenConnection();
-
-            using (var reader = command.ExecuteReader())
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                var newObject = new T();
-                var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
-                while (reader.Read())
+                var name = reader.GetName(i);
+                PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                if (prop == null)
                 {
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var name = reader.GetName(i);
-                        PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
-                        if (prop == null)
-                        {
-                            continue;
-                        }
-                        var val = reader.IsDBNull(i) ? null : reader[i];
-                        prop.SetValue(newObject, val, null);
-                    }
-                    break;
+                    continue;
                 }
-
-                return newObject;
+                var val = reader.IsDBNull(i) ? null : reader[i];
+                prop.SetValue(newObject, val, null);
             }
+            break;
         }
+
+        return newObject;
     }
 
     /// <summary>
@@ -90,36 +86,32 @@ public static class EFCoreExtension
     /// <returns></returns>
     public static async Task<T> QueryAsync<T>(this DbContext dbContext, string sql) where T : class, new()
     {
-        using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+        using var command = dbContext.Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+
+        await dbContext.Database.OpenConnectionAsync();
+
+        using var reader = await command.ExecuteReaderAsync();
+        var newObject = new T();
+        var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
+        while (await reader.ReadAsync())
         {
-            command.CommandText = sql;
-            command.CommandType = CommandType.Text;
-
-            await dbContext.Database.OpenConnectionAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                var newObject = new T();
-                var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
-                while (await reader.ReadAsync())
+                var name = reader.GetName(i);
+                PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                if (prop == null)
                 {
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var name = reader.GetName(i);
-                        PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
-                        if (prop == null)
-                        {
-                            continue;
-                        }
-                        var val = reader.IsDBNull(i) ? null : reader[i];
-                        prop.SetValue(newObject, val, null);
-                    }
-                    break;
+                    continue;
                 }
-
-                return newObject;
+                var val = reader.IsDBNull(i) ? null : reader[i];
+                prop.SetValue(newObject, val, null);
             }
+            break;
         }
+
+        return newObject;
     }
 
     /// <summary>
@@ -131,37 +123,33 @@ public static class EFCoreExtension
     /// <returns></returns>
     public static async Task<T> QueryAsync<T>(this DbContext dbContext, string sql, DbParameter[] parameters) where T : class, new()
     {
-        using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+        using var command = dbContext.Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        command.Parameters.AddRange(parameters);
+
+        await dbContext.Database.OpenConnectionAsync();
+
+        using var reader = await command.ExecuteReaderAsync();
+        var newObject = new T();
+        var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
+        while (await reader.ReadAsync())
         {
-            command.CommandText = sql;
-            command.CommandType = CommandType.Text;
-            command.Parameters.AddRange(parameters);
-
-            await dbContext.Database.OpenConnectionAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                var newObject = new T();
-                var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
-                while (await reader.ReadAsync())
+                var name = reader.GetName(i);
+                PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                if (prop == null)
                 {
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var name = reader.GetName(i);
-                        PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
-                        if (prop == null)
-                        {
-                            continue;
-                        }
-                        var val = reader.IsDBNull(i) ? null : reader[i];
-                        prop.SetValue(newObject, val, null);
-                    }
-                    break;
+                    continue;
                 }
-
-                return newObject;
+                var val = reader.IsDBNull(i) ? null : reader[i];
+                prop.SetValue(newObject, val, null);
             }
+            break;
         }
+
+        return newObject;
     }
 
     /// <summary>
@@ -173,37 +161,33 @@ public static class EFCoreExtension
     /// <returns></returns>
     public static List<T> QueryList<T>(this DbContext dbContext, string sql) where T : class, new()
     {
-        using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+        using var command = dbContext.Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+
+        dbContext.Database.OpenConnection();
+
+        using var reader = command.ExecuteReader();
+        var list = new List<T>();
+        var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
+        while (reader.Read())
         {
-            command.CommandText = sql;
-            command.CommandType = CommandType.Text;
-
-            dbContext.Database.OpenConnection();
-
-            using (var reader = command.ExecuteReader())
+            var newObject = new T();
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                var list = new List<T>();
-                var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
-                while (reader.Read())
+                var name = reader.GetName(i);
+                PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                if (prop == null)
                 {
-                    var newObject = new T();
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var name = reader.GetName(i);
-                        PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
-                        if (prop == null)
-                        {
-                            continue;
-                        }
-                        var val = reader.IsDBNull(i) ? null : reader[i];
-                        prop.SetValue(newObject, val, null);
-                    }
-                    list.Add(newObject);
+                    continue;
                 }
-
-                return list;
+                var val = reader.IsDBNull(i) ? null : reader[i];
+                prop.SetValue(newObject, val, null);
             }
+            list.Add(newObject);
         }
+
+        return list;
     }
 
     /// <summary>
@@ -215,38 +199,34 @@ public static class EFCoreExtension
     /// <returns></returns>
     public static List<T> QueryList<T>(this DbContext dbContext, string sql, DbParameter[] parameters) where T : class, new()
     {
-        using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+        using var command = dbContext.Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        command.Parameters.AddRange(parameters);
+
+        dbContext.Database.OpenConnection();
+
+        using var reader = command.ExecuteReader();
+        var list = new List<T>();
+        var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
+        while (reader.Read())
         {
-            command.CommandText = sql;
-            command.CommandType = CommandType.Text;
-            command.Parameters.AddRange(parameters);
-
-            dbContext.Database.OpenConnection();
-
-            using (var reader = command.ExecuteReader())
+            var newObject = new T();
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                var list = new List<T>();
-                var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
-                while (reader.Read())
+                var name = reader.GetName(i);
+                PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                if (prop == null)
                 {
-                    var newObject = new T();
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var name = reader.GetName(i);
-                        PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
-                        if (prop == null)
-                        {
-                            continue;
-                        }
-                        var val = reader.IsDBNull(i) ? null : reader[i];
-                        prop.SetValue(newObject, val, null);
-                    }
-                    list.Add(newObject);
+                    continue;
                 }
-
-                return list;
+                var val = reader.IsDBNull(i) ? null : reader[i];
+                prop.SetValue(newObject, val, null);
             }
+            list.Add(newObject);
         }
+
+        return list;
     }
 
     /// <summary>
@@ -258,37 +238,33 @@ public static class EFCoreExtension
     /// <returns></returns>
     public static async Task<List<T>> QueryListAsync<T>(this DbContext dbContext, string sql) where T : class, new()
     {
-        using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+        using var command = dbContext.Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+
+        await dbContext.Database.OpenConnectionAsync();
+
+        using var reader = await command.ExecuteReaderAsync();
+        var list = new List<T>();
+        var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
+        while (await reader.ReadAsync())
         {
-            command.CommandText = sql;
-            command.CommandType = CommandType.Text;
-
-            await dbContext.Database.OpenConnectionAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
+            var newObject = new T();
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                var list = new List<T>();
-                var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
-                while (await reader.ReadAsync())
+                var name = reader.GetName(i);
+                PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                if (prop == null)
                 {
-                    var newObject = new T();
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var name = reader.GetName(i);
-                        PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
-                        if (prop == null)
-                        {
-                            continue;
-                        }
-                        var val = reader.IsDBNull(i) ? null : reader[i];
-                        prop.SetValue(newObject, val, null);
-                    }
-                    list.Add(newObject);
+                    continue;
                 }
-
-                return list;
+                var val = reader.IsDBNull(i) ? null : reader[i];
+                prop.SetValue(newObject, val, null);
             }
+            list.Add(newObject);
         }
+
+        return list;
     }
 
     /// <summary>
@@ -300,38 +276,34 @@ public static class EFCoreExtension
     /// <returns></returns>
     public static async Task<List<T>> QueryListAsync<T>(this DbContext dbContext, string sql, DbParameter[] parameters) where T : class, new()
     {
-        using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+        using var command = dbContext.Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        command.Parameters.AddRange(parameters);
+
+        await dbContext.Database.OpenConnectionAsync();
+
+        using var reader = await command.ExecuteReaderAsync();
+        var list = new List<T>();
+        var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
+        while (await reader.ReadAsync())
         {
-            command.CommandText = sql;
-            command.CommandType = CommandType.Text;
-            command.Parameters.AddRange(parameters);
-
-            await dbContext.Database.OpenConnectionAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
+            var newObject = new T();
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                var list = new List<T>();
-                var columns = new T().GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToList();
-                while (await reader.ReadAsync())
+                var name = reader.GetName(i);
+                PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
+                if (prop == null)
                 {
-                    var newObject = new T();
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var name = reader.GetName(i);
-                        PropertyInfo? prop = columns.FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
-                        if (prop == null)
-                        {
-                            continue;
-                        }
-                        var val = reader.IsDBNull(i) ? null : reader[i];
-                        prop.SetValue(newObject, val, null);
-                    }
-                    list.Add(newObject);
+                    continue;
                 }
-
-                return list;
+                var val = reader.IsDBNull(i) ? null : reader[i];
+                prop.SetValue(newObject, val, null);
             }
+            list.Add(newObject);
         }
+
+        return list;
     }
 
     #region ExecuteSql

@@ -615,13 +615,13 @@ namespace iMaxSys.Max.Data
         /// Deletes the entity by the specified primary key.
         /// </summary>
         /// <param name="id">The primary key value.</param>
-        Entity? Delete(object id);
+        TEntity? Delete(object id);
 
         /// <summary>
         /// Deletes the specified entity.
         /// </summary>
         /// <param name="entity">The entity to delete.</param>
-        Entity Delete(TEntity entity);
+        TEntity Delete(TEntity entity);
 
         /// <summary>
         /// Deletes the specified entities.
@@ -639,13 +639,13 @@ namespace iMaxSys.Max.Data
         /// Soft deletes the entity by the specified primary key.
         /// </summary>
         /// <param name="id">The primary key value.</param>
-        void Remove(long id);
+        TEntity? Remove(object id);
 
         /// <summary>
         /// Soft deletes the specified entity.
         /// </summary>
         /// <param name="entity">The entity to delete.</param>
-        void Remove(TEntity entity);
+        TEntity Remove(TEntity entity);
 
         /// <summary>
         /// Soft deletes the specified entities.
@@ -658,37 +658,6 @@ namespace iMaxSys.Max.Data
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Remove(IEnumerable<TEntity> entities);
-
-        /// <summary>
-        /// Soft deletes the entity by the specified primary key.
-        /// </summary>
-        /// <param name="id">The primary key value.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous soft delete operation.</returns>
-        Task RemoveAsync(long id, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Soft deletes the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity to delete.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous soft delete operation.</returns>
-        Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Soft deletes the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous soft delete operation.</returns>
-        Task RemoveAsync(params TEntity[] entities);
-
-        /// <summary>
-        /// Soft deletes the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous soft delete operation.</returns>
-        Task RemoveAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Change entity state for patch method on web api.

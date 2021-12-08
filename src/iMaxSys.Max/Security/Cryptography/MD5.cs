@@ -20,46 +20,28 @@ namespace iMaxSys.Max.Security.Cryptography
     /// <summary>
     /// MD5
     /// </summary>
-    public class Md5
+    public static class MD5
     {
         /// <summary>
         /// MD5 Hash
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string Hash(string input)
+        public static string Hash(string source)
         {
-            using (MD5 md5Hash = MD5.Create())
-            {
-                // Convert the input string to a byte array and compute the hash.
-                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-                // Create a new Stringbuilder to collect the bytes
-                // and create a string.
-                StringBuilder sBuilder = new StringBuilder();
-
-                // Loop through each byte of the hashed data 
-                // and format each one as a hexadecimal string.
-                for (int i = 0; i < data.Length; i++)
-                {
-                    sBuilder.Append(data[i].ToString("x2"));
-                }
-
-                // Return the hexadecimal string.
-                return sBuilder.ToString();
-            }
+            return string.Join("", System.Security.Cryptography.MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(source)).Select(x => x.ToString("x2")));
         }
 
-        // Verify a hash against a string.
-        public static bool Verify(string input, string hash)
+        /// <summary>
+        /// Verify
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="hash"></param>
+        /// <returns></returns>
+        public static bool Verify(string source, string hash)
         {
-            // Hash the input.
-            string hashOfInput = Hash(input);
-
-            // Create a StringComparer an compare the hashes.
-            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
-
-            return 0 == comparer.Compare(hashOfInput, hash);
+            string sourceHash = Hash(source);
+            return 0 == StringComparer.OrdinalIgnoreCase.Compare(sourceHash, hash);
         }
     }
 }
