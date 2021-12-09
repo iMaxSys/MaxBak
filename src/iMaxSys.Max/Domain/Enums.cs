@@ -61,7 +61,7 @@ namespace iMaxSys.Max.Domain
     /// <summary>
     /// 应用来源
     /// </summary>
-    public enum AppSource
+    public enum XppSource
     {
         /// <summary>
         /// PCWeb

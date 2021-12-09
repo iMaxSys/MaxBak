@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMaxSys.Pay", "src\iMaxSys.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMaxSys.Data", "src\iMaxSys.Data\iMaxSys.Data.csproj", "{47B46B9E-AFE0-4BC4-B52E-F2F9D75C68EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMaxSys.Identity", "src\iMaxSys.Identity\iMaxSys.Identity.csproj", "{4CF66475-EE86-4316-B054-A92F5DADC29F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XppSns.cs", "src\iMaxSys.Identity\XppSns.cs.csproj", "{4CF66475-EE86-4316-B054-A92F5DADC29F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMaxSys.Sns", "src\iMaxSys.Sns\iMaxSys.Sns.csproj", "{11D0AB1C-6868-413D-8C8D-4272210F3F09}"
 EndProject
