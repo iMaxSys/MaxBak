@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phoenix.Api", "samples\1.Pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMaxSys.Identity", "src\iMaxSys.Identity\iMaxSys.Identity.csproj", "{5D75BCC6-4746-46C7-A362-11FDBFFCF4D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMaxSys.Caching", "src\iMaxSys.Caching\iMaxSys.Caching.csproj", "{0C0A61D9-C894-41E9-AFA6-CF46918B7D21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{5D75BCC6-4746-46C7-A362-11FDBFFCF4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D75BCC6-4746-46C7-A362-11FDBFFCF4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D75BCC6-4746-46C7-A362-11FDBFFCF4D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0A61D9-C894-41E9-AFA6-CF46918B7D21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0A61D9-C894-41E9-AFA6-CF46918B7D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0A61D9-C894-41E9-AFA6-CF46918B7D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0A61D9-C894-41E9-AFA6-CF46918B7D21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +111,7 @@ Global
 		{6C5FAF76-5ED9-4ADF-81CF-33F42EC58F32} = {6FA3A2E2-ADEA-4E0C-8F30-C4732B99EF8F}
 		{4FC460AC-8447-491F-B555-48122FC09788} = {6FA3A2E2-ADEA-4E0C-8F30-C4732B99EF8F}
 		{5D75BCC6-4746-46C7-A362-11FDBFFCF4D4} = {CA024A85-61CD-4B4D-8FBD-850D98173DBC}
+		{0C0A61D9-C894-41E9-AFA6-CF46918B7D21} = {CA024A85-61CD-4B4D-8FBD-850D98173DBC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9599EFE6-02BB-4FFA-9003-F76130B9C83D}
