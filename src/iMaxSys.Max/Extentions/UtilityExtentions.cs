@@ -62,14 +62,39 @@ public static class UtilityExtentions
     /// <returns></returns>
     public static int IndexValue(this long value, int index) => (int)((value / (int)Math.Pow(10, index)) % 10);
 
-    public static string ToIntMoneyString(this decimal value) => value.ToString("f0");
+    /// <summary>
+    /// 转换为整数金额
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static string ToInt(this decimal value) => value.ToString("f0");
 
+    /// <summary>
+    /// 转换为两位小数金额
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public static string ToMoneyString(this decimal value) => value.ToString("f2");
 
+    /// <summary>
+    /// 转换为折扣率
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public static string ToDiscountString(this decimal value) => value.ToString("f1");
 
+    /// <summary>
+    /// 转换为整数金额
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public static string? ToIntMoneyString(this decimal? value) => value?.ToString("f0");
 
+    /// <summary>
+    /// 转换为两位小数金额
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public static string? ToMoneyString(this decimal? value) => value?.ToString("f2");
 
     /// <summary>
