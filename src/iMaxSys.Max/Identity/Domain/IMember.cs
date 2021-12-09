@@ -96,7 +96,7 @@ namespace iMaxSys.Max.Identity.Domain
         /// <summary>
         /// 应用来源
         /// </summary>
-        AppSource AppSource { get; set; }
+        XppSource XppSource { get; set; }
 
         /// <summary>
         /// 账号来源
