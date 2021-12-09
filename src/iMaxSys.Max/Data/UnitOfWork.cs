@@ -35,7 +35,6 @@ namespace iMaxSys.Max.Data
     {
         private readonly T _context;
         private readonly IServiceProvider _serviceProvider;
-        //private Dictionary<Type, object> _repositories;
 
         /// <summary>
         /// Gets the db context.
@@ -49,17 +48,7 @@ namespace iMaxSys.Max.Data
             _serviceProvider = serviceProvider;
         }
 
-        //public async Task AddAsync<TEntity>(TEntity entity) where TEntity : class
-        //{
-        //    await _context.AddAsync<TEntity>(entity);
-        //}
-
-        public DbSet<TEntity> GetRepository<TEntity>() where TEntity : class
-        {
-            return _context.Set<TEntity>();
-        }
-
-        public IRepository<TEntity>? GetRepo<TEntity>() where TEntity : Entity
+        public IRepository<TEntity>? GetRepository<TEntity>() where TEntity : Entity
         {
             try
             {
@@ -78,11 +67,6 @@ namespace iMaxSys.Max.Data
             return _context.SaveChanges();
         }
 
-        //public async Task<int> SaveChangesAsync()
-        //{
-        //	return await _context.SaveChangesAsync();
-        //}
-
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return await _context.SaveChangesAsync(cancellationToken);
@@ -91,13 +75,13 @@ namespace iMaxSys.Max.Data
         public async Task<int> SaveChangesAsync(IUnitOfWork[] unitOfWorks, CancellationToken cancellationToken = default)
         {
             using var ts = new TransactionScope();
-            var count = 0;
+            int count = 0;
             foreach (var unitOfWork in unitOfWorks)
             {
-                count += await unitOfWork.SaveChangesAsync();
+                count += await unitOfWork.SaveChangesAsync(cancellationToken);
             }
 
-            count += await SaveChangesAsync();
+            count += await SaveChangesAsync(cancellationToken);
 
             ts.Complete();
 

@@ -38,18 +38,11 @@ namespace iMaxSys.Max.Data
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 新增
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="entity"></param>
-        //Task AddAsync<TEntity>(TEntity entity) where TEntity : class;
-
-        /// <summary>
         /// 获取仓储
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        DbSet<TEntity> GetRepository<TEntity>() where TEntity : class;
+        IRepository<TEntity>? GetRepository<TEntity>() where TEntity : Entity;
     }
 
     /// <summary>
