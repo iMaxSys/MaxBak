@@ -35,7 +35,7 @@ namespace iMaxSys.Data.EFCore.Configurations
             //Description
             builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255);
             //应用Id
-            builder.Property(x => x.XappId).HasColumnName("xpp_id");
+            builder.Property(x => x.XppId).HasColumnName("xpp_id");
             //社交平台账号来源
             builder.Property(x => x.Source).HasColumnName("source");
             //第三方平台原始Id
@@ -47,7 +47,7 @@ namespace iMaxSys.Data.EFCore.Configurations
             //状态
             builder.Property(x => x.Status).HasColumnName("status");
             //一对多设定
-            builder.HasOne(x => x.Xpp).WithMany(y => y.XppSns).HasForeignKey(f => f.XappId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(x => x.Xpp).WithMany(y => y.XppSns).HasForeignKey(f => f.XppId).OnDelete(DeleteBehavior.Restrict);
             //ToTable
             builder.ToTable("xpp_sns");
         }

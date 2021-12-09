@@ -37,7 +37,7 @@ namespace iMaxSys.Data.Models
         /// <summary>
         /// 应用Id
         /// </summary>
-        public long XappId { get; set; }
+        public long XppId { get; set; }
 
         /// <summary>
         /// 社交平台账号来源
