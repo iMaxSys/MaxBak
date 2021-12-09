@@ -1,4 +1,6 @@
-﻿namespace iMaxSys.Identity;
+﻿
+namespace iMaxSys.Identity;
+
 public class Class1
 {
 
