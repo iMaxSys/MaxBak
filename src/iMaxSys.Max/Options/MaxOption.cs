@@ -21,12 +21,12 @@ namespace iMaxSys.Max.Options
         /// <summary>
         /// 应用标识
         /// </summary>
-        public long AppId { get; set; }
+        public long XppId { get; set; }
 
         /// <summary>
         /// 应用名称
         /// </summary>
-        public string AppName { get; set; } = String.Empty;
+        public string XppName { get; set; } = String.Empty;
 
         /// <summary>
         /// 应用版本

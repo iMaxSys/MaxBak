@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\iMaxSys.Max\iMaxSys.Max.csproj" />
+    <ProjectReference Include="..\iMaxSys.Caching\iMaxSys.Caching.csproj" />
+    <ProjectReference Include="..\iMaxSys.Data\iMaxSys.Data.csproj" />
+    <ProjectReference Include="..\iMaxSys.Caching\iMaxSys.Caching.csproj" />
+  </ItemGroup>
 </Project>

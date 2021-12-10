@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: XappSns.cs
-//摘要: 应用x社交账号 
+//文件: Menu.cs
+//摘要: Menu 
 //说明:
 //
 //当前：1.0
@@ -11,19 +11,21 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-
-using System.Collections.Generic;
-
 using iMaxSys.Max.Domain;
 using iMaxSys.Max.Data.Entities;
 
-namespace iMaxSys.Data.Models
+namespace iMaxSys.Identity.Data.Models
 {
     /// <summary>
-    /// 应用x社交网络
+    /// Menu
     /// </summary>
-    public class XppSns : MasterEntity
+    public class Menu : TenantMasterEntity
     {
+        /// <summary>
+        /// XppId
+        /// </summary>
+        public long XppId { get; set; }
+
         /// <summary>
         /// 名称
         /// </summary>
@@ -35,43 +37,58 @@ namespace iMaxSys.Data.Models
         public string Alias { get; set; } = string.Empty;
 
         /// <summary>
+        /// Code
+        /// </summary>
+        public string Code { get; set; } = string.Empty;
+
+        /// <summary>
+        /// QuickCode
+        /// </summary>
+        public string QuickCode { get; set; } = string.Empty;
+
+        /// <summary>
         /// Description
         /// </summary>
         public string? Description { get; set; }
 
         /// <summary>
-        /// 应用Id
+        /// Icon
         /// </summary>
-        public long XppId { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
-        /// 社交平台账号来源
+        /// Style
         /// </summary>
-        public PlatformSource Source { get; set; }
+        public string? Style { get; set; }
 
         /// <summary>
-        /// 第三方平台原始Id
+        /// Router
         /// </summary>
-        public string? AccountId { get; set; }
+        public string Router { get; set; } = string.Empty;
 
         /// <summary>
-        /// AppId
+        /// 左值
         /// </summary>
-        public string? AppId { get; set; }
+        public int Lv { get; set; }
 
         /// <summary>
-        /// AppSecret
+        /// 右值
         /// </summary>
-        public string? AppSecret { get; set; }
+        public int Rv { get; set; }
 
         /// <summary>
-        /// 状态
+        /// 深度
+        /// </summary>
+        public int Deep { get; set; }
+
+        /// <summary>
+        /// Status
         /// </summary>
         public Status Status { get; set; }
 
         /// <summary>
-        /// App
+        /// Operations
         /// </summary>
-        public virtual Xpp Xpp { get; set; } = new();
+        public virtual IList<Operation>? Operations { get; set; }
     }
 }

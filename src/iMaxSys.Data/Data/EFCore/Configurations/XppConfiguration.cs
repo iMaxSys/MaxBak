@@ -31,13 +31,13 @@ namespace iMaxSys.Data.EFCore.Configurations
             //基类配置
             base.Configures(builder);
             //Name
-            builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50);
+            builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
+            //Alias
+            builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).IsRequired();
             //Description
             builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255);
-            //NeedMobile
-            builder.Property(x => x.NeedMobile).HasColumnName("need_mobile").HasDefaultValue(false);
             //AppSource
-            builder.Property(x => x.Source).HasColumnName("source");
+            builder.Property(x => x.Source).HasColumnName("source").IsRequired(); ;
             //第三方平台原始Id(暂不使用)
             builder.Property(x => x.AccountId).HasColumnName("account_id").HasMaxLength(50);
             //AppId
@@ -45,7 +45,7 @@ namespace iMaxSys.Data.EFCore.Configurations
             //AppKey
             builder.Property(x => x.AppKey).HasColumnName("app_key").HasMaxLength(50);
             //状态
-            builder.Property(x => x.Status).HasColumnName("status");
+            builder.Property(x => x.Status).HasColumnName("status").IsRequired();
             //ToTable
             builder.ToTable("xpp");
         }

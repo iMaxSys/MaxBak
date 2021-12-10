@@ -16,4 +16,3 @@ namespace iMaxSys.Caching;
 public interface IGenericCache : ICache, ISingleton
 {
 }
-

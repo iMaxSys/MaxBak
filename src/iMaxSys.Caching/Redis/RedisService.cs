@@ -23,8 +23,6 @@ public class RedisService : IRedisService
     private readonly ConnectionMultiplexer _connection;
     private readonly IDatabase _database;
 
-    //private readonly Newtonsoft.Json.JsonSerializerSettings _jsonConfig = new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore };
-
     public RedisService(string connection, long appId)
     {
         _connection = ConnectionMultiplexer.Connect(connection);

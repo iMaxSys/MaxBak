@@ -1,61 +1,60 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2025 Care Co.,Ltd.
+//Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: Tenant.cs
-//摘要: Tenant 
+//文件: TenantModel.cs
+//摘要: 租户模型
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2018-03-07
+//日期：2019-11-16
 //----------------------------------------------------------------
 
 using System;
 
 using iMaxSys.Max.Domain;
-using iMaxSys.Max.Data.Entities;
 
-namespace iMaxSys.Data.Models
+namespace iMaxSys.Identity.Models
 {
     /// <summary>
-    /// Tenant
+    /// 租户模型
     /// </summary>
-    public class Tenant : MasterEntity
+    public class TenantModel
     {
+        /// <summary>
+        /// Id
+        /// </summary>
+        public long Id { get; set; }
+
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
 
         /// <summary>
         /// 别名
         /// </summary>
-        public string Alias { get; set; } = string.Empty;
-
-        /// <summary>
-        /// 速查码
-        /// </summary>
-        public string QuickCode { get; set; } = string.Empty;
+        public string Alias { get; set; }
 
         /// <summary>
         /// 描述
         /// </summary>
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// Start
         /// </summary>
-        public DateTime Start { get; set; }
+        public DateTime? Start { get; set; }
 
         /// <summary>
         /// End
         /// </summary>
-        public DateTime End { get; set; }
+        public DateTime? End { get; set; }
 
         /// <summary>
         /// 状态
         /// </summary>
-        public Status Status { get; set; } = Status.Enable;
+        public Status? Status { get; set; }
     }
 }

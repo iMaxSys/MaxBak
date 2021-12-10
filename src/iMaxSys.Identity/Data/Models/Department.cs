@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: Tenant.cs
-//摘要: Tenant 
+//文件: Department.cs
+//摘要: Department 
 //说明:
 //
 //当前：1.0
@@ -11,17 +11,17 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using System;
+using System.Collections.Generic;
 
 using iMaxSys.Max.Domain;
 using iMaxSys.Max.Data.Entities;
 
-namespace iMaxSys.Data.Models
+namespace iMaxSys.Identity.Data.Models
 {
     /// <summary>
-    /// Tenant
+    /// Department
     /// </summary>
-    public class Tenant : MasterEntity
+    public class Department : TenantMasterEntity
     {
         /// <summary>
         /// 名称
@@ -34,28 +34,18 @@ namespace iMaxSys.Data.Models
         public string Alias { get; set; } = string.Empty;
 
         /// <summary>
-        /// 速查码
-        /// </summary>
-        public string QuickCode { get; set; } = string.Empty;
-
-        /// <summary>
         /// 描述
         /// </summary>
-        public string? Description { get; set; }
-
-        /// <summary>
-        /// Start
-        /// </summary>
-        public DateTime Start { get; set; }
-
-        /// <summary>
-        /// End
-        /// </summary>
-        public DateTime End { get; set; }
+        public string? Descripton { get; set; }
 
         /// <summary>
         /// 状态
         /// </summary>
         public Status Status { get; set; } = Status.Enable;
+
+        /// <summary>
+        /// 成员
+        /// </summary>
+        public virtual List<Member>? Members { get; set; }
     }
 }

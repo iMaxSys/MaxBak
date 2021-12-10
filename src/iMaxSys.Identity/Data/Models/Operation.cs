@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: XappSns.cs
-//摘要: 应用x社交账号 
+//文件: Operation.cs
+//摘要: 操作
 //说明:
 //
 //当前：1.0
@@ -11,19 +11,26 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-
-using System.Collections.Generic;
-
 using iMaxSys.Max.Domain;
 using iMaxSys.Max.Data.Entities;
 
-namespace iMaxSys.Data.Models
+namespace iMaxSys.Identity.Data.Models
 {
     /// <summary>
-    /// 应用x社交网络
+    /// Operation
     /// </summary>
-    public class XppSns : MasterEntity
+    public class Operation : TenantMasterEntity
     {
+        /// <summary>
+        /// XppId
+        /// </summary>
+        public long XppId { get; set; }
+
+        /// <summary>
+        /// MenuId
+        /// </summary>
+        public long MenuId { get; set; }
+
         /// <summary>
         /// 名称
         /// </summary>
@@ -35,43 +42,43 @@ namespace iMaxSys.Data.Models
         public string Alias { get; set; } = string.Empty;
 
         /// <summary>
-        /// Description
+        /// Code
         /// </summary>
-        public string? Description { get; set; }
+        public string Code { get; set; } = string.Empty;
 
         /// <summary>
-        /// 应用Id
+        /// QuickCode
         /// </summary>
-        public long XppId { get; set; }
+        public string QuickCode { get; set; } = string.Empty;
 
         /// <summary>
-        /// 社交平台账号来源
+        /// Descripton
         /// </summary>
-        public PlatformSource Source { get; set; }
+        public string? Descripton { get; set; }
 
         /// <summary>
-        /// 第三方平台原始Id
+        /// Icon
         /// </summary>
-        public string? AccountId { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
-        /// AppId
+        /// Style
         /// </summary>
-        public string? AppId { get; set; }
+        public string? Style { get; set; }
 
         /// <summary>
-        /// AppSecret
+        /// Router
         /// </summary>
-        public string? AppSecret { get; set; }
+        public string Router { get; set; } = string.Empty;
 
         /// <summary>
-        /// 状态
+        /// Status
         /// </summary>
         public Status Status { get; set; }
 
         /// <summary>
-        /// App
+        /// Menu
         /// </summary>
-        public virtual Xpp Xpp { get; set; } = new();
+        public virtual Menu Menu { get; set; } = new();
     }
 }

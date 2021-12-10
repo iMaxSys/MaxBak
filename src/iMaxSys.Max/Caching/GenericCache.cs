@@ -18,7 +18,7 @@ namespace iMaxSys.Max.Caching;
 
 public class GenericCache : RedisService, IGenericCache
 {
-    public GenericCache(IOptions<MaxOption> option) : base(option.Value.Caching!.Connection, option.Value.AppId)
+    public GenericCache(IOptions<MaxOption> option) : base(option.Value.Caching!.Connection, option.Value.XppId)
     {
     }
 }

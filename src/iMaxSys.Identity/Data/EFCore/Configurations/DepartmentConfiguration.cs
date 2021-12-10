@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
-//文件: TenantConfiguration.cs
-//摘要: TenantConfiguration
+//文件: DepartmentConfiguration.cs
+//摘要: Department映射配置
 //说明:
 //
 //当前：1.0
@@ -17,36 +17,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using iMaxSys.Max.Data.EFCore.Configurations;
+using iMaxSys.Identity.Data.Models;
 
-using iMaxSys.Data.Models;
-
-namespace iMaxSys.Data.EFCore.Configurations
+namespace iMaxSys.Identity.Data.EFCore.Configurations
 {
     /// <summary>
-    /// Tenant映射配置
+    /// Department映射配置
     /// </summary>
-    public class TenantConfiguration : MasterEntityConfiguration<Tenant>
+    public class DepartmentConfiguration : TenantMasterEntityConfiguration<Department>
     {
-        protected override void Configures(EntityTypeBuilder<Tenant> builder)
+        protected override void Configures(EntityTypeBuilder<Department> builder)
         {
             //基类配置
             base.Configures(builder);
-            //Name
+            //名称
             builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
-            //Alias
+            //别名
             builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).IsRequired();
-            //QuickCode
-            builder.Property(x => x.QuickCode).HasColumnName("quick_code").HasMaxLength(50).IsRequired();
-            //Description
-            builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255);
-            //Start
-            builder.Property(x => x.Start).HasColumnName("start").IsRequired();
-            //End
-            builder.Property(x => x.End).HasColumnName("end").IsRequired();
-            //Status
+            //描述
+            builder.Property(x => x.Descripton).HasColumnName("descripton").HasMaxLength(255);
+            //状态
             builder.Property(x => x.Status).HasColumnName("status").IsRequired();
             //ToTable
-            builder.ToTable("tenant");
+            builder.ToTable("department");
         }
     }
 }

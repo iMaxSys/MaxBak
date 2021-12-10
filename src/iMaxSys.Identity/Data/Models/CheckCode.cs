@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: Tenant.cs
-//摘要: Tenant 
+//文件: CheckCode.cs
+//摘要: CheckCode 
 //说明:
 //
 //当前：1.0
@@ -16,42 +16,52 @@ using System;
 using iMaxSys.Max.Domain;
 using iMaxSys.Max.Data.Entities;
 
-namespace iMaxSys.Data.Models
+namespace iMaxSys.Identity.Data.Models
 {
     /// <summary>
-    /// Tenant
+    /// 
     /// </summary>
-    public class Tenant : MasterEntity
+    public class CheckCode : TenantMasterEntity
     {
         /// <summary>
-        /// 名称
+        /// 应用Id
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public long XppId { get; set; }
 
         /// <summary>
-        /// 别名
+        /// 业务Id
         /// </summary>
-        public string Alias { get; set; } = string.Empty;
+        public long BizId { get; set; }
 
         /// <summary>
-        /// 速查码
+        /// MemberId
         /// </summary>
-        public string QuickCode { get; set; } = string.Empty;
+        public long MemberId { get; set; }
 
         /// <summary>
-        /// 描述
+        /// 目标
         /// </summary>
-        public string? Description { get; set; }
+        public string To { get; set; } = string.Empty;
 
         /// <summary>
-        /// Start
+        /// 验证码
         /// </summary>
-        public DateTime Start { get; set; }
+        public string Code { get; set; } = string.Empty;
 
         /// <summary>
-        /// End
+        /// 内容
         /// </summary>
-        public DateTime End { get; set; }
+        public string Content { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 过期时间
+        /// </summary>
+        public DateTime Expires { get; set; }
+
+        /// <summary>
+        /// 校验次数
+        /// </summary>
+        public int CheckCount { get; set; } = 0;
 
         /// <summary>
         /// 状态

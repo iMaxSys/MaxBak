@@ -29,14 +29,14 @@ namespace iMaxSys.Data.Models
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
+        /// 别名
+        /// </summary>
+        public string Alias { get; set; } = string.Empty;
+
+        /// <summary>
         /// Description
         /// </summary>
         public string? Description { get; set; }
-
-        /// <summary>
-        /// 新用户注册是否需要手机号
-        /// </summary>
-        public bool NeedMobile { get; set; }
 
         /// <summary>
         /// XppSource
@@ -61,7 +61,7 @@ namespace iMaxSys.Data.Models
         /// <summary>
         /// 状态
         /// </summary>
-        public Status Status { get; set; }
+        public Status Status { get; set; } = Status.Enable;
 
         /// <summary>
         /// 应用社交

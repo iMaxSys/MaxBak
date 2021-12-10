@@ -9,4 +9,10 @@
   <ItemGroup>
     <ProjectReference Include="..\iMaxSys.Max\iMaxSys.Max.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Pomelo.EntityFrameworkCore.MySql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0" />
+  </ItemGroup>
 </Project>
