@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using iMaxSys.Max.Data;
+using iMaxSys.Data;
 using iMaxSys.Max.Options;
 using iMaxSys.Identity.Data.EFCore;
 

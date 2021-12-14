@@ -11,8 +11,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
+    <None Remove="EFCore\" />
+    <None Remove="Entities\" />
+    <None Remove="Entities\App\" />
+    <None Remove="EFCore\Configurations\App\" />
+    <None Remove="Dapper" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EFCore\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Entities\App\" />
+    <Folder Include="EFCore\Configurations\App\" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@
 //日期：2021-10-12
 //----------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.Options;

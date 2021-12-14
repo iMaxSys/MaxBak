@@ -17,6 +17,38 @@ using System.ComponentModel;
 namespace iMaxSys.Max.Domain
 {
     /// <summary>
+    /// DbServer[0:MariaDB,1:MySQL,2:SqlServer,3:Oracle,4:PostgreSQL]
+    /// </summary>
+    public enum DbServer
+    {
+        /// <summary>
+        /// MariaDB
+        /// </summary>
+        [Description("MariaDB")]
+        MariaDB = 0,
+        /// <summary>
+        /// MariaDB
+        /// </summary>
+        [Description("MySQL")]
+        MySQL = 1,
+        /// <summary>
+        /// MariaDB
+        /// </summary>
+        [Description("SqlServer")]
+        SqlServer =2,
+        /// <summary>
+        /// MariaDB
+        /// </summary>
+        [Description("Oracle")]
+        Oracle = 3,
+        /// <summary>
+        /// MariaDB
+        /// </summary>
+        [Description("PostgreSQL")]
+        PostgreSQL = 4
+    }
+
+    /// <summary>
     /// 通用状态
     /// </summary>
     public enum Status

@@ -2,32 +2,35 @@
 //Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: LoginResult.cs
-//摘要: 登录结果
+//文件: CheckCodeModel.cs
+//摘要: 验证码模型
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2020-05-01
+//日期：2019-11-16
 //----------------------------------------------------------------
-
-using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity.Models
 {
     /// <summary>
-    /// 登录结果
+    /// 验证码模型
     /// </summary>
-    public class LoginResult
+    public class CheckCodeResult
     {
         /// <summary>
-        /// 访问令牌
+        /// Code
         /// </summary>
-        public IAccessToken? AccessToken { get; set; }
+        public string Code { get; set; } = String.Empty;
 
         /// <summary>
-        /// 成员
+        /// Expires
         /// </summary>
-        public IMember? Member { get; set; }
+        public int Expires { get; set; } = 0;
+
+        /// <summary>
+        /// BizName
+        /// </summary>
+        public string BizName { get; set; } = String.Empty;
     }
 }

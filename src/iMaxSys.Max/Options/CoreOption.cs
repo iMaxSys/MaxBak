@@ -11,6 +11,8 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Domain;
+
 namespace iMaxSys.Max.Options
 {
     public class CoreOption
@@ -24,6 +26,6 @@ namespace iMaxSys.Max.Options
         /// 数据库类型
         /// 0:MariaDB,1:MySQL,2:SqlServer,3:Oracle,4:Sybase
         /// </summary>
-        public int Type { get; set; } = 0;
+        public DbServer Type { get; set; } = DbServer.MariaDB;
     }
 }

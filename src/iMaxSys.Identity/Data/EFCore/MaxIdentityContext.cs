@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyModel;
 
-using iMaxSys.Max.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Logging.Debug;
+
+using iMaxSys.Data;
+using iMaxSys.Max.Options;
 
 namespace iMaxSys.Identity.Data.EFCore
 {
@@ -35,7 +37,7 @@ namespace iMaxSys.Identity.Data.EFCore
             base.OnConfiguring(optionsBuilder);
             //optionsBuilder.UseLoggerFactory(LoggerFactory);
             string connection = string.IsNullOrWhiteSpace(_maxOption.Identity.Connection) ? (string.IsNullOrWhiteSpace(_maxOption.Core.Connection) ? new DesignTimeMaxOptions().Value.Core.Connection : _maxOption.Core.Connection) : _maxOption.Identity.Connection;
-            optionsBuilder.UseMySql(connection);
+            optionsBuilder.UseDatabase(connection, _maxOption.Core.Type);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,11 +52,13 @@ namespace iMaxSys.Identity.Data.EFCore
         /// <param name="modelBuilder">ModelBuilder</param>
         private void ApplyConfigurations(ModelBuilder modelBuilder)
         {
-            //映射Core模块配置
-            var c = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Core")).FirstOrDefault();
-            var a = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(c.Name));
-            modelBuilder.ApplyConfigurationsFromAssembly(a);
-
+            //映射Data模块配置
+            var c = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Data")).FirstOrDefault();
+            if (c != null)
+            {
+                var a = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(c.Name));
+                modelBuilder.ApplyConfigurationsFromAssembly(a);
+            }
             //映射本模块配置
             modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
         }

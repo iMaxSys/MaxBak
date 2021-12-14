@@ -11,19 +11,17 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System;
-using System.Threading.Tasks;
+
 
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 
-using iMaxSys.Max.Data;
+using iMaxSys.Data;
 using iMaxSys.Max.Domain;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
-using iMaxSys.Max.Data.Specifications;
 
-using iMaxSys.Core.Data.Models;
+using iMaxSys.Data.Models;
 using iMaxSys.Identity.Data.Models;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
@@ -65,7 +63,7 @@ namespace iMaxSys.Identity
             //此处有意去除应用+租户+业务条件过滤
             ISpecification<CheckCode> spec = new Specification<CheckCode>(x => x.XappId == xappSns.XappId && x.BizId == bizId && x.To == to && x.Status == Status.Enable && x.Expires > DateTime.Now);
             spec = spec.ApplyTracking();
-            var checkCode = await _unitOfWork.GetRepo<CheckCode>().FirstOrDefaultAsync(spec);
+            var checkCode = await _unitOfWork.GetRepository<CheckCode>().FirstOrDefaultAsync(spec);
 
             //无匹配的验证码
             if (checkCode == null)

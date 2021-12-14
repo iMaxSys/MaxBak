@@ -49,6 +49,7 @@ global using Microsoft.Extensions.Options;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyModel;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Query;
 global using Microsoft.EntityFrameworkCore.Query.Internal;
@@ -63,6 +64,7 @@ global using StackExchange.Redis;
 
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Collection;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Max.Json.NamingPolicy;

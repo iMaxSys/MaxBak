@@ -16,19 +16,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
-
-using Microsoft.Extensions.DependencyModel;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-
-using iMaxSys.Max.Data;
 using iMaxSys.Max.Extentions;
-using iMaxSys.Max.Data.EFCore;
-using System.Collections.Generic;
 
 namespace iMaxSys.Max.DependencyInjection
 {
@@ -52,7 +40,7 @@ namespace iMaxSys.Max.DependencyInjection
             //var scoped = typeof(IDependency);
 
             //为提高性能,只加载框架相关程序集和应用程序程序集
-            var assemblies = UtilityExtentions.GetAppAssemblies();
+            var assemblies = UtilityExtensions.GetAppAssemblies();
 
             //获取所有包含接口标识类型
             var types = assemblies.SelectMany(x => x.GetTypes()).Where(c => c.IsClass && !c.IsAbstract && c.GetInterfaces().Contains(flags[0]));

@@ -21,18 +21,17 @@ using Microsoft.EntityFrameworkCore;
 
 using AutoMapper;
 
-using iMaxSys.Max.Data;
-using iMaxSys.Max.Data.Specifications;
+using iMaxSys.Data;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Algorithm.Collection;
 using iMaxSys.Identity.Data.EFCore;
 
-using DbTenant = iMaxSys.Core.Data.Models.Tenant;
 using DbMenu = iMaxSys.Identity.Data.Models.Menu;
 using DbRole = iMaxSys.Identity.Data.Models.Role;
 using DbMember = iMaxSys.Identity.Data.Models.Member;
+using DbTenant = iMaxSys.Data.Models.Tenant;
 
 namespace iMaxSys.Identity
 {
@@ -74,7 +73,7 @@ namespace iMaxSys.Identity
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        protected async Task<T> GetCacheAsync<T>(string key, bool global = false) => await _cache.GetAsync<T>(key, global);
+        protected async Task<T?> GetCacheAsync<T>(string key, bool global = false) => await _cache.GetAsync<T>(key, global);
 
         /// <summary>
         /// 设置缓存
