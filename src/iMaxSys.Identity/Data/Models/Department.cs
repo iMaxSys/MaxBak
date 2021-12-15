@@ -14,38 +14,37 @@
 using System.Collections.Generic;
 
 using iMaxSys.Max.Domain;
-using iMaxSys.Max.Data.Entities;
+using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models
+namespace iMaxSys.Identity.Data.Models;
+
+/// <summary>
+/// Department
+/// </summary>
+public class Department : TenantMasterEntity
 {
     /// <summary>
-    /// Department
+    /// 名称
     /// </summary>
-    public class Department : TenantMasterEntity
-    {
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 别名
-        /// </summary>
-        public string Alias { get; set; } = string.Empty;
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string Alias { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 描述
-        /// </summary>
-        public string? Descripton { get; set; }
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string? Descripton { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public Status Status { get; set; } = Status.Enable;
+    /// <summary>
+    /// 状态
+    /// </summary>
+    public Status Status { get; set; } = Status.Enable;
 
-        /// <summary>
-        /// 成员
-        /// </summary>
-        public virtual List<Member>? Members { get; set; }
-    }
+    /// <summary>
+    /// 成员
+    /// </summary>
+    public virtual IList<Member>? Members { get; set; }
 }

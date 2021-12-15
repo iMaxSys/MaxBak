@@ -12,73 +12,72 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Domain;
-using iMaxSys.Max.Data.Entities;
+using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models
+namespace iMaxSys.Identity.Data.Models;
+
+/// <summary>
+/// Operation
+/// </summary>
+public class Operation : TenantMasterEntity
 {
     /// <summary>
-    /// Operation
+    /// XppId
     /// </summary>
-    public class Operation : TenantMasterEntity
-    {
-        /// <summary>
-        /// XppId
-        /// </summary>
-        public long XppId { get; set; }
+    public long XppId { get; set; }
 
-        /// <summary>
-        /// MenuId
-        /// </summary>
-        public long MenuId { get; set; }
+    /// <summary>
+    /// MenuId
+    /// </summary>
+    public long MenuId { get; set; }
 
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+    /// <summary>
+    /// 名称
+    /// </summary>
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 别名
-        /// </summary>
-        public string Alias { get; set; } = string.Empty;
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string Alias { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Code
-        /// </summary>
-        public string Code { get; set; } = string.Empty;
+    /// <summary>
+    /// Code
+    /// </summary>
+    public string Code { get; set; } = string.Empty;
 
-        /// <summary>
-        /// QuickCode
-        /// </summary>
-        public string QuickCode { get; set; } = string.Empty;
+    /// <summary>
+    /// QuickCode
+    /// </summary>
+    public string QuickCode { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Descripton
-        /// </summary>
-        public string? Descripton { get; set; }
+    /// <summary>
+    /// Descripton
+    /// </summary>
+    public string? Descripton { get; set; }
 
-        /// <summary>
-        /// Icon
-        /// </summary>
-        public string? Icon { get; set; }
+    /// <summary>
+    /// Icon
+    /// </summary>
+    public string? Icon { get; set; }
 
-        /// <summary>
-        /// Style
-        /// </summary>
-        public string? Style { get; set; }
+    /// <summary>
+    /// Style
+    /// </summary>
+    public string? Style { get; set; }
 
-        /// <summary>
-        /// Router
-        /// </summary>
-        public string Router { get; set; } = string.Empty;
+    /// <summary>
+    /// Router
+    /// </summary>
+    public string Router { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Status
-        /// </summary>
-        public Status Status { get; set; }
+    /// <summary>
+    /// Status
+    /// </summary>
+    public Status Status { get; set; }
 
-        /// <summary>
-        /// Menu
-        /// </summary>
-        public virtual Menu Menu { get; set; } = new();
-    }
+    /// <summary>
+    /// Menu
+    /// </summary>
+    public virtual Menu Menu { get; set; } = new();
 }

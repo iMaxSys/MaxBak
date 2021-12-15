@@ -11,8 +11,7 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System;
-using iMaxSys.Max.Data.EFCore;
+using iMaxSys.Data.EFCore;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Models;
 

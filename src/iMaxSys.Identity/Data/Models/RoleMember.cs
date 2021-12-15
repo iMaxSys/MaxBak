@@ -12,38 +12,37 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Domain;
-using iMaxSys.Max.Data.Entities;
+using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models
+namespace iMaxSys.Identity.Data.Models;
+
+/// <summary>
+/// RoleMember
+/// </summary>
+public class RoleMember : TenantMasterEntity
 {
     /// <summary>
-    /// RoleMember
+    /// MemberId
     /// </summary>
-    public class RoleMember : TenantMasterEntity
-    {
-        /// <summary>
-        /// MemberId
-        /// </summary>
-        public long MemberId { get; set; }
+    public long MemberId { get; set; }
 
-        /// <summary>
-        /// RoleId
-        /// </summary>
-        public long RoleId { get; set; }
+    /// <summary>
+    /// RoleId
+    /// </summary>
+    public long RoleId { get; set; }
 
-        /// <summary>
-        /// MemberId
-        /// </summary>
-        public Status Status { get; set; } = Status.Enable;
+    /// <summary>
+    /// MemberId
+    /// </summary>
+    public Status Status { get; set; } = Status.Enable;
 
-        /// <summary>
-        /// Role
-        /// </summary>
-        public Role Role { get; set; } = new();
+    /// <summary>
+    /// Role
+    /// </summary>
+    public Role Role { get; set; } = new();
 
-        /// <summary>
-        /// Member
-        /// </summary>
-        public Member Member { get; set; } = new();
-    }
+    /// <summary>
+    /// Member
+    /// </summary>
+    public Member Member { get; set; } = new();
 }

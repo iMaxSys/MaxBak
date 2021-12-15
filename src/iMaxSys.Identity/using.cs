@@ -11,11 +11,21 @@
 //日期：2021-10-12
 //----------------------------------------------------------------
 
-using System;
-using System.Threading.Tasks;
+global using System;
+global using System.Linq;
+global using System.Reflection;
+global using System.Runtime.Loader;
+global using System.Threading.Tasks;
 
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Options;
+global using Microsoft.Extensions.DependencyModel;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Design;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using AutoMapper;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Logging.Console;
+global using Microsoft.Extensions.Logging.Debug;
+
+global using AutoMapper;
 

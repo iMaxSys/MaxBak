@@ -11,37 +11,31 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-using iMaxSys.Max.Data.EFCore.Configurations;
+using iMaxSys.Data.EFCore.Configurations;
 using iMaxSys.Identity.Data.Models;
 
-namespace iMaxSys.Identity.Data.EFCore.Configurations
+namespace iMaxSys.Identity.Data.EFCore.Configurations;
+
+/// <summary>
+/// Department映射配置
+/// </summary>
+public class DepartmentConfiguration : TenantMasterEntityConfiguration<Department>
 {
-    /// <summary>
-    /// Department映射配置
-    /// </summary>
-    public class DepartmentConfiguration : TenantMasterEntityConfiguration<Department>
+    protected override void Configures(EntityTypeBuilder<Department> builder)
     {
-        protected override void Configures(EntityTypeBuilder<Department> builder)
-        {
-            //基类配置
-            base.Configures(builder);
-            //名称
-            builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
-            //别名
-            builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).IsRequired();
-            //描述
-            builder.Property(x => x.Descripton).HasColumnName("descripton").HasMaxLength(255);
-            //状态
-            builder.Property(x => x.Status).HasColumnName("status").IsRequired();
-            //ToTable
-            builder.ToTable("department");
-        }
+        //基类配置
+        base.Configures(builder);
+        //名称
+        builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
+        //别名
+        builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).IsRequired();
+        //描述
+        builder.Property(x => x.Descripton).HasColumnName("descripton").HasMaxLength(255);
+        //状态
+        builder.Property(x => x.Status).HasColumnName("status").IsRequired();
+        //索引
+        builder.HasIndex(x => new { x.Name });
+        //ToTable
+        builder.ToTable("department");
     }
 }
-
-

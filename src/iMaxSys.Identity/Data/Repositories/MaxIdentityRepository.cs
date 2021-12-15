@@ -11,9 +11,9 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Data;
-using iMaxSys.Max.Data.EFCore;
-using iMaxSys.Max.Data.Entities;
+using iMaxSys.Data;
+using iMaxSys.Data.EFCore;
+using iMaxSys.Data.Entities;
 using iMaxSys.Max.DependencyInjection;
 
 using iMaxSys.Identity.Data.EFCore;

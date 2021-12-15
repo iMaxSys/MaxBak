@@ -11,7 +11,7 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Data;
+using iMaxSys.Data;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Identity.Data.Models;
 using iMaxSys.Identity.Models;

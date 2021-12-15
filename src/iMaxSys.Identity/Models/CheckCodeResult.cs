@@ -11,26 +11,25 @@
 //日期：2019-11-16
 //----------------------------------------------------------------
 
-namespace iMaxSys.Identity.Models
+namespace iMaxSys.Identity.Models;
+
+/// <summary>
+/// 验证码模型
+/// </summary>
+public class CheckCodeResult
 {
     /// <summary>
-    /// 验证码模型
+    /// Code
     /// </summary>
-    public class CheckCodeResult
-    {
-        /// <summary>
-        /// Code
-        /// </summary>
-        public string Code { get; set; } = String.Empty;
+    public string Code { get; set; } = String.Empty;
 
-        /// <summary>
-        /// Expires
-        /// </summary>
-        public int Expires { get; set; } = 0;
+    /// <summary>
+    /// Expires
+    /// </summary>
+    public int Expires { get; set; } = 0;
 
-        /// <summary>
-        /// BizName
-        /// </summary>
-        public string BizName { get; set; } = String.Empty;
-    }
+    /// <summary>
+    /// BizName
+    /// </summary>
+    public string BizName { get; set; } = String.Empty;
 }
