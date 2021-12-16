@@ -11,6 +11,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+/*
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.Options;
@@ -176,3 +177,4 @@ namespace iMaxSys.Identity
         }
     }
 }
+*/

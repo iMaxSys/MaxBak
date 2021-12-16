@@ -33,6 +33,18 @@ namespace iMaxSys.Max.Domain
         Fail = 999999,
 
         /// <summary>
+        /// 无法获取范型仓储
+        /// </summary>
+        [Description("无法获取范型仓储")]
+        CantGetRepository = 30,
+
+        /// <summary>
+        /// 无法定制范型仓储
+        /// </summary>
+        [Description("无法获取定制仓储")]
+        CantGetCustomRepository = 31,
+
+        /// <summary>
         /// 未授权
         /// </summary>
         [Description("未授权")]

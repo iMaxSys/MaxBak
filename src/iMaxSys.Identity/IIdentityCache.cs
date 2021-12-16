@@ -11,6 +11,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+/*
 using System;
 using System.Collections.Concurrent;
 
@@ -28,3 +29,4 @@ namespace iMaxSys.Identity
         ConcurrentDictionary<long, IAuthority> Authorities { get; }
     }
 }
+*/

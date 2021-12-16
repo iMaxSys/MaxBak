@@ -10,7 +10,7 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
-
+/*
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -195,3 +195,4 @@ namespace iMaxSys.Identity
         SnsPhoneNumber GetSnsPhoneNumber(long sid, string data, string key, string iv);
     }
 }
+*/

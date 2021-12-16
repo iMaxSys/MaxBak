@@ -26,7 +26,7 @@ public abstract class MasterEntity : SingleEntity
     /// <summary>
     /// 创建者名称
     /// </summary>
-    public string Creator { get; set; } = "sys";
+    public string Creator { get; set; } = "0";
 
     /// <summary>
     /// 修改者标识
@@ -36,7 +36,7 @@ public abstract class MasterEntity : SingleEntity
     /// <summary>
     /// 修改者名称
     /// </summary>
-    public string Reviser { get; set; } = "sys";
+    public string Reviser { get; set; } = "0";
 
     /// <summary>
     /// 修改时间

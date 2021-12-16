@@ -10,7 +10,7 @@
 //作者：陶剑扬
 //日期：2019-11-16
 //----------------------------------------------------------------
-
+/*
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
@@ -75,3 +75,4 @@ namespace iMaxSys.Identity
         }
     }
 }
+*/

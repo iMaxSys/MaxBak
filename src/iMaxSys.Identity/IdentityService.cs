@@ -11,6 +11,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+/*
 using System;
 using System.Linq;
 using System.Text.Json;
@@ -45,6 +46,7 @@ using iMaxSys.SDK.Sns.WeChat.Services;
 using DbMember = iMaxSys.Identity.Data.Models.Member;
 using System.Linq.Expressions;
 using iMaxSys.Max.Data.Query;
+using iMaxSys.Data;
 
 namespace iMaxSys.Identity
 {
@@ -54,7 +56,7 @@ namespace iMaxSys.Identity
     /// </summary>
     public class IdentityService : Service, IIdentityService
     {
-        const string PASSWORD = "rmfy2020";
+        const string PASSWORD = "wow#babylon";
 
         private readonly ISns _sns;
         private readonly IRoleService _roleService;
@@ -1191,3 +1193,4 @@ namespace iMaxSys.Identity
         }
     }
 }
+*/

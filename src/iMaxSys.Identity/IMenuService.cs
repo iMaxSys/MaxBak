@@ -10,7 +10,7 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
-
+/*
 using System.Threading.Tasks;
 
 using iMaxSys.Max.Identity.Domain;
@@ -77,3 +77,4 @@ namespace iMaxSys.Identity
         Task RemoveMenuItemAsync(long id, long tenantId = 0);
     }
 }
+*/

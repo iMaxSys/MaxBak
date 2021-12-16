@@ -10,7 +10,7 @@
 //作者：陶剑扬
 //日期：2019-11-16
 //----------------------------------------------------------------
-
+/*
 using iMaxSys.Max.Domain;
 
 namespace iMaxSys.Identity.Models
@@ -126,3 +126,4 @@ namespace iMaxSys.Identity.Models
         public string IP { get; set; }
     }
 }
+*/

@@ -26,5 +26,3 @@ public class CheckCodeRepository : EfRepository<CheckCode>, ICheckCodeRepository
     {
     }
 }
-
-

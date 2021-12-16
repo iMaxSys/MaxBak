@@ -51,11 +51,13 @@ public static class Extensions
         }
 
         var types = UtilityExtensions.GetAppTypes();
-        var root = typeof(IRepository<>);
-        Type ignores = typeof(EfRepository<>);
+        Type iroot = typeof(ICustomRepository);         //定制仓储接口标识
+        Type root = typeof(IRepository<>);              //范型仓储接口标识
+        Type ignores = typeof(EfRepository<>);          //排除中间类型
         Type st;
 
-        var mts = types.Where(item => (item != ignores) && item.GetInterfaces().Where(i => i.IsGenericType).Any(i => i.GetGenericTypeDefinition() == root));
+        //获取仓储实现类型集合
+        var mts = types.Where(item => (item != ignores) && item.GetInterfaces().Any(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i == iroot));
 
         foreach (var assignedType in mts)
         {

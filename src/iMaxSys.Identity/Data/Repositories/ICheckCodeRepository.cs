@@ -21,8 +21,6 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// <summary>
 /// 验证码仓储接口
 /// </summary>
-public interface ICheckCodeRepository : IDependency, ICustomRepository, IRepository<CheckCode>
+public interface ICheckCodeRepository : ICustomRepository, IRepository<CheckCode>
 {
 }
-
-

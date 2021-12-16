@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: IMaxIdentityRepository.cs
-//摘要: 身份通用仓储接口
+//文件: IIDentityRepository.cs
+//摘要: 身份仓储接口
 //说明:
 //
 //当前：1.0
@@ -12,16 +12,13 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Data;
-using iMaxSys.Data.Entities;
 using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Identity.Data.Models;
+using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity.Data.Repositories
 {
-    /// <summary>
-    /// 身份通用仓储接口
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IMaxIdentityRepository<T> : IRepository<T> where T : Entity
+    public interface IIDentityRepository : ICustomRepository
     {
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using iMaxSys.Max.Data;
 using iMaxSys.Max.Data.EFCore;
 using iMaxSys.Max.Data.Entities;
@@ -33,3 +34,4 @@ namespace iMaxSys.Identity.Services
     //    }
     //}
 }
+*/

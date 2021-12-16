@@ -13,6 +13,8 @@
 
 using iMaxSys.Data.EFCore;
 using iMaxSys.Data.Entities;
+using iMaxSys.Max.Domain;
+using iMaxSys.Max.Exceptions;
 
 namespace iMaxSys.Data;
 
@@ -48,18 +50,16 @@ public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <returns></returns>
-    public IRepository<TEntity>? GetRepository<TEntity>() where TEntity : Entity
+    public IRepository<TEntity> GetRepository<TEntity>() where TEntity : Entity
     {
-        try
+        //var repo = _serviceProvider.GetServices<IRepository<TEntity>>();
+        //var repo = _serviceProvider.GetServices(typeof(IRepository<TEntity>));
+        var respositoy = _serviceProvider.GetServices<IRepository<TEntity>>().FirstOrDefault(x => x.Code == _context.GetType().GetHashCode());
+        if (respositoy == null)
         {
-            //var repo = _serviceProvider.GetServices<IRepository<TEntity>>();
-            var repo = _serviceProvider.GetServices(typeof(IRepository<TEntity>));
-            return _serviceProvider.GetServices<IRepository<TEntity>>().FirstOrDefault(x => x.Code == _context.GetType().GetHashCode());
+            throw new MaxException(ResultEnum.CantGetRepository);
         }
-        catch
-        {
-            return null;
-        }
+        return respositoy;
     }
 
     /// <summary>
@@ -67,9 +67,16 @@ public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
     /// </summary>
     /// <typeparam name="TCustomRepository"></typeparam>
     /// <returns></returns>
-    public TCustomRepository? GetCustomRepository<TCustomRepository>() where TCustomRepository : ICustomRepository
+    public TCustomRepository GetCustomRepository<TCustomRepository>() where TCustomRepository : ICustomRepository
     {
-        return _serviceProvider.GetService<TCustomRepository>();
+        try
+        {
+            return _serviceProvider.GetRequiredService<TCustomRepository>();
+        }
+        catch (Exception ex)
+        {
+            throw new MaxException(ex, ResultEnum.CantGetCustomRepository);
+        }
     }
 
     /// <summary>

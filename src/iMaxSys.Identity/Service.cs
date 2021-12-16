@@ -10,7 +10,7 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
-
+/*
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -329,3 +329,4 @@ namespace iMaxSys.Identity
         }
     }
 }
+*/

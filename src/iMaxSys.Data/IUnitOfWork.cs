@@ -37,14 +37,14 @@ public interface IUnitOfWork
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <returns></returns>
-    IRepository<TEntity>? GetRepository<TEntity>() where TEntity : Entity;
+    IRepository<TEntity> GetRepository<TEntity>() where TEntity : Entity;
 
     /// <summary>
     /// 获取定制仓储
     /// </summary>
     /// <typeparam name="TCustomRepository"></typeparam>
     /// <returns></returns>
-    TCustomRepository? GetCustomRepository<TCustomRepository>() where TCustomRepository : ICustomRepository;
+    TCustomRepository GetCustomRepository<TCustomRepository>() where TCustomRepository : ICustomRepository;
 }
 
 /// <summary>

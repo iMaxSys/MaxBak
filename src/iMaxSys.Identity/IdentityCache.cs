@@ -10,7 +10,7 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
-
+/*
 using System.Collections.Concurrent;
 
 using Microsoft.Extensions.Options;
@@ -45,3 +45,4 @@ namespace iMaxSys.Identity
         }
     }
 }
+*/

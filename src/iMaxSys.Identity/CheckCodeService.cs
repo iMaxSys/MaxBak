@@ -17,14 +17,15 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 
 using iMaxSys.Data;
+using iMaxSys.Data.Entities;
 using iMaxSys.Max.Domain;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
-
-using iMaxSys.Data.Models;
 using iMaxSys.Identity.Data.Models;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Identity.Data.Repositories;
+using iMaxSys.Data.Entities.App;
 
 namespace iMaxSys.Identity
 {
@@ -35,11 +36,14 @@ namespace iMaxSys.Identity
     {
         private readonly MaxOption _option;
         private readonly IUnitOfWork _unitOfWork;
+        //private readonly IMaxIdentityRepository _maxIdentityRepository;
+        private readonly ICheckCodeRepository _checkCodeRepository;
 
         public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork)
         {
             _option = option.Value;
             _unitOfWork = unitOfWork;
+            _checkCodeRepository = _unitOfWork.GetCustomRepository<ICheckCodeRepository>();
         }
 
         /// <summary>
@@ -58,12 +62,14 @@ namespace iMaxSys.Identity
                 throw new MaxException(ResultEnum.CheckCodeCantNull);
             }
 
-            var xappSns = await _unitOfWork.GetRepo<XappSns>().GetAsync(sid);
+            //定制仓储
+            var repository = _unitOfWork.GetCustomRepository<ICheckCodeRepository>();
+
+
+            var xppSns = await _unitOfWork.GetRepository<XppSns>().FindAsync(sid);
 
             //此处有意去除应用+租户+业务条件过滤
-            ISpecification<CheckCode> spec = new Specification<CheckCode>(x => x.XappId == xappSns.XappId && x.BizId == bizId && x.To == to && x.Status == Status.Enable && x.Expires > DateTime.Now);
-            spec = spec.ApplyTracking();
-            var checkCode = await _unitOfWork.GetRepository<CheckCode>().FirstOrDefaultAsync(spec);
+            var checkCode = await _unitOfWork.GetRepository<CheckCode>().GetFirstOrDefaultAsync(x => x.XppId == xppSns!.XppId && x.BizId == bizId && x.To == to && x.Status == Status.Enable && x.Expires > DateTime.Now, null, null, false, true);
 
             //无匹配的验证码
             if (checkCode == null)
@@ -83,7 +89,7 @@ namespace iMaxSys.Identity
                     //验证错误
                     throw new MaxException(ResultEnum.CheckCodeError);
                 }
-                await _unitOfWork.GetRepo<CheckCode>().UpdateAsync(checkCode);
+                _unitOfWork.GetRepository<CheckCode>().Update(checkCode);
                 await _unitOfWork.SaveChangesAsync();
             }
         }
@@ -98,24 +104,26 @@ namespace iMaxSys.Identity
         /// <param name="memberId"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public async Task<CheckCodeModel> MakeAsync(long sid, long tenantId, long bizId, string bizName, long memberId, string to)
+        public async Task<CheckCodeResult> MakeAsync(long sid, long tenantId, long bizId, string bizName, long memberId, string to)
         {
-            //验证码请求频率检查
-            bool has = await _unitOfWork.GetRepo<CheckCode>().ExistAsync(x => (x.To == to || (x.MemberId > 0 && x.MemberId == memberId)) && x.Expires > DateTime.Now);
+            //验证码请求频率检查, 如果存在有效的验证码, 则提示请求频率过快
+            //bool has = await _checkCodeRepository.AnyAsync(x => (x.To == to || (x.MemberId > 0 && x.MemberId == memberId)) && x.Expires > DateTime.Now);
+            bool has = await _unitOfWork.GetRepository<CheckCode>().AnyAsync(x => (x.To == to || (x.MemberId > 0 && x.MemberId == memberId)) && x.Expires > DateTime.Now);
+
             if (has)
             {
                 throw new MaxException(ResultEnum.CheckCodeTimeLimit);
             }
 
-            var xappSns = await _unitOfWork.GetRepo<XappSns>().GetAsync(sid);
+            var xppSns = await _unitOfWork.GetRepository<XppSns>().FindAsync(sid);
 
             //生成验证码发送信息
-            string code = Max.Algorithm.CheckCode.Next(4);
+            string code = Max.Algorithm.CheckCode.Next();
 
-            CheckCode checkCode = new CheckCode
+            CheckCode checkCode = new()
             {
                 TenantId = tenantId,
-                XappId = xappSns.XappId,
+                XppId = xppSns!.XppId,
                 BizId = bizId,
                 Code = code,
                 Content = $"验证码为:{code}，{_option.Identity.CheckCodeExpires}分钟内有效，请尽快进行{bizName}",
@@ -127,10 +135,10 @@ namespace iMaxSys.Identity
             };
 
             //保存验证码
-            await _unitOfWork.GetRepo<CheckCode>().AddAsync(checkCode);
+            await _unitOfWork.GetRepository<CheckCode>().AddAsync(checkCode);
             await _unitOfWork.SaveChangesAsync();
 
-            return new CheckCodeModel
+            return new CheckCodeResult
             {
                 Code = code,
                 Expires = _option.Identity.CheckCodeExpires,
