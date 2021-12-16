@@ -19,23 +19,22 @@ using iMaxSys.Data;
 using iMaxSys.Max.Options;
 using iMaxSys.Identity.Data.EFCore;
 
-namespace iMaxSys.Identity
+namespace iMaxSys.Identity;
+
+public static class Extensions
 {
-    public static class Extensions
+    const string FXN = "Max";
+
+    public static void AddMaxIdentity(this IServiceCollection services, IConfiguration configuration)
     {
-        const string FXN = "Max";
+        services.Configure<MaxOption>(configuration.GetSection(FXN));
+        services.AddDbContext<MaxIdentityContext>().AddUnitOfWork<MaxIdentityContext>();
+    }
 
-        public static void AddMaxIdentity(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<MaxOption>(configuration.GetSection(FXN));
-            services.AddDbContext<MaxIdentityContext>().AddUnitOfWork<MaxIdentityContext>();
-        }
-
-        public static IApplicationBuilder UseMaxIdentity(this IApplicationBuilder builder)
-        {
-            //身份中间件
-            return builder.UseMiddleware<IdentityMiddleware>();
-        }
+    public static IApplicationBuilder UseMaxIdentity(this IApplicationBuilder builder)
+    {
+        //身份中间件
+        return builder.UseMiddleware<IdentityMiddleware>();
     }
 }
 */

@@ -51,6 +51,7 @@ public static class MaxExtensions
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddDependencyInjection();
         services.AddOptions();
+        services.AddEndpointsApiExplorer();
     }
 
     public static IApplicationBuilder UseMax(this IApplicationBuilder builder)

@@ -65,7 +65,6 @@ namespace iMaxSys.Identity
             //定制仓储
             var repository = _unitOfWork.GetCustomRepository<ICheckCodeRepository>();
 
-
             var xppSns = await _unitOfWork.GetRepository<XppSns>().FindAsync(sid);
 
             //此处有意去除应用+租户+业务条件过滤

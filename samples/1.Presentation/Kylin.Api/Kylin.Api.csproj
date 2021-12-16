@@ -17,4 +17,9 @@
   <ItemGroup>
     <None Include="..\..\..\.editorconfig" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\iMaxSys.Identity\iMaxSys.Identity.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

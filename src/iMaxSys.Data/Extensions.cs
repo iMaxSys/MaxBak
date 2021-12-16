@@ -53,19 +53,29 @@ public static class Extensions
         var types = UtilityExtensions.GetAppTypes();
         Type iroot = typeof(ICustomRepository);         //定制仓储接口标识
         Type root = typeof(IRepository<>);              //范型仓储接口标识
-        Type ignores = typeof(EfRepository<>);          //排除中间类型
-        Type st;
+        Type ignores = typeof(EfRepository<>);          //排除中间类型, 多库情况下，直接注入范型仓储无法识别, 例如IReposotory<Rule>, 因为无法确定具体哪个库/DbContext
+        Type irepository;
 
-        //获取仓储实现类型集合
-        var mts = types.Where(item => (item != ignores) && item.GetInterfaces().Any(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i == iroot));
-
-        foreach (var assignedType in mts)
+        //获取仓储实现类型集合, 来着IRepository<>和ICustomRepository之实现
+        //var ts = types.Where(t => t != ignores && t.GetInterfaces().Any(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i == iroot));
+        var repositories = types.Where(t => t.GetInterfaces().Any(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i == iroot));
+        foreach (var repository in repositories)
         {
-            var serviceTypes = assignedType.GetInterfaces().Where(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == root));
-            foreach (var serviceType in serviceTypes)
+            var interfaces = repository.GetInterfaces();
+
+            //定制仓储注册, 定制仓储注册后, 便不再注册范型仓储
+            var icustomrepository = repository.GetInterfaces().FirstOrDefault(i => i.GetInterfaces().Contains(iroot));
+            if (icustomrepository != null)
             {
-                st = serviceType.IsGenericType ? (serviceType.GenericTypeArguments.Length > 0 && serviceType.GenericTypeArguments[0].IsGenericParameter ? serviceType.GetGenericTypeDefinition() : serviceType) : serviceType;
-                services.AddScoped(st, assignedType);
+                services.AddScoped(icustomrepository, repository);
+                continue;
+            }
+
+            var its = interfaces.Where(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == root));
+            foreach (var it in its)
+            {
+                irepository = it.IsGenericType ? (it.GenericTypeArguments.Length > 0 && it.GenericTypeArguments[0].IsGenericParameter ? it.GetGenericTypeDefinition() : it) : it;
+                services.AddScoped(irepository, repository);
             }
         }
 
