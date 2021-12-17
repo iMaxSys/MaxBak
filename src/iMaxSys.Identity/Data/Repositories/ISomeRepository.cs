@@ -1,9 +1,12 @@
 ﻿using System;
 using iMaxSys.Data;
+using iMaxSys.Data.EFCore;
+using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Identity.Data.Models;
 
 namespace iMaxSys.Identity.Data.Repositories
 {
-	public interface ISomeRepository : ICustomRepository
+	public interface ISomeRepository : IRepository
 	{
 		string Get();
 	}
@@ -15,4 +18,22 @@ namespace iMaxSys.Identity.Data.Repositories
             return $"{ToString()}";
         }
     }
+
+
+	public interface IBabyRepository : IRepository<CheckCode>
+	{
+		string Get();
+	}
+
+	public class BabyRepository : EfRepository<CheckCode>, IBabyRepository
+	{
+        public BabyRepository(MaxIdentityContext context) : base(context)
+        {
+        }
+
+        public string Get()
+		{
+			return $"{ToString()}";
+		}
+	}
 }

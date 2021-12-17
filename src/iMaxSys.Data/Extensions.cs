@@ -51,33 +51,35 @@ public static class Extensions
         }
 
         var types = UtilityExtensions.GetAppTypes();
-        Type iroot = typeof(ICustomRepository);         //定制仓储接口标识
-        Type root = typeof(IRepository<>);              //范型仓储接口标识
-        Type ignores = typeof(EfRepository<>);          //排除中间类型, 多库情况下，直接注入范型仓储无法识别, 例如IReposotory<Rule>, 因为无法确定具体哪个库/DbContext
-        Type irepository;
+        Type root = typeof(IRepository);                    //仓储接口标识
+        Type iroot = typeof(IRepository<>);                 //范型仓储接口标识
+        IEnumerable<Type>? irepositories;
 
-        //获取仓储实现类型集合, 来着IRepository<>和ICustomRepository之实现
-        //var ts = types.Where(t => t != ignores && t.GetInterfaces().Any(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i == iroot));
-        var repositories = types.Where(t => t.GetInterfaces().Any(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i == iroot));
+        //获取所有仓储实现类
+        var repositories = types.Where(t => t.GetInterfaces().Any(x => x == root));
         foreach (var repository in repositories)
         {
             var interfaces = repository.GetInterfaces();
 
-            //定制仓储注册, 定制仓储注册后, 便不再注册范型仓储
-            var icustomrepository = repository.GetInterfaces().FirstOrDefault(i => i.GetInterfaces().Contains(iroot));
-            if (icustomrepository != null)
+            //按范型(ef<>&xx<>)和非范型(定制)处理
+            if (repository.IsGenericType)
             {
-                services.AddScoped(icustomrepository, repository);
-                continue;
+                //范型实现只取范型接口
+                irepositories = interfaces.Where(x => x.IsGenericType).Select(x => x.GenericTypeArguments.Length > 0 && x.GenericTypeArguments[0].IsGenericParameter ? x.GetGenericTypeDefinition() : x);
+            }
+            else
+            {
+                //非范型只取非范型非仓储标识接口
+                irepositories = interfaces.Where(x => !x.IsGenericType && x != root);
             }
 
-            var its = interfaces.Where(i => (i.IsGenericType && i.GetGenericTypeDefinition() == root) || i.GetInterfaces().Any(i => i.GetGenericTypeDefinition() == root));
-            foreach (var it in its)
+            foreach (var irepository in irepositories)
             {
-                irepository = it.IsGenericType ? (it.GenericTypeArguments.Length > 0 && it.GenericTypeArguments[0].IsGenericParameter ? it.GetGenericTypeDefinition() : it) : it;
                 services.AddScoped(irepository, repository);
             }
         }
+
+        var x = services.Where(x => x.ServiceType.GetInterfaces().Any(i => i == root));
 
         _registered = true;
     }
@@ -87,6 +89,7 @@ public static class Extensions
         return type switch
         {
             DbServer.MariaDB => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
+            DbServer.MySQL => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
             _ => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
         };
     }

@@ -20,7 +20,7 @@ namespace iMaxSys.Data.EFCore;
 /// EfRepository
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public class EfRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
+public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
 {
     protected readonly DbContext _dbContext;
     protected readonly DbSet<TEntity> _dbSet;

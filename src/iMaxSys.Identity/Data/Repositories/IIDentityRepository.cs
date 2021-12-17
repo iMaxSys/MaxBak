@@ -18,7 +18,7 @@ using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity.Data.Repositories
 {
-    public interface IIDentityRepository : ICustomRepository
+    public interface IIDentityRepository : IRepository
     {
     }
 }

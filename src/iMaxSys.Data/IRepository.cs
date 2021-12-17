@@ -20,7 +20,7 @@ namespace iMaxSys.Data;
 /// Defines the interfaces for generic repository.
 /// </summary>
 /// <typeparam name="TEntity">The type of the entity.</typeparam>
-public interface IRepository<TEntity> where TEntity : Entity
+public interface IRepository<TEntity> : IRepository where TEntity : Entity
 {
     /// <summary>
     /// Code
@@ -665,4 +665,11 @@ public interface IRepository<TEntity> where TEntity : Entity
     /// <param name="entity">The entity.</param>
     /// <param name="state">The entity state.</param>
     void ChangeEntityState(TEntity entity, EntityState state);
+}
+
+/// <summary>
+/// 仓储标识接口
+/// </summary>
+public interface IRepository
+{
 }

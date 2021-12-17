@@ -42,9 +42,9 @@ public interface IUnitOfWork
     /// <summary>
     /// 获取定制仓储
     /// </summary>
-    /// <typeparam name="TCustomRepository"></typeparam>
+    /// <typeparam name="TRepository"></typeparam>
     /// <returns></returns>
-    TCustomRepository GetCustomRepository<TCustomRepository>() where TCustomRepository : ICustomRepository;
+    TRepository GetCustomRepository<TRepository>() where TRepository : IRepository;
 }
 
 /// <summary>

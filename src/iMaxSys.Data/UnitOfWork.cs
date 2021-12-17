@@ -65,13 +65,13 @@ public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
     /// <summary>
     /// 获取定制仓储
     /// </summary>
-    /// <typeparam name="TCustomRepository"></typeparam>
+    /// <typeparam name="TRepository"></typeparam>
     /// <returns></returns>
-    public TCustomRepository GetCustomRepository<TCustomRepository>() where TCustomRepository : ICustomRepository
+    public TRepository GetCustomRepository<TRepository>() where TRepository : IRepository
     {
         try
         {
-            return _serviceProvider.GetRequiredService<TCustomRepository>();
+            return _serviceProvider.GetRequiredService<TRepository>();
         }
         catch (Exception ex)
         {
