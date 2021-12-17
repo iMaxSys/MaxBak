@@ -25,37 +25,37 @@ namespace iMaxSys.Max.Environment.Access
     /// </summary>
     public class Application : IApplication
     {
-        private readonly IApplication _application;
+        private readonly IApplicationStore _applicationStore;
 
 
-        public Application(IApplication application)
+        public Application(IApplicationStore applicationStore)
         {
-            _application = application;
+            _applicationStore = applicationStore;
         }
 
         public T? Get<T>(string key)
         {
-            return _application.Get<T>(key);
+            return _applicationStore.Get<T>(key);
         }
 
         public async Task<T?> GetAsync<T>(string key)
         {
-            return await _application.GetAsync<T>(key);
+            return await _applicationStore.GetAsync<T>(key);
         }
 
         public void Set(string key, object data)
         {
-            _application.Set(key, data);
+            _applicationStore.Set(key, data);
         }
 
         public async Task SetAsync(string key, object data)
         {
-            await _application.SetAsync(key, data);
+            await _applicationStore.SetAsync(key, data);
         }
 
         public void Clear()
         {
-            _application.Clear();
+            _applicationStore.Clear();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace iMaxSys.Max.Environment.Access
         /// <param name="key"></param>
         public void Remove(string key)
         {
-            _application.Remove(key);
+            _applicationStore.Remove(key);
         }
     }
 }

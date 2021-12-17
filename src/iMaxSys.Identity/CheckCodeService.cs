@@ -36,14 +36,15 @@ namespace iMaxSys.Identity
     {
         private readonly MaxOption _option;
         private readonly IUnitOfWork _unitOfWork;
-        //private readonly IMaxIdentityRepository _maxIdentityRepository;
         private readonly ICheckCodeRepository _checkCodeRepository;
+        private readonly IRepository<CheckCode> _repository;
 
-        public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork)
+        public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork, IRepository<CheckCode> repository)
         {
             _option = option.Value;
             _unitOfWork = unitOfWork;
             _checkCodeRepository = _unitOfWork.GetCustomRepository<ICheckCodeRepository>();
+            _repository = repository;
         }
 
         /// <summary>
