@@ -41,5 +41,61 @@ public class SampleRepository : EfRepository<XappSns>, ISampleRepository
     {
     }
 }
+
+//5. 定制仓储
+
+public interface ISomeRepository : ICustomRepository{}
+
+public class SomrRepository : ISomeRepository
+{
+    public SampleRepository(MaxContext context) : base(context)
+    {
+    }
+}
+
+public class SomrRepository : ISomeRepository
+{
+    //do with dapper
+    public SampleRepository(）
+    {
+    }
+}
+
+//5. 定制仓储
+
+public interface ICheckCodeRepository : ICustomRepository, IRepository<CheckCode>{}
+
+public class SomrRepository : ISomeRepository
+{
+    public SampleRepository(MaxContext context) : base(context)
+    {
+    }
+}
+
+public class CheckCodeRepository : EfRepository<CheckCode>, ICheckCodeRepository
+{
+    public CheckCodeRepository(MaxIdentityContext context) : base(context)
+    {
+    }
+}
+
+//6. 定制仓储
+
+public interface ICheckCodeRepository : IRepository<CheckCode>{}
+
+public class SomrRepository : ISomeRepository
+{
+    public SampleRepository(MaxContext context) : base(context)
+    {
+    }
+}
+
+public class CheckCodeRepository : EfRepository<CheckCode>, ICheckCodeRepository
+{
+    public CheckCodeRepository(MaxIdentityContext context) : base(context)
+    {
+    }
+}
+
 ```
 
