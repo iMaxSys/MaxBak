@@ -39,6 +39,6 @@ public class RoleMemberConfiguration : TenantMasterEntityConfiguration<RoleMembe
         builder.HasIndex(x => new { x.TenantId, x.MemberId });
         builder.HasIndex(x => new { x.TenantId, x.RoleId });
         //ToTable
-        builder.ToTable("role");
+        builder.ToTable("role_member");
     }
 }

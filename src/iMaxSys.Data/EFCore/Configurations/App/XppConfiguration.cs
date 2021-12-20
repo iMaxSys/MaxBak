@@ -46,6 +46,8 @@ public class XappConfiguration : MasterEntityConfiguration<Xpp>
         builder.Property(x => x.AppKey).HasColumnName("app_key").HasMaxLength(50);
         //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
+        //index
+        builder.HasIndex(x => new { x.Name });
         //ToTable
         builder.ToTable("xpp");
     }

@@ -8,7 +8,7 @@
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2018-03-07
+//日期：2020-12-17
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Domain;
@@ -79,7 +79,7 @@ public static class Extensions
             }
         }
 
-        var x = services.Where(x => x.ServiceType.GetInterfaces().Any(i => i == root));
+        //var x = services.Where(x => x.ServiceType.GetInterfaces().Any(i => i == root));
 
         _registered = true;
     }

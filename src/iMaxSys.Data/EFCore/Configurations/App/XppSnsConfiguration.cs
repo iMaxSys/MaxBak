@@ -43,6 +43,8 @@ public class XappSnsConfiguration : MasterEntityConfiguration<XppSns>
         builder.Property(x => x.AppSecret).HasColumnName("app_secret").HasMaxLength(50);
         //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
+        //index
+        builder.HasIndex(x => new { x.Name });
         //一对多设定
         builder.HasOne(x => x.Xpp).WithMany(y => y.XppSns).HasForeignKey(f => f.XppId).OnDelete(DeleteBehavior.Restrict);
         //ToTable
