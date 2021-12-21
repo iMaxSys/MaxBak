@@ -11,9 +11,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using System.ComponentModel;
-
-namespace iMaxSys.Max.Domain
+namespace iMaxSys.Max.Common.Enums
 {
     /// <summary>
     /// ResultEnum

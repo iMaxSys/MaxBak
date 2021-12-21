@@ -30,6 +30,7 @@
     <None Remove="Microsoft.Extensions.Caching.StackExchangeRedis" />
     <None Remove="Environment\Access\" />
     <None Remove="Dapper" />
+    <None Remove="Common\Enums\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Net\Http\HttpClient.cs" />
@@ -47,5 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Environment\Access\" />
+    <Folder Include="Common\Enums\" />
   </ItemGroup>
 </Project>

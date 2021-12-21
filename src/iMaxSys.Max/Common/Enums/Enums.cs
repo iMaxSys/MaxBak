@@ -14,7 +14,7 @@
 using System;
 using System.ComponentModel;
 
-namespace iMaxSys.Max.Domain
+namespace iMaxSys.Max.Common.Enums
 {
     /// <summary>
     /// DbServer[0:MariaDB,1:MySQL,2:SqlServer,3:Oracle,4:PostgreSQL]

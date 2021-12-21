@@ -11,7 +11,7 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-namespace iMaxSys.Max.Domain
+namespace iMaxSys.Max.Common.Enums
 {
     /// <summary>
     /// 业务配置
@@ -21,12 +21,12 @@ namespace iMaxSys.Max.Domain
         /// <summary>
         /// 应用Id
         /// </summary>
-        public long? XappId { get; set; }
+        public long? XppId { get; set; }
 
         /// <summary>
         /// 应用名称
         /// </summary>
-        public string? XappName { get; set; }
+        public string? XppName { get; set; }
 
         /// <summary>
         /// TenantId

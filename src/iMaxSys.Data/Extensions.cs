@@ -12,8 +12,6 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Domain;
-using iMaxSys.Max.Extentions;
-using iMaxSys.Data.EFCore;
 
 namespace iMaxSys.Data;
 
