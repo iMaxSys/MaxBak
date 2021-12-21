@@ -11,64 +11,62 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Domain;
-using iMaxSys.Data.Entities;
+using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Data.Entities.App
+namespace iMaxSys.Data.Entities.App;
+
+/// <summary>
+/// 应用x社交网络
+/// </summary>
+public class XppSns : MasterEntity
 {
     /// <summary>
-    /// 应用x社交网络
+    /// 名称
     /// </summary>
-    public class XppSns : MasterEntity
-    {
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 别名
-        /// </summary>
-        public string Alias { get; set; } = string.Empty;
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string Alias { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Description
-        /// </summary>
-        public string? Description { get; set; }
+    /// <summary>
+    /// Description
+    /// </summary>
+    public string? Description { get; set; }
 
-        /// <summary>
-        /// 应用Id
-        /// </summary>
-        public long XppId { get; set; }
+    /// <summary>
+    /// 应用Id
+    /// </summary>
+    public long XppId { get; set; }
 
-        /// <summary>
-        /// 社交平台账号来源
-        /// </summary>
-        public PlatformSource Source { get; set; }
+    /// <summary>
+    /// 社交平台账号来源
+    /// </summary>
+    public PlatformSource Source { get; set; }
 
-        /// <summary>
-        /// 第三方平台原始Id
-        /// </summary>
-        public string? AccountId { get; set; }
+    /// <summary>
+    /// 第三方平台原始Id
+    /// </summary>
+    public string? AccountId { get; set; }
 
-        /// <summary>
-        /// AppId
-        /// </summary>
-        public string? AppId { get; set; }
+    /// <summary>
+    /// AppId
+    /// </summary>
+    public string? AppId { get; set; }
 
-        /// <summary>
-        /// AppSecret
-        /// </summary>
-        public string? AppSecret { get; set; }
+    /// <summary>
+    /// AppSecret
+    /// </summary>
+    public string? AppSecret { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public Status Status { get; set; }
+    /// <summary>
+    /// 状态
+    /// </summary>
+    public Status Status { get; set; }
 
-        /// <summary>
-        /// App
-        /// </summary>
-        public virtual Xpp Xpp { get; set; } = new();
-    }
+    /// <summary>
+    /// App
+    /// </summary>
+    public virtual Xpp Xpp { get; set; } = new();
 }

@@ -11,47 +11,44 @@
 //日期：2020-01-01
 //----------------------------------------------------------------
 
-using System;
+using iMaxSys.Max.Common.Enums;
 
-using iMaxSys.Max.Domain;
+namespace iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Max.Identity.Domain
+public class Tenant : ITenant
 {
-    public class Tenant : ITenant
-    {
-        /// <summary>
-        /// Id
-        /// </summary>
-        public long Id { get; set; }
+    /// <summary>
+    /// Id
+    /// </summary>
+    public long Id { get; set; }
 
-        /// <summary>
-        /// Name
-        /// </summary>
-        public string? Name { get; set; }
+    /// <summary>
+    /// Name
+    /// </summary>
+    public string? Name { get; set; }
 
-        /// <summary>
-        /// 别名
-        /// </summary>
-        public string? Alias { get; set; }
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string? Alias { get; set; }
 
-        /// <summary>
-        /// Start
-        /// </summary>
-        public DateTime? Start { get; set; }
+    /// <summary>
+    /// Start
+    /// </summary>
+    public DateTime? Start { get; set; }
 
-        /// <summary>
-        /// End
-        /// </summary>
-        public DateTime? End { get; set; }
+    /// <summary>
+    /// End
+    /// </summary>
+    public DateTime? End { get; set; }
 
-        /// <summary>
-        /// Status
-        /// </summary>
-        public Status Status { get; set; }
-    }
+    /// <summary>
+    /// Status
+    /// </summary>
+    public Status Status { get; set; }
+}
 
-    public class Tenant<T> : Tenant, ITenant<T>
-    {
-        public T? Info { get; set; }
-    }
+public class Tenant<T> : Tenant, ITenant<T>
+{
+    public T? Info { get; set; }
 }

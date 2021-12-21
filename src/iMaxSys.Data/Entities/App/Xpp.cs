@@ -11,59 +11,58 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Domain;
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Data.Entities.App
+namespace iMaxSys.Data.Entities.App;
+
+/// <summary>
+/// 应用
+/// </summary>
+public class Xpp : MasterEntity
 {
     /// <summary>
-    /// 应用
+    /// Name
     /// </summary>
-    public class Xpp : MasterEntity
-    {
-        /// <summary>
-        /// Name
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 别名
-        /// </summary>
-        public string Alias { get; set; } = string.Empty;
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string Alias { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Description
-        /// </summary>
-        public string? Description { get; set; }
+    /// <summary>
+    /// Description
+    /// </summary>
+    public string? Description { get; set; }
 
-        /// <summary>
-        /// XppSource
-        /// </summary>
-        public XppSource Source { get; set; }
+    /// <summary>
+    /// XppSource
+    /// </summary>
+    public XppSource Source { get; set; }
 
-        /// <summary>
-        /// 第三方平台原始Id(暂不使用)
-        /// </summary>
-        public string? AccountId { get; set; }
+    /// <summary>
+    /// 第三方平台原始Id(暂不使用)
+    /// </summary>
+    public string? AccountId { get; set; }
 
-        /// <summary>
-        /// AppId
-        /// </summary>
-        public string? AppId { get; set; }
+    /// <summary>
+    /// AppId
+    /// </summary>
+    public string? AppId { get; set; }
 
-        /// <summary>
-        /// AppKey
-        /// </summary>
-        public string? AppKey { get; set; }
+    /// <summary>
+    /// AppKey
+    /// </summary>
+    public string? AppKey { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public Status Status { get; set; } = Status.Enable;
+    /// <summary>
+    /// 状态
+    /// </summary>
+    public Status Status { get; set; } = Status.Enable;
 
-        /// <summary>
-        /// 应用社交
-        /// </summary>
-        public virtual List<XppSns>? XppSns { get; set; }
-    }
+    /// <summary>
+    /// 应用社交
+    /// </summary>
+    public virtual List<XppSns>? XppSns { get; set; }
 }

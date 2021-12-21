@@ -12,58 +12,55 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Caching;
-using iMaxSys.Max.Domain;
-using iMaxSys.Max.Environment.Access;
 using iMaxSys.Max.Options;
+using iMaxSys.Max.Environment.Access;
 
-namespace iMaxSys.Max.Environment.Access
+namespace iMaxSys.Max.Environment.Access;
+
+public class ApplicationStore : IApplicationStore
 {
-    public class ApplicationStore : IApplicationStore
+    const string TAG_APP = "a:";
+
+    private readonly ICache _cache;
+    private readonly MaxOption _maxOption;
+
+    public ApplicationStore(IOptions<MaxOption> maxOption, IGenericCache cache)
     {
-        const string TAG_APP = "a:";
+        _maxOption = maxOption.Value;
+        _cache = cache;
+    }
 
-        private readonly ICache _cache;
-        private readonly MaxOption _maxOption;
+    public T? Get<T>(string key)
+    {
+        return _cache.Get<T>($"{TAG_APP}{key}");
+    }
 
-        public ApplicationStore(IOptions<MaxOption> maxOption, IGenericCache cache)
-        {
-            _maxOption = maxOption.Value;
-            _cache = cache;
-        }
+    public async Task<T?> GetAsync<T>(string key)
+    {
+        return await _cache.GetAsync<T>($"{TAG_APP}{key}");
+    }
 
-        public T? Get<T>(string key)
-        {
-            return _cache.Get<T>($"{TAG_APP}{key}");
-        }
+    public void Set(string key, object data)
+    {
+        _cache.Set($"{TAG_APP}{key}", data);
+    }
 
-        public async Task<T?> GetAsync<T>(string key)
-        {
-            return await _cache.GetAsync<T>($"{TAG_APP}{key}");
-        }
+    public async Task SetAsync(string key, object data)
+    {
+        await _cache.SetAsync($"{TAG_APP}{key}", data);
+    }
 
-        public void Set(string key, object data)
-        {
-            _cache.Set($"{TAG_APP}{key}", data);
-        }
+    public void Clear()
+    {
+        _cache.Delete(TAG_APP);
+    }
 
-        public async Task SetAsync(string key, object data)
-        {
-            await _cache.SetAsync($"{TAG_APP}{key}", data);
-        }
-
-        public void Clear()
-        {
-            _cache.Delete(TAG_APP);
-        }
-
-        /// <summary>
-        /// 删除指定key
-        /// </summary>
-        /// <param name="key"></param>
-        public void Remove(string key)
-        {
-            _cache.Delete($"{TAG_APP}{key}");
-        }
+    /// <summary>
+    /// 删除指定key
+    /// </summary>
+    /// <param name="key"></param>
+    public void Remove(string key)
+    {
+        _cache.Delete($"{TAG_APP}{key}");
     }
 }
-

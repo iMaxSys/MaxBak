@@ -12,6 +12,7 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Data.Entities;
+using iMaxSys.Data.Repositories;
 
 namespace iMaxSys.Data;
 

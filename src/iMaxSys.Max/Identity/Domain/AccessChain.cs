@@ -11,21 +11,20 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-namespace iMaxSys.Max.Identity.Domain
+namespace iMaxSys.Max.Identity.Domain;
+
+/// <summary>
+/// AccessChain
+/// </summary>
+public class AccessChain : IAccessChain
 {
     /// <summary>
-    /// AccessChain
+    /// AccessSession
     /// </summary>
-    public class AccessChain : IAccessChain
-    {
-        /// <summary>
-        /// AccessSession
-        /// </summary>
-        public IAccessSession? AccessSession { get; set; }
+    public IAccessSession? AccessSession { get; set; }
 
-        /// <summary>
-        /// Member
-        /// </summary>
-        public IMember? Member { get; set; }
-    }
+    /// <summary>
+    /// Member
+    /// </summary>
+    public IMember? Member { get; set; }
 }

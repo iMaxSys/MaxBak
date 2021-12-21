@@ -11,8 +11,8 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Data.EFCore.Configurations;
-using iMaxSys.Identity.Data.Models;
+using iMaxSys.Identity.Data.Entities;
+using iMaxSys.Data.Repositories.EFCore.Configurations;
 
 namespace iMaxSys.Identity.Data.EFCore.Configurations;
 

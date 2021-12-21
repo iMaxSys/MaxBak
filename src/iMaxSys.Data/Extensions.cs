@@ -11,7 +11,9 @@
 //日期：2020-12-17
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Domain;
+using iMaxSys.Max.Extentions;
+using iMaxSys.Max.Common.Enums;
+using iMaxSys.Data.Repositories;
 
 namespace iMaxSys.Data;
 

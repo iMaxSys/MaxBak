@@ -11,21 +11,20 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Domain;
+using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Max.Options
+namespace iMaxSys.Max.Options;
+
+public class CoreOption
 {
-    public class CoreOption
-    {
-        /// <summary>
-        /// 连接
-        /// </summary>
-        public string Connection { get; set; } = String.Empty;
+    /// <summary>
+    /// 连接
+    /// </summary>
+    public string Connection { get; set; } = String.Empty;
 
-        /// <summary>
-        /// 数据库类型
-        /// 0:MariaDB,1:MySQL,2:SqlServer,3:Oracle,4:Sybase
-        /// </summary>
-        public DbServer Type { get; set; } = DbServer.MariaDB;
-    }
+    /// <summary>
+    /// 数据库类型
+    /// 0:MariaDB,1:MySQL,2:SqlServer,3:Oracle,4:Sybase
+    /// </summary>
+    public DbServer Type { get; set; } = DbServer.MariaDB;
 }

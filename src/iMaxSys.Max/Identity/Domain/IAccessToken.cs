@@ -11,23 +11,20 @@
 //日期：2020-01-01
 //----------------------------------------------------------------
 
-using System;
+namespace iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Max.Identity.Domain
+/// <summary>
+/// 访问令牌
+/// </summary>
+public interface IAccessToken
 {
     /// <summary>
-    /// 访问令牌
+    /// 令牌
     /// </summary>
-    public interface IAccessToken
-    {
-        /// <summary>
-        /// 令牌
-        /// </summary>
-        string? Token { get; set; }
+    string? Token { get; set; }
 
-        /// <summary>
-        /// 过期时间
-        /// </summary>
-        DateTime Expires { get; set; }
-    }
+    /// <summary>
+    /// 过期时间
+    /// </summary>
+    DateTime Expires { get; set; }
 }

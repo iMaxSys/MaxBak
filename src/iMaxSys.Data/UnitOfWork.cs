@@ -11,10 +11,11 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using iMaxSys.Data.EFCore;
-using iMaxSys.Data.Entities;
-using iMaxSys.Max.Domain;
+
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Common.Enums;
+using iMaxSys.Data.Entities;
+using iMaxSys.Data.Repositories;
 
 namespace iMaxSys.Data;
 

@@ -11,61 +11,57 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using System;
+using iMaxSys.Max.Common.Enums;
 
-using iMaxSys.Max.Domain;
-using iMaxSys.Data.Entities;
+namespace iMaxSys.Data.Entities.App;
 
-namespace iMaxSys.Data.Entities.App
-{
     /// <summary>
     /// Tenant
     /// </summary>
-    public class Tenant : MasterEntity
-    {
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+public class Tenant : MasterEntity
+{
+    /// <summary>
+    /// 名称
+    /// </summary>
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 别名
-        /// </summary>
-        public string Alias { get; set; } = string.Empty;
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string Alias { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 编号
-        /// </summary>
-        public string Code { get; set; } = string.Empty;
+    /// <summary>
+    /// 编号
+    /// </summary>
+    public string Code { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 速查码
-        /// </summary>
-        public string QuickCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 速查码
+    /// </summary>
+    public string QuickCode { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 描述
-        /// </summary>
-        public string? Description { get; set; }
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string? Description { get; set; }
 
-        /// <summary>
-        /// Logo
-        /// </summary>
-        public string? Logo { get; set; }
+    /// <summary>
+    /// Logo
+    /// </summary>
+    public string? Logo { get; set; }
 
-        /// <summary>
-        /// Start
-        /// </summary>
-        public DateTime Start { get; set; }
+    /// <summary>
+    /// Start
+    /// </summary>
+    public DateTime Start { get; set; }
 
-        /// <summary>
-        /// End
-        /// </summary>
-        public DateTime End { get; set; }
+    /// <summary>
+    /// End
+    /// </summary>
+    public DateTime End { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public Status Status { get; set; } = Status.Enable;
-    }
+    /// <summary>
+    /// 状态
+    /// </summary>
+    public Status Status { get; set; } = Status.Enable;
 }

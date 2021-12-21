@@ -11,19 +11,10 @@
 //日期：2021-10-12
 //----------------------------------------------------------------
 
-using System;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-
-using iMaxSys.Max.Domain;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Environment;
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Environment.Access;
 

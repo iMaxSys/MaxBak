@@ -11,104 +11,95 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using System;
-using System.Text.Json;
-using System.Text.Unicode;
-using System.Threading.Tasks;
-using System.Text.Encodings.Web;
+using iMaxSys.Max.Common.Enums;
 
-using Microsoft.AspNetCore.Http;
+namespace iMaxSys.Max.Exceptions;
 
-using iMaxSys.Max.Domain;
-
-namespace iMaxSys.Max.Exceptions
+/// <summary>
+/// 异常处理选项
+/// </summary>
+public class ExceptionHandlingOptions
 {
     /// <summary>
-    /// 异常处理选项
+    /// 默认代码
     /// </summary>
-    public class ExceptionHandlingOptions
+    public int DefaultCode { get; set; } = 999999;
+    /// <summary>
+    /// 默认消息
+    /// </summary>
+    public string DefaultMessage { get; set; } = "系统异常";
+}
+
+public class ExceptionHandlingMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ExceptionHandlingOptions _options;
+
+    static JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All) };
+
+    public ExceptionHandlingMiddleware(RequestDelegate next, ExceptionHandlingOptions options)
     {
-        /// <summary>
-        /// 默认代码
-        /// </summary>
-        public int DefaultCode { get; set; } = 999999;
-        /// <summary>
-        /// 默认消息
-        /// </summary>
-        public string DefaultMessage { get; set; } = "系统异常";
+        _next = next;
+        _options = options ?? new ExceptionHandlingOptions();
     }
 
-    public class ExceptionHandlingMiddleware
+    public async Task Invoke(HttpContext context)
     {
-        private readonly RequestDelegate _next;
-        private readonly ExceptionHandlingOptions _options;
-
-        static JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All) };
-
-        public ExceptionHandlingMiddleware(RequestDelegate next, ExceptionHandlingOptions options)
+        try
         {
-            _next = next;
-            _options = options ?? new ExceptionHandlingOptions();
+            await _next(context);
         }
-
-        public async Task Invoke(HttpContext context)
+        catch (Exception ex)
         {
-            try
+            await HandleExceptionAsync(context, ex);
+        }
+    }
+
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        Result result;
+
+        if (exception is MaxException ex)
+        {
+            result = new Result
             {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                await HandleExceptionAsync(context, ex);
-            }
+                Code = ex.Code,
+                Message = ex.Info,
+                Detail = $"{GetMaxDetail(ex)}{GetDetail(ex.InnerException)}"
+            };
+            context.Response.StatusCode = (int)ex.HttpStatusCode;
         }
-
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        else
         {
-            Result result;
-
-            if (exception is MaxException ex)
+            result = new Result
             {
-                result = new Result
-                {
-                    Code = ex.Code,
-                    Message = ex.Info,
-                    Detail = $"{GetMaxDetail(ex)}{GetDetail(ex.InnerException)}"
-                };
-                context.Response.StatusCode = (int)ex.HttpStatusCode;
-            }
-            else
-            {
-                result = new Result
-                {
-                    Code = _options.DefaultCode,
-                    Message = _options.DefaultMessage,
-                    Detail = GetDetail(exception)
-                };
-            }
-
-            context.Response.ContentType = "application/json;charset=utf-8";
-            await context.Response.WriteAsync(JsonSerializer.Serialize(result, _jsonSerializerOptions));
+                Code = _options.DefaultCode,
+                Message = _options.DefaultMessage,
+                Detail = GetDetail(exception)
+            };
         }
 
-        /// <summary>
-        /// 获取MaxDetail
-        /// </summary>
-        /// <param name="ex"></param>
-        /// <returns></returns>
-        private string GetMaxDetail(MaxException ex)
-        {
-            return null == ex ? "" : $"{ex.Code}:{ex.Info};{(null == ex.InnerMaxException ? "" : GetMaxDetail(ex.InnerMaxException))}";
-        }
+        context.Response.ContentType = "application/json;charset=utf-8";
+        await context.Response.WriteAsync(JsonSerializer.Serialize(result, _jsonSerializerOptions));
+    }
 
-        /// <summary>
-        /// 获取Detail
-        /// </summary>
-        /// <param name="ex"></param>
-        /// <returns></returns>
-        private static string? GetDetail(Exception? ex)
-        {
-            return null == ex ? "" : $"[message:{ex.Message};inner:{ex.InnerException?.Message};source:{ex.Source};trace:{ex.StackTrace}]";
-        }
+    /// <summary>
+    /// 获取MaxDetail
+    /// </summary>
+    /// <param name="ex"></param>
+    /// <returns></returns>
+    private string GetMaxDetail(MaxException ex)
+    {
+        return null == ex ? "" : $"{ex.Code}:{ex.Info};{(null == ex.InnerMaxException ? "" : GetMaxDetail(ex.InnerMaxException))}";
+    }
+
+    /// <summary>
+    /// 获取Detail
+    /// </summary>
+    /// <param name="ex"></param>
+    /// <returns></returns>
+    private static string? GetDetail(Exception? ex)
+    {
+        return null == ex ? "" : $"[message:{ex.Message};inner:{ex.InnerException?.Message};source:{ex.Source};trace:{ex.StackTrace}]";
     }
 }

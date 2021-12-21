@@ -11,21 +11,17 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-
-
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
-
-using iMaxSys.Data;
-using iMaxSys.Data.Entities;
-using iMaxSys.Max.Domain;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
-using iMaxSys.Identity.Data.Models;
+using iMaxSys.Max.Common.Enums;
+using iMaxSys.Data;
+using iMaxSys.Data.Entities;
+using iMaxSys.Data.Entities.App;
+using iMaxSys.Data.Repositories;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Data.Repositories;
-using iMaxSys.Data.Entities.App;
 
 namespace iMaxSys.Identity
 {

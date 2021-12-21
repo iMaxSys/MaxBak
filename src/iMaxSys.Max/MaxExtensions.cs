@@ -12,8 +12,8 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Options;
-using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.DependencyInjection;
 
 namespace iMaxSys.Max;
 

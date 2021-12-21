@@ -11,57 +11,54 @@
 //日期：2020-01-01
 //----------------------------------------------------------------
 
-using System;
+using iMaxSys.Max.Common.Enums;
 
-using iMaxSys.Max.Domain;
+namespace iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Max.Identity.Domain
+/// <summary>
+/// 租户
+/// </summary>
+public interface ITenant
 {
     /// <summary>
-    /// 租户
+    /// Id
     /// </summary>
-    public interface ITenant
-    {
-        /// <summary>
-        /// Id
-        /// </summary>
-        long Id { get; set; }
-
-        /// <summary>
-        /// Name
-        /// </summary>
-        string? Name { get; set; }
-
-        /// <summary>
-        /// 别名
-        /// </summary>
-        string? Alias { get; set; }
-
-        /// <summary>
-        /// Start
-        /// </summary>
-        DateTime? Start { get; set; }
-
-        /// <summary>
-        /// End
-        /// </summary>
-        DateTime? End { get; set; }
-
-        /// <summary>
-        /// Status
-        /// </summary>
-        Status Status { get; set; }
-    }
+    long Id { get; set; }
 
     /// <summary>
-    /// 租户
+    /// Name
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface ITenant<T> : ITenant
-    {
-        /// <summary>
-        /// 更多信息
-        /// </summary>
-        T? Info { get; set; }
-    }
+    string? Name { get; set; }
+
+    /// <summary>
+    /// 别名
+    /// </summary>
+    string? Alias { get; set; }
+
+    /// <summary>
+    /// Start
+    /// </summary>
+    DateTime? Start { get; set; }
+
+    /// <summary>
+    /// End
+    /// </summary>
+    DateTime? End { get; set; }
+
+    /// <summary>
+    /// Status
+    /// </summary>
+    Status Status { get; set; }
+}
+
+/// <summary>
+/// 租户
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface ITenant<T> : ITenant
+{
+    /// <summary>
+    /// 更多信息
+    /// </summary>
+    T? Info { get; set; }
 }

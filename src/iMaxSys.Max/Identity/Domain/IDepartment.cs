@@ -11,35 +11,34 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Domain;
+using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Max.Identity.Domain
+namespace iMaxSys.Max.Identity.Domain;
+
+public interface IDepartment
 {
-    public interface IDepartment
-    {
-        /// <summary>
-        /// Id
-        /// </summary>
-        long Id { get; set; }
+    /// <summary>
+    /// Id
+    /// </summary>
+    long Id { get; set; }
 
-        /// <summary>
-        /// 名称
-        /// </summary>
-        string? Name { get; set; }
+    /// <summary>
+    /// 名称
+    /// </summary>
+    string? Name { get; set; }
 
-        /// <summary>
-        /// 别名
-        /// </summary>
-        string? Alias { get; set; }
+    /// <summary>
+    /// 别名
+    /// </summary>
+    string? Alias { get; set; }
 
-        /// <summary>
-        /// 描述
-        /// </summary>
-        string? Descripton { get; set; }
+    /// <summary>
+    /// 描述
+    /// </summary>
+    string? Descripton { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        Status Status { get; set; }
-    }
+    /// <summary>
+    /// 状态
+    /// </summary>
+    Status Status { get; set; }
 }

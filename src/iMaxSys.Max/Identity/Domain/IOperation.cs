@@ -11,58 +11,57 @@
 //日期：2020-01-01
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Domain;
+using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Max.Identity.Domain
+namespace iMaxSys.Max.Identity.Domain;
+
+/// <summary>
+/// IOperation
+/// </summary>
+public interface IOperation
 {
     /// <summary>
-    /// IOperation
+    /// Id
     /// </summary>
-    public interface IOperation
-    {
-        /// <summary>
-        /// Id
-        /// </summary>
-        long Id { get; set; }
+    long Id { get; set; }
 
-        /// <summary>
-        /// MenuId
-        /// </summary>
-        long MenuId { get; set; }
+    /// <summary>
+    /// MenuId
+    /// </summary>
+    long MenuId { get; set; }
 
-        /// <summary>
-        /// Code
-        /// </summary>
-        string? Code { get; set; }
+    /// <summary>
+    /// Code
+    /// </summary>
+    string? Code { get; set; }
 
-        /// <summary>
-        /// 名称
-        /// </summary>
-        string? Name { get; set; }
+    /// <summary>
+    /// 名称
+    /// </summary>
+    string? Name { get; set; }
 
-        /// <summary>
-        /// Descripton
-        /// </summary>
-        string? Descripton { get; set; }
+    /// <summary>
+    /// Descripton
+    /// </summary>
+    string? Descripton { get; set; }
 
-        /// <summary>
-        /// Icon
-        /// </summary>
-        string? Icon { get; set; }
+    /// <summary>
+    /// Icon
+    /// </summary>
+    string? Icon { get; set; }
 
-        /// <summary>
-        /// Style
-        /// </summary>
-        string? Style { get; set; }
+    /// <summary>
+    /// Style
+    /// </summary>
+    string? Style { get; set; }
 
-        /// <summary>
-        /// Router
-        /// </summary>
-        string? Router { get; set; }
+    /// <summary>
+    /// Router
+    /// </summary>
+    string? Router { get; set; }
 
-        /// <summary>
-        /// Status
-        /// </summary>
-        Status Status { get; set; }
-    }
+    /// <summary>
+    /// Status
+    /// </summary>
+    Status Status { get; set; }
 }

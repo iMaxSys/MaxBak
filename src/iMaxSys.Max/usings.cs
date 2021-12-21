@@ -44,6 +44,7 @@ global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.ModelBinding;
 global using Microsoft.AspNetCore.Mvc.ApplicationModels;
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using Microsoft.Extensions.Configuration;

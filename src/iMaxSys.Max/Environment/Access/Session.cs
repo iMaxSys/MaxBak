@@ -1,76 +1,83 @@
 ﻿
-using System;
-using System.Threading.Tasks;
+//----------------------------------------------------------------
+//Copyright (C) 2016-2026 iMaxSys Co.,Ltd.
+//All rights reserved.
+//
+//文件: ApplicationStore.cs
+//摘要: IApplicationStore
+//说明:
+//
+//当前：1.0
+//作者：陶剑扬
+//日期：2021-11-30
+//----------------------------------------------------------------
 
-using Microsoft.Extensions.Options;
-
-using iMaxSys.Max.Domain;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Caching.Redis;
 
-namespace iMaxSys.Max.Environment.Access
+namespace iMaxSys.Max.Environment.Access;
+
+/// <summary>
+/// Session
+/// </summary>
+public class Session : ISession
 {
+    private readonly ISessionStore _sessionStore;
+    private readonly string _id = "";
+
     /// <summary>
-    /// Session
+    /// SessionId
     /// </summary>
-    public class Session : ISession
+    public string Id { get => _id; }
+
+    public Session(ISessionStore sessionStore)
     {
-        private readonly ISessionStore _sessionStore;
-        private readonly string _id = "";
+        _sessionStore = sessionStore;
+        _id = _sessionStore.Id;
+    }
 
-        /// <summary>
-        /// SessionId
-        /// </summary>
-        public string Id { get => _id; }
+    public T? Get<T>(string key)
+    {
+        return _sessionStore.Get<T>(key);
+    }
 
-        public Session(ISessionStore sessionStore)
+    public async Task<T?> GetAsync<T>(string key)
+    {
+        return await _sessionStore.GetAsync<T>(key);
+    }
+
+    public void Set(string key, object data)
+    {
+        if (string.IsNullOrWhiteSpace(Id))
         {
-            _sessionStore = sessionStore;
-            _id = _sessionStore.Id;
+            throw new MaxException(ResultEnum.CantSetSession);
         }
+        _sessionStore.Set(key, data);
+    }
 
-        public T? Get<T>(string key)
+    public async Task SetAsync(string key, object data)
+    {
+        if (string.IsNullOrWhiteSpace(Id))
         {
-            return _sessionStore.Get<T>(key);
+            throw new MaxException(ResultEnum.CantSetSession);
         }
+        await _sessionStore.SetAsync(key, data);
+    }
 
-        public async Task<T?> GetAsync<T>(string key)
-        {
-           return await _sessionStore.GetAsync<T>(key);
-        }
+    public void Clear()
+    {
+        _sessionStore.Clear();
+    }
 
-        public void Set(string key, object data)
-        {
-            if (string.IsNullOrWhiteSpace(Id))
-            {
-                throw new MaxException(ResultEnum.CantSetSession);
-            }
-            _sessionStore.Set(key, data);
-        }
-
-        public async Task SetAsync(string key, object data)
-        {
-            if (string.IsNullOrWhiteSpace(Id))
-            {
-                throw new MaxException(ResultEnum.CantSetSession);
-            }
-            await _sessionStore.SetAsync(key, data);
-        }
-
-        public void Clear()
-        {
-            _sessionStore.Clear();
-        }
-
-        /// <summary>
-        /// 清除指定key
-        /// </summary>
-        /// <param name="key"></param>
-        public void Remove(string key)
-        {
-            _sessionStore.Remove(key);
-        }
+    /// <summary>
+    /// 清除指定key
+    /// </summary>
+    /// <param name="key"></param>
+    public void Remove(string key)
+    {
+        _sessionStore.Remove(key);
     }
 }

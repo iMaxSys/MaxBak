@@ -11,23 +11,20 @@
 //日期：2020-01-01
 //----------------------------------------------------------------
 
-using System.Collections.Generic;
+namespace iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Max.Identity.Domain
+/// <summary>
+/// Authority
+/// </summary>
+public class Authority : IAuthority
 {
     /// <summary>
-    /// Authority
+    /// Menus
     /// </summary>
-    public class Authority : IAuthority
-    {
-        /// <summary>
-        /// Menus
-        /// </summary>
-        public IMenu? Menu { get; set; }
+    public IMenu? Menu { get; set; }
 
-        /// <summary>
-        /// Roles
-        /// </summary>
-        public IList<IRole>? Roles { get; set; }
-    }
+    /// <summary>
+    /// Roles
+    /// </summary>
+    public IList<IRole>? Roles { get; set; }
 }

@@ -11,66 +11,62 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using System;
-using System.Text.Json;
-
 using iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Max.Identity
+namespace iMaxSys.Max.Identity;
+
+/// <summary>
+/// Extensions
+/// </summary>
+public static class Extensions
 {
     /// <summary>
-    /// Extensions
+    /// 获取具体用户
     /// </summary>
-    public static class Extensions
+    /// <param name="member"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public static object? GetUser(this IMember member, Type type)
     {
-        /// <summary>
-        /// 获取具体用户
-        /// </summary>
-        /// <param name="member"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static object? GetUser(this IMember member, Type type)
+        //if (member.User != null)
+        //{
+        //    return member.User;
+        //}
+        //else
+        //{
+        if (!string.IsNullOrWhiteSpace(member.UserJson))
         {
-            //if (member.User != null)
-            //{
-            //    return member.User;
-            //}
-            //else
-            //{
+            return JsonSerializer.Deserialize(member.UserJson, type);
+        }
+        else
+        {
+            return null;
+        }
+        //}
+    }
+
+    /// <summary>
+    /// 获取具体用户
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="member"></param>
+    /// <returns></returns>
+    public static object? User<T>(this IMember member)
+    {
+        if (member.User != null)
+        {
+            return member.User;
+        }
+        else
+        {
             if (!string.IsNullOrWhiteSpace(member.UserJson))
             {
-                return JsonSerializer.Deserialize(member.UserJson, type);
-            }
-            else
-            {
-                return null;
-            }
-            //}
-        }
-
-        /// <summary>
-        /// 获取具体用户
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="member"></param>
-        /// <returns></returns>
-        public static object? User<T>(this IMember member)
-        {
-            if (member.User != null)
-            {
+                member.User = JsonSerializer.Deserialize<T>(member.UserJson);
                 return member.User;
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(member.UserJson))
-                {
-                    member.User = JsonSerializer.Deserialize<T>(member.UserJson);
-                    return member.User;
-                }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
         }
     }
