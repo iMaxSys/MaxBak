@@ -14,7 +14,7 @@
 using iMaxSys.Max.Domain;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models;
+namespace iMaxSys.Identity.Data.Entities;
 
 /// <summary>
 /// Member
@@ -80,6 +80,21 @@ public class Member : TenantMasterEntity
     /// 头像
     /// </summary>
     public string Avatar { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国家
+    /// </summary>
+    public string Country { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 省
+    /// </summary>
+    public string Province { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 城市
+    /// </summary>
+    public string City { get; set; } = string.Empty;
 
     /// <summary>
     /// 类型

@@ -11,7 +11,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-namespace iMaxSys.Data.EFCore;
+namespace iMaxSys.Data.Repositories.EFCore;
 
 /// <summary>
 /// EFCoreExtension

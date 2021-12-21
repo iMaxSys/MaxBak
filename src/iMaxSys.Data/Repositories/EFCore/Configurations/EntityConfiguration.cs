@@ -14,7 +14,7 @@
 using iMaxSys.Max;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Data.EFCore.Configurations;
+namespace iMaxSys.Data.Repositories.EFCore.Configurations;
 
 public abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T> where T : Entity
 {

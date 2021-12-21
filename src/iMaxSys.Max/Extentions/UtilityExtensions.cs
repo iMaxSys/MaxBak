@@ -389,7 +389,7 @@ public static class UtilityExtensions
     public static bool IsNullOrWhiteSpace(this String data) => String.IsNullOrWhiteSpace(data);
 
     /// <summary>
-    /// 	如果指定的 <see cref="System.String"/> 对象字符串是 null、空还是仅由空白字符组成则返回默认值。
+    /// 如果指定的 <see cref="System.String"/> 对象字符串是 null、空还是仅由空白字符组成则返回默认值。
     /// </summary>
     public static string IfNullOrWhiteSpace(this string value, string defaultValue) => (!value.IsNullOrWhiteSpace() ? value : defaultValue);
 

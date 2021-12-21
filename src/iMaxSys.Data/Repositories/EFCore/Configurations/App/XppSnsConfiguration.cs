@@ -12,9 +12,8 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Data.Entities.App;
-using iMaxSys.Data.EFCore.Configurations;
 
-namespace iMaxSys.Data.EFCore.Configurations.App;
+namespace iMaxSys.Data.Repositories.EFCore.Configurations.App;
 
 /// <summary>
 /// 应用x社交网络映射配置

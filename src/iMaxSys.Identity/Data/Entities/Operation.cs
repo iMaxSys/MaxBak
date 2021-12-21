@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: Role.cs
-//摘要: 角色
+//文件: Operation.cs
+//摘要: 操作
 //说明:
 //
 //当前：1.0
@@ -14,12 +14,12 @@
 using iMaxSys.Max.Domain;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models;
+namespace iMaxSys.Identity.Data.Entities;
 
 /// <summary>
-/// Role
+/// Operation
 /// </summary>
-public class Role : TenantMasterEntity
+public class Operation : TenantMasterEntity
 {
     /// <summary>
     /// XppId
@@ -27,7 +27,12 @@ public class Role : TenantMasterEntity
     public long XppId { get; set; }
 
     /// <summary>
-    /// Name
+    /// MenuId
+    /// </summary>
+    public long MenuId { get; set; }
+
+    /// <summary>
+    /// 名称
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
@@ -62,24 +67,9 @@ public class Role : TenantMasterEntity
     public string? Style { get; set; }
 
     /// <summary>
-    /// Menus("45675,45677")
+    /// Router
     /// </summary>
-    public string? MenuIds { get; set; }
-
-    /// <summary>
-    /// Operations("45675,45677")
-    /// </summary>
-    public string? OperationIds { get; set; }
-
-    /// <summary>
-    /// Start
-    /// </summary>
-    public DateTime Start { get; set; }
-
-    /// <summary>
-    /// End
-    /// </summary>
-    public DateTime End { get; set; }
+    public string Router { get; set; } = string.Empty;
 
     /// <summary>
     /// Status
@@ -87,7 +77,7 @@ public class Role : TenantMasterEntity
     public Status Status { get; set; }
 
     /// <summary>
-    /// Members
+    /// Menu
     /// </summary>
-    public virtual IList<RoleMember>? RoleMembers { get; set; }
+    public virtual Menu Menu { get; set; } = new();
 }

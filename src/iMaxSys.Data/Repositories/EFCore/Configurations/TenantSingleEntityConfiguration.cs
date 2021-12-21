@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: TenantMasterEntityConfiguration.cs
-//摘要: TenantMasterEntityConfiguration
+//文件: TenantSingleEntityConfiguration.cs
+//摘要: TenantSingleEntityConfiguration
 //说明:
 //
 //当前：1.0
@@ -13,9 +13,9 @@
 
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Data.EFCore.Configurations;
+namespace iMaxSys.Data.Repositories.EFCore.Configurations;
 
-public abstract class TenantMasterEntityConfiguration<T> : MasterEntityConfiguration<T> where T : TenantMasterEntity
+public abstract class TenantSingleEntityConfiguration<T> : SingleEntityConfiguration<T> where T : TenantSingleEntity
 {
     protected override void Configures(EntityTypeBuilder<T> builder)
     {

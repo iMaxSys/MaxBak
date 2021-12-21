@@ -14,7 +14,7 @@
 using iMaxSys.Max.Collection;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Data.EFCore;
+namespace iMaxSys.Data.Repositories.EFCore;
 
 /// <summary>
 /// EfRepository

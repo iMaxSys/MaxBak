@@ -10,13 +10,13 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
-/*
+
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
-using iMaxSys.SDK.Sns.Domain.Open;
+using iMaxSys.Sns.Domain.Open;
 using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity
@@ -62,7 +62,7 @@ namespace iMaxSys.Identity
         /// <param name="id"></param>
         /// <param name="sids"></param>
         /// <returns></returns>
-        Task<Dictionary<long, string>> GetKeysAsync(long id, long[] sids = null);
+        Task<Dictionary<long, string>> GetKeysAsync(long id, long[]? sids = null);
 
         /// <summary>
         /// 获取用户关键值
@@ -71,7 +71,7 @@ namespace iMaxSys.Identity
         /// <param name="type"></param>
         /// <param name="sids"></param>
         /// <returns></returns>
-        Task<Dictionary<long, string>> GetKeysAsync(long id, int type, long[] sids = null);
+        Task<Dictionary<long, string>> GetKeysAsync(long id, int type, long[]? sids = null);
 
         /// <summary>
         /// 新增成员
@@ -80,7 +80,7 @@ namespace iMaxSys.Identity
         /// <param name="ip"></param>
         /// <param name="tenantId"></param>
         /// <returns></returns>
-        Task<IMember> AddMemberAsync(MemberModel model, string ip, long tenantId = 0);
+        Task<IMember> AddMemberAsync(MemberResult member, string ip, long tenantId = 0);
 
         /// <summary>
         /// 更新成员
@@ -88,7 +88,7 @@ namespace iMaxSys.Identity
         /// <param name="memberId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<IMember> UpdateMemberAsync(MemberModel model);
+        Task<IMember> UpdateMemberAsync(MemberResult member);
 
         /// <summary>
         /// 移除成员
@@ -129,7 +129,7 @@ namespace iMaxSys.Identity
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task RegisterAsync(RegisterModel model);
+        Task RegisterAsync(RegisterResult model);
 
         /// <summary>
         /// 登录:用户名&密码
@@ -195,4 +195,3 @@ namespace iMaxSys.Identity
         SnsPhoneNumber GetSnsPhoneNumber(long sid, string data, string key, string iv);
     }
 }
-*/

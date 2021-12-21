@@ -10,18 +10,13 @@
 //作者：陶剑扬
 //日期：2019-11-16
 //----------------------------------------------------------------
-/*
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
-using Microsoft.Extensions.DependencyInjection;
 
 using iMaxSys.Max.Domain;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Environment;
+using iMaxSys.Max.Extentions;
+using iMaxSys.Max.Environment.Access;
 
 namespace iMaxSys.Identity
 {
@@ -56,23 +51,27 @@ namespace iMaxSys.Identity
         /// <returns></returns>
         public async Task Access(HttpContext context)
         {
-            string router = context.Request.Path.Value.ToLower();
+            string? router = context.Request.Path.Value;
+
+            //空则pass
+            if (string.IsNullOrWhiteSpace(router))
+            {
+                return;
+            }
+
             //判断是否需要token
-            if ("*" != _option.Identity.OpenRouters && !_option.Identity.OpenRouters.Contains(router) && !context.Request.Headers.ContainsKey(FLAG_TOKEN))
+            if ("*" != _option.Identity.OpenRouters && !_option.Identity.OpenRouters.Contains(router.ToLower()) && !context.Request.Headers.ContainsKey(FLAG_TOKEN))
             {
                 //Headers中无token
-                throw new MaxException(ResultEnum.NeedToken, context.Request.Path.Value);
+                throw new MaxException(ResultEnum.NeedToken, router);
             }
 
             if (context.Request.Headers.TryGetValue(FLAG_TOKEN, out StringValues values))
             {
-                IWorkContext workContext = context.RequestServices.GetService<IWorkContext>();
-                IIdentityService identityService = context.RequestServices.GetService<IIdentityService>();
-                //string token = "6a732875346247e298b55f688c4709a3";
-                //string token = values[0].ToString();
+                IWorkContext workContext = context.RequestServices.GetRequiredService<IWorkContext>();
+                IIdentityService identityService = context.RequestServices.GetRequiredService<IIdentityService>();
                 workContext.AccessChain = await identityService.CheckAsync(values[0].ToString(), router);
             }
         }
     }
 }
-*/

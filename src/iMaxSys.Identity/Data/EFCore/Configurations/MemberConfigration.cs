@@ -47,6 +47,12 @@ public class MemberConfiguration : TenantMasterEntityConfiguration<Member>
         builder.Property(x => x.Mobile).HasColumnName("mobile").HasMaxLength(50).IsRequired();
         //电子邮箱
         builder.Property(x => x.Email).HasColumnName("email").HasMaxLength(50).IsRequired();
+        //国家
+        builder.Property(x => x.Country).HasColumnName("country").HasMaxLength(255).IsRequired();
+        //省
+        builder.Property(x => x.Province).HasColumnName("province").HasMaxLength(255).IsRequired();
+        //市
+        builder.Property(x => x.City).HasColumnName("city").HasMaxLength(255).IsRequired();
         //头像
         builder.Property(x => x.Avatar).HasColumnName("avatar").HasMaxLength(500).IsRequired();
         //类型

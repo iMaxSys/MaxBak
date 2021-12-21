@@ -17,6 +17,9 @@ global using System.Reflection;
 global using System.Runtime.Loader;
 global using System.Threading.Tasks;
 
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.Primitives;
+global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Options;
 global using Microsoft.Extensions.DependencyModel;
 global using Microsoft.EntityFrameworkCore;

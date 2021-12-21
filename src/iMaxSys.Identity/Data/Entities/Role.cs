@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: Menu.cs
-//摘要: Menu 
+//文件: Role.cs
+//摘要: 角色
 //说明:
 //
 //当前：1.0
@@ -14,12 +14,12 @@
 using iMaxSys.Max.Domain;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models;
+namespace iMaxSys.Identity.Data.Entities;
 
 /// <summary>
-/// Menu
+/// Role
 /// </summary>
-public class Menu : TenantMasterEntity
+public class Role : TenantMasterEntity
 {
     /// <summary>
     /// XppId
@@ -27,7 +27,7 @@ public class Menu : TenantMasterEntity
     public long XppId { get; set; }
 
     /// <summary>
-    /// 名称
+    /// Name
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
@@ -47,9 +47,9 @@ public class Menu : TenantMasterEntity
     public string QuickCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// Description
+    /// Descripton
     /// </summary>
-    public string? Description { get; set; }
+    public string? Descripton { get; set; }
 
     /// <summary>
     /// Icon
@@ -62,24 +62,24 @@ public class Menu : TenantMasterEntity
     public string? Style { get; set; }
 
     /// <summary>
-    /// Router
+    /// Menus("45675,45677")
     /// </summary>
-    public string Router { get; set; } = string.Empty;
+    public string? MenuIds { get; set; }
 
     /// <summary>
-    /// 左值
+    /// Operations("45675,45677")
     /// </summary>
-    public int Lv { get; set; }
+    public string? OperationIds { get; set; }
 
     /// <summary>
-    /// 右值
+    /// Start
     /// </summary>
-    public int Rv { get; set; }
+    public DateTime Start { get; set; }
 
     /// <summary>
-    /// 深度
+    /// End
     /// </summary>
-    public int Deep { get; set; }
+    public DateTime End { get; set; }
 
     /// <summary>
     /// Status
@@ -87,7 +87,7 @@ public class Menu : TenantMasterEntity
     public Status Status { get; set; }
 
     /// <summary>
-    /// Operations
+    /// Members
     /// </summary>
-    public virtual IList<Operation>? Operations { get; set; }
+    public virtual IList<RoleMember>? RoleMembers { get; set; }
 }

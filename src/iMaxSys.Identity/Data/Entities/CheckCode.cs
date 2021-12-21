@@ -11,15 +11,13 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using System;
-
 using iMaxSys.Max.Domain;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models;
+namespace iMaxSys.Identity.Data.Entities;
 
 /// <summary>
-/// 
+/// CheckCode
 /// </summary>
 public class CheckCode : TenantMasterEntity
 {

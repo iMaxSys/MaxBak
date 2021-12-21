@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: Operation.cs
-//摘要: 操作
+//文件: Menu.cs
+//摘要: Menu 
 //说明:
 //
 //当前：1.0
@@ -14,22 +14,17 @@
 using iMaxSys.Max.Domain;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models;
+namespace iMaxSys.Identity.Data.Entities;
 
 /// <summary>
-/// Operation
+/// Menu
 /// </summary>
-public class Operation : TenantMasterEntity
+public class Menu : TenantMasterEntity
 {
     /// <summary>
     /// XppId
     /// </summary>
     public long XppId { get; set; }
-
-    /// <summary>
-    /// MenuId
-    /// </summary>
-    public long MenuId { get; set; }
 
     /// <summary>
     /// 名称
@@ -52,9 +47,9 @@ public class Operation : TenantMasterEntity
     public string QuickCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// Descripton
+    /// Description
     /// </summary>
-    public string? Descripton { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Icon
@@ -72,12 +67,27 @@ public class Operation : TenantMasterEntity
     public string Router { get; set; } = string.Empty;
 
     /// <summary>
+    /// 左值
+    /// </summary>
+    public int Lv { get; set; }
+
+    /// <summary>
+    /// 右值
+    /// </summary>
+    public int Rv { get; set; }
+
+    /// <summary>
+    /// 深度
+    /// </summary>
+    public int Deep { get; set; }
+
+    /// <summary>
     /// Status
     /// </summary>
     public Status Status { get; set; }
 
     /// <summary>
-    /// Menu
+    /// Operations
     /// </summary>
-    public virtual Menu Menu { get; set; } = new();
+    public virtual IList<Operation>? Operations { get; set; }
 }

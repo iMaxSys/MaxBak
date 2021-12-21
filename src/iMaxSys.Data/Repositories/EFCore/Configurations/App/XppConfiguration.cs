@@ -11,15 +11,9 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-using iMaxSys.Data.EFCore.Configurations;
 using iMaxSys.Data.Entities.App;
 
-namespace iMaxSys.Data.EFCore.Configurations.App;
+namespace iMaxSys.Data.Repositories.EFCore.Configurations.App;
 
 /// <summary>
 /// 应用映射配置

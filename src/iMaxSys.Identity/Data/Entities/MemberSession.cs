@@ -15,7 +15,7 @@ using iMaxSys.Max.Domain;
 using iMaxSys.Data.Entities;
 
 
-namespace iMaxSys.Identity.Data.Models;
+namespace iMaxSys.Identity.Data.Entities;
 
 /// <summary>
 /// MemberSession

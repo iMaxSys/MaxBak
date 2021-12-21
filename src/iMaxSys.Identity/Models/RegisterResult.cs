@@ -10,7 +10,7 @@
 //作者：陶剑扬
 //日期：2019-11-16
 //----------------------------------------------------------------
-/*
+
 using iMaxSys.Max.Domain;
 
 namespace iMaxSys.Identity.Models
@@ -18,7 +18,7 @@ namespace iMaxSys.Identity.Models
     /// <summary>
     /// 用户注册模型
     /// </summary>
-    public class RegisterResult
+    public class RegisteModel
     {
         /// <summary>
         /// Sid
@@ -28,7 +28,7 @@ namespace iMaxSys.Identity.Models
         /// <summary>
         /// 注册方式
         /// </summary>
-        //public int Way { get; set; }
+        public int Way { get; set; }
 
         /// <summary>
         /// 用户类型
@@ -43,77 +43,77 @@ namespace iMaxSys.Identity.Models
         /// <summary>
         /// OpenId
         /// </summary>
-        public string OpenId { get; set; }
+        public string OpenId { get; set; } = string.Empty;
 
         /// <summary>
         /// 社交平台code
         /// </summary>
-        public string Code { get; set; }
+        public string Code { get; set; } = string.Empty;
 
         /// <summary>
         /// 验证码
         /// </summary>
-        public string CheckCode { get; set; }
+        public string CheckCode { get; set; } = string.Empty;
 
         /// <summary>
         /// 社交平台加密数据（微信绑定电话）
         /// </summary>
-        public string EncryptedData { get; set; }
+        public string EncryptedData { get; set; } = string.Empty;
 
         /// <summary>
         /// IV
         /// </summary>
-        public string IV { get; set; }
+        public string IV { get; set; } = string.Empty;
 
         /// <summary>
         /// Token
         /// </summary>
-        public string Token { get; set; }
+        public string Token { get; set; } = string.Empty;
 
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// 用户名
         /// </summary>
-        public string UserName { get; set; }
+        public string UserName { get; set; } = string.Empty;
 
         /// <summary>
         /// 密码
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         /// <summary>
         /// 昵称
         /// </summary>
-        public string NickName { get; set; }
+        public string NickName { get; set; } = string.Empty;
 
         /// <summary>
         /// PhoneNumber
         /// </summary>
-        public string Mobile { get; set; }
+        public string Mobile { get; set; } = string.Empty;
 
         /// <summary>
         /// 国家
         /// </summary>
-        public string Country { get; set; }
+        public string Country { get; set; } = string.Empty;
 
         /// <summary>
         /// 省
         /// </summary>
-        public string Province { get; set; }
+        public string Province { get; set; } = string.Empty;
 
         /// <summary>
         /// 城市
         /// </summary>
-        public string City { get; set; }
+        public string City { get; set; } = string.Empty;
 
         /// <summary>
         /// 头像
         /// </summary>
-        public string Avatar { get; set; }
+        public string Avatar { get; set; } = string.Empty;
 
         /// <summary>
         /// 性别(0未知,1男,2女)
@@ -123,7 +123,6 @@ namespace iMaxSys.Identity.Models
         /// <summary>
         /// IP
         /// </summary>
-        public string IP { get; set; }
+        public string IP { get; set; } = string.Empty;
     }
 }
-*/

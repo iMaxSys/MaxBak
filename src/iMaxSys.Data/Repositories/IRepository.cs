@@ -14,7 +14,7 @@
 using iMaxSys.Max.Collection;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Data;
+namespace iMaxSys.Data.Repositories;
 
 /// <summary>
 /// Defines the interfaces for generic repository.

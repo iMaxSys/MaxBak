@@ -1,5 +1,4 @@
-﻿
-//----------------------------------------------------------------
+﻿//----------------------------------------------------------------
 //Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
@@ -14,7 +13,7 @@
 
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Data.EFCore.Configurations;
+namespace iMaxSys.Data.Repositories.EFCore.Configurations;
 
 public abstract class MasterEntityConfiguration<T> : SingleEntityConfiguration<T> where T : MasterEntity
 {

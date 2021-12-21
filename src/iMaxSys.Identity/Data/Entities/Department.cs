@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: RoleMember.cs
-//摘要: RoleMember 
+//文件: Department.cs
+//摘要: Department 
 //说明:
 //
 //当前：1.0
@@ -14,35 +14,35 @@
 using iMaxSys.Max.Domain;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Models;
+namespace iMaxSys.Identity.Data.Entities;
 
 /// <summary>
-/// RoleMember
+/// Department
 /// </summary>
-public class RoleMember : TenantMasterEntity
+public class Department : TenantMasterEntity
 {
     /// <summary>
-    /// MemberId
+    /// 名称
     /// </summary>
-    public long MemberId { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    /// RoleId
+    /// 别名
     /// </summary>
-    public long RoleId { get; set; }
+    public string Alias { get; set; } = string.Empty;
 
     /// <summary>
-    /// MemberId
+    /// 描述
+    /// </summary>
+    public string? Descripton { get; set; }
+
+    /// <summary>
+    /// 状态
     /// </summary>
     public Status Status { get; set; } = Status.Enable;
 
     /// <summary>
-    /// Role
+    /// 成员
     /// </summary>
-    public Role Role { get; set; } = new();
-
-    /// <summary>
-    /// Member
-    /// </summary>
-    public Member Member { get; set; } = new();
+    public virtual IList<Member>? Members { get; set; }
 }

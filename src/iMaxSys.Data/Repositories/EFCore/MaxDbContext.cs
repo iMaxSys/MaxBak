@@ -11,7 +11,7 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-namespace iMaxSys.Data.EFCore;
+namespace iMaxSys.Data.Repositories.EFCore;
 
 public class MaxDbContext : DbContext
 {
