@@ -23,7 +23,7 @@ public class ExceptionHandlingOptions
     /// <summary>
     /// 默认代码
     /// </summary>
-    public int DefaultCode { get; set; } = 999999;
+    public int DefaultCode { get; set; } = ResultEnum.Fail.GetHashCode();
     /// <summary>
     /// 默认消息
     /// </summary>

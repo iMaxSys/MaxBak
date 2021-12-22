@@ -28,7 +28,7 @@ namespace iMaxSys.Max.Common.Enums
         /// 失败
         /// </summary>
         [Description("失败")]
-        Fail = 999999,
+        Fail = -1,
 
         /// <summary>
         /// 类型不匹配

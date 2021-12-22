@@ -21,22 +21,10 @@ namespace iMaxSys.Max.Web.Mvc;
 /// 分页响应范型类
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public abstract class PagingResponse<T> : Response
+public abstract class PagingResponse<T> : ResultBase
 {
-    private PagedList<T>? _list;
-
     /// <summary>
-    /// 数据
+    /// 分页数据
     /// </summary>
-    public override object? Data
-    {
-        get
-        {
-            return _list;
-        }
-        set
-        {
-            _list = value is PagedList<T> ? value as PagedList<T> : throw new MaxException(ResultEnum.TypeIsUnmatched);
-        }
-    }
+    public PagedList<T>? Data;
 }
