@@ -11,9 +11,8 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Domain;
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data.Entities;
-
 
 namespace iMaxSys.Identity.Data.Entities;
 

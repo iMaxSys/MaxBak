@@ -11,41 +11,18 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
-using Microsoft.Extensions.Options;
-
-using AutoMapper;
-
-using iMaxSys.Max.Data;
-using iMaxSys.Max.Data.Specifications;
-using iMaxSys.Max.Domain;
+using iMaxSys.Data;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Extentions;
-
 using iMaxSys.Max.Identity;
 using iMaxSys.Max.Identity.Domain;
-using iMaxSys.Max.Security.Cryptography;
-using iMaxSys.Core.Data.Models;
 using iMaxSys.Identity.Models;
-using iMaxSys.Identity.Data.Models;
 using iMaxSys.Identity.Data.EFCore;
-using iMaxSys.SDK.Sns;
-using iMaxSys.SDK.Sns.Api;
-using iMaxSys.SDK.Sns.Domain;
-using iMaxSys.SDK.Sns.Domain.Auth;
-using iMaxSys.SDK.Sns.Domain.Open;
-using iMaxSys.SDK.Sns.WeChat.Services;
+using iMaxSys.Max.Security.Cryptography;
 
-using DbMember = iMaxSys.Identity.Data.Models.Member;
-using System.Linq.Expressions;
-using iMaxSys.Max.Data.Query;
-using iMaxSys.Data;
+using DbMember = iMaxSys.Identity.Data.Entities.Member;
 
 namespace iMaxSys.Identity
 {
