@@ -11,12 +11,11 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-namespace iMaxSys.SDK.Sns.WeChat.Domain
+namespace iMaxSys.Sns.WeChat.Common;
+
+/// <summary>
+/// 微信实体标识接口
+/// </summary>
+public interface IWeChatEntity
 {
-    /// <summary>
-    /// 微信实体标识接口
-    /// </summary>
-    public interface IWeChatEntity
-    {
-    }
 }

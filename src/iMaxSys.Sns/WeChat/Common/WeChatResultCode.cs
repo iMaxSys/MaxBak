@@ -11,19 +11,16 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using System.ComponentModel;
+namespace iMaxSys.Sns.WeChat.Common;
 
-namespace iMaxSys.SDK.Sns.WeChat.Domain
+/// <summary>
+/// 微信结果代码
+/// </summary>
+public enum WeChatResultCode
 {
     /// <summary>
-    /// 微信结果代码
+    /// 获取微信访问配置异常
     /// </summary>
-    public enum WeChatResultCode
-    {
-        /// <summary>
-        /// 获取微信访问配置异常
-        /// </summary>
-        [Description("获取微信访问配置异常")]
-        GetAccessConfigFail = 300000,
-    }
+    [Description("获取微信访问配置异常")]
+    GetAccessConfigFail = 300000,
 }

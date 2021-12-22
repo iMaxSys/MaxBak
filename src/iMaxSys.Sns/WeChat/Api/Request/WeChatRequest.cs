@@ -11,33 +11,32 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using iMaxSys.SDK.Sns.Api.Reqeust;
+using iMaxSys.Sns.Api.Reqeust;
 
-namespace iMaxSys.SDK.Sns.WeChat.Api.Request
+namespace iMaxSys.Sns.WeChat.Api.Request;
+
+/// <summary>
+/// 微信请求
+/// </summary>
+public abstract class WeChatRequest : SnsRequest
 {
     /// <summary>
-    /// 微信请求
+    /// BaseAPIUrl
     /// </summary>
-    public abstract class WeChatRequest : SnsRequest
-    {
-        /// <summary>
-        /// BaseAPIUrl
-        /// </summary>
-        protected const string BASEAPIURL = "https://api.weixin.qq.com";
+    protected const string BASEAPIURL = "https://api.weixin.qq.com";
 
-        /// <summary>
-        /// 方法(默认POST)
-        /// </summary>
-        public string Method { get; set; } = "POST";
+    /// <summary>
+    /// 方法(默认POST)
+    /// </summary>
+    public string Method { get; set; } = "POST";
 
-        /// <summary>
-        /// API接口名称
-        /// </summary>
-        public abstract string Action { get; }
+    /// <summary>
+    /// API接口名称
+    /// </summary>
+    public abstract string Action { get; }
 
-        /// <summary>
-        /// 接口Url
-        /// </summary>
-        public string Url { get { return $"{BASEAPIURL}{Action}"; } }
-    }
+    /// <summary>
+    /// 接口Url
+    /// </summary>
+    public string Url { get { return $"{BASEAPIURL}{Action}"; } }
 }

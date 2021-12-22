@@ -11,26 +11,21 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using System.Threading.Tasks;
+using iMaxSys.Sns.WeChat.Common;
+using iMaxSys.Sns.WeChat.Api.Request;
 
-using iMaxSys.Max.DependencyInjection;
-using iMaxSys.SDK.Sns.WeChat.Domain;
-using iMaxSys.SDK.Sns.WeChat.Api.Request;
-
-namespace iMaxSys.SDK.Sns.WeChat.Api
+namespace iMaxSys.Sns.WeChat.Api;
+/// <summary>
+/// IWeChatClient
+/// </summary>
+public interface IWeChatClient : IDependency
 {
     /// <summary>
-    /// IWeChatClient
+    /// ExecuteAsync
     /// </summary>
-    public interface IWeChatClient : IDependency
-    {
-        /// <summary>
-        /// ExecuteAsync
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="request"></param>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        Task<T> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode code);
-    }
+    /// <typeparam name="T"></typeparam>
+    /// <param name="request"></param>
+    /// <param name="code"></param>
+    /// <returns></returns>
+    Task<T> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode code);
 }

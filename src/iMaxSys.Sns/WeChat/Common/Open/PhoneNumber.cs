@@ -11,14 +11,13 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using iMaxSys.SDK.Sns.Domain.Open;
+using iMaxSys.Sns.Common.Open;
 
-namespace iMaxSys.SDK.Sns.WeChat.Domain.Open
+namespace iMaxSys.Sns.WeChat.Common.Open;
+
+/// <summary>
+/// 微信电话号码类
+/// </summary>
+public class WeChatPhoneNumber : SnsPhoneNumber, IWeChatEntity
 {
-    /// <summary>
-    /// 微信电话号码类
-    /// </summary>
-    public class WeChatPhoneNumber : SnsPhoneNumber, IWeChatEntity
-    {
-    }
 }

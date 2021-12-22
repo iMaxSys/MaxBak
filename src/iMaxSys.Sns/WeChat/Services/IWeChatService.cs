@@ -11,14 +11,13 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Sns;
 
-namespace iMaxSys.SDK.Sns.WeChat.Services
+namespace iMaxSys.Sns.WeChat.Services;
+
+/// <summary>
+/// 微信服务
+/// </summary>
+public interface IWeChatService : IDependency, ISns
 {
-    /// <summary>
-    /// 微信服务
-    /// </summary>
-    public interface IWeChatService : IDependency, ISns
-    {
-    }
 }

@@ -11,32 +11,26 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using System.Text.Json.Serialization;
+namespace iMaxSys.Sns.WeChat.Api.Response;
 
-namespace iMaxSys.SDK.Sns.WeChat.Api.Response
+/// <summary>
+/// 授权应答
+/// </summary>
+public class AuthResponse : WeChatResponse
 {
     /// <summary>
-    /// 授权应答
+    /// SessionKey
     /// </summary>
-    public class AuthResponse : WeChatResponse
-    {
-        /// <summary>
-        /// SessionKey
-        /// </summary>
-        /// [JsonProperty(PropertyName = "session_key")]
-        [JsonPropertyName("session_key")]
-        public string SessionKey { get; set; }
+    [JsonPropertyName("session_key")]
+    public string SessionKey { get; set; } = String.Empty;
 
-        /// <summary>
-        /// OpenId
-        /// </summary>
-        //[JsonPropertyName("openid")]
-        public string OpenId { get; set; }
+    /// <summary>
+    /// OpenId
+    /// </summary>
+    public string OpenId { get; set; } = String.Empty;
 
-        /// <summary>
-        /// UnionId
-        /// </summary>
-        //[JsonPropertyName("unionid")]
-        public string UnionId { get; set; }
-    }
+    /// <summary>
+    /// UnionId
+    /// </summary>
+    public string UnionId { get; set; } = String.Empty;
 }

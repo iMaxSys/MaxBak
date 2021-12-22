@@ -11,23 +11,22 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using iMaxSys.SDK.Sns.Api.Response;
+using iMaxSys.Sns.Api.Response;
 
-namespace iMaxSys.SDK.Sns.WeChat.Api.Response
+namespace iMaxSys.Sns.WeChat.Api.Response;
+
+/// <summary>
+/// 微信应答
+/// </summary>
+public class WeChatResponse : SnsResponse
 {
     /// <summary>
-    /// 微信应答
+    /// 错误码
     /// </summary>
-    public class WeChatResponse : SnsResponse
-    {
-        /// <summary>
-        /// 错误码
-        /// </summary>
-        public int ErrCode { get; set; }
+    public int ErrCode { get; set; }
 
-        /// <summary>
-        /// 错误信息
-        /// </summary>
-        public string ErrMsg { get; set; }
-    }
+    /// <summary>
+    /// 错误信息
+    /// </summary>
+    public string ErrMsg { get; set; } = String.Empty;
 }

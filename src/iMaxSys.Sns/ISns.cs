@@ -11,33 +11,30 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using System.Threading.Tasks;
+using iMaxSys.Sns.Api;
+using iMaxSys.Sns.Common.Auth;
+using iMaxSys.Sns.Common.Open;
 
-using iMaxSys.SDK.Sns.Api;
-using iMaxSys.SDK.Sns.Domain.Auth;
-using iMaxSys.SDK.Sns.Domain.Open;
+namespace iMaxSys.Sns;
 
-namespace iMaxSys.SDK.Sns
+/// <summary>
+/// 社交服务接口
+/// </summary>
+public interface ISns
 {
     /// <summary>
-    /// 社交服务接口
+    /// 获取访问配额
     /// </summary>
-    public interface ISns
-    {
-        /// <summary>
-        /// 获取访问配额
-        /// </summary>
-        /// <param name="snsAuth"></param>
-        /// <returns></returns>
-        Task<AccessConfig> GetAccessConfigAsync(SnsAuth snsAuth);
+    /// <param name="snsAuth"></param>
+    /// <returns></returns>
+    Task<AccessConfig> GetAccessConfigAsync(SnsAuth snsAuth);
 
-        /// <summary>
-        /// 获取电话号码
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="key"></param>
-        /// <param name="iv"></param>
-        /// <returns></returns>
-        SnsPhoneNumber GetPhoneNumber(string data, string key, string iv);
-    }
+    /// <summary>
+    /// 获取电话号码
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="key"></param>
+    /// <param name="iv"></param>
+    /// <returns></returns>
+    SnsPhoneNumber GetPhoneNumber(string data, string key, string iv);
 }

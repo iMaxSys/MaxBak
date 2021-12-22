@@ -11,16 +11,11 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System;
-using System.Text;
-using System.Collections.Generic;
+namespace iMaxSys.Sns.Api.Response;
 
-namespace iMaxSys.SDK.Sns.Api.Response
+/// <summary>
+/// Sns应答
+/// </summary>
+public abstract class SnsResponse : iMaxSys.Max.Web.Mvc.Response
 {
-    /// <summary>
-    /// Sns应答
-    /// </summary>
-    public abstract class SnsResponse
-    {
-    }
 }

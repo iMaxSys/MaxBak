@@ -11,31 +11,31 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-namespace iMaxSys.SDK.Sns.WeChat.Api.Request
+namespace iMaxSys.Sns.WeChat.Api.Request;
+
+/// <summary>
+/// 获取授权请求
+/// </summary>
+public class AuthRequest : WeChatRequest
 {
     /// <summary>
-    /// 获取授权请求
+    /// AppId
     /// </summary>
-    public class AuthRequest : WeChatRequest
-    {
-        /// <summary>
-        /// AppId
-        /// </summary>
-        public string AppId { get; set; }
+    public string AppId { get; set; } = String.Empty;
 
-        /// <summary>
-        /// AppSecret
-        /// </summary>
-        public string AppSecret { get; set; }
+    /// <summary>
+    /// AppSecret
+    /// </summary>
+    public string AppSecret { get; set; } = String.Empty;
 
-        /// <summary>
-        /// AppId
-        /// </summary>
-        public string Code { get; set; }
+    /// <summary>
+    /// AppId
+    /// </summary>
+    public string Code { get; set; } = String.Empty;
 
-        /// <summary>
-        /// Action
-        /// </summary>
-        public override string Action => $"/sns/jscode2session?appid={AppId}&secret={AppSecret}&js_code={Code}&grant_type=authorization_code";
-    }
+    /// <summary>
+    /// Action
+    /// https://api.weixin.qq.com/sns/jscode2session?appid=<AppId>&secret=<AppSecret>&js_code=<code>&grant_type=authorization_code
+    /// </summary>
+    public override string Action => $"/sns/jscode2session?appid={AppId}&secret={AppSecret}&js_code={Code}&grant_type=authorization_code";
 }

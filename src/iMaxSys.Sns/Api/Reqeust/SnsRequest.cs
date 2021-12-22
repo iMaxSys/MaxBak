@@ -11,16 +11,11 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System;
-using System.Text;
-using System.Collections.Generic;
+namespace iMaxSys.Sns.Api.Reqeust;
 
-namespace iMaxSys.SDK.Sns.Api.Reqeust
+/// <summary>
+/// SnsRequest
+/// </summary>
+public abstract class SnsRequest : iMaxSys.Max.Web.Mvc.Request
 {
-    /// <summary>
-    /// SnsRequest
-    /// </summary>
-    public abstract class SnsRequest
-    {
-    }
 }
