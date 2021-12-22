@@ -11,6 +11,15 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
+using iMaxSys.Sns.Api;
+using iMaxSys.Sns.Common.Auth;
+using iMaxSys.Sns.Common.Open;
+using iMaxSys.Sns.WeChat.Api;
+using iMaxSys.Sns.WeChat.Api.Request;
+using iMaxSys.Sns.WeChat.Api.Response;
+using iMaxSys.Sns.WeChat.Common;
+using iMaxSys.Sns.WeChat.Common.Open;
+
 namespace iMaxSys.Sns.WeChat.Services;
 
 /// <summary>
@@ -36,7 +45,7 @@ public class WeChatService : IWeChatService
     /// <returns></returns>
     public async Task<AccessConfig> GetAccessConfigAsync(SnsAuth snsAuth)
     {
-        AuthRequest authRequest = new AuthRequest
+        AuthRequest authRequest = new()
         {
             AppId = snsAuth.AppId,
             AppSecret = snsAuth.AppSecret,
@@ -61,7 +70,7 @@ public class WeChatService : IWeChatService
     /// <param name="key"></param>
     /// <param name="iv"></param>
     /// <returns></returns>
-    public SnsPhoneNumber GetPhoneNumber(string data, string key, string iv)
+    public SnsPhoneNumber? GetPhoneNumber(string data, string key, string iv)
     {
         string json = AES.Decrypt(data, key, iv);
         return JsonSerializer.Deserialize<WeChatPhoneNumber>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
