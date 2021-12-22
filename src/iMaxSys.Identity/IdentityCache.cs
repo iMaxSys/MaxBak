@@ -10,39 +10,33 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
-/*
-using System.Collections.Concurrent;
-
-using Microsoft.Extensions.Options;
 
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Caching.Redis;
 using iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Identity
+namespace iMaxSys.Identity;
+
+/// <summary>
+/// IdentityCache
+/// </summary>
+public class IdentityCache : RedisService, IIdentityCache
 {
-    /// <summary>
-    /// IdentityCache
-    /// </summary>
-    public class IdentityCache : RedisService, IIdentityCache
+    private readonly ConcurrentDictionary<long, IAuthority> _authorities;
+
+    public IdentityCache(IOptions<MaxOption> option) : base(option.Value.Caching.Connection, option.Value.XppId)
     {
-        private readonly ConcurrentDictionary<long, IAuthority> _authorities;
+        _authorities = new ConcurrentDictionary<long, IAuthority>();
+    }
 
-        public IdentityCache(IOptions<MaxOption> option) : base(option.Value.Caching.Connection, option.Value.AppId)
+    /// <summary>
+    /// 租户权限字典
+    /// </summary>
+    public ConcurrentDictionary<long, IAuthority> Authorities
+    {
+        get
         {
-            _authorities = new ConcurrentDictionary<long, IAuthority>();
-        }
-
-        /// <summary>
-        /// 租户权限字典
-        /// </summary>
-        public ConcurrentDictionary<long, IAuthority> Authorities
-        {
-            get
-            {
-                return _authorities;
-            }
+            return _authorities;
         }
     }
 }
-*/

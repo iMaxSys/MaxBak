@@ -2,25 +2,23 @@
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: IIdentityCache.cs
-//摘要: IIdentityCache
-//说明:
+//文件: IWeChatService.cs
+//摘要: 微信服务
+//说明: 
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2017-11-15
+//日期：2019-05-26
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Caching;
-using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
 
-namespace iMaxSys.Identity;
-
-public interface IIdentityCache : ICache, ISingleton
+namespace iMaxSys.SDK.Sns.WeChat.Services
 {
     /// <summary>
-    /// 租户权限字典
+    /// 微信服务
     /// </summary>
-    ConcurrentDictionary<long, IAuthority> Authorities { get; }
+    public interface IWeChatService : IDependency, ISns
+    {
+    }
 }

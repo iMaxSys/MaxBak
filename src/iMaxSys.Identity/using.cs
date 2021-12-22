@@ -16,6 +16,7 @@ global using System.Linq;
 global using System.Reflection;
 global using System.Runtime.Loader;
 global using System.Threading.Tasks;
+global using System.Collections.Concurrent;
 
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Primitives;
