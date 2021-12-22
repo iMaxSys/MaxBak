@@ -16,7 +16,7 @@ namespace iMaxSys.Max.Web.Mvc;
 /// <summary>
 /// 分页请求
 /// </summary>
-public class PagingRequest : Request
+public abstract class PagingRequest : Request
 {
     const int SIZE = 50;
 

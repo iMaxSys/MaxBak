@@ -11,6 +11,8 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
+using iMaxSys.Sns.WeChat.Api.Request
+
 namespace iMaxSys.Sns.WeChat.Api;
 
 /// <summary>

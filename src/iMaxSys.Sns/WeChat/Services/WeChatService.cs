@@ -72,7 +72,8 @@ public class WeChatService : IWeChatService
     /// <returns></returns>
     public SnsPhoneNumber? GetPhoneNumber(string data, string key, string iv)
     {
-        string json = AES.Decrypt(data, key, iv);
-        return JsonSerializer.Deserialize<WeChatPhoneNumber>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return new SnsPhoneNumber();
+        //string json = AES.Decrypt(data, key, iv);
+        //return JsonSerializer.Deserialize<WeChatPhoneNumber>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 }
