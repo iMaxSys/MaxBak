@@ -18,7 +18,7 @@ namespace iMaxSys.Identity.Models
     /// <summary>
     /// 登录结果
     /// </summary>
-    public class LoginResult
+    public class LoginModel
     {
         /// <summary>
         /// 访问令牌

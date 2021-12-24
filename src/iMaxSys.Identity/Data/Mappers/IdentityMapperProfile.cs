@@ -16,10 +16,10 @@ using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Algorithm.Collection;
 
 using DbTenant = iMaxSys.Data.Entities.App.Tenant;
-using DbRole = iMaxSys.Identity.Data.Models.Role;
-using DbMenu = iMaxSys.Identity.Data.Models.Menu;
-using DbOperation = iMaxSys.Identity.Data.Models.Operation;
-using DbMember = iMaxSys.Identity.Data.Models.Member;
+using DbRole = iMaxSys.Identity.Data.Entities.Role;
+using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
+using DbOperation = iMaxSys.Identity.Data.Entities.Operation;
+using DbMember = iMaxSys.Identity.Data.Entities.Member;
 
 namespace iMaxSys.Identity.Data.Mappers;
 

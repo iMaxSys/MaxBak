@@ -11,9 +11,10 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Data;
 using iMaxSys.Max.DependencyInjection;
-using iMaxSys.Identity.Data.Models;
+using iMaxSys.Data;
+using iMaxSys.Data.Repositories;
+using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity.Data.Repositories;

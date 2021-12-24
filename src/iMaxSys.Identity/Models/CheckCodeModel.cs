@@ -16,7 +16,7 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 验证码模型
 /// </summary>
-public class CheckCodeResult
+public class CheckCodeModel
 {
     /// <summary>
     /// Code
