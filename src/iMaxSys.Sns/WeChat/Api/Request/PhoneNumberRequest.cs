@@ -19,9 +19,29 @@ namespace iMaxSys.Sns.WeChat.Api.Request;
 public class PhoneNumberRequest : WeChatRequest
 {
     /// <summary>
+    /// 手机号获取凭证
+    /// </summary>
+    public string Code { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 接口调用凭证
+    /// </summary>
+    public string AccessToken { get; set; } = string.Empty;
+
+    /// <summary>
     /// Action
     /// https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=ACCESS_TOKEN
     /// </summary>
     public override string Action => $"/wxa/business/getuserphonenumber?access_token={AccessToken}";
+
+    /// <summary>
+    /// Build
+    /// </summary>
+    /// <param name="dict"></param>
+    public override PhoneNumberRequest Build()
+    {
+        Params.Add("code", Code);
+        return this;
+    }
 }
 

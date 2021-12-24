@@ -11,11 +11,13 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Web.Mvc;
+
 namespace iMaxSys.Sns.Api.Response;
 
 /// <summary>
 /// Sns应答
 /// </summary>
-public abstract class SnsResponse : iMaxSys.Max.Web.Mvc.Response
+public abstract class SnsResponse : IResponseBase
 {
 }

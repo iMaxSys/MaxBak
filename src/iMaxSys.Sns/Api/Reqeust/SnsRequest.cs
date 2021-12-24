@@ -11,11 +11,13 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Web.Mvc;
+
 namespace iMaxSys.Sns.Api.Reqeust;
 
 /// <summary>
 /// SnsRequest
 /// </summary>
-public abstract class SnsRequest : iMaxSys.Max.Web.Mvc.Request
+public abstract class SnsRequest : Request
 {
 }

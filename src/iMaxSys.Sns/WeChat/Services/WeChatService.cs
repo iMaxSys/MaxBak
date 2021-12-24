@@ -52,15 +52,24 @@ public class WeChatService : IWeChatService
             Code = snsAuth.Code,
             Method = "GET"
         };
-        AuthResponse response = await _weChatClient.ExecuteAsync<AuthResponse>(authRequest, WeChatResultCode.GetAccessConfigFail);
-        return new AccessConfig
+
+        AuthResponse? response = await _weChatClient.ExecuteAsync<AuthResponse>(authRequest, WeChatResultCode.GetAccessConfigFail);
+
+        if (response != null)
         {
-            AppId = authRequest.AppId,
-            AppSecret = authRequest.AppSecret,
-            OpenId = response.OpenId,
-            UnionId = response.UnionId,
-            SessionKey = response.SessionKey
-        };
+            return new AccessConfig
+            {
+                AppId = authRequest.AppId,
+                AppSecret = authRequest.AppSecret,
+                OpenId = response.OpenId,
+                UnionId = response.UnionId,
+                SessionKey = response.SessionKey
+            };
+        }
+        else
+        {
+            throw new MaxException(WeChatResultCode.GetAccessConfigFail);
+        }
     }
 
     /// <summary>

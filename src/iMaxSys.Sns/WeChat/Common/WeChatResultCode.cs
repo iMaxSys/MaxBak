@@ -19,8 +19,14 @@ namespace iMaxSys.Sns.WeChat.Common;
 public enum WeChatResultCode
 {
     /// <summary>
+    /// 访问微信接口服务异常
+    /// </summary>
+    [Description("访问微信接口服务异常")]
+    AccessWeChatFail = 300000,
+
+    /// <summary>
     /// 获取微信访问配置异常
     /// </summary>
     [Description("获取微信访问配置异常")]
-    GetAccessConfigFail = 300000,
+    GetAccessConfigFail = 300001
 }

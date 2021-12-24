@@ -15,16 +15,20 @@ using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Max.Web.Mvc;
 
+public interface IResponseBase
+{
+}
+
 /// <summary>
 /// 响应类
 /// </summary>
-public class Response : Result
+public class Response : Result, IResponseBase
 {
 }
 
 /// <summary>
 /// 响应范型类
 /// </summary>
-public class Response<T> : Result<T>
+public class Response<T> : Result<T>, IResponseBase
 {
 }

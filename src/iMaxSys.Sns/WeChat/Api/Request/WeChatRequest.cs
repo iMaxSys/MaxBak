@@ -26,17 +26,13 @@ public abstract class WeChatRequest : SnsRequest
     protected const string BASEAPIURL = "https://api.weixin.qq.com";
 
     /// <summary>
-    /// 方法(默认POST)
+    /// Url
     /// </summary>
-    public string Method { get; set; } = "POST";
-
-    /// <summary>
-    /// API接口名称
-    /// </summary>
-    public abstract string Action { get; }
-
-    /// <summary>
-    /// 接口Url
-    /// </summary>
-    public string Url { get { return $"{BASEAPIURL}{Action}"; } }
+    public override string Url
+    {
+        get
+        {
+            return $"{BASEAPIURL}{Action}";
+        }
+    }
 }

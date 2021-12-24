@@ -8,10 +8,11 @@
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2019-05-26
+//日期：2021-12-22
 //----------------------------------------------------------------
 
-using iMaxSys.Sns.WeChat.Api.Request
+using iMaxSys.Sns.WeChat.Common;
+using iMaxSys.Sns.WeChat.Api.Request;
 
 namespace iMaxSys.Sns.WeChat.Api;
 
@@ -27,13 +28,32 @@ public class WeChatClient : IWeChatClient
         _httpService = httpService;
     }
 
-    public async Task<T> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode code)
+    /// <summary>
+    /// ExecuteAsync
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task<T?> ExecuteAsync<T>(WeChatRequest request)
+    {
+        return await ExecuteAsync<T>(request, WeChatResultCode.AccessWeChatFail);
+    }
+
+    /// <summary>
+    /// ExecuteAsync
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="request"></param>
+    /// <param name="code"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task<T?> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode code)
     {
         try
         {
             if (request.Method == "POST")
             {
-
                 return await _httpService.PostAsync<T>(request.Url);
             }
             else
