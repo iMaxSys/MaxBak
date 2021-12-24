@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: TenantModel.cs
-//摘要: 租户模型
+//文件: OperationMode.cs
+//摘要: 操作模型
 //说明:
 //
 //当前：1.0
@@ -16,14 +16,19 @@ using iMaxSys.Max.Common.Enums;
 namespace iMaxSys.Identity.Models;
 
 /// <summary>
-/// 租户模型
+/// 操作模型
 /// </summary>
-public class TenantResult
+public class OperationModel
 {
     /// <summary>
     /// Id
     /// </summary>
     public long Id { get; set; }
+
+    /// <summary>
+    /// MenuId
+    /// </summary>
+    public long MenuId { get; set; }
 
     /// <summary>
     /// 名称
@@ -46,22 +51,27 @@ public class TenantResult
     public string QuickCode { get; set; } = String.Empty;
 
     /// <summary>
-    /// 描述
+    /// Descripton
     /// </summary>
-    public string? Description { get; set; }
+    public string? Descripton { get; set; }
 
     /// <summary>
-    /// Start
+    /// Icon
     /// </summary>
-    public DateTime Start { get; set; }
+    public string? Icon { get; set; }
 
     /// <summary>
-    /// End
+    /// Style
     /// </summary>
-    public DateTime End { get; set; }
+    public string? Style { get; set; }
 
     /// <summary>
-    /// 状态
+    /// Router
+    /// </summary>
+    public string? Router { get; set; }
+
+    /// <summary>
+    /// Status
     /// </summary>
     public Status Status { get; set; } = Status.Enable;
 }

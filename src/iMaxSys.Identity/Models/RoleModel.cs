@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: TenantModel.cs
-//摘要: 租户模型
+//文件: RoleModel.cs
+//摘要: 角色模型
 //说明:
 //
 //当前：1.0
@@ -16,14 +16,19 @@ using iMaxSys.Max.Common.Enums;
 namespace iMaxSys.Identity.Models;
 
 /// <summary>
-/// 租户模型
+/// 角色模型
 /// </summary>
-public class TenantResult
+public class RoleModel
 {
     /// <summary>
     /// Id
     /// </summary>
-    public long Id { get; set; }
+    public long? Id { get; set; }
+
+    /// <summary>
+    /// TenantId
+    /// </summary>
+    public long? TenantId { get; set; }
 
     /// <summary>
     /// 名称
@@ -46,9 +51,29 @@ public class TenantResult
     public string QuickCode { get; set; } = String.Empty;
 
     /// <summary>
-    /// 描述
+    /// Descripton
     /// </summary>
-    public string? Description { get; set; }
+    public string? Descripton { get; set; }
+
+    /// <summary>
+    /// Icon
+    /// </summary>
+    public string? Icon { get; set; }
+
+    /// <summary>
+    /// Style
+    /// </summary>
+    public string? Style { get; set; }
+
+    /// <summary>
+    /// Menus("45675,45677")
+    /// </summary>
+    public string? Menus { get; set; }
+
+    /// <summary>
+    /// Operations("45675,45677")
+    /// </summary>
+    public string? Operations { get; set; }
 
     /// <summary>
     /// Start
@@ -61,7 +86,7 @@ public class TenantResult
     public DateTime End { get; set; }
 
     /// <summary>
-    /// 状态
+    /// Status
     /// </summary>
     public Status Status { get; set; } = Status.Enable;
 }

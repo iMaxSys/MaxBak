@@ -11,14 +11,10 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Data;
-using iMaxSys.Max.DependencyInjection;
-using iMaxSys.Identity.Data.Models;
-using iMaxSys.Identity.Models;
+using iMaxSys.Data.Repositories;
 
-namespace iMaxSys.Identity.Data.Repositories
+namespace iMaxSys.Identity.Data.Repositories;
+
+public interface IIDentityRepository : IRepository
 {
-    public interface IIDentityRepository : IRepository
-    {
-    }
 }

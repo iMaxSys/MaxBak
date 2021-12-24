@@ -1,8 +1,9 @@
-﻿using System;
-using iMaxSys.Data;
-using iMaxSys.Data.EFCore;
+﻿
+
+using iMaxSys.Data.Repositories;
+using iMaxSys.Data.Repositories.EFCore;
 using iMaxSys.Identity.Data.EFCore;
-using iMaxSys.Identity.Data.Models;
+using iMaxSys.Identity.Data.Entities;
 
 namespace iMaxSys.Identity.Data.Repositories
 {

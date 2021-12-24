@@ -11,23 +11,19 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Data;
-using iMaxSys.Data.EFCore;
 using iMaxSys.Data.Entities;
-using iMaxSys.Max.DependencyInjection;
-
+using iMaxSys.Data.Repositories.EFCore;
 using iMaxSys.Identity.Data.EFCore;
 
-namespace iMaxSys.Identity.Data.Repositories
+namespace iMaxSys.Identity.Data.Repositories;
+
+/// <summary>
+/// 身份通用仓储
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class MaxIdentityRepository<T> : EfRepository<T>, IMaxIdentityRepository<T> where T : Entity
 {
-    /// <summary>
-    /// 身份通用仓储
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class MaxIdentityRepository<T> : EfRepository<T>, IMaxIdentityRepository<T> where T : Entity
+    public MaxIdentityRepository(MaxIdentityContext context) : base(context)
     {
-        public MaxIdentityRepository(MaxIdentityContext context) : base(context)
-        {
-        }
     }
 }

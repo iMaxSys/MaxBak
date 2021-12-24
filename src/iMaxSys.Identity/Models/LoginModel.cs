@@ -13,21 +13,20 @@
 
 using iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Identity.Models
+namespace iMaxSys.Identity.Models;
+
+/// <summary>
+/// 登录结果
+/// </summary>
+public class LoginModel
 {
     /// <summary>
-    /// 登录结果
+    /// 访问令牌
     /// </summary>
-    public class LoginModel
-    {
-        /// <summary>
-        /// 访问令牌
-        /// </summary>
-        public IAccessToken? AccessToken { get; set; }
+    public IAccessToken? AccessToken { get; set; }
 
-        /// <summary>
-        /// 成员
-        /// </summary>
-        public IMember? Member { get; set; }
-    }
+    /// <summary>
+    /// 成员
+    /// </summary>
+    public IMember? Member { get; set; }
 }

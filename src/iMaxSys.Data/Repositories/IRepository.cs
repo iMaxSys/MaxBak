@@ -178,14 +178,14 @@ public interface IRepository<TEntity> : IRepository where TEntity : Entity
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
     /// </param>
-    /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <returns>An <see cref="Task{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
     /// <remarks>Ex: This method defaults to a read-only, no-tracking query. </remarks>
     Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
         bool ignoreQueryFilters = false,
-        CancellationToken cancellationToken = default);
+        CancellationToken? cancellationToken = default);
 
     /// <summary>
     /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method defaults to a read-only, no-tracking query.
@@ -199,7 +199,7 @@ public interface IRepository<TEntity> : IRepository where TEntity : Entity
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
     /// </param>
-    /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <returns>An <see cref="Task{TResult}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
     /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
     Task<TResult?> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
