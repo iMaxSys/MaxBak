@@ -63,9 +63,9 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using AutoMapper;
 global using StackExchange.Redis;
 
-using iMaxSys.Max.Options;
-using iMaxSys.Max.Exceptions;
-using iMaxSys.Max.Extentions;
-using iMaxSys.Max.Collection;
-using iMaxSys.Max.DependencyInjection;
-using iMaxSys.Max.Json.NamingPolicy;
+global using iMaxSys.Max.Options;
+global using iMaxSys.Max.Exceptions;
+global using iMaxSys.Max.Extentions;
+global using iMaxSys.Max.Collection;
+global using iMaxSys.Max.DependencyInjection;
+global using iMaxSys.Max.Json.NamingPolicy;

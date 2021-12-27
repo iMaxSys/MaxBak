@@ -69,7 +69,7 @@ public class RoleService : Service, IRoleService
 
         if (role == null)
         {
-            DbRole? dbRole = await _unitOfWork.GetRepository<DbRole>().GetFirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id);
+            DbRole? dbRole = await _unitOfWork.GetRepository<DbRole>().FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id);
             role = _mapper.Map<IRole>(dbRole);
             await SetCacheAsync(key, role);
         }
