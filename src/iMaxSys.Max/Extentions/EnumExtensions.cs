@@ -20,7 +20,7 @@ namespace iMaxSys.Max.Extentions;
 /// </summary>
 public static class EnumExtensions
 {
-    private static ConcurrentDictionary<Enum, string> _concurrentDictionary = new ConcurrentDictionary<Enum, string>();
+    private static readonly ConcurrentDictionary<Enum, string> _concurrentDictionary = new();
 
     /// <summary>
     /// 获取枚举的描述信息(Descripion)。

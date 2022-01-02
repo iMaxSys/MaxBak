@@ -18,7 +18,7 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 用户注册模型
 /// </summary>
-public class RegisteModel
+public class RegisterModel
 {
     /// <summary>
     /// Sid

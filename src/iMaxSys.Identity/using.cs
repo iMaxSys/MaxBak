@@ -13,7 +13,9 @@
 
 global using System;
 global using System.Linq;
+global using System.Text.Json;
 global using System.Reflection;
+global using System.ComponentModel;
 global using System.Runtime.Loader;
 global using System.Threading.Tasks;
 global using System.Collections.Concurrent;

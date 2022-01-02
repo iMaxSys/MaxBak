@@ -29,6 +29,8 @@ public class RoleMemberConfiguration : TenantMasterEntityConfiguration<RoleMembe
         builder.Property(x => x.MemberId).HasColumnName("member_id").IsRequired();
         //RoleId
         builder.Property(x => x.RoleId).HasColumnName("role_id").IsRequired();
+        //XppId
+        builder.Property(x => x.XppId).HasColumnName("xpp_id").IsRequired();
         //Status
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //关系
@@ -36,8 +38,7 @@ public class RoleMemberConfiguration : TenantMasterEntityConfiguration<RoleMembe
         //关系
         builder.HasOne(x => x.Member).WithMany(x => x.RoleMembers).HasForeignKey(x => x.MemberId);
         //Index
-        builder.HasIndex(x => new { x.TenantId, x.MemberId });
-        builder.HasIndex(x => new { x.TenantId, x.RoleId });
+        builder.HasIndex(x => new {x.MemberId, x.XppId, x.TenantId, x.RoleId });
         //ToTable
         builder.ToTable("role_member");
     }

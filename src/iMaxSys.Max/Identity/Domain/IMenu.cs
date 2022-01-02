@@ -60,10 +60,10 @@ public interface IMenu
     /// <summary>
     /// Menus
     /// </summary>
-    List<IMenu>? Menus { get; set; }
+    IList<IMenu>? Menus { get; set; }
 
     /// <summary>
     /// Operations
     /// </summary>
-    List<IOperation>? Operations { get; set; }
+    IList<IOperation>? Operations { get; set; }
 }

@@ -84,21 +84,21 @@ public class RoleService : Service, IRoleService
     /// <param name="id"></param>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IMenu> GetRoleMenuAsync(long id, long tenantId = 0)
+    public async Task<IMenu?> GetRoleMenuAsync(long id, long tenantId = 0)
     {
         if (id == 0)
         {
             return null;
         }
 
-        //DbRole dbRole = await _unitOfWork.GetRepository<DbRole>().GetFirstOrDefaultAsync(predicate: x => x.TenantId == tenantId && x.Id == id);
-        ISpecification<DbRole> spec = new Specification<DbRole>(x => x.TenantId == tenantId && x.Id == id);
-        DbRole dbRole = await _unitOfWork.GetRepo<DbRole>().FirstOrDefaultAsync(spec);
+        DbRole? dbRole = await _unitOfWork.GetRepository<DbRole>().FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id);
+
         if (dbRole == null)
         {
             return null;
         }
         IRole role = _mapper.Map<IRole>(dbRole);
+
         return await GetRoleMenuAsync(role);
     }
 
@@ -108,7 +108,7 @@ public class RoleService : Service, IRoleService
     /// <param name="role"></param>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IMenu> GetRoleMenuAsync(IRole role, long tenantId = 0)
+    public async Task<IMenu?> GetRoleMenuAsync(IRole role, long tenantId = 0)
     {
         if (role == null)
         {
@@ -187,3 +187,4 @@ public class RoleService : Service, IRoleService
         dbRole.End = model.End ?? dbRole.End;
         dbRole.Status = model.Status ?? dbRole.Status;
     }
+}

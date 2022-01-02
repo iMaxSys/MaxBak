@@ -101,7 +101,7 @@ public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
-        bool ignoreQueryFilters = false)
+        bool ignoreQueryFilters = false) where TResult : class
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -145,7 +145,7 @@ public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
     /// </param>
-    /// <returns>The <see cref="IQueryable{TEntity}"/>.</returns>
+    /// <returns>The <see cref="IList{TEntity}"/>.</returns>
     public async Task<IList<TEntity>> AllAsync(CancellationToken cancellationToken = default) => await _dbSet.ToListAsync(cancellationToken);
 
     /// <summary>
@@ -163,7 +163,7 @@ public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity
     /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
     public async Task<IList<TEntity>> AllAsync(Expression<Func<TEntity, bool>>? predicate = null,
                                               Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                               bool disableTracking = true,
                                               bool ignoreQueryFilters = false,
                                               CancellationToken cancellationToken = default)
@@ -188,10 +188,10 @@ public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity
     public async Task<IList<TResult>> AllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
         bool disableTracking = true,
         bool ignoreQueryFilters = false,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) where TResult : class
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -434,7 +434,7 @@ public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity
                                        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
                                        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
                                        bool disableTracking = true,
-                                       bool ignoreQueryFilters = false)
+                                       bool ignoreQueryFilters = false) where TResult : class
     {
         IQueryable<TEntity> query = _dbSet;
 

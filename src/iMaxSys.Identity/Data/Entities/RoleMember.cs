@@ -12,6 +12,7 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Common;
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data.Entities;
 
 namespace iMaxSys.Identity.Data.Entities;
@@ -30,6 +31,11 @@ public class RoleMember : TenantMasterEntity
     /// RoleId
     /// </summary>
     public long RoleId { get; set; }
+
+    /// <summary>
+    /// XppId
+    /// </summary>
+    public long XppId { get; set; }
 
     /// <summary>
     /// MemberId

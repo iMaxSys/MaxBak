@@ -60,12 +60,12 @@ public class Menu : IMenu
     /// <summary>
     /// Menus
     /// </summary>
-    public List<IMenu>? Menus { get; set; }
+    public IList<IMenu>? Menus { get; set; }
 
     /// <summary>
     /// Operations
     /// </summary>
-    public List<IOperation>? Operations { get; set; }
+    public IList<IOperation>? Operations { get; set; }
 }
 
 /// <summary>
@@ -116,10 +116,10 @@ public class MenuShadow
     /// <summary>
     /// Menus
     /// </summary>
-    public List<MenuShadow>? Menus { get; set; }
+    public IList<MenuShadow>? Menus { get; set; }
 
     /// <summary>
     /// Operations
     /// </summary>
-    public List<Operation>? Operations { get; set; }
+    public IList<Operation>? Operations { get; set; }
 }

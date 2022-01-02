@@ -18,9 +18,12 @@ using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Identity;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Max.Common.Enums;
+
 using iMaxSys.Sns;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Identity.Repositories;
 using iMaxSys.Max.Security.Cryptography;
 
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
@@ -43,7 +46,7 @@ public class IdentityService : Service, IIdentityService
     bool _isGetRealMember = false;
     User _user;
 
-    public IdentityService(IMapper mapper, IOptions<MaxOption> option, IIdentityCache cache, IUnitOfWork<MaxIdentityContext> unitOfWork, IWeChatService sns, IRoleService roleService, IUserProvider userProvider, ICheckCodeService checkCodeService) : base(mapper, option, cache, unitOfWork)
+    public IdentityService(IMapper mapper, IOptions<MaxOption> option, IIdentityCache cache, IUnitOfWork<MaxIdentityContext> unitOfWork, ISns sns, IRoleService roleService, IUserProvider userProvider, ICheckCodeService checkCodeService) : base(mapper, option, cache, unitOfWork)
     {
         _sns = sns;
         _roleService = roleService;

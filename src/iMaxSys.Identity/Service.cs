@@ -17,6 +17,7 @@ using iMaxSys.Max.Caching;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Algorithm.Collection;
 using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Identity.Repositories;
 
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
@@ -36,6 +37,9 @@ public abstract class Service
     protected const string TAG_TENANT = "t:";
     protected const string TAG_ROLE = "r:";
     protected const string TAG_MENU = "m:";
+
+    protected const string TAG_TENANT_MENU = $"{TAG}{TAG_MENU}";
+    protected const string TAG_TENANT_ROLE = $"{TAG}{TAG_ROLE}";
 
     protected readonly IMapper _mapper;
     protected readonly MaxOption _option;
@@ -85,31 +89,27 @@ public abstract class Service
     protected async Task RemoveCacheAsync(string key, bool global = false) => await _cache.DeleteAsync(key, global);
 
     /// <summary>
-    /// 刷新权限基础信息
-    /// (菜单&角色权限)
+    /// 刷新权限基础信息(菜单&角色权限)
     /// </summary>
     /// <param name="tenantId"></param>
     /// <returns></returns>
     public async Task<IAuthority> RefreshAuthorityAsync(long tenantId = 0)
     {
-        IAuthority authority = null;
+        IAuthority? authority = null;
 
-        string tenantMenuKey = $"{TAG}{TAG_MENU}{tenantId}";
-        string tenantRoleKey = $"{TAG}{TAG_ROLE}{tenantId}";
+        
+        string tenantMenuKey = $"{TAG_TENANT_MENU}{tenantId}";      //xppid:id:xppid:m:tenantId
+        string tenantRoleKey = $"{TAG_TENANT_ROLE}{tenantId}";      //xppid:id:xppid:r:tenantId
 
-        //删除原数据,完整菜单&角色信息
+        //删除原数据: 完整菜单&角色信息
         await RemoveCacheAsync(tenantMenuKey);
         await RemoveCacheAsync(tenantRoleKey);
 
-        //刷新
-
-        DateTime expires = DateTime.Now.AddMinutes(_option.Identity.Refresh);
-
         //获取菜单，无指定租户菜单则取默认菜单
-        ISpecification<DbMenu> spec = new Specification<DbMenu>(x => x.TenantId == tenantId).AddInclude(x => x.Operations);
-        var menus = await _unitOfWork.GetRepo<DbMenu>().GetListAsync(spec);
+        var menus = await _unitOfWork.GetRepository<DbMenu>().AllAsync(x => x.TenantId == tenantId, null, source => source.Include(y => y.Operations));
+
         var tmenus = menus.Where(x => x.TenantId == tenantId).ToList();
-        if (tmenus.Count() > 0)
+        if (tmenus.Any())
         {
             menus = tmenus;
         }
@@ -117,13 +117,12 @@ public abstract class Service
         await SetCacheAsync(tenantMenuKey, ms);
 
 
-        //获取权限
-        ISpecification<DbRole> spec1 = new Specification<DbRole>(x => x.TenantId == tenantId);
-        var roles = _unitOfWork.GetRepo<DbRole>().GetListAsync(spec1);
+        //获取租户的所有角色
+        var roles = _unitOfWork.GetRepository<DbRole>().AllAsync(x => x.TenantId == tenantId);
         List<IRole> rs = _mapper.Map<List<IRole>>(roles);
         foreach (var role in rs)
         {
-            await _cache.SetAsync($"{tenantRoleKey}:{role.Id}", role, expires);
+            await SetCacheAsync($"{tenantRoleKey}:{role.Id}", role);
         }
 
         authority = new Authority
@@ -143,7 +142,7 @@ public abstract class Service
     /// <returns></returns>
     public async Task<IMenu> GetTenantFullMenuAsync(long tenantId = 0)
     {
-        string key = $"{TAG}{TAG_MENU}{tenantId}";
+        string key = $"{TAG_TENANT_ROLE}{tenantId}";
         bool exists = await KeyExistsAsync(key);
 
         IMenu menu;
@@ -168,18 +167,21 @@ public abstract class Service
     /// <param name="menu"></param>
     /// <param name="ms"></param>
     /// <param name="os"></param>
-    protected void SetMatchMenus(List<IMenu> menus, long[] ms, long[] os)
+    protected void SetMatchMenus(List<IMenu>? menus, long[] ms, long[] os)
     {
         if (ms.Length == 1 && ms[0] == 0)
         {
             return;
         }
-        menus.RemoveAll(x => !ms.Contains(x.Id));
-        menus.ForEach(x =>
+        if (menus != null)
         {
-            x.Operations.RemoveAll(x => !os.Contains(x.Id));
-            SetMatchMenus(x.Menus, ms, os);
-        });
+            menus.RemoveAll(x => !ms.Contains(x.Id));
+            menus.ForEach(x =>
+            {
+                x.Operations?.RemoveAll(x => !os.Contains(x.Id));
+                SetMatchMenus(x.Menus, ms, os);
+            });
+        }
     }
 
     /// <summary>
@@ -271,7 +273,7 @@ public abstract class Service
     }
 
     //==============================菜单操作==============================
-    private IMenu GetMenu(List<DbMenu> stores)
+    private IMenu GetMenu(IList<DbMenu> stores)
     {
         var store = stores.FirstOrDefault(x => x.Lv == 0);
         IMenu menu = new Menu

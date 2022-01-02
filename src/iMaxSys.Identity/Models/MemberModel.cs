@@ -83,7 +83,7 @@ public class MemberModel
     /// <summary>
     /// 类型
     /// </summary>
-    public int? Type { get; set; }
+    public int Type { get; set; }
 
     /// <summary>
     /// RoleId
@@ -93,7 +93,7 @@ public class MemberModel
     /// <summary>
     /// DepartmentId
     /// </summary>
-    public long? DepartmentId { get; set; }
+    public long DepartmentId { get; set; }
 
     /// <summary>
     /// 启用时间
@@ -109,6 +109,11 @@ public class MemberModel
     /// 是否正式
     /// </summary>
     public bool IsOfficial { get; set; } = false;
+
+    /// <summary>
+    /// IP
+    /// </summary>
+    public string IP { get; set; } = "0.0.0.0";
 
     /// <summary>
     /// 状态

@@ -27,9 +27,4 @@ public interface IAccessChain
     /// Member
     /// </summary>
     IMember? Member { get; set; }
-
-    /// <summary>
-    /// 真实用户
-    /// </summary>
-    //IRealMember RealMember { get; }
 }

@@ -14,6 +14,7 @@
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Identity.Models;
+using iMaxSys.Sns.Common.Open;
 
 namespace iMaxSys.Identity;
 

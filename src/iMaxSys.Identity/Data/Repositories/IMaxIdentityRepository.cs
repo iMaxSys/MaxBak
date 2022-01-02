@@ -13,6 +13,7 @@
 
 using iMaxSys.Data;
 using iMaxSys.Data.Entities;
+using iMaxSys.Data.Repositories;
 using iMaxSys.Max.DependencyInjection;
 
 namespace iMaxSys.Identity.Data.Repositories

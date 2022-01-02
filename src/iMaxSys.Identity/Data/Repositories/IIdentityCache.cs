@@ -15,7 +15,7 @@ using iMaxSys.Max.Options;
 using iMaxSys.Max.Caching.Redis;
 using iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Identity;
+namespace iMaxSys.Identity.Data.Repositories;
 
 /// <summary>
 /// IdentityCache

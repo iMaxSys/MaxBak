@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
+//Copyright (C) 2016-2026 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
 //文件: IIdentityCache.cs
@@ -15,7 +15,7 @@ using iMaxSys.Max.Caching;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
 
-namespace iMaxSys.Identity;
+namespace iMaxSys.Identity.Data.Repositories;
 
 public interface IIdentityCache : ICache, ISingleton
 {

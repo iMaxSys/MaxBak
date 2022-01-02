@@ -178,7 +178,7 @@ public interface IMember
 public interface IMember<T> : IMember
 {
     /// <summary>
-    /// 更多信息
+    /// 具体用户
     /// </summary>
-    T Info { get; set; }
+    T? Info { get; set; }
 }

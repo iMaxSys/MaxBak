@@ -114,13 +114,13 @@ namespace iMaxSys.Max.Common.Enums
         /// <summary>
         /// 用户不存在或者密码错误
         /// </summary>
-        [Description("用户不存在")]
-        UserNotExsits = 1009,
+        [Description("成员不存在")]
+        MemberNotExsits = 1009,
         /// <summary>
         /// 要更新的成员Id不可为空
         /// </summary>
         [Description("要更新的成员Id不可为空")]
-        UserIdCantNull = 1010,
+        MemberIdCantNull = 1010,
         /// <summary>
         /// 用户不存在或者密码错误
         /// </summary>
@@ -130,12 +130,12 @@ namespace iMaxSys.Max.Common.Enums
         /// 用户被禁用
         /// </summary>
         [Description("用户被禁用")]
-        UserIsDisable = 1012,
+        MemberIsDisable = 1012,
         /// <summary>
         /// 用户已经过期
         /// </summary>
         [Description("用户已经过期")]
-        UserIsExpired = 1013,
+        MemberIsExpired = 1013,
         /// <summary>
         /// 角色之下存在用户
         /// </summary>
