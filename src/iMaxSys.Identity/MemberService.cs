@@ -140,17 +140,19 @@ namespace iMaxSys.Identity
         public async Task<IMember?> GetAsync(long id)
         {
             var member = await UnitOfWork.GetCustomRepository<IMemberRepository>().FindAsync(id);
-            if (member == null)
+            if (member != null)
+            {
+                return Mapper.Map<IMember>(member);
+            }
+            else
             {
                 throw new MaxException(ResultEnum.MemberNotExsits);
             }
-
-            return Mapper.Map<IMember>(member);
         }
 
         #endregion
 
-        #region GetAsync
+        #region UpdateAsync
 
         /// <summary>
         /// Get member
@@ -177,6 +179,49 @@ namespace iMaxSys.Identity
             await UnitOfWork.SaveChangesAsync();
 
             return Mapper.Map<IMember>(member);
+        }
+
+        #endregion
+
+        #region RefreshAsync
+
+        /// <summary>
+        /// 刷新member缓存
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        public async Task RefreshAsync(long memberId)
+        {
+            IMember? member = await GetAsync(memberId);
+            if (member != null)
+            {
+                await RefreshAsync(member);
+            }
+        }
+
+        /// <summary>
+        /// 刷新member缓存
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
+        public async Task RefreshAsync(IMember member)
+        {
+            await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAsync(member, DateTime.Now.AddMinutes(Option.Identity.Expires));
+        }
+
+        #endregion
+
+        #region RefreshAcceeChainAsync
+
+        /// <summary>
+        /// 刷新AcceeChain缓存
+        /// </summary>
+        /// <param name="oldToken"></param>
+        /// <param name="accessChain"></param>
+        /// <returns></returns>
+        public async Task RefreshAcceeChainAsync(string oldToken, IAccessChain accessChain)
+        {
+            await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessChainAsync(oldToken, accessChain, DateTime.Now.AddMinutes(Option.Identity.Expires));
         }
 
         #endregion

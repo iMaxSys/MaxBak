@@ -47,7 +47,7 @@ public class Member : IMember
     /// <summary>
     /// 登录名/用户名
     /// </summary>
-    public string? LoginName { get; set; }
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 昵称

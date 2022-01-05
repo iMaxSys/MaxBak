@@ -24,11 +24,6 @@ namespace iMaxSys.Max.Options
         public string Connection { get; set; } = string.Empty;
 
         /// <summary>
-        /// 全局标志,默认否
-        /// </summary>
-        /// public bool Global { get; set; } = false;
-
-        /// <summary>
         /// 过期分钟数,默认4320(3天)
         /// </summary>
         public int Expires { get; set; } = 4320;

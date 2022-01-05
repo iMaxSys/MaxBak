@@ -3,12 +3,12 @@
 //All rights reserved.
 //
 //文件: IMemberService.cs
-//摘要: 菜单服务接口
+//摘要: 成员服务接口
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2017-11-15
+//日期：2022-01-04
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Identity.Domain;
@@ -54,14 +54,14 @@ public interface IMemberService : IDependency
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task UpdateAsync(MemberModel model);
+    Task<IMember?> UpdateAsync(MemberModel model);
 
     /// <summary>
     /// 刷新成员缓存
     /// </summary>
     /// <param name="memberId"></param>
     /// <returns></returns>
-    //Task RefreshAsync(long memberId);
+    Task RefreshAsync(long memberId);
 
     /// <summary>
     /// 刷新成员缓存
@@ -74,7 +74,7 @@ public interface IMemberService : IDependency
     /// 刷新AcceeChain缓存
     /// </summary>
     /// <param name="oldToken"></param>
-    /// <param name="memberId"></param>
+    /// <param name="accessChain"></param>
     /// <returns></returns>
-    //Task RefreshAcceeChainAsync(string oldToken, long memberId);
+    Task RefreshAcceeChainAsync(string oldToken, IAccessChain accessChain);
 }

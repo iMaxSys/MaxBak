@@ -214,4 +214,31 @@ namespace iMaxSys.Max.Common.Enums
         [Description("全天")]
         AllDay = 3
     }
+
+    public enum MaritalStatus
+    {
+        /// <summary>
+        /// 未婚
+        /// </summary>
+        [Description("未婚")]
+        Single =0,
+
+        /// <summary>
+        /// 已婚
+        /// </summary>
+        [Description("已婚")]
+        Married = 1,
+
+        /// <summary>
+        /// 离婚
+        /// </summary>
+        [Description("离婚")]
+        Divorced = 2,
+
+        /// <summary>
+        /// 丧偶
+        /// </summary>
+        [Description("丧偶")]
+        Widowed = 3
+    }
 }

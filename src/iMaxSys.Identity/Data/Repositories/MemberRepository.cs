@@ -34,6 +34,8 @@ namespace iMaxSys.Identity.Data.Repositories
 
         protected const string TAG_TENANT_MENU = $"{TAG}{TAG_MENU}";
         protected const string TAG_TENANT_ROLE = $"{TAG}{TAG_ROLE}";
+        protected const string TAG_ACCESS_SECTION = $"{TAG}{TAG_ACCESS}";
+        protected const string TAG_MEMBER_SECTION = $"{TAG}{TAG_MEMBER}";
 
         private readonly IIdentityCache _identityCache;
 
@@ -54,7 +56,7 @@ namespace iMaxSys.Identity.Data.Repositories
         /// <returns></returns>
         public async Task<IAccessSession?> GetAccessSessionAsync(string token)
         {
-            return await _identityCache.GetAsync<AccessSession>($"{TAG}{TAG_ACCESS}{token}", true);
+            return await _identityCache.GetAsync<AccessSession>($"{TAG_MEMBER_SECTION}{token}", true);
         }
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace iMaxSys.Identity.Data.Repositories
         /// <returns></returns>
         public async Task<IMember?> ReadAsync(long memberId)
         {
-            return await _identityCache.GetAsync<Max.Identity.Domain.Member>($"{TAG}{TAG_MEMBER}{memberId}", true);
+            return await _identityCache.GetAsync<Max.Identity.Domain.Member>($"{TAG_MEMBER_SECTION}{memberId}", true);
         }
 
         /// <summary>
@@ -75,7 +77,7 @@ namespace iMaxSys.Identity.Data.Repositories
         public async Task RemoveAsync(long memberId)
         {
             //清除缓存
-            await _identityCache.DeleteAsync($"{TAG}{TAG_MEMBER}{memberId}", true);
+            await _identityCache.DeleteAsync($"{TAG_MEMBER_SECTION}{memberId}", true);
             //软删除
             this.Remove(memberId);
         }
@@ -84,12 +86,13 @@ namespace iMaxSys.Identity.Data.Repositories
         /// 刷新member缓存
         /// </summary>
         /// <param name="member"></param>
+        /// <param name="expires"></param>
         /// <returns></returns>
         public async Task RefreshAsync(IMember member, DateTime expires)
         {
             if (member.Id > 0)
             {
-                await _identityCache.SetAsync($"{TAG}{TAG_MEMBER}{member.Id}", member, expires, true);
+                await _identityCache.SetAsync($"{TAG_MEMBER_SECTION}{member.Id}", member, expires, true);
             }
         }
 
@@ -98,20 +101,21 @@ namespace iMaxSys.Identity.Data.Repositories
         /// </summary>
         /// <param name="oldToken"></param>
         /// <param name="accessChain"></param>
+        /// <param name="expires"></param>
         /// <returns></returns>
         public async Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain, DateTime expires)
         {
             //清除旧AccessSession和User
             if (!string.IsNullOrWhiteSpace(oldToken))
             {
-                await _identityCache.DeleteAsync($"{TAG}{TAG_ACCESS}{oldToken}", true);
+                await _identityCache.DeleteAsync($"{TAG_ACCESS_SECTION}{oldToken}", true);
             }
 
             //设置新缓存
-            await _identityCache.SetAsync($"{TAG}{TAG_ACCESS}{accessChain.AccessSession.Token}", accessChain.AccessSession, expires, true);
+            await _identityCache.SetAsync($"{TAG_ACCESS_SECTION}{accessChain!.AccessSession!.Token}", accessChain.AccessSession, expires, true);
             if (accessChain.AccessSession.MemberId > 0)
             {
-                await RefreshAsync(accessChain.Member, expires);
+                await RefreshAsync(accessChain.Member!, expires);
             }
         }
     }

@@ -47,9 +47,9 @@ public interface IMember
     DateTime? Birthday { get; set; }
 
     /// <summary>
-    /// 登录名
+    /// 用户名
     /// </summary>
-    string? LoginName { get; set; }
+    string UserName { get; set; }
 
     /// <summary>
     /// 昵称
