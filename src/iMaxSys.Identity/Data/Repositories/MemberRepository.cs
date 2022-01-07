@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
+//Copyright (C) 2016-2026 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
 //文件: MemberRepository.cs
@@ -28,12 +28,9 @@ namespace iMaxSys.Identity.Data.Repositories
         protected const string TAG = "id:";
         protected const string TAG_ACCESS = "a:";
         protected const string TAG_MEMBER = "u:";
-        protected const string TAG_TENANT = "t:";
-        protected const string TAG_ROLE = "r:";
         protected const string TAG_MENU = "m:";
 
         protected const string TAG_TENANT_MENU = $"{TAG}{TAG_MENU}";
-        protected const string TAG_TENANT_ROLE = $"{TAG}{TAG_ROLE}";
         protected const string TAG_ACCESS_SECTION = $"{TAG}{TAG_ACCESS}";
         protected const string TAG_MEMBER_SECTION = $"{TAG}{TAG_MEMBER}";
 
@@ -76,10 +73,11 @@ namespace iMaxSys.Identity.Data.Repositories
         /// <returns></returns>
         public async Task RemoveAsync(long memberId)
         {
-            //清除缓存
-            await _identityCache.DeleteAsync($"{TAG_MEMBER_SECTION}{memberId}", true);
             //软删除
             this.Remove(memberId);
+
+            //清除缓存
+            await _identityCache.DeleteAsync($"{TAG_MEMBER_SECTION}{memberId}", true);
         }
 
         /// <summary>

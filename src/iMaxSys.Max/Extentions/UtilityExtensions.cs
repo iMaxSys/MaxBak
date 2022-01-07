@@ -39,6 +39,79 @@ public static class UtilityExtensions
     }
 
     /// <summary>
+    /// 值类型非空执行
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="action"></param>
+    /// <param name="actionIfNull"></param>
+    public static void IfNotNull<T>(this T source, Action<T> action) where T : struct
+    {
+        action(source);
+    }
+
+    /// <summary>
+    /// 值类型非空执行
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="action"></param>
+    /// <param name="actionIfNull"></param>
+    public static void IfNotNull<T>(this T? source, Action<T?> action) where T : struct
+    {
+        action(source);
+    }
+
+    /// <summary>
+    /// 字符串非空执行
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="action"></param>
+    /// <param name="actionIfNull"></param>
+    public static void IfNotNull(this string source, Action<string> action, Action? actionIfNull = null)
+    {
+        if (!string.IsNullOrWhiteSpace(source))
+        {
+            action(source);
+        }
+        else
+        {
+            actionIfNull?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// 引用类型非空执行
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="action"></param>
+    /// <param name="actionIfNull"></param>
+    public static void IfNotNull<T>(this T source, Action<T> action, Action? actionIfNull = null) where T : class
+    {
+        if (source != null)
+        {
+            action(source);
+        }
+        else
+        {
+            actionIfNull?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// 非空执行
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="R"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="func"></param>
+    /// <param name="ifNull"></param>
+    /// <returns></returns>
+    public static TResult IfNotNull<T, TResult>(this T source, Func<T, TResult> func, Func<TResult>? ifNull = null) where T : class where TResult : new()
+    {
+        return source != null ? func(source) : (ifNull != null ? ifNull() : new TResult());
+    }
+
+    /// <summary>
     /// 整型位开关(11001->3=true)
     /// </summary>
     /// <param name="value"></param>

@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
+//Copyright (C) 2016-2026 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
 //文件: IMaxIdentityRepository.cs

@@ -98,11 +98,11 @@ public class MemberConfiguration : TenantMasterEntityConfiguration<Member>
         //加入/激活时间
         builder.Property(x => x.JoinTime).HasColumnName("join_time").IsRequired().HasComment("加入/激活时间");
         //加入Ip
-        builder.Property(x => x.JoinIp).HasColumnName("join_ip").HasMaxLength(50).IsRequired().HasComment("加入Ip");
+        builder.Property(x => x.JoinIP).HasColumnName("join_ip").HasMaxLength(50).IsRequired().HasComment("加入Ip");
         //最后登录时间
         builder.Property(x => x.LastLogin).HasColumnName("last_login").IsRequired().HasComment("最后登录时间");
         //最后登录IP
-        builder.Property(x => x.LastIp).HasColumnName("last_ip").HasMaxLength(50).IsRequired().HasComment("最后登录IP");
+        builder.Property(x => x.LastIP).HasColumnName("last_ip").HasMaxLength(50).IsRequired().HasComment("最后登录IP");
         //是否正式会员
         builder.Property(x => x.IsOfficial).HasColumnName("is_official").HasComment("是否正式成员");
         //状态

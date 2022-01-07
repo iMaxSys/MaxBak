@@ -29,4 +29,10 @@ public enum IdentityResultEnum
     /// </summary>
     [Description("成员id不可为空")]
     MemberIdCantNull = 102001,
+
+    /// <summary>
+    /// 角色不存在
+    /// </summary>
+    [Description("角色不存在")]
+    RoleIsNotExist = 102100,
 }

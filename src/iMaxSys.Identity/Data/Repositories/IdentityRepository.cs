@@ -55,4 +55,9 @@ public class IdentityRepository : IIdentityRepository
     {
         return await _identityCache.GetAsync<Max.Identity.Domain.Member>($"{TAG}{TAG_MEMBER}{memberId}", true);
     }
+
+    public Task<IMember?> ReadAsync(string memberId)
+    {
+        throw new NotImplementedException();
+    }
 }

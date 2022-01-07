@@ -23,7 +23,7 @@ using iMaxSys.Max.Common.Enums;
 using iMaxSys.Sns;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
-using iMaxSys.Identity.Repositories;
+using iMaxSys.Identity.Data.Repositories;
 using iMaxSys.Max.Security.Cryptography;
 
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
@@ -195,13 +195,13 @@ public class IdentityService : Service, IIdentityService
 
         var now = DateTime.Now;
         dbMember.JoinTime = now;
-        dbMember.JoinIp = ip;
+        dbMember.JoinIP = ip;
 
         //ip非空，则为自动注册
         if (!string.IsNullOrWhiteSpace(ip))
         {
             dbMember.LastLogin = now;
-            dbMember.LastIp = ip;
+            dbMember.LastIP = ip;
         }
         dbMember.Salt = Guid.NewGuid().ToString().Replace("-", "");
         await _unitOfWork.GetRepo<DbMember>().AddAsync(dbMember);
@@ -475,7 +475,7 @@ public class IdentityService : Service, IIdentityService
         await _unitOfWork.GetRepo<MemberSession>().AddAsync(memberSession);
 
         dbMember.LastLogin = DateTime.Now;
-        dbMember.LastIp = ip;
+        dbMember.LastIP = ip;
 
         await _unitOfWork.GetRepo<DbMember>().UpdateAsync(dbMember);
         await _unitOfWork.SaveChangesAsync();
@@ -558,9 +558,9 @@ public class IdentityService : Service, IIdentityService
                 AccountSource = sns.Source,
                 Salt = Guid.NewGuid().ToString().Replace("-", ""),
                 JoinTime = now,
-                JoinIp = ip,
+                JoinIP = ip,
                 LastLogin = now,
-                LastIp = ip,
+                LastIP = ip,
                 IsOfficial = false,
                 Status = Status.Enable,
                 MemberExts = new List<MemberExt>()
@@ -581,7 +581,7 @@ public class IdentityService : Service, IIdentityService
         else
         {
             dbMember = memberExt.Member;
-            dbMember.LastIp = ip;
+            dbMember.LastIP = ip;
             dbMember.LastLogin = now;
             await CheckStatus(dbMember);
 
@@ -772,11 +772,11 @@ public class IdentityService : Service, IIdentityService
                 Salt = Guid.NewGuid().ToString().Replace("-", ""),
                 AccountSource = source,
                 JoinTime = DateTime.Now,
-                JoinIp = model.IP,
+                JoinIP = model.IP,
                 Start = DateTime.Now,
                 Gender = user?.Gender ?? model.Gender,
                 Avatar = user?.Avatar ?? model.Avatar,
-                LastIp = model.IP,
+                LastIP = model.IP,
                 LastLogin = DateTime.Now,
                 IsOfficial = user?.IsOfficial ?? false,
                 Status = Status.Enable,
@@ -958,7 +958,7 @@ public class IdentityService : Service, IIdentityService
     /// <param name="dbMember"></param>
     private void SetDbMember(MemberModel model, DbMember dbMember)
     {
-        dbMember.UserId = model.ExtId ?? dbMember.UserId;
+        dbMember.UserId = model.UserId ?? dbMember.UserId;
         dbMember.Avatar = model.Avatar ?? dbMember.Avatar;
         dbMember.Birthday = model.Birthday ?? dbMember.Birthday;
         dbMember.DepartmentId = model.DepartmentId ?? dbMember.DepartmentId;

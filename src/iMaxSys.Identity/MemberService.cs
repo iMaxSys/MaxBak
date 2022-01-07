@@ -107,7 +107,7 @@ namespace iMaxSys.Identity
         public async Task<IMember> AddAsync(MemberModel model, long xppId, long roleId)
         {
             DbMember dbMember = new();
-            SetNewMember(model, xppId, roleId, dbMember);
+            SetNewMember(model, xppId, dbMember);
             await UnitOfWork.GetCustomRepository<IMemberRepository>().AddAsync(dbMember);
             await UnitOfWork.SaveChangesAsync();
             return Mapper.Map<IMember>(dbMember);
@@ -178,7 +178,10 @@ namespace iMaxSys.Identity
             UnitOfWork.GetCustomRepository<IMemberRepository>().Update(member);
             await UnitOfWork.SaveChangesAsync();
 
-            return Mapper.Map<IMember>(member);
+            var result = Mapper.Map<IMember>(member);
+            await RefreshAsync(result);
+
+            return result;
         }
 
         #endregion
@@ -235,22 +238,36 @@ namespace iMaxSys.Identity
         /// <param name="dbMember"></param>
         private static void SetMember(MemberModel model, DbMember dbMember)
         {
-            dbMember.UserId = model.ExtId ?? dbMember.UserId;
-            dbMember.Avatar = model.Avatar;
-            dbMember.Birthday = model.Birthday;
-            dbMember.DepartmentId = model.DepartmentId;
-            dbMember.Email = model.Email;
-            dbMember.End = model.End;
-            dbMember.Gender = model.Gender;
-            dbMember.IsOfficial = model.IsOfficial;
-            dbMember.Mobile = model.Mobile;
-            dbMember.Name = model.Name;
-            dbMember.QuickCode = model.QuickCode;
-            dbMember.NickName = model.NickName;
-            dbMember.Start = model.Start;
-            dbMember.Status = model.Status;
-            dbMember.LoginName = model.UserName ?? dbMember.LoginName;
-            dbMember.Type = model.Type;
+            dbMember.UserId = model.UserId ??= dbMember.Id;      //如无外接UserId,使用Member.Id
+            model.Name?.IfNotNull(x => dbMember.Name = x);
+            model.IdNumber?.IfNotNull(x => dbMember.IdNumber = x);
+            model.QuickCode?.IfNotNull(x => dbMember.QuickCode = x);
+            model.Birthday?.IfNotNull(x => dbMember.Birthday = x);
+            model.MaritalStatus?.IfNotNull(x => dbMember.MaritalStatus = x);
+            model.Gender?.IfNotNull(x => dbMember.Gender = x);
+            model.Nation?.IfNotNull(x => dbMember.Nation = x);
+            model.Education?.IfNotNull(x => dbMember.Education = x);
+            model.Party?.IfNotNull(x => dbMember.Party = x);
+            model.UserName?.IfNotNull(x => dbMember.UserName = x, () => dbMember.UserName = dbMember.Mobile);
+            model.NickName?.IfNotNull(x => dbMember.NickName = x);
+            model.CountryCode?.IfNotNull(x => dbMember.CountryCode = x);
+            model.Mobile?.IfNotNull(x => dbMember.Mobile = x);
+            model.Phone?.IfNotNull(x => dbMember.Phone = x);
+            model.Email?.IfNotNull(x => dbMember.Email = x);
+            model.Avatar?.IfNotNull(x => dbMember.Avatar = x);
+            model.Country?.IfNotNull(x => dbMember.Country = x);
+            model.Province?.IfNotNull(x => dbMember.Province = x);
+            model.City?.IfNotNull(x => dbMember.City = x);
+            model.District?.IfNotNull(x => dbMember.District = x);
+            model.Street?.IfNotNull(x => dbMember.Street = x);
+            model.Community?.IfNotNull(x => dbMember.Community = x);
+            model.AreaCode?.IfNotNull(x => dbMember.AreaCode = x);
+            model.Address?.IfNotNull(x => dbMember.Address = x);
+            model.Zipcode?.IfNotNull(x => dbMember.Zipcode = x);
+            model.Type?.IfNotNull(x => dbMember.Type = x);
+            model.DepartmentId?.IfNotNull(x => dbMember.DepartmentId = x);
+            model.Start?.IfNotNull(x => dbMember.Start = x);
+            model.End?.IfNotNull(x => dbMember.End = x);
         }
 
         /// <summary>
@@ -260,26 +277,28 @@ namespace iMaxSys.Identity
         /// <param name="xppId"></param>
         /// <param name="roleId"></param>
         /// <param name="dbMember"></param>
-        private static void SetNewMember(MemberModel model, long xppId, long roleId, DbMember dbMember)
+        private static void SetNewMember(MemberModel model, long xppId, DbMember dbMember)
         {
             SetMember(model, dbMember);
 
             //注册or新增信息
             dbMember.TenantId = model.TenantId;
 
+            //时间和IP
             var now = DateTime.Now;
             dbMember.JoinTime = now;
-            dbMember.JoinIp = model.IP;
+            model.IP?.IfNotNull(x => dbMember.JoinIP = x);
             dbMember.LastLogin = now;
-            dbMember.LastIp = model.IP;
+            dbMember.LastIP = dbMember.JoinIP;
 
+            //salt
             dbMember.Salt = Guid.NewGuid().ToString().Replace("-", "");
 
-            //角色信息
+            //角色信息(roleId为空,则指定为默认角色)
             RoleMember roleMember = new()
             {
                 XppId = xppId,
-                RoleId = roleId,
+                RoleId = model.RoleId ?? 0,
                 Status = Status.Enable,
                 TenantId = model.TenantId
             };

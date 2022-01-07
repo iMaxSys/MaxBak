@@ -1,11 +1,12 @@
 ﻿
 using System;
 using iMaxSys.Data;
-using iMaxSys.Data.EFCore;
 using iMaxSys.Data.Entities;
 using iMaxSys.Max.DependencyInjection;
 
 using iMaxSys.Data.Entities.App;
+using iMaxSys.Data.Repositories;
+using iMaxSys.Data.Repositories.EFCore;
 using iMaxSys.Identity.Data.EFCore;
 
 namespace iMaxSys.Identity.Services

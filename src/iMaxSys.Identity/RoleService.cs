@@ -17,20 +17,50 @@ using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Identity.Data.Repositories;
 
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using iMaxSys.Identity.Common;
 
 namespace iMaxSys.Identity;
 
 /// <summary>
 /// 角色服务
 /// </summary>
-public class RoleService : Service, IRoleService
+public class RoleService : ServiceBase, IRoleService
 {
-    public RoleService(IMapper mapper, IOptions<MaxOption> option, IIdentityCache cache, IUnitOfWork<MaxIdentityContext> unitOfWork) : base(mapper, option, cache, unitOfWork)
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="mapper"></param>
+    /// <param name="option"></param>
+    /// <param name="unitOfWork"></param>
+    public RoleService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork) : base(mapper, option, unitOfWork)
     {
     }
+
+    #region GetAsync
+
+    /// <summary>
+    /// Get role
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<IRole?> GetAsync(long id)
+    {
+        var role = await UnitOfWork.GetCustomRepository<IRoleRepository>().FindAsync(id);
+        if (role != null)
+        {
+            return Mapper.Map<IRole>(role);
+        }
+        else
+        {
+            throw new MaxException(IdentityResultEnum.RoleIsNotExist);
+        }
+    }
+
+    #endregion
 
     /// <summary>
     /// 新增角色
@@ -38,15 +68,15 @@ public class RoleService : Service, IRoleService
     /// <param name="model"></param>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IRole> AddRoleAsync(RoleModel model, long tenantId = 0)
+    public async Task<IRole> AddAsync(RoleModel model, long tenantId = 0)
     {
         DbRole dbRole = new();
         SetDbRole(model, dbRole);
         dbRole.TenantId = tenantId;
-        //await _unitOfWork.GetRepository<DbRole>().InsertAsync(dbRole);
-        await _unitOfWork.GetRepository<DbRole>().AddAsync(dbRole);
-        await _unitOfWork.SaveChangesAsync();
-        IRole role = _mapper.Map<IRole>(dbRole);
+        await UnitOfWork.GetRepository<DbRole>().AddAsync(dbRole);
+        await UnitOfWork.SaveChangesAsync();
+        IRole role = Mapper.Map<IRole>(dbRole);
+        await RefreshAsync(result);
         await SetCacheAsync(GetRoleKey(role.TenantId, role.Id), role);
         return role;
     }
@@ -187,4 +217,32 @@ public class RoleService : Service, IRoleService
         dbRole.End = model.End ?? dbRole.End;
         dbRole.Status = model.Status ?? dbRole.Status;
     }
+
+    #region RefreshAsync
+
+    /// <summary>
+    /// 刷新role缓存
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public async Task RefreshAsync(long roleId)
+    {
+        IRole? role = await GetAsync(roleId);
+        if (role != null)
+        {
+            await RefreshAsync(role);
+        }
+    }
+
+    /// <summary>
+    /// 刷新role缓存
+    /// </summary>
+    /// <param name="member"></param>
+    /// <returns></returns>
+    public async Task RefreshAsync(IRole role)
+    {
+        await UnitOfWork.GetCustomRepository<IRoleRepository>().RefreshAsync(role, DateTime.Now.AddMinutes(Option.Identity.Expires));
+    }
+
+    #endregion
 }

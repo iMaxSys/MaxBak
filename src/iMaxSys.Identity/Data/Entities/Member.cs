@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data.Entities;
+using iMaxSys.Max.Common;
 
 namespace iMaxSys.Identity.Data.Entities;
 
@@ -204,7 +205,7 @@ public class Member : TenantMasterEntity
     /// <summary>
     /// 加入Ip
     /// </summary>
-    public string JoinIp { get; set; } = string.Empty;
+    public string JoinIP { get; set; } = Const.DEFAULT_IP;
 
     /// <summary>
     /// 最后登录时间
@@ -214,7 +215,7 @@ public class Member : TenantMasterEntity
     /// <summary>
     /// 最后登录IP
     /// </summary>
-    public string LastIp { get; set; } = string.Empty;
+    public string LastIP { get; set; } = Const.DEFAULT_IP;
 
     /// <summary>
     /// 是否正式

@@ -17,7 +17,7 @@ using iMaxSys.Max.Caching;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Algorithm.Collection;
 using iMaxSys.Identity.Data.EFCore;
-using iMaxSys.Identity.Repositories;
+using iMaxSys.Identity.Data.Repositories;
 
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
