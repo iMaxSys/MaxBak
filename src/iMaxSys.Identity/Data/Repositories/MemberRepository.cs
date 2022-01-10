@@ -29,8 +29,6 @@ namespace iMaxSys.Identity.Data.Repositories
         protected const string TAG_ACCESS = "a:";
         protected const string TAG_MEMBER = "u:";
         protected const string TAG_MENU = "m:";
-
-        protected const string TAG_TENANT_MENU = $"{TAG}{TAG_MENU}";
         protected const string TAG_ACCESS_SECTION = $"{TAG}{TAG_ACCESS}";
         protected const string TAG_MEMBER_SECTION = $"{TAG}{TAG_MEMBER}";
 

@@ -146,7 +146,7 @@ namespace iMaxSys.Identity
             }
             else
             {
-                throw new MaxException(ResultEnum.MemberNotExsits);
+                throw new MaxException(IdentityResultEnum.MemberNotExists);
             }
         }
 
@@ -164,18 +164,18 @@ namespace iMaxSys.Identity
             //成员id判空
             if (!model.Id.HasValue)
             {
-                throw new MaxException(ResultEnum.MemberIdCantNull);
+                throw new MaxException(IdentityResultEnum.MemberIdCantNull);
             }
 
             IMemberRepository respoitory = UnitOfWork.GetCustomRepository<IMemberRepository>();
             var member = await respoitory.FindAsync(model.Id);
             if (member == null)
             {
-                throw new MaxException(ResultEnum.MemberNotExsits);
+                throw new MaxException(IdentityResultEnum.MemberNotExists);
             }
 
             SetMember(model, member);
-            UnitOfWork.GetCustomRepository<IMemberRepository>().Update(member);
+            respoitory.Update(member);
             await UnitOfWork.SaveChangesAsync();
 
             var result = Mapper.Map<IMember>(member);

@@ -28,7 +28,7 @@ public class RoleModel
     /// <summary>
     /// TenantId
     /// </summary>
-    public long? TenantId { get; set; }
+    public long TenantId { get; set; }
 
     /// <summary>
     /// 名称

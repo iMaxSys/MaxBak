@@ -22,6 +22,8 @@ using iMaxSys.Identity.Data.Repositories;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
 using iMaxSys.Identity.Common;
+using iMaxSys.Max.Extentions;
+using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Identity;
 
@@ -47,66 +49,93 @@ public class RoleService : ServiceBase, IRoleService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<IRole?> GetAsync(long id)
+    public async Task<IRole?> GetAsync(long id, long tenantId = 0)
     {
-        var role = await UnitOfWork.GetCustomRepository<IRoleRepository>().FindAsync(id);
+        var role = await UnitOfWork.GetCustomRepository<IRoleRepository>().FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
         if (role != null)
         {
             return Mapper.Map<IRole>(role);
         }
         else
         {
-            throw new MaxException(IdentityResultEnum.RoleIsNotExist);
+            throw new MaxException(IdentityResultEnum.RoleNotExists);
         }
     }
 
     #endregion
 
+    #region AddAsync
+
     /// <summary>
     /// 新增角色
     /// </summary>
     /// <param name="model"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IRole> AddAsync(RoleModel model, long tenantId = 0)
+    public async Task<IRole> AddAsync(RoleModel model)
     {
         DbRole dbRole = new();
-        SetDbRole(model, dbRole);
-        dbRole.TenantId = tenantId;
-        await UnitOfWork.GetRepository<DbRole>().AddAsync(dbRole);
+        SetRole(model, dbRole);
+        dbRole.TenantId = model.TenantId;
+        await UnitOfWork.GetCustomRepository<IRoleRepository>().AddAsync(dbRole);
         await UnitOfWork.SaveChangesAsync();
         IRole role = Mapper.Map<IRole>(dbRole);
-        await RefreshAsync(result);
-        await SetCacheAsync(GetRoleKey(role.TenantId, role.Id), role);
+        await RefreshAsync(role);
         return role;
     }
+
+    #endregion
+
+    #region UpdateAsync
 
     /// <summary>
-    /// 获取角色
+    /// 更新角色
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="tenantId"></param>
+    /// <param name="model"></param>
     /// <returns></returns>
-    public async Task<IRole?> GetRoleAsync(long id, long tenantId = 0)
+    /// <exception cref="MaxException"></exception>
+    public async Task<IRole> UpdateAsync(RoleModel model)
     {
-        if (id == 0)
+        //成员id判空
+        if (!model.Id.HasValue)
         {
-            return null;
+            throw new MaxException(IdentityResultEnum.RoleIdCantNull);
         }
 
-        string key = GetRoleKey(tenantId, id);
-        IRole? role = await GetCacheAsync<IRole>(key);
-
+        IRoleRepository respoitory = UnitOfWork.GetCustomRepository<IRoleRepository>();
+        var role = await respoitory.FindAsync(model.Id);
         if (role == null)
         {
-            DbRole? dbRole = await _unitOfWork.GetRepository<DbRole>().FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id);
-            role = _mapper.Map<IRole>(dbRole);
-            await SetCacheAsync(key, role);
+            throw new MaxException(IdentityResultEnum.RoleNotExists);
         }
 
-        //role.Menu = await GetRoleMenuAsync(id);
-        return role;
+        SetRole(model, role);
+        respoitory.Update(role);
+        await UnitOfWork.SaveChangesAsync();
+
+        var result = Mapper.Map<IRole>(role);
+        await RefreshAsync(result);
+
+        return result;
     }
+
+    #endregion
+
+    #region RemoveAsync
+
+    /// <summary>
+    /// 移除角色
+    /// </summary>
+    /// <param name="id">RoleId</param>
+    /// <returns></returns>
+    public async Task RemoveAsync(long id)
+    {
+        await UnitOfWork.GetCustomRepository<IRoleRepository>().RemoveAsync(id);
+        await UnitOfWork.SaveChangesAsync();
+    }
+
+    #endregion
+
+    #region GetMenuAsync
 
     /// <summary>
     /// 获取角色菜单
@@ -114,37 +143,36 @@ public class RoleService : ServiceBase, IRoleService
     /// <param name="id"></param>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IMenu?> GetRoleMenuAsync(long id, long tenantId = 0)
+    public async Task<IMenu?> GetMenuAsync(long roleId, long tenantId = 0)
     {
-        if (id == 0)
+        if (roleId == 0)
         {
-            return null;
+            throw new MaxException(IdentityResultEnum.RoleIdCantNull);
         }
 
-        DbRole? dbRole = await _unitOfWork.GetRepository<DbRole>().FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id);
+        DbRole? dbRole = await UnitOfWork.GetCustomRepository<IRoleRepository>().FirstOrDefaultAsync(x => x.Id == roleId && x.TenantId == tenantId);
 
         if (dbRole == null)
         {
-            return null;
+            throw new MaxException(IdentityResultEnum.RoleNotExists);
         }
-        IRole role = _mapper.Map<IRole>(dbRole);
 
-        return await GetRoleMenuAsync(role);
+        IRole role = Mapper.Map<IRole>(dbRole);
+
+        return await GetMenuAsync(role);
     }
+
+    #endregion
 
     /// <summary>
     /// 获取角色菜单
     /// </summary>
     /// <param name="role"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IMenu?> GetRoleMenuAsync(IRole role, long tenantId = 0)
+    public async Task<IMenu?> GetMenuAsync(IRole role)
     {
-        if (role == null)
-        {
-            return null;
-        }
-        var menu = await GetTenantFullMenuAsync(role.TenantId);
+        //获取完整菜单for tenant && xpp
+        var menu = await GetFullMenuAsync(role.TenantId);
         SetMatchMenus(menu.Menus, role.MenuIds, role.OperationIds);
         return menu;
     }
@@ -154,9 +182,35 @@ public class RoleService : ServiceBase, IRoleService
     /// </summary>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IMenu> GetFullMenuAsync(long tenantId = 0)
+    public async Task<IMenu> GetFullMenuAsync(long tenantId = 0, long xpp = 0)
     {
         return await GetTenantFullMenuAsync(tenantId);
+    }
+
+    /// <summary>
+    /// 获取租户完整菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
+    public async Task<IMenu> GetTenantFullMenuAsync(long tenantId = 0)
+    {
+        string key = $"{TAG}{TAG_MENU}{tenantId}";
+        bool exists = await KeyExistsAsync(key);
+
+        IMenu menu;
+        if (exists)
+        {
+            //menu = await GetCacheAsync<IMenu>(key);
+            var ms = await GetCacheAsync<MenuShadow>(key);
+            menu = _mapper.Map<IMenu>(ms);
+        }
+        else
+        {
+            IAuthority authority = await RefreshAuthorityAsync(tenantId);
+            menu = authority.Menu;
+        }
+
+        return menu;
     }
 
     /// <summary>
@@ -181,41 +235,25 @@ public class RoleService : ServiceBase, IRoleService
         await RemoveCacheAsync(GetRoleKey(tenantId, id));
     }
 
-    /// <summary>
-    /// 更新角色
-    /// </summary>
-    /// <param name="model"></param>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
-    public async Task<IRole> UpdateRoleAsync(RoleModel model, long tenantId = 0)
-    {
-        ISpecification<DbRole> spec = new Specification<DbRole>(x => x.TenantId == tenantId && x.Id == model.Id);
-        DbRole dbRole = await _unitOfWork.GetRepo<DbRole>().FirstOrDefaultAsync(spec);
-        SetDbRole(model, dbRole);
-        //_unitOfWork.GetRepository<DbRole>().Update(dbRole);
-        await _unitOfWork.SaveChangesAsync();
-        IRole role = _mapper.Map<IRole>(dbRole);
-        await SetCacheAsync(GetRoleKey(role.TenantId, role.Id), role);
-        return role;
-    }
+    
 
     /// <summary>
     /// 设置DbRole
     /// </summary>
     /// <param name="model"></param>
     /// <param name="dbTenant"></param>
-    private void SetDbRole(RoleModel model, DbRole dbRole)
+    private static void SetRole(RoleModel model, DbRole dbRole)
     {
-        dbRole.TenantId = model.TenantId ?? dbRole.TenantId;
-        dbRole.Name = model.Name ?? dbRole.Name;
-        dbRole.Descripton = model.Descripton ?? dbRole.Descripton;
-        dbRole.Icon = model.Icon ?? dbRole.Icon;
-        dbRole.Style = model.Style ?? dbRole.Style;
-        dbRole.MenuIds = model.Menus ?? dbRole.MenuIds;
-        dbRole.OperationIds = model.Operations ?? dbRole.OperationIds;
-        dbRole.Start = model.Start ?? dbRole.Start;
-        dbRole.End = model.End ?? dbRole.End;
-        dbRole.Status = model.Status ?? dbRole.Status;
+        dbRole.TenantId = model.TenantId;
+        dbRole.Name = model.Name;
+        model.Descripton?.IfNotNull(x => dbRole.Descripton = x);
+        model.Icon?.IfNotNull(x => dbRole.Icon = x);
+        model.Style?.IfNotNull(x => dbRole.Style = x);
+        model.Menus?.IfNotNull(x => dbRole.MenuIds = x);
+        model.Operations?.IfNotNull(x => dbRole.OperationIds = x);
+        dbRole.Start = model.Start;
+        dbRole.End = model.End;
+        dbRole.Status = model.Status;
     }
 
     #region RefreshAsync
@@ -242,6 +280,23 @@ public class RoleService : ServiceBase, IRoleService
     public async Task RefreshAsync(IRole role)
     {
         await UnitOfWork.GetCustomRepository<IRoleRepository>().RefreshAsync(role, DateTime.Now.AddMinutes(Option.Identity.Expires));
+    }
+
+    /// <summary>
+    /// 刷新租户所有role缓存
+    /// </summary>
+    /// <param name="member"></param>
+    /// <returns></returns>
+    public async Task RefreshAllAsync(long tenantId = 0)
+    {
+        //此处暂时采用循环刷新，日后调整为一次刷新
+        var list = await UnitOfWork.GetCustomRepository<IRoleRepository>().AllAsync(x => x.TenantId == tenantId);
+        DateTime now = DateTime.Now;
+        foreach (var item in list)
+        {
+            IRole role = Mapper.Map<IRole>(item);
+            await UnitOfWork.GetCustomRepository<IRoleRepository>().RefreshAsync(role, now.AddMinutes(Option.Identity.Expires));
+        }
     }
 
     #endregion

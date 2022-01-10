@@ -28,41 +28,42 @@ public interface IRoleService : IDependency
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<IRole?> GetRoleAsync(long id, long tenantId = 0);
+    Task<IRole?> GetAsync(long id);
 
     /// <summary>
     /// 新增角色
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<IRole> AddRoleAsync(RoleModel model, long tenantId = 0);
+    Task<IRole> AddAsync(RoleModel model);
 
     /// <summary>
     /// 更新角色
     /// </summary>
-    /// <param name="accessChain"></param>
-    Task<IRole> UpdateRoleAsync(RoleModel model, long tenantId = 0);
+    /// <param name="model"></param>
+    /// <returns></returns>
+    Task<IRole> UpdateAsync(RoleModel model);
 
     /// <summary>
     /// 移除角色
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task RemoveRoleAsync(long id, long tenantId = 0);
+    Task RemoveAsync(long id);
 
     /// <summary>
     /// 获取角色菜单
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<IMenu> GetRoleMenuAsync(long id, long tenantId = 0);
+    Task<IMenu> GetMenuAsync(long id);
 
     /// <summary>
     /// 获取角色菜单
     /// </summary>
     /// <param name="role"></param>
     /// <returns></returns>
-    Task<IMenu> GetRoleMenuAsync(IRole role, long tenantId = 0);
+    Task<IMenu> GetMenuAsync(IRole role);
 
     /// <summary>
     /// 获取完整菜单

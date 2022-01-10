@@ -31,8 +31,20 @@ public enum IdentityResultEnum
     MemberIdCantNull = 102001,
 
     /// <summary>
+    /// 成员不存在
+    /// </summary>
+    [Description("成员不存在")]
+    MemberNotExists = 102002,
+
+    /// <summary>
+    /// 角色id不可为空
+    /// </summary>
+    [Description("角色id不可为空")]
+    RoleIdCantNull = 102100,
+
+    /// <summary>
     /// 角色不存在
     /// </summary>
     [Description("角色不存在")]
-    RoleIsNotExist = 102100,
+    RoleNotExists = 102101,
 }
