@@ -15,6 +15,10 @@ using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Max.Identity.Domain;
 
+/// <summary>
+/// Menu
+/// 此处最终
+/// </summary>
 public class Menu : IMenu
 {
     /// <summary>
@@ -116,10 +120,10 @@ public class MenuShadow
     /// <summary>
     /// Menus
     /// </summary>
-    public IList<MenuShadow>? Menus { get; set; }
+    public List<MenuShadow>? Menus { get; set; }
 
     /// <summary>
     /// Operations
     /// </summary>
-    public IList<Operation>? Operations { get; set; }
+    public List<Operation>? Operations { get; set; }
 }

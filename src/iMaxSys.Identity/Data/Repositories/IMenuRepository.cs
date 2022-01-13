@@ -24,26 +24,28 @@ namespace iMaxSys.Identity.Data.Repositories;
 public interface IMenuRepository : IRepository<DbMenu>
 {
     /// <summary>
-    /// 读取菜单
+    /// 读取租户角色菜单
     /// </summary>
-    /// <param name="xpp"></param>
-    /// <param name="roleId"></param>
-    /// <returns></returns>
-    Task<IMenu?> ReadAsync(long xpp, long roleId);
-
-    /// <summary>
-    /// 获取菜单
-    /// </summary>
-    /// <param name="xpp"></param>
-    /// <param name="roleId"></param>
-    /// <returns></returns>
-    Task<IMenu?> GetAsync(long xpp, long roleId);
-
-    /// <summary>
-    /// 刷新菜单缓存
-    /// </summary>
+    /// <param name="xppId"></param>
+    /// <param name="tenantId"></param>
     /// <param name="role"></param>
+    /// <returns></returns>
+    Task<IMenu?> ReadAsync(long xppId, long tenantId, IRole role);
+
+    /// <summary>
+    /// 读取租户完整菜单
+    /// </summary>
+    /// <param name="xppId"></param>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
+    Task<IMenu?> ReadFullAsync(long xppId, long tenantId);
+
+    /// <summary>
+    /// 刷新租户应用菜单缓存
+    /// </summary>
+    /// <param name="xppId"></param>
+    /// <param name="tenantId"></param>
     /// <param name="expires"></param>
     /// <returns></returns>
-    Task RefreshAsync(IRole role, DateTime expires);
+    Task<IMenu?> RefreshAsync(long xppId, long tenantId, DateTime? expires = null);
 }
