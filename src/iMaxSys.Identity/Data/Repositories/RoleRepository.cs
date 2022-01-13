@@ -11,6 +11,7 @@
 //日期：2022-01-07
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Repositories.EFCore;
@@ -25,10 +26,11 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// </summary>
 public class RoleRepository : EfRepository<DbRole>, IRoleRepository
 {
-    protected const string TAG = "id:";
-    protected const string TAG_ROLE = "r:";
-    protected const string TAG_ROLE_SECTION = $"{TAG}{TAG_ROLE}";
+    const string TAG = "id:";
+    const string TAG_ROLE = "r:";
+    const string TAG_ROLE_SECTION = $"{TAG}{TAG_ROLE}";
 
+    private readonly MaxOption _option;
     private readonly IIdentityCache _identityCache;
 
     /// <summary>
@@ -36,8 +38,9 @@ public class RoleRepository : EfRepository<DbRole>, IRoleRepository
     /// </summary>
     /// <param name="context"></param>
     /// <param name="identityCache"></param>
-    public RoleRepository(MaxIdentityContext context, IIdentityCache identityCache) : base(context)
+    public RoleRepository(MaxIdentityContext context, IOptions<MaxOption> option, IIdentityCache identityCache) : base(context)
     {
+        _option = option.Value;
         _identityCache = identityCache;
     }
 
@@ -57,11 +60,11 @@ public class RoleRepository : EfRepository<DbRole>, IRoleRepository
     /// <param name="role"></param>
     /// <param name="expires"></param>
     /// <returns></returns>
-    public async Task RefreshAsync(IRole role, DateTime expires)
+    public async Task RefreshAsync(IRole role, DateTime? expires = null)
     {
         if (role?.Id > 0)
         {
-            await _identityCache.SetAsync($"{TAG_ROLE_SECTION}{role.Id}", role, expires, true);
+            await _identityCache.SetAsync($"{TAG_ROLE_SECTION}{role.Id}", role, expires ?? DateTime.Now.AddMinutes(_option.Identity.Refresh), true);
         }
     }
 

@@ -11,6 +11,7 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Repositories.EFCore;
@@ -25,13 +26,13 @@ namespace iMaxSys.Identity.Data.Repositories
     /// </summary>
     public class MemberRepository : EfRepository<DbMember>, IMemberRepository
     {
-        protected const string TAG = "id:";
-        protected const string TAG_ACCESS = "a:";
-        protected const string TAG_MEMBER = "u:";
-        protected const string TAG_MENU = "m:";
-        protected const string TAG_ACCESS_SECTION = $"{TAG}{TAG_ACCESS}";
-        protected const string TAG_MEMBER_SECTION = $"{TAG}{TAG_MEMBER}";
+        const string TAG = "id:";
+        const string TAG_ACCESS = "a:";
+        const string TAG_MEMBER = "u:";
+        const string TAG_ACCESS_SECTION = $"{TAG}{TAG_ACCESS}";
+        const string TAG_MEMBER_SECTION = $"{TAG}{TAG_MEMBER}";
 
+        private readonly MaxOption _option;
         private readonly IIdentityCache _identityCache;
 
         /// <summary>
@@ -39,8 +40,9 @@ namespace iMaxSys.Identity.Data.Repositories
         /// </summary>
         /// <param name="context"></param>
         /// <param name="identityCache"></param>
-        public MemberRepository(MaxIdentityContext context, IIdentityCache identityCache) : base(context)
+        public MemberRepository(IOptions<MaxOption> option, MaxIdentityContext context, IIdentityCache identityCache) : base(context)
         {
+            _option = option.Value;
             _identityCache = identityCache;
         }
 
@@ -84,11 +86,11 @@ namespace iMaxSys.Identity.Data.Repositories
         /// <param name="member"></param>
         /// <param name="expires"></param>
         /// <returns></returns>
-        public async Task RefreshAsync(IMember member, DateTime expires)
+        public async Task RefreshAsync(IMember member, DateTime? expires = null)
         {
             if (member.Id > 0)
             {
-                await _identityCache.SetAsync($"{TAG_MEMBER_SECTION}{member.Id}", member, expires, true);
+                await _identityCache.SetAsync($"{TAG_MEMBER_SECTION}{member.Id}", member, expires ?? DateTime.Now.AddMinutes(_option.Identity.Expires), true);
             }
         }
 
@@ -99,7 +101,7 @@ namespace iMaxSys.Identity.Data.Repositories
         /// <param name="accessChain"></param>
         /// <param name="expires"></param>
         /// <returns></returns>
-        public async Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain, DateTime expires)
+        public async Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain, DateTime? expires = null)
         {
             //清除旧AccessSession和User
             if (!string.IsNullOrWhiteSpace(oldToken))
@@ -108,7 +110,7 @@ namespace iMaxSys.Identity.Data.Repositories
             }
 
             //设置新缓存
-            await _identityCache.SetAsync($"{TAG_ACCESS_SECTION}{accessChain!.AccessSession!.Token}", accessChain.AccessSession, expires, true);
+            await _identityCache.SetAsync($"{TAG_ACCESS_SECTION}{accessChain!.AccessSession!.Token}", accessChain.AccessSession, expires ?? DateTime.Now.AddMinutes(_option.Identity.Expires), true);
             if (accessChain.AccessSession.MemberId > 0)
             {
                 await RefreshAsync(accessChain.Member!, expires);

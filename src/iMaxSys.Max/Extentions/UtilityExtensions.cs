@@ -79,6 +79,24 @@ public static class UtilityExtensions
     }
 
     /// <summary>
+    /// 字符串非空执行
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="action"></param>
+    /// <param name="actionIfNull"></param>
+    public static string? IfNotNull(this string source, string? value)
+    {
+        if (!string.IsNullOrWhiteSpace(source))
+        {
+            return source;
+        }
+        else
+        {
+            return value;
+        }
+    }
+
+    /// <summary>
     /// 引用类型非空执行
     /// </summary>
     /// <typeparam name="T"></typeparam>

@@ -22,21 +22,7 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// </summary>
 public class IdentityCache : RedisService, IIdentityCache
 {
-    private readonly ConcurrentDictionary<long, IAuthority> _authorities;
-
     public IdentityCache(IOptions<MaxOption> option) : base(option.Value.Caching.Connection, option.Value.XppId)
     {
-        _authorities = new ConcurrentDictionary<long, IAuthority>();
-    }
-
-    /// <summary>
-    /// 租户权限字典
-    /// </summary>
-    public ConcurrentDictionary<long, IAuthority> Authorities
-    {
-        get
-        {
-            return _authorities;
-        }
     }
 }

@@ -26,15 +26,14 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// </summary>
 public class MenuRepository : EfRepository<DbMenu>, IMenuRepository
 {
-    protected const string TAG = "id:";
-    protected const string TAG_MENU = "m:";
-    protected const string TAG_TENANT = "t:";
+    const string TAG = "id:";
+    const string TAG_MENU = "m:";
+    const string TAG_TENANT = "t:";
+    const string TAG_TENANT_MENU = $"{TAG}{TAG_MENU}";
 
-    protected const string TAG_TENANT_MENU = $"{TAG}{TAG_MENU}";
-
-    protected readonly IMapper _mapper;
-    protected readonly MaxOption _option;
-    protected readonly IIdentityCache _identityCache;
+    private readonly IMapper _mapper;
+    private readonly MaxOption _option;
+    private readonly IIdentityCache _identityCache;
 
     /// <summary>
     /// 构造
@@ -93,7 +92,7 @@ public class MenuRepository : EfRepository<DbMenu>, IMenuRepository
         {
             menu = GetMenu(menus);
             //设置租户全菜单缓存
-            await _identityCache.SetAsync($"{TAG_TENANT_MENU}{xppId}{tenantId}", expires ?? DateTime.Now.AddMinutes(_option.Identity.Expires), true);
+            await _identityCache.SetAsync($"{TAG_TENANT_MENU}{xppId}{tenantId}", expires ?? DateTime.Now.AddMinutes(_option.Identity.Refresh), true);
         }
         return menu;
     }
@@ -112,10 +111,10 @@ public class MenuRepository : EfRepository<DbMenu>, IMenuRepository
     {
         if (menu != null && menu.Menus != null && menu.Menus.Any())
         {
-            menu.Menus.RemoveAll(x => ms == null || !ms.Contains(x.Id));
+            menu.Menus.RemoveAll(x => ms != null && !ms.Contains(0) && !ms.Contains(x.Id));
             menu.Menus.ForEach(x =>
             {
-                x.Operations?.RemoveAll(x => os == null || !os.Contains(x.Id));
+                x.Operations?.RemoveAll(x => os != null && !os.Contains(0) && !os.Contains(x.Id));
                 SetMatchMenus(x, ms, os);
             });
         }

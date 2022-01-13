@@ -19,8 +19,4 @@ namespace iMaxSys.Identity.Data.Repositories;
 
 public interface IIdentityCache : ICache, ISingleton
 {
-    /// <summary>
-    /// 租户权限字典
-    /// </summary>
-    ConcurrentDictionary<long, IAuthority> Authorities { get; }
 }

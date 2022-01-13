@@ -36,7 +36,7 @@ public class IdentityMapperProfile : Profile
         CreateMap<DbMenu, IMenu>();
 
         CreateMap<DbMember, IMember>()
-            .ForMember(t => t.LoginName, opt => opt.MapFrom(s => s.LoginName ?? s.Mobile))
+            .ForMember(t => t.UserName, opt => opt.MapFrom(s => s.UserName.IfNotNull(s.Mobile)))
             .ForMember(t => t.Name, opt => opt.MapFrom(s => s.Name ?? s.NickName));
 
         CreateMap<DbOperation, IOperation>();

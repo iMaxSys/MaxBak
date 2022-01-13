@@ -64,12 +64,12 @@ public class Menu : IMenu
     /// <summary>
     /// Menus
     /// </summary>
-    public IList<IMenu>? Menus { get; set; }
+    public List<IMenu>? Menus { get; set; }
 
     /// <summary>
     /// Operations
     /// </summary>
-    public IList<IOperation>? Operations { get; set; }
+    public List<IOperation>? Operations { get; set; }
 }
 
 /// <summary>

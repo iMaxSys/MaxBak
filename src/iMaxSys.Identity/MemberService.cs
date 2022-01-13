@@ -209,7 +209,7 @@ namespace iMaxSys.Identity
         /// <returns></returns>
         public async Task RefreshAsync(IMember member)
         {
-            await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAsync(member, DateTime.Now.AddMinutes(Option.Identity.Expires));
+            await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAsync(member);
         }
 
         #endregion
@@ -224,7 +224,7 @@ namespace iMaxSys.Identity
         /// <returns></returns>
         public async Task RefreshAcceeChainAsync(string oldToken, IAccessChain accessChain)
         {
-            await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessChainAsync(oldToken, accessChain, DateTime.Now.AddMinutes(Option.Identity.Expires));
+            await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessChainAsync(oldToken, accessChain);
         }
 
         #endregion

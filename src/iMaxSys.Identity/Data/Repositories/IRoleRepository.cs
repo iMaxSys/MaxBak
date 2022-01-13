@@ -43,5 +43,5 @@ public interface IRoleRepository : IRepository<DbRole>
     /// <param name="role"></param>
     /// <param name="expires"></param>
     /// <returns></returns>
-    Task RefreshAsync(IRole role, DateTime expires);
+    Task RefreshAsync(IRole role, DateTime? expires = null);
 }

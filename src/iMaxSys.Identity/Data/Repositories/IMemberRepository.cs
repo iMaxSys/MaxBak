@@ -47,7 +47,7 @@ public interface IMemberRepository : IRepository<DbMember>
     /// <param name="member"></param>
     /// <param name="expires"></param>
     /// <returns></returns>
-    Task RefreshAsync(IMember member, DateTime expires);
+    Task RefreshAsync(IMember member, DateTime? expires = null);
 
     /// <summary>
     /// 刷新AccessChain
@@ -56,5 +56,5 @@ public interface IMemberRepository : IRepository<DbMember>
     /// <param name="accessChain"></param>
     /// <param name="expires"></param>
     /// <returns></returns>
-    Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain, DateTime expires);
+    Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain, DateTime? expires = null);
 }
