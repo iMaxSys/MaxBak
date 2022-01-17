@@ -24,6 +24,7 @@ using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Repositories;
 using iMaxSys.Identity.Data.Entities;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using iMaxSys.Data.Entities.App;
 
 namespace iMaxSys.Identity
 {
@@ -115,7 +116,7 @@ namespace iMaxSys.Identity
 
         #endregion
 
-        #region Remove
+        #region RemoveAsync
 
         /// <summary>
         /// 移除成员
@@ -225,6 +226,226 @@ namespace iMaxSys.Identity
         public async Task RefreshAcceeChainAsync(string oldToken, IAccessChain accessChain)
         {
             await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessChainAsync(oldToken, accessChain);
+        }
+
+        #endregion
+
+        #region RegisterAsync
+
+        public async Task RegisterAsync(RegisterModel model)
+        {
+            string mobile = model.Mobile;
+            bool needCheckCode = true;
+
+            //账号平台来源
+            PlatformSource source = PlatformSource.Max;
+
+            //获取sns
+            var xppSns = await UnitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == model.XppSnsId, null, x => x.Include(y => y.Xpp));
+
+            AccessConfig accessConfig = await CheckSnsAccountAsync(sns, model.Code);
+            source = sns.Source;
+
+            //获取手机号对应的会员信息
+            ISpecification<DbMember> spec2 = new Specification<DbMember>(x => x.Id == model.MemberId || x.Mobile == mobile || (!string.IsNullOrWhiteSpace(model.UserName) && x.LoginName == model.UserName)).AddInclude(x => x.MemberExts).ApplyTracking();
+            var repo = _unitOfWork.GetRepo<DbMember>();
+
+            DbMember dbMember = await repo.FirstOrDefaultAsync(spec2);
+
+            //用户名密码注册,需要判断是否用该手机号注册过,其他方式注册存在多社交账户绑定同一member,就不判断
+            if (sns.Source == PlatformSource.Max && dbMember != null || dbMember.IsOfficial)
+            {
+                throw new MaxException(ResultEnum.UserExists);
+            }
+
+            //BizConfig bizConfig = new BizConfig
+            //{
+            //    XappId = sns.XappId,
+            //    XappName = sns.Xapp.Name,
+            //    BizId = BizSource.BindCheckCode.GetHashCode(),
+            //    BizName = BizSource.BindCheckCode.GetDescription(),
+            //};
+
+            switch (source)
+            {
+                case PlatformSource.Max:
+                    if (string.IsNullOrWhiteSpace(model.UserName))
+                    {
+                        throw new MaxException(ResultEnum.UserNameCantNull);
+                    }
+                    if (string.IsNullOrWhiteSpace(model.Password))
+                    {
+                        throw new MaxException(ResultEnum.PasswordCantNull);
+                    }
+                    //是否需要手机号码
+                    if (sns.Xapp.NeedMobile && string.IsNullOrWhiteSpace(model.Mobile))
+                    {
+                        throw new MaxException(ResultEnum.NeedMobile);
+                    }
+                    break;
+                case PlatformSource.WeChat:
+                    //有code,就不需要openId,但二者不可同时为空
+                    if (string.IsNullOrWhiteSpace(model.Code) && string.IsNullOrWhiteSpace(model.OpenId))
+                    {
+                        throw new MaxException(ResultEnum.CodeOpenIdCantNull);
+                    }
+                    //是否需要手机号码
+                    if (sns.Xapp.NeedMobile && string.IsNullOrWhiteSpace(model.Mobile) && string.IsNullOrWhiteSpace(model.EncryptedData))
+                    {
+                        throw new MaxException(ResultEnum.NeedMobile);
+                    }
+                    //社交平台获取电话号码,则不需要验证码
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedData))
+                    {
+                        ISpecification<MemberSession> spec = new Specification<MemberSession>(x => x.XappSnsId == model.XappSnsId && x.Token == model.Token);
+                        MemberSession xmemberSession = await _unitOfWork.GetRepo<MemberSession>().FirstOrDefaultAsync(spec);
+                        SnsPhoneNumber phoneNumber = GetSnsPhoneNumber(model.XappSnsId, model.EncryptedData, xmemberSession.SessionKey, model.IV);
+                        mobile = phoneNumber.PurePhoneNumber;
+                        needCheckCode = false;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            if (needCheckCode)
+            {
+                //检查验证码
+                await _checkCodeService.CheckAsync(model.XappSnsId, BizSource.BindCheckCode.GetHashCode(), model.MemberId, model.Mobile, model.CheckCode);
+            }
+
+            IUser user = await ActiveUserAsync(mobile, model.Avatar, model.Type);
+
+            //新会员
+            if (dbMember == null)
+            {
+                dbMember = new DbMember
+                {
+                    TenantId = user?.TenantId > 0 ? user.TenantId : 0,
+                    Name = (((user?.Name ?? user?.NickName) ?? model.Name) ?? model.NickName) ?? mobile,
+                    NickName = ((user?.NickName) ?? model.NickName) ?? mobile,
+                    Mobile = mobile,
+                    LoginName = model.UserName ?? mobile,
+                    Salt = Guid.NewGuid().ToString().Replace("-", ""),
+                    AccountSource = source,
+                    JoinTime = DateTime.Now,
+                    JoinIp = model.IP,
+                    Start = DateTime.Now,
+                    Gender = user?.Gender ?? model.Gender,
+                    Avatar = user?.Avatar ?? model.Avatar,
+                    LastIp = model.IP,
+                    LastLogin = DateTime.Now,
+                    IsOfficial = user?.IsOfficial ?? false,
+                    Status = Status.Enable,
+                    Type = model.Type,
+                    MemberExts = new List<MemberExt>()
+                };
+
+                dbMember.Password = MakePassword(PASSWORD, dbMember.Salt);
+
+                MemberExt ext1 = new MemberExt
+                {
+                    TenantId = user?.TenantId > 0 ? user.TenantId : 0,
+                    OpenId = model.OpenId,
+                    Expires = DateTime.Now.AddMinutes(_option.Identity.Expires),
+                    NickName = model.NickName,
+                    Mobile = model.Mobile,
+                    Avatar = model.Avatar,
+                    Country = model.Country,
+                    Province = model.Province,
+                    City = model.City,
+                    Gender = model.Gender,
+                    XappSnsId = sns.Id,
+                    Name = model.NickName,
+                    Status = Status.Enable
+                };
+                dbMember.MemberExts.Add(ext1);
+                await repo.AddAsync(dbMember);
+            }
+            else
+            {
+                dbMember.UserId = user?.Id ?? 0;
+                dbMember.TenantId = user?.TenantId > 0 ? user.TenantId : 0;
+                dbMember.Name = (((user?.Name ?? user?.NickName) ?? model.Name) ?? model.NickName) ?? mobile;
+                dbMember.IsOfficial = user?.IsOfficial ?? false;
+                dbMember.Mobile = user?.Mobile;
+
+                //是否存在用户同一应用同一账号来源的绑定信息
+                //ISpecification<MemberExt> spec3 = new Specification<MemberExt>(x => x.XappSnsId == model.XappSnsId && x.MemberId == dbMember.Id);
+                //spec3.ApplyTracking();
+                //MemberExt memberExt = await _unitOfWork.GetRepo<MemberExt>().FirstOrDefaultAsync(spec3);
+
+                MemberExt memberExt = dbMember.MemberExts.FirstOrDefault(x => x.XappSnsId == model.XappSnsId && x.MemberId == dbMember.Id);
+                if (memberExt == null)
+                {
+                    MemberExt ext2 = new MemberExt
+                    {
+                        TenantId = dbMember.TenantId,
+                        MemberId = dbMember.Id,
+                        OpenId = model.OpenId,
+                        NickName = model.NickName,
+                        Avatar = model.Avatar,
+                        Mobile = model.Mobile,
+                        Name = model.NickName,
+                        Country = model.Country,
+                        Province = model.Province,
+                        City = model.City,
+                        Gender = model.Gender,
+                        Expires = DateTime.Now.AddMinutes(_option.Identity.Expires),
+                        Status = Status.Enable
+                    };
+                    dbMember.MemberExts.Add(ext2);
+                }
+                else
+                {
+                    memberExt.TenantId = dbMember.TenantId;
+                    memberExt.XappSnsId = model.XappSnsId;
+                    memberExt.OpenId = model.OpenId;
+                    memberExt.NickName = model.NickName;
+                    memberExt.Avatar = model.Avatar;
+                    memberExt.Mobile = model.Mobile;
+                    memberExt.Name = model.NickName;
+                    memberExt.Country = model.Country;
+                    memberExt.Province = model.Province;
+                    memberExt.City = model.City;
+                    memberExt.Gender = model.Gender;
+                    memberExt.Expires = DateTime.Now.AddMinutes(_option.Identity.Expires);
+                    memberExt.Status = Status.Enable;
+
+                    //await _unitOfWork.GetRepo<MemberExt>().UpdateAsync(memberExt);
+                }
+
+                if (string.IsNullOrWhiteSpace(dbMember.Name))
+                {
+                    dbMember.Name = model.Name ?? user.Name;
+                }
+
+                if (string.IsNullOrWhiteSpace(dbMember.LoginName))
+                {
+                    dbMember.LoginName = model.UserName ?? (model.Mobile ?? user.Mobile);
+                }
+
+                if (string.IsNullOrWhiteSpace(dbMember.Password))
+                {
+                    dbMember.Password = MakePassword(PASSWORD, dbMember.Salt);
+                }
+
+                if (string.IsNullOrWhiteSpace(dbMember.NickName))
+                {
+                    dbMember.NickName = model.NickName ?? user.NickName;
+                }
+
+                if (string.IsNullOrWhiteSpace(dbMember.Avatar))
+                {
+                    dbMember.Avatar = model.Avatar ?? user.Avatar;
+                }
+
+                await repo.UpdateAsync(dbMember);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            await UpdateSession(model.Token, sns.Id, model.OpenId);
         }
 
         #endregion

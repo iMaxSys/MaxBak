@@ -50,7 +50,7 @@ public class PhoneInfo
     /// <summary>
     /// 数据水印
     /// </summary>
-    public Watermark? Watermark { get; set; }
+    public Watermark Watermark { get; set; } = new();
 }
 
 /// <summary>

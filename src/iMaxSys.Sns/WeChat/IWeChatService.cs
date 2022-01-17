@@ -13,7 +13,7 @@
 
 using iMaxSys.Sns;
 
-namespace iMaxSys.Sns.WeChat.Services;
+namespace iMaxSys.Sns.WeChat;
 
 /// <summary>
 /// 微信服务

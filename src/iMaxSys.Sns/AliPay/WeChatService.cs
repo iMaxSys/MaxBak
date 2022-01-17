@@ -14,28 +14,20 @@
 using iMaxSys.Sns.Api;
 using iMaxSys.Sns.Common.Auth;
 using iMaxSys.Sns.Common.Open;
-using iMaxSys.Sns.WeChat.Api;
-using iMaxSys.Sns.WeChat.Api.Request;
-using iMaxSys.Sns.WeChat.Api.Response;
-using iMaxSys.Sns.WeChat.Common;
-using iMaxSys.Sns.WeChat.Common.Open;
 
-namespace iMaxSys.Sns.WeChat;
+namespace iMaxSys.Sns.AliPay;
 
 /// <summary>
 /// 微信服务
 /// </summary>
-public class WeChatService : IWeChatService
+public class AliPayService : IAliPayService
 {
-    private readonly IWeChatClient _weChatClient;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="weChatClient"></param>
-    public WeChatService(IWeChatClient weChatClient)
+    public AliPayService()
     {
-        _weChatClient = weChatClient;
     }
 
     /// <summary>
@@ -45,31 +37,8 @@ public class WeChatService : IWeChatService
     /// <returns></returns>
     public async Task<AccessConfig> GetAccessConfigAsync(SnsAuth snsAuth)
     {
-        AuthRequest authRequest = new()
-        {
-            AppId = snsAuth.AppId,
-            AppSecret = snsAuth.AppSecret,
-            Code = snsAuth.Code,
-            Method = "GET"
-        };
-
-        AuthResponse? response = await _weChatClient.ExecuteAsync<AuthResponse>(authRequest, WeChatResultCode.GetAccessConfigFail);
-
-        if (response != null)
-        {
-            return new AccessConfig
-            {
-                AppId = authRequest.AppId,
-                AppSecret = authRequest.AppSecret,
-                OpenId = response.OpenId,
-                UnionId = response.UnionId,
-                SessionKey = response.SessionKey
-            };
-        }
-        else
-        {
-            throw new MaxException(WeChatResultCode.GetAccessConfigFail);
-        }
+        await Task.Delay(1000);
+        throw new Exception();
     }
 
     /// <summary>

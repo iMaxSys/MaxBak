@@ -13,11 +13,11 @@
 
 using iMaxSys.Sns;
 
-namespace iMaxSys.Sns.WeChat;
+namespace iMaxSys.Sns.AliPay;
 
 /// <summary>
 /// 微信服务
 /// </summary>
-public interface IWeChatService : IDependency, ISns
+public interface IAliPayService : IDependency, ISns
 {
 }

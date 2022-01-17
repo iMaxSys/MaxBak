@@ -20,7 +20,7 @@ using iMaxSys.Sns.WeChat.Api.Response;
 using iMaxSys.Sns.WeChat.Common;
 using iMaxSys.Sns.WeChat.Common.Open;
 
-namespace iMaxSys.Sns.WeChat.Services;
+namespace iMaxSys.Sns.WeChat;
 
 /// <summary>
 /// 微信服务

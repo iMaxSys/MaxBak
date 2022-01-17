@@ -9,4 +9,14 @@
   <ItemGroup>
     <ProjectReference Include="..\iMaxSys.Max\iMaxSys.Max.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Weibo\" />
+    <None Remove="AliPay\" />
+    <None Remove="QQ\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Weibo\" />
+    <Folder Include="AliPay\" />
+    <Folder Include="QQ\" />
+  </ItemGroup>
 </Project>
