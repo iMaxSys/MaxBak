@@ -225,7 +225,7 @@ public class RoleService : ServiceBase, IRoleService
         bool has = await _unitOfWork.GetRepo<DbMember>().ExistAsync(x => x.TenantId == tenantId && x.RoleId == id);
         if (has)
         {
-            throw new MaxException(ResultEnum.RoleHasMember);
+            throw new MaxException(ResultCode.RoleHasMember);
         }
 
         ISpecification<DbRole> spec = new Specification<DbRole>(x => x.TenantId == tenantId && x.Id == id);

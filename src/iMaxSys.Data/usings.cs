@@ -24,6 +24,7 @@ global using System.Threading.Tasks;
 global using System.Reflection;
 global using System.Collections.Generic;
 global using System.Runtime.Loader;
+global using System.ComponentModel;
 
 global using Microsoft.Extensions.DependencyModel;
 global using Microsoft.EntityFrameworkCore;

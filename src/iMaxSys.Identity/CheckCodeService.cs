@@ -56,7 +56,7 @@ public class CheckCodeService : ICheckCodeService
     {
         if (string.IsNullOrWhiteSpace(code))
         {
-            throw new MaxException(ResultEnum.CheckCodeCantNull);
+            throw new MaxException(ResultCode.CheckCodeCantNull);
         }
 
         //定制仓储
@@ -70,7 +70,7 @@ public class CheckCodeService : ICheckCodeService
         //无匹配的验证码
         if (checkCode == null)
         {
-            throw new MaxException(ResultEnum.CheckCodeNotExists);
+            throw new MaxException(ResultCode.CheckCodeNotExists);
         }
         else
         {
@@ -83,7 +83,7 @@ public class CheckCodeService : ICheckCodeService
             else
             {
                 //验证错误
-                throw new MaxException(ResultEnum.CheckCodeError);
+                throw new MaxException(ResultCode.CheckCodeError);
             }
             _unitOfWork.GetRepository<CheckCode>().Update(checkCode);
             await _unitOfWork.SaveChangesAsync();
@@ -108,7 +108,7 @@ public class CheckCodeService : ICheckCodeService
 
         if (has)
         {
-            throw new MaxException(ResultEnum.CheckCodeTimeLimit);
+            throw new MaxException(ResultCode.CheckCodeTimeLimit);
         }
 
         var xppSns = await _unitOfWork.GetRepository<XppSns>().FindAsync(sid);

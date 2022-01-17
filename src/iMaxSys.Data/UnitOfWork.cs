@@ -13,7 +13,7 @@
 
 
 using iMaxSys.Max.Exceptions;
-using iMaxSys.Max.Common.Enums;
+using iMaxSys.Data.Common;
 using iMaxSys.Data.Entities;
 using iMaxSys.Data.Repositories;
 
@@ -58,7 +58,7 @@ public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
         var respositoy = _serviceProvider.GetServices<IRepository<TEntity>>().FirstOrDefault(x => x.Code == _context.GetType().GetHashCode());
         if (respositoy == null)
         {
-            throw new MaxException(ResultEnum.CantGetRepository);
+            throw new MaxException(ResultCode.CantGetRepository);
         }
         return respositoy;
     }
@@ -76,7 +76,7 @@ public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
         }
         catch (Exception ex)
         {
-            throw new MaxException(ex, ResultEnum.CantGetCustomRepository);
+            throw new MaxException(ex, ResultCode.CantGetCustomRepository);
         }
     }
 

@@ -53,7 +53,7 @@ public class Session : ISession
     {
         if (string.IsNullOrWhiteSpace(Id))
         {
-            throw new MaxException(ResultEnum.CantSetSession);
+            throw new MaxException(ResultCode.CantSetSession);
         }
         _sessionStore.Set(key, data);
     }
@@ -62,7 +62,7 @@ public class Session : ISession
     {
         if (string.IsNullOrWhiteSpace(Id))
         {
-            throw new MaxException(ResultEnum.CantSetSession);
+            throw new MaxException(ResultCode.CantSetSession);
         }
         await _sessionStore.SetAsync(key, data);
     }

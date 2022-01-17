@@ -62,7 +62,7 @@ public class IdentityMiddleware
         if ("*" != _option.Identity.OpenRouters && !_option.Identity.OpenRouters.Contains(router.ToLower()) && !context.Request.Headers.ContainsKey(FLAG_TOKEN))
         {
             //Headers中无token
-            throw new MaxException(ResultEnum.NeedToken, router);
+            throw new MaxException(ResultCode.NeedToken, router);
         }
 
         if (context.Request.Headers.TryGetValue(FLAG_TOKEN, out StringValues values))

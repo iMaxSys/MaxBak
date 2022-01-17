@@ -46,7 +46,7 @@ public static class EnumExtensions
     {
         return new Result
         {
-            Success = value.GetHashCode() == ResultEnum.Success.GetHashCode(),
+            Success = value.GetHashCode() == ResultCode.Success.GetHashCode(),
             Code = value.GetHashCode(),
             Message = GetDescription(value),
             Data = null
@@ -62,7 +62,7 @@ public static class EnumExtensions
     {
         return new Result
         {
-            Success = value.GetHashCode() == ResultEnum.Success.GetHashCode(),
+            Success = value.GetHashCode() == ResultCode.Success.GetHashCode(),
             Code = value.GetHashCode(),
             Message = GetDescription(value),
             Data = data
@@ -78,7 +78,7 @@ public static class EnumExtensions
     {
         return new Result<T>
         {
-            Success = value.GetHashCode() == ResultEnum.Success.GetHashCode(),
+            Success = value.GetHashCode() == ResultCode.Success.GetHashCode(),
             Code = value.GetHashCode(),
             Message = GetDescription(value),
             Data = data

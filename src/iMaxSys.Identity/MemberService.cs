@@ -255,7 +255,7 @@ namespace iMaxSys.Identity
             //用户名密码注册,需要判断是否用该手机号注册过,其他方式注册存在多社交账户绑定同一member,就不判断
             if (sns.Source == PlatformSource.Max && dbMember != null || dbMember.IsOfficial)
             {
-                throw new MaxException(ResultEnum.UserExists);
+                throw new MaxException(ResultCode.UserExists);
             }
 
             //BizConfig bizConfig = new BizConfig
@@ -271,28 +271,28 @@ namespace iMaxSys.Identity
                 case PlatformSource.Max:
                     if (string.IsNullOrWhiteSpace(model.UserName))
                     {
-                        throw new MaxException(ResultEnum.UserNameCantNull);
+                        throw new MaxException(ResultCode.UserNameCantNull);
                     }
                     if (string.IsNullOrWhiteSpace(model.Password))
                     {
-                        throw new MaxException(ResultEnum.PasswordCantNull);
+                        throw new MaxException(ResultCode.PasswordCantNull);
                     }
                     //是否需要手机号码
                     if (sns.Xapp.NeedMobile && string.IsNullOrWhiteSpace(model.Mobile))
                     {
-                        throw new MaxException(ResultEnum.NeedMobile);
+                        throw new MaxException(ResultCode.NeedMobile);
                     }
                     break;
                 case PlatformSource.WeChat:
                     //有code,就不需要openId,但二者不可同时为空
                     if (string.IsNullOrWhiteSpace(model.Code) && string.IsNullOrWhiteSpace(model.OpenId))
                     {
-                        throw new MaxException(ResultEnum.CodeOpenIdCantNull);
+                        throw new MaxException(ResultCode.CodeOpenIdCantNull);
                     }
                     //是否需要手机号码
                     if (sns.Xapp.NeedMobile && string.IsNullOrWhiteSpace(model.Mobile) && string.IsNullOrWhiteSpace(model.EncryptedData))
                     {
-                        throw new MaxException(ResultEnum.NeedMobile);
+                        throw new MaxException(ResultCode.NeedMobile);
                     }
                     //社交平台获取电话号码,则不需要验证码
                     if (!string.IsNullOrWhiteSpace(model.EncryptedData))

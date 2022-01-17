@@ -2,9 +2,9 @@
 //Copyright (C) 2016-2026 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: Enums.cs
+//文件: IdentityResultEnum.cs
 //摘要: 身份结果枚举
-//说明:
+//说明: 102
 //
 //当前：1.0
 //作者：陶剑扬

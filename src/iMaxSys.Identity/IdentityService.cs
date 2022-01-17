@@ -119,7 +119,7 @@ public class IdentityService : Service, IIdentityService
         //停用检查
         if (accessChain?.Member?.Status == Status.Disable)
         {
-            throw new MaxException(ResultEnum.UserIsDisable);
+            throw new MaxException(ResultCode.UserIsDisable);
         }
 
         //全开放
@@ -140,12 +140,12 @@ public class IdentityService : Service, IIdentityService
 
                 if (accessChain == null)
                 {
-                    throw new MaxException(ResultEnum.UnLogin);
+                    throw new MaxException(ResultCode.UnLogin);
                 }
 
                 if (!accessChain.AccessSession.IsLogin)
                 {
-                    throw new MaxException(ResultEnum.Forbidden, router);
+                    throw new MaxException(ResultCode.Forbidden, router);
                 }
             }
             else //严格模式
@@ -158,12 +158,12 @@ public class IdentityService : Service, IIdentityService
 
                 if (accessChain == null)
                 {
-                    throw new MaxException(ResultEnum.UnLogin);
+                    throw new MaxException(ResultCode.UnLogin);
                 }
 
                 if (!accessChain.AccessSession.IsLogin)
                 {
-                    throw new MaxException(ResultEnum.Forbidden, router);
+                    throw new MaxException(ResultCode.Forbidden, router);
                 }
 
                 var role = await _roleService.GetRoleAsync(accessChain.Member.RoleId);
@@ -174,7 +174,7 @@ public class IdentityService : Service, IIdentityService
                 }
                 else
                 {
-                    throw new MaxException(ResultEnum.Forbidden, router);
+                    throw new MaxException(ResultCode.Forbidden, router);
                 }
 
             }
@@ -225,13 +225,13 @@ public class IdentityService : Service, IIdentityService
         //用户是否存在
         if (dbmebmer == null)
         {
-            throw new MaxException(ResultEnum.UserNotExsits);
+            throw new MaxException(ResultCode.UserNotExsits);
         }
 
         //验证旧密码
         if (!CheckPassword(dbmebmer.Password, oldPassword, dbmebmer.Salt))
         {
-            throw new MaxException(ResultEnum.PasswordError);
+            throw new MaxException(ResultCode.PasswordError);
         }
 
         dbmebmer.Password = MakePassword(newPassword, dbmebmer.Salt);
@@ -251,7 +251,7 @@ public class IdentityService : Service, IIdentityService
         DbMember dbMember = await _unitOfWork.GetRepo<DbMember>().FirstOrDefaultAsync(spec);
         if (dbMember == null)
         {
-            throw new MaxException(ResultEnum.UserNotExsits);
+            throw new MaxException(ResultCode.UserNotExsits);
         }
 
         return _mapper.Map<IMember>(dbMember);
@@ -426,13 +426,13 @@ public class IdentityService : Service, IIdentityService
         //用户名空检查
         if (string.IsNullOrWhiteSpace(userName))
         {
-            throw new MaxException(ResultEnum.UserNameCantNull);
+            throw new MaxException(ResultCode.UserNameCantNull);
         }
 
         //密码空检查
         if (string.IsNullOrWhiteSpace(password))
         {
-            throw new MaxException(ResultEnum.PasswordCantNull);
+            throw new MaxException(ResultCode.PasswordCantNull);
         }
 
         AccessChain accessChain = new AccessChain();
@@ -449,12 +449,12 @@ public class IdentityService : Service, IIdentityService
         DbMember dbMember = await _unitOfWork.GetRepo<DbMember>().FirstOrDefaultAsync(spec);
         if (dbMember == null)
         {
-            throw new MaxException(ResultEnum.UserNotExsits);
+            throw new MaxException(ResultCode.UserNotExsits);
         }
 
         if (!(CheckPassword(dbMember.Password, password, dbMember.Salt)))
         {
-            throw new MaxException(ResultEnum.PasswordError);
+            throw new MaxException(ResultCode.PasswordError);
         }
 
         var token = MakeAccessToken();
@@ -698,7 +698,7 @@ public class IdentityService : Service, IIdentityService
         //用户名密码注册,需要判断是否用该手机号注册过,其他方式注册存在多社交账户绑定同一member,就不判断
         if (sns.Source == PlatformSource.Max && dbMember != null || dbMember.IsOfficial)
         {
-            throw new MaxException(ResultEnum.UserExists);
+            throw new MaxException(ResultCode.UserExists);
         }
 
         //BizConfig bizConfig = new BizConfig
@@ -714,28 +714,28 @@ public class IdentityService : Service, IIdentityService
             case PlatformSource.Max:
                 if (string.IsNullOrWhiteSpace(model.UserName))
                 {
-                    throw new MaxException(ResultEnum.UserNameCantNull);
+                    throw new MaxException(ResultCode.UserNameCantNull);
                 }
                 if (string.IsNullOrWhiteSpace(model.Password))
                 {
-                    throw new MaxException(ResultEnum.PasswordCantNull);
+                    throw new MaxException(ResultCode.PasswordCantNull);
                 }
                 //是否需要手机号码
                 if (sns.Xapp.NeedMobile && string.IsNullOrWhiteSpace(model.Mobile))
                 {
-                    throw new MaxException(ResultEnum.NeedMobile);
+                    throw new MaxException(ResultCode.NeedMobile);
                 }
                 break;
             case PlatformSource.WeChat:
                 //有code,就不需要openId,但二者不可同时为空
                 if (string.IsNullOrWhiteSpace(model.Code) && string.IsNullOrWhiteSpace(model.OpenId))
                 {
-                    throw new MaxException(ResultEnum.CodeOpenIdCantNull);
+                    throw new MaxException(ResultCode.CodeOpenIdCantNull);
                 }
                 //是否需要手机号码
                 if (sns.Xapp.NeedMobile && string.IsNullOrWhiteSpace(model.Mobile) && string.IsNullOrWhiteSpace(model.EncryptedData))
                 {
-                    throw new MaxException(ResultEnum.NeedMobile);
+                    throw new MaxException(ResultCode.NeedMobile);
                 }
                 //社交平台获取电话号码,则不需要验证码
                 if (!string.IsNullOrWhiteSpace(model.EncryptedData))
@@ -1052,13 +1052,13 @@ public class IdentityService : Service, IIdentityService
         //禁用判断
         if (dbMember?.Status == Status.Disable || realMember?.Status == Status.Disable)
         {
-            throw new MaxException(ResultEnum.UserIsDisable);
+            throw new MaxException(ResultCode.UserIsDisable);
         }
 
         //过期判断
         if (dbMember?.End < DateTime.Now || realMember?.End < DateTime.Now)
         {
-            throw new MaxException(ResultEnum.UserIsExpired);
+            throw new MaxException(ResultCode.UserIsExpired);
         }
     }
 

@@ -16,7 +16,7 @@ namespace iMaxSys.Max.Common.Enums
     /// <summary>
     /// ResultEnum
     /// </summary>
-    public enum ResultEnum
+    public enum ResultCode
     {
         /// <summary>
         /// 成功
@@ -35,18 +35,6 @@ namespace iMaxSys.Max.Common.Enums
         /// </summary>
         [Description("类型不匹配")]
         TypeIsUnmatched = 30,
-
-        /// <summary>
-        /// 无法获取范型仓储
-        /// </summary>
-        [Description("无法获取范型仓储")]
-        CantGetRepository = 40,
-
-        /// <summary>
-        /// 无法定制范型仓储
-        /// </summary>
-        [Description("无法获取定制仓储")]
-        CantGetCustomRepository = 41,
 
         /// <summary>
         /// 未授权

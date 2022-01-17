@@ -25,7 +25,7 @@ public class ResultBase
     /// <summary>
     /// 代码
     /// </summary>
-    public int Code { get; set; } = ResultEnum.Fail.GetHashCode();
+    public int Code { get; set; } = ResultCode.Fail.GetHashCode();
     /// <summary>
     /// 信息
     /// </summary>

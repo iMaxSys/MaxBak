@@ -57,7 +57,7 @@ public class SessionStore : ISessionStore
     {
         if (string.IsNullOrWhiteSpace(Id))
         {
-            throw new MaxException(ResultEnum.CantSetSession);
+            throw new MaxException(ResultCode.CantSetSession);
         }
         _cache.Set($"{TAG_SESSION}{Id}:{key}", data, DateTime.Now.AddMinutes(_maxOption.Identity.Expires));
     }
@@ -66,7 +66,7 @@ public class SessionStore : ISessionStore
     {
         if (string.IsNullOrWhiteSpace(Id))
         {
-            throw new MaxException(ResultEnum.CantSetSession);
+            throw new MaxException(ResultCode.CantSetSession);
         }
         await _cache.SetAsync($"{TAG_SESSION}{Id}:{key}", data, DateTime.Now.AddMinutes(_maxOption.Identity.Expires));
     }
