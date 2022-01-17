@@ -38,12 +38,12 @@ public class SnsFactory : ISnsFactory
     /// </summary>
     /// <param name="platform"></param>
     /// <returns></returns>
-    public ISns GetService(Platform platform)
+    public ISns GetService(SnsSource snsSource)
     {
-        return platform switch
+        return snsSource switch
         {
-            Platform.WeChat => _serviceProvider.GetRequiredService<IWeChatService>(),
-            Platform.AliPay => _serviceProvider.GetRequiredService<IAliPayService>(),
+            SnsSource.WeChat => _serviceProvider.GetRequiredService<IWeChatService>(),
+            SnsSource.AliPay => _serviceProvider.GetRequiredService<IAliPayService>(),
             _ => _serviceProvider.GetRequiredService<IWeChatService>(),
         };
     }

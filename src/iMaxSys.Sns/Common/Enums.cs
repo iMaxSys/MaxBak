@@ -16,7 +16,7 @@ namespace iMaxSys.Sns.Common;
 /// <summary>
 /// 平台
 /// </summary>
-public enum Platform
+public enum SnsSource
 {
     /// <summary>
     /// 本体系

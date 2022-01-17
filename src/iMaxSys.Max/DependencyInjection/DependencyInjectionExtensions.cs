@@ -35,10 +35,6 @@ public static class DependencyInjectionExtensions
 
         Type[] flags = { typeof(IDependency), typeof(ISingleton), typeof(ITransient) };
 
-        //var singleton = typeof(ISingleton);
-        //var transient = typeof(ITransient);
-        //var scoped = typeof(IDependency);
-
         //为提高性能,只加载框架相关程序集和应用程序程序集
         var assemblies = UtilityExtensions.GetAppAssemblies();
 

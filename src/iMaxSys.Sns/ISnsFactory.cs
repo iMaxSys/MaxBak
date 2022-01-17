@@ -17,5 +17,5 @@ namespace iMaxSys.Sns;
 
 public interface ISnsFactory : IDependency
 {
-    ISns GetService(Platform platform);
+    ISns GetService(SnsSource snsSource);
 }

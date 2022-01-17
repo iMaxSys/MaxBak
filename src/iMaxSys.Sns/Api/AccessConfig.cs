@@ -29,7 +29,7 @@ public class AccessConfig
     /// <summary>
     /// 账号来源
     /// </summary>
-    public Platform Platform { get; set; }
+    public SnsSource SnsSource { get; set; }
 
     /// <summary>
     /// AccountId（第三方平台主体Id,例如微信公众号原始Id）
