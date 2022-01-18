@@ -3,16 +3,19 @@
 //All rights reserved.
 //
 //文件: ResultCode.cs
-//摘要: 社交系统结果枚举
-//说明: 107
+//摘要: 总线结果枚举
+//说明: 104
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2019-05-26
+//日期：2017-11-15
 //----------------------------------------------------------------
 
-namespace iMaxSys.Sns.Common;
+namespace iMaxSys.Bus.Common;
 
+/// <summary>
+/// 总线结果枚举
+/// </summary>
 public enum ResultCode
 {
 }

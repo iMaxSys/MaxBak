@@ -2,7 +2,7 @@
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: ResultEnum.cs
+//文件: ResultCode.cs
 //摘要: 数据访问结果枚举
 //说明: 102
 //

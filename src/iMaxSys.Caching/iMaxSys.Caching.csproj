@@ -9,4 +9,10 @@
   <ItemGroup>
     <ProjectReference Include="..\iMaxSys.Max\iMaxSys.Max.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
 </Project>
