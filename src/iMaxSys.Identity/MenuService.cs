@@ -27,6 +27,7 @@ namespace iMaxSys.Identity;
 /// </summary>
 public class MenuService : ServiceBase, IMenuService
 {
+
     public MenuService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork) : base(mapper, option, unitOfWork)
     {
     }
@@ -46,9 +47,17 @@ public class MenuService : ServiceBase, IMenuService
     /// </summary>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IMenu?> GetFullAsync(long tenantId = 0)
+    public async Task<IMenu?> GetFullAsync(long tenantId = 0, long xppId)
     {
-
+        var role = await UnitOfWork.GetCustomRepository<IMenuRepository>().FirstOrDefaultAsync(x => x.TenantId == tenantId && );
+        if (role != null)
+        {
+            return Mapper.Map<IRole>(role);
+        }
+        else
+        {
+            throw new MaxException(IdentityResultEnum.RoleNotExists);
+        }
     }
 
     /// <summary>

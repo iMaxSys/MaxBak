@@ -28,10 +28,7 @@ public interface IMenuService : IDependency
     /// </summary>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<IMenu?> ReadAsync(long roleId)
-    {
-
-    }
+    Task<IMenu?> ReadAsync(long roleId);
 
     /// <summary>
     /// 获取完整菜单
