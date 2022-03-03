@@ -3,7 +3,7 @@
 //All rights reserved.
 //
 //文件: Service.cs
-//摘要: 服务基类
+//摘要: 服务基础类
 //说明:
 //
 //当前：1.0
