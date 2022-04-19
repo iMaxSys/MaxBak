@@ -18,6 +18,8 @@ namespace iMaxSys.Max.Options
     /// </summary>
     public class CachingOption
     {
+        public int Type { get; set; } = 0;
+
         /// <summary>
         /// Connection
         /// </summary>

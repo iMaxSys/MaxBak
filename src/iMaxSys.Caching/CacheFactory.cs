@@ -43,6 +43,15 @@ namespace iMaxSys.Caching
                 _ => _serviceProvider.GetRequiredService<IRedisService>(),
             };
         }
+
+        public ICache GetService()
+        {
+            return _option.Caching. switch
+            {
+                CacheSource.Redis => _serviceProvider.GetRequiredService<IRedisService>(),
+                _ => _serviceProvider.GetRequiredService<IRedisService>(),
+            };
+        }
     }
 }
 

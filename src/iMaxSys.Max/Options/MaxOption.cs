@@ -36,7 +36,7 @@ namespace iMaxSys.Max.Options
         /// <summary>
         /// 核心
         /// </summary>
-        public CoreOption Core { get; set; } = new CoreOption();
+        public CoreOption Core { get; set; } = new ();
 
         /// <summary>
         /// 网络
