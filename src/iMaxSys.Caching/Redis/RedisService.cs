@@ -18,16 +18,22 @@ namespace iMaxSys.Caching.Redis;
 /// </summary>
 public class RedisService : IRedisService
 {
-    private readonly long _appId;
-
     private readonly ConnectionMultiplexer _connection;
     private readonly IDatabase _database;
+    private readonly long _appId;
 
     public RedisService(string connection, long appId)
     {
         _connection = ConnectionMultiplexer.Connect(connection);
         _database = _connection.GetDatabase();
         _appId = appId;
+    }
+
+    public RedisService(IOptions<MaxOption> option)
+    {
+        _connection = ConnectionMultiplexer.Connect(option.Value.Caching.Connection);
+        _database = _connection.GetDatabase();
+        _appId = option.Value.XppId;
     }
 
     private string GetKey(string key, bool global = false)

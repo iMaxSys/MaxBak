@@ -11,7 +11,6 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Identity.Models;
@@ -24,7 +23,7 @@ namespace iMaxSys.Identity;
 public interface IMenuService : IDependency
 {
     /// <summary>
-    /// 读取菜单
+    /// 读取菜单from cache
     /// </summary>
     /// <param name="roleId"></param>
     /// <returns></returns>

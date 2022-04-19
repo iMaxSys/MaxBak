@@ -24,12 +24,14 @@ public class ServiceBase
 {
     protected readonly IMapper Mapper;
     protected readonly MaxOption Option;
+    protected readonly IGenericCache Cache;
     protected readonly IUnitOfWork UnitOfWork;
 
-    public ServiceBase(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork)
+    public ServiceBase(IMapper mapper, IOptions<MaxOption> option, IGenericCache genericCache, UnitOfWork<MaxIdentityContext> unitOfWork)
     {
         Mapper = mapper;
         Option = option.Value;
+        Cache = genericCache;
         UnitOfWork = unitOfWork;
     }
 }

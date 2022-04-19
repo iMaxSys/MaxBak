@@ -11,8 +11,11 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Caching.Common;
+
 namespace iMaxSys.Caching;
 
 public interface ICacheFactory
 {
+    ICache GetService(CacheSource source, string connection);
 }

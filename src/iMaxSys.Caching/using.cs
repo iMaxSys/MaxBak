@@ -11,11 +11,12 @@
 //日期：2021-11-12
 //----------------------------------------------------------------
 
-global using System.Text;
 global using System.Text.Json;
 global using System.Collections;
+global using System.ComponentModel;
 
 global using Microsoft.Extensions.Options;
+global using Microsoft.Extensions.DependencyInjection;
 
 global using StackExchange.Redis;
 

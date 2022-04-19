@@ -27,9 +27,12 @@ namespace iMaxSys.Identity;
 /// </summary>
 public class MenuService : ServiceBase, IMenuService
 {
-
-    public MenuService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork) : base(mapper, option, unitOfWork)
+    public MenuService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork, IGenericCache genericCache) : base(mapper, option, unitOfWork)
     {
+        _mapper = mapper;
+        _option = option;
+        _genericCache = genericCache;
+        _unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -37,7 +40,7 @@ public class MenuService : ServiceBase, IMenuService
     /// </summary>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<IMenu?> ReadAsync(long roleId)
+        public async Task<IMenu?> ReadAsync(long roleId)
     {
 
     }

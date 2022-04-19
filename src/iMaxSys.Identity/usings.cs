@@ -35,3 +35,4 @@ global using Microsoft.Extensions.Logging.Debug;
 
 global using AutoMapper;
 
+global using iMaxSys.Caching;

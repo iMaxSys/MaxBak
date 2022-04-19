@@ -16,6 +16,6 @@ namespace iMaxSys.Caching.Redis;
 /// <summary>
 /// IRedisService
 /// </summary>
-public interface IRedisService : ICache
+public interface IRedisService : ICache, ISingleton
 {
 }
