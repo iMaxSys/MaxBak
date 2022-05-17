@@ -19,22 +19,28 @@ namespace iMaxSys.Identity.Common;
 public enum ResultCode
 {
     /// <summary>
+    /// 数据库连接串为空
+    /// </summary>
+    [Description("数据库连接串为空")]
+    ConnectionIsNull = 106000,
+
+    /// <summary>
     /// token不可为空
     /// </summary>
     [Description("token不可为空")]
-    TokenCantNull = 106000,
+    TokenCantNull = 106001,
 
     /// <summary>
     /// 成员id不可为空
     /// </summary>
     [Description("成员id不可为空")]
-    MemberIdCantNull = 1062001,
+    MemberIdCantNull = 1062002,
 
     /// <summary>
     /// 成员不存在
     /// </summary>
     [Description("成员不存在")]
-    MemberNotExists = 106002,
+    MemberNotExists = 106003,
 
     /// <summary>
     /// 角色id不可为空

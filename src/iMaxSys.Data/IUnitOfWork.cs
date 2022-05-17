@@ -45,19 +45,7 @@ public interface IUnitOfWork
     /// </summary>
     /// <typeparam name="TRepository"></typeparam>
     /// <returns></returns>
-    TRepository GetCustomRepository<TRepository>() where TRepository : IRepository;
-}
-
-/// <summary>
-/// IUnitOfWork
-/// </summary>
-/// <typeparam name="TContext"></typeparam>
-public interface IUnitOfWork<T> : IUnitOfWork where T : DbContext
-{
-    /// <summary>
-    /// DbContext
-    /// </summary>
-    T DbContext { get; }
+    TRepository GetCustomRepository<TRepository>() where TRepository : IRepositoryBase;
 
     /// <summary>
     /// 多工作单元提交
@@ -66,4 +54,36 @@ public interface IUnitOfWork<T> : IUnitOfWork where T : DbContext
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<int> SaveChangesAsync(IUnitOfWork[] unitOfWorks, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// 读写分离IUnitOfWork接口
+/// </summary>
+/// <typeparam name="T">读写类型</typeparam>
+public interface IUnitOfWork<T> : IUnitOfWork where T : DbContext
+{
+    /// <summary>
+    /// DbContext
+    /// </summary>
+    T DbContext { get; }
+}
+
+/// <summary>
+/// 读写分离IUnitOfWork接口
+/// </summary>
+/// <typeparam name="T">读写类型</typeparam>
+/// <typeparam name="K">只读类型</typeparam>
+public interface IUnitOfWork<T, K> : IUnitOfWork<T> where T : DbContext where K : DbContext
+{
+    /// <summary>
+    /// ReadOnlyDbContext
+    /// </summary>
+    K ReadOnlyDbContext { get; }
+
+    /// <summary>
+    /// 获取只读范型仓储
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : Entity;
 }

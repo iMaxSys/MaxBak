@@ -21,6 +21,7 @@ using DbRole = iMaxSys.Identity.Data.Entities.Role;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
+/*
 /// <summary>
 /// 角色仓储
 /// </summary>
@@ -82,3 +83,4 @@ public class RoleRepository : EfRepository<DbRole>, IRoleRepository
         await _identityCache.DeleteAsync($"{TAG_ROLE_SECTION}{roleId}", true);
     }
 }
+*/

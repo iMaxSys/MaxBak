@@ -21,10 +21,13 @@ global using System.Threading.Tasks;
 global using System.Collections.Concurrent;
 
 global using Microsoft.AspNetCore.Http;
-global using Microsoft.Extensions.Primitives;
-global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.AspNetCore.Builder;
 global using Microsoft.Extensions.Options;
+global using Microsoft.Extensions.Primitives;
+global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyModel;
+global using Microsoft.Extensions.DependencyInjection;
+
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;

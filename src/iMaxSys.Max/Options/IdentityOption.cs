@@ -19,9 +19,9 @@ namespace iMaxSys.Max.Options
     public class IdentityOption
     {
         /// <summary>
-        /// 连接
+        /// Databases
         /// </summary>
-        public string Connection { get; set; } = string.Empty;
+        public List<DatabaseOption>? Databases { get; set; }
 
         /// <summary>
         /// 过期分钟数,默认4320(3天)

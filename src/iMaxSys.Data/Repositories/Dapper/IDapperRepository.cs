@@ -16,7 +16,7 @@ namespace iMaxSys.Data.Repositories.Dapper;
 /// <summary>
 /// IDapperRepository
 /// </summary>
-public interface IDapperRepository : IRepository
+public interface IDapperRepository : IRepositoryBase
 {
     /// <summary>
     /// 连接

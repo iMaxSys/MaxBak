@@ -21,14 +21,9 @@ namespace iMaxSys.Max.Options;
 public class CoreOption
 {
     /// <summary>
-    /// Master
+    /// Databases
     /// </summary>
-    public DatabaseOption Master { get; set; } = new();
-
-    /// <summary>
-    /// Slave
-    /// </summary>
-    public DatabaseOption? Slave { get; set; }
+    public List<DatabaseOption>? Databases { get; set; }
 }
 
 /// <summary>
@@ -39,6 +34,7 @@ public class DatabaseOption
     /// <summary>
     /// 数据库类型
     /// 0:MariaDB,1:MySQL,2:SqlServer,3:Oracle,4:Sybase
+    /// 此处无法用到枚举
     /// </summary>
     public int Type { get; set; } = 0;
 

@@ -12,8 +12,9 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Extentions;
-using iMaxSys.Max.Common.Enums;
+using iMaxSys.Data.Common.Enums;
 using iMaxSys.Data.Repositories;
+using iMaxSys.Max.Options;
 
 namespace iMaxSys.Data;
 
@@ -27,13 +28,28 @@ public static class Extensions
     /// <summary>
     /// AddUnitOfWork
     /// </summary>
-    /// <typeparam name="T">DbContext</typeparam>
+    /// <typeparam name="T">读写DbContext类型</typeparam>
     /// <param name="services"></param>
     /// <returns></returns>
     public static IServiceCollection AddUnitOfWork<T>(this IServiceCollection services) where T : DbContext
     {
         services.AddScoped<IUnitOfWork<T>, UnitOfWork<T>>();
         services.AddScoped<IUnitOfWork, UnitOfWork<T>>();
+        RegisterRepositories(services);
+        return services;
+    }
+
+    /// <summary>
+    /// AddUnitOfWork
+    /// </summary>
+    /// <typeparam name="T">读写DbContext类型</typeparam>
+    /// <typeparam name="K">只读DbContext类型</typeparam>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddUnitOfWork<T, K>(this IServiceCollection services) where T : DbContext where K : DbContext
+    {
+        services.AddScoped<IUnitOfWork<T, K>, UnitOfWork<T, K>>();
+        services.AddScoped<IUnitOfWork, UnitOfWork<T, K>>();
         RegisterRepositories(services);
         return services;
     }
@@ -51,9 +67,11 @@ public static class Extensions
         }
 
         var types = UtilityExtensions.GetAppTypes();
-        Type root = typeof(IRepository);                    //仓储接口标识
-        Type iroot = typeof(IRepository<>);                 //范型仓储接口标识
+        Type root = typeof(IRepositoryBase);                    //仓储接口标识
+        Type iroot = typeof(IRepository<>);                     //范型仓储接口标识
+        Type irroot = typeof(IReadOnlyRepository<>);            //范型只读仓储接口标识
         IEnumerable<Type>? irepositories;
+        IEnumerable<Type>? irrepositories;
 
         //获取所有仓储实现类
         var repositories = types.Where(t => t.GetInterfaces().Any(x => x == root));
@@ -65,7 +83,8 @@ public static class Extensions
             if (repository.IsGenericType)
             {
                 //范型实现只取范型接口
-                irepositories = interfaces.Where(x => x.IsGenericType).Select(x => x.GenericTypeArguments.Length > 0 && x.GenericTypeArguments[0].IsGenericParameter ? x.GetGenericTypeDefinition() : x);
+                irepositories = interfaces.Where(x => x.IsGenericType && x == iroot).Select(x => x.GenericTypeArguments.Length > 0 && x.GenericTypeArguments[0].IsGenericParameter ? x.GetGenericTypeDefinition() : x);
+                irrepositories = interfaces.Where(x => x.IsGenericType && x == irroot).Select(x => x.GenericTypeArguments.Length > 0 && x.GenericTypeArguments[0].IsGenericParameter ? x.GetGenericTypeDefinition() : x);
             }
             else
             {
@@ -84,13 +103,30 @@ public static class Extensions
         _registered = true;
     }
 
-    public static DbContextOptionsBuilder UseDatabase(this DbContextOptionsBuilder builder, string connection, DbServer type)
+    //public static DbContextOptionsBuilder UseDatabase(this DbContextOptionsBuilder builder, string connection, DbServer type)
+    //{
+    //    return type switch
+    //    {
+    //        DbServer.MariaDB => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
+    //        DbServer.MySQL => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
+    //        _ => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
+    //    };
+    //}
+
+    private static DbContextOptionsBuilder UseDatabase(DbContextOptionsBuilder optionsBuilder, List<DatabaseOption> databases, ref int index)
     {
-        return type switch
+        int idx = index % databases.Count;
+        index = ++index > 1024 ? 0 : index;
+        return UseDatabase(optionsBuilder, databases[idx]);
+    }
+
+    private static DbContextOptionsBuilder UseDatabase(DbContextOptionsBuilder optionsBuilder, DatabaseOption database)
+    {
+        return database.Type switch
         {
-            DbServer.MariaDB => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
-            DbServer.MySQL => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
-            _ => builder.UseMySql(connection, new MariaDbServerVersion(ServerVersion.AutoDetect(connection))),
+            0 => optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.LatestSupportedServerVersion),
+            1 => optionsBuilder.UseSqlServer(database.Connection),
+            _ => optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.LatestSupportedServerVersion),
         };
     }
 }

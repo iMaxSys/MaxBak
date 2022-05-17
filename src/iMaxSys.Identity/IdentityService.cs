@@ -30,6 +30,7 @@ using DbMember = iMaxSys.Identity.Data.Entities.Member;
 
 namespace iMaxSys.Identity;
 
+/*
 /// <summary>
 /// 成员服务
 /// </summary>
@@ -1171,3 +1172,4 @@ public class IdentityService : Service, IIdentityService
         await RefreshAsync(token, accessChain);
     }
 }
+*/

@@ -11,10 +11,6 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
 using iMaxSys.Data;
 using iMaxSys.Max.Options;
 using iMaxSys.Identity.Data.EFCore;
@@ -33,7 +29,7 @@ public static class Extensions
 
     public static IApplicationBuilder UseMaxIdentity(this IApplicationBuilder builder)
     {
-        //身份中间件
+        //鉴权中间件
         return builder.UseMiddleware<IdentityMiddleware>();
     }
 }

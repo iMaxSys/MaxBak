@@ -27,6 +27,7 @@ using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Identity;
 
+/*
 /// <summary>
 /// 角色服务
 /// </summary>
@@ -301,3 +302,4 @@ public class RoleService : ServiceBase, IRoleService
 
     #endregion
 }
+*/

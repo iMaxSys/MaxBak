@@ -17,6 +17,8 @@ using iMaxSys.Max.DependencyInjection;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
+/*
 public interface IIdentityCache : ICache, ISingleton
 {
 }
+*/

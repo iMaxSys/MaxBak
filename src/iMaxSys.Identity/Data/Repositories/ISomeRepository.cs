@@ -7,13 +7,18 @@ using iMaxSys.Identity.Data.Entities;
 
 namespace iMaxSys.Identity.Data.Repositories
 {
-	public interface ISomeRepository : IRepository
+	public interface ISomeRepository : IRepositoryBase
 	{
 		string Get();
 	}
 
 	public class SomeRepository : ISomeRepository
 	{
+        public void ChangeTable(string table)
+        {
+            throw new NotImplementedException();
+        }
+
         public string Get()
         {
             return $"{ToString()}";

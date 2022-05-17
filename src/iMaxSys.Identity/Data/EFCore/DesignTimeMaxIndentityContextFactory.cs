@@ -15,6 +15,7 @@ using iMaxSys.Max.Options;
 
 namespace iMaxSys.Identity.Data.EFCore;
 
+
 public class DesignTimeMaxIdentityContextFactory : IDesignTimeDbContextFactory<MaxIdentityContext>
 {
     public MaxIdentityContext CreateDbContext(string[] args)
@@ -25,6 +26,14 @@ public class DesignTimeMaxIdentityContextFactory : IDesignTimeDbContextFactory<M
 
 public class DesignTimeMaxOptions : IOptions<MaxOption>
 {
-    //public MaxOption Value => new() { Core = new CoreOption() { Connection = "server=127.0.0.1;port=8806;database=max;uid=muser;pwd=yaoniming$3000A;Charset=utf8mb4;", Type = 0 } };
-    public MaxOption Value => new() { Core = new CoreOption() { Connection = "server=localhost;port=8806;database=max;uid=muser;pwd=yaoniming$3000A;Charset=utf8mb4;", Type = 0 } };
+    public MaxOption Value => new()
+    {
+        Identity = new IdentityOption
+        {
+            Databases = new List<DatabaseOption>
+        {
+            new DatabaseOption { Type = 0, Connection = "server=localhost;port=8806;database=max;uid=muser;pwd=yaoniming$3000A;Charset=utf8mb4;" }
+        }
+        }
+    };
 }

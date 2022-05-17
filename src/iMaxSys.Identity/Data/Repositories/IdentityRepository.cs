@@ -17,6 +17,7 @@ using iMaxSys.Identity.Data.Repositories;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
+/*
 public class IdentityRepository : IIdentityRepository
 {
     protected const string TAG = "id:";
@@ -61,3 +62,4 @@ public class IdentityRepository : IIdentityRepository
         throw new NotImplementedException();
     }
 }
+*/

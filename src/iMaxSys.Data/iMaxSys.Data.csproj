@@ -19,21 +19,31 @@
     <None Remove="Repositories\EFCore\" />
     <None Remove="Repositories\Dapper\" />
     <None Remove="Common\" />
+    <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
+    <None Remove="EFCore\" />
+    <None Remove="Dapper\" />
+    <None Remove="EFCore\Repositories\" />
+    <None Remove="DbContexts\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
     <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="Entities\App\" />
+    <Folder Include="EfDbContext.cs\" />
+    <Folder Include="EfDbContext.cs\App\" />
     <Folder Include="Repositories\" />
     <Folder Include="Repositories\EFCore\" />
     <Folder Include="Repositories\Dapper\" />
     <Folder Include="Common\" />
+    <Folder Include="EFCore\" />
+    <Folder Include="Dapper\" />
+    <Folder Include="EFCore\Repositories\" />
+    <Folder Include="DbContexts\" />
   </ItemGroup>
 </Project>

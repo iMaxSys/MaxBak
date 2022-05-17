@@ -22,6 +22,7 @@ using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 
 namespace iMaxSys.Identity;
 
+/*
 /// <summary>
 /// 菜单服务
 /// </summary>
@@ -196,3 +197,4 @@ public class MenuService : ServiceBase, IMenuService
         target.Menus = source.Menus;
     }
 }
+*/

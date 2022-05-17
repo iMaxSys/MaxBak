@@ -2,20 +2,20 @@
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: ICacheFactory.cs
-//摘要: ICacheFactory
-//说明: 
+//文件: IRepository.cs
+//摘要: IRepository 
+//说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2017-11-15
+//日期：2022-05-07
 //----------------------------------------------------------------
 
-using iMaxSys.Caching.Common.Enums;
+namespace iMaxSys.Data.Repositories;
 
-namespace iMaxSys.Caching;
-
-public interface ICacheFactory
+/// <summary>
+/// 仓储标识接口
+/// </summary>
+public interface IRepositoryBase
 {
-    ICache GetService(CacheServer source, string connection);
 }

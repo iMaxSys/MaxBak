@@ -21,6 +21,7 @@ using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
+/*
 /// <summary>
 /// 菜单仓储
 /// </summary>
@@ -177,3 +178,4 @@ public class MenuRepository : EfRepository<DbMenu>, IMenuRepository
 
     #endregion
 }
+*/

@@ -11,7 +11,9 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using iMaxSys.Caching.Common;
+using Microsoft.Extensions.Options;
+
+using iMaxSys.Caching.Common.Enums;
 
 namespace iMaxSys.Caching
 {
@@ -24,34 +26,30 @@ namespace iMaxSys.Caching
         /// 构造
         /// </summary>
         /// <param name="serviceProvider"></param>
-        public CacheFactory(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
         public CacheFactory(IServiceProvider serviceProvider, IOptions<MaxOption> option)
         {
             _serviceProvider = serviceProvider;
             _option = option.Value;
         }
 
-        public ICache GetService(CacheSource source, string connection)
+        public ICache GetService(CacheServer source, string connection)
         {
             return source switch
             {
-                CacheSource.Redis => _serviceProvider.GetRequiredService<IRedisService>(),
+                CacheServer.Redis => _serviceProvider.GetRequiredService<IRedisService>(),
                 _ => _serviceProvider.GetRequiredService<IRedisService>(),
             };
         }
 
         public ICache GetService()
         {
-            return _option.Caching. switch
+            return _option.Caching.Type switch
             {
-                CacheSource.Redis => _serviceProvider.GetRequiredService<IRedisService>(),
+                (int)CacheServer.Redis => _serviceProvider.GetRequiredService<IRedisService>(),
                 _ => _serviceProvider.GetRequiredService<IRedisService>(),
             };
         }
+
     }
 }
 

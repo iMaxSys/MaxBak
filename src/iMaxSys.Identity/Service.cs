@@ -26,6 +26,7 @@ using DbTenant = iMaxSys.Data.Entities.App.Tenant;
 
 namespace iMaxSys.Identity;
 
+/*
 /// <summary>
 /// 服务基类
 /// </summary>
@@ -320,3 +321,4 @@ public abstract class Service
         }
     }
 }
+*/

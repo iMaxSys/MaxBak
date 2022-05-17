@@ -17,6 +17,7 @@ using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
+/*
 /// <summary>
 /// IdentityCache
 /// </summary>
@@ -26,3 +27,4 @@ public class IdentityCache : RedisService, IIdentityCache
     {
     }
 }
+*/

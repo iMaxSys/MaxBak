@@ -11,7 +11,6 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Data.Common;
 using iMaxSys.Data.Entities;
@@ -22,11 +21,54 @@ namespace iMaxSys.Data;
 /// <summary>
 /// UnitOfWork
 /// </summary>
-/// <typeparam name="T">DbContext</typeparam>
+/// <typeparam name="T">读写</typeparam>
+/// <typeparam name="K">只读</typeparam>
+public class UnitOfWork<T, K> : UnitOfWork<T>, IUnitOfWork<T, K> where T : DbContext where K : DbContext
+{
+    protected readonly K _readOnlyContext;
+
+    /// <summary>
+    /// Gets the read only db context.
+    /// </summary>
+    /// <returns>The instance of type <typeparamref name="TContext"/>.</returns>
+    public K ReadOnlyDbContext => _readOnlyContext;
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="serviceProvider"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public UnitOfWork(T context, K readOnlyContext, IServiceProvider serviceProvider) : base(context, serviceProvider)
+    {
+        _readOnlyContext = readOnlyContext ?? throw new ArgumentNullException(nameof(readOnlyContext));
+    }
+
+    /// <summary>
+    /// 获取只读范型仓储
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : Entity
+    {
+        var respositoy = _serviceProvider.GetServices<IReadOnlyRepository<TEntity>>().FirstOrDefault(x => x.Code == _readOnlyContext.GetType().GetHashCode());
+        if (respositoy == null)
+        {
+            throw new MaxException(ResultCode.CantGetRepository);
+        }
+        return respositoy;
+    }
+}
+
+/// <summary>
+/// UnitOfWork<T>
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
 {
-    private readonly T _context;
-    private readonly IServiceProvider _serviceProvider;
+    protected readonly T _context;
+    protected readonly IServiceProvider _serviceProvider;
 
     /// <summary>
     /// Gets the db context.
@@ -68,7 +110,7 @@ public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
     /// </summary>
     /// <typeparam name="TRepository"></typeparam>
     /// <returns></returns>
-    public TRepository GetCustomRepository<TRepository>() where TRepository : IRepository
+    public TRepository GetCustomRepository<TRepository>() where TRepository : IRepositoryBase
     {
         try
         {

@@ -19,7 +19,7 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// <summary>
 /// 身份仓储
 /// </summary>
-public interface IIdentityRepository : IRepository
+public interface IIdentityRepository : IRepositoryBase
 {
     /// <summary>
     /// 获取访问Session

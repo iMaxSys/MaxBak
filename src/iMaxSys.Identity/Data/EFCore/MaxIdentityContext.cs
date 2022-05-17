@@ -12,6 +12,8 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Data;
+using iMaxSys.Identity.Common;
+using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Options;
 
 namespace iMaxSys.Identity.Data.EFCore;
@@ -34,9 +36,15 @@ public class MaxIdentityContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        //optionsBuilder.UseLoggerFactory(LoggerFactory);
-        string connection = string.IsNullOrWhiteSpace(_maxOption.Identity.Connection) ? (string.IsNullOrWhiteSpace(_maxOption.Core.Connection) ? new DesignTimeMaxOptions().Value.Core.Connection : _maxOption.Core.Connection) : _maxOption.Identity.Connection;
-        optionsBuilder.UseDatabase(connection, _maxOption.Core.Type);
+        List<DatabaseOption>? databases = _maxOption.Identity.Databases ?? _maxOption.Core.Databases;
+        if (databases != null && databases.Count > 0)
+        {
+            optionsBuilder.UseDatabase(databases);
+        }
+        else
+        {
+            throw new MaxException(ResultCode.ConnectionIsNull);
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
