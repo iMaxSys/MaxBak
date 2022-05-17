@@ -13,8 +13,9 @@
 
 using iMaxSys.Max.Collection;
 using iMaxSys.Data.Entities;
+using iMaxSys.Data.Repositories;
 
-namespace iMaxSys.Data.Repositories.EFCore;
+namespace iMaxSys.Data.EFCore.Repositories;
 
 /// <summary>
 /// EF Core只读范型仓储
@@ -26,7 +27,6 @@ public class EfReadOnlyRepository<TEntity> : IReadOnlyRepository<TEntity> where 
     protected readonly DbSet<TEntity> _dbSet;
 
     public int Code => _dbContext.GetType().GetHashCode();
-
 
     public EfReadOnlyRepository(DbContext dbContext)
     {
