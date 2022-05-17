@@ -13,7 +13,7 @@
 
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Data.Repositories.EFCore.Configurations;
+namespace iMaxSys.Data.EFCore.Repositories.Configurations;
 
 public abstract class TenantMasterEntityConfiguration<T> : MasterEntityConfiguration<T> where T : TenantMasterEntity
 {

@@ -16,6 +16,6 @@ namespace iMaxSys.Data.DbContexts;
 /// <summary>
 /// 上下文接口标识
 /// </summary>
-public interface IDbConextBase
+public interface IDbContextBase
 {
 }

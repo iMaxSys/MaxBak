@@ -24,6 +24,8 @@
     <None Remove="Dapper\" />
     <None Remove="EFCore\Repositories\" />
     <None Remove="DbContexts\" />
+    <None Remove="EFCore\Repositories\Configurations\" />
+    <None Remove="Dapper\Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
@@ -35,8 +37,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EfDbContext.cs\" />
-    <Folder Include="EfDbContext.cs\App\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Entities\App\" />
     <Folder Include="Repositories\" />
     <Folder Include="Repositories\EFCore\" />
     <Folder Include="Repositories\Dapper\" />
@@ -45,5 +47,7 @@
     <Folder Include="Dapper\" />
     <Folder Include="EFCore\Repositories\" />
     <Folder Include="DbContexts\" />
+    <Folder Include="EFCore\Repositories\Configurations\" />
+    <Folder Include="Dapper\Repositories\" />
   </ItemGroup>
 </Project>

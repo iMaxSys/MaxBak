@@ -16,6 +16,6 @@ namespace iMaxSys.Data.DbContexts;
 /// <summary>
 /// 只读上下文接口标识
 /// </summary>
-public interface IReadOnlyDbContext : IDbConextBase
+public interface IReadOnlyDbContext : IDbContextBase
 {
 }

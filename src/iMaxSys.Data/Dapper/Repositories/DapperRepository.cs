@@ -13,7 +13,7 @@
 
 using Dapper;
 
-namespace iMaxSys.Data.Repositories.Dapper;
+namespace iMaxSys.Data.Dapper.Repositories;
 
 /// <summary>
 /// DapperRepository<T>

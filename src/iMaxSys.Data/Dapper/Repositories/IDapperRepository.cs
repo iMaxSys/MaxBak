@@ -11,7 +11,9 @@
 //日期：2020-11-16
 //----------------------------------------------------------------
 
-namespace iMaxSys.Data.Repositories.Dapper;
+using iMaxSys.Data.Repositories;
+
+namespace iMaxSys.Data.Dapper.Repositories;
 
 /// <summary>
 /// IDapperRepository

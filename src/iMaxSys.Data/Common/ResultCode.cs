@@ -16,14 +16,20 @@ namespace iMaxSys.Data.Common;
 public enum ResultCode
 {
     /// <summary>
+    /// 数据库连接串为空
+    /// </summary>
+    [Description("数据库连接串为空")]
+    ConnectionIsNull = 102000,
+
+    /// <summary>
     /// 无法获取范型仓储
     /// </summary>
     [Description("无法获取范型仓储")]
-    CantGetRepository = 102000,
+    CantGetRepository = 102001,
 
     /// <summary>
     /// 无法定制范型仓储
     /// </summary>
     [Description("无法获取定制仓储")]
-    CantGetCustomRepository = 102001,
+    CantGetCustomRepository = 102002,
 }

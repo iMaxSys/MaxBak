@@ -26,11 +26,12 @@ global using System.Collections.Generic;
 global using System.Runtime.Loader;
 global using System.ComponentModel;
 
+global using Microsoft.Extensions.Options;
 global using Microsoft.Extensions.DependencyModel;
+global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata;
 global using Microsoft.EntityFrameworkCore.Infrastructure;
-global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.EntityFrameworkCore.ValueGeneration;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;

@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Co.,Ltd.
 //All rights reserved.
 //
-//文件: MaxDbContext.cs
-//摘要: MaxDbContext 
+//文件: EfDbContext.cs
+//摘要: ef读写上下文 
 //说明:
 //
 //当前：1.0
@@ -11,30 +11,28 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Options;
+using iMaxSys.Max.Exceptions;
+using iMaxSys.Data.Common;
+using iMaxSys.Data.DbContexts;
+
 namespace iMaxSys.Data.EFCore;
 
-public class EfDbContext : DbContext
+/// <summary>
+/// read/write dbcontext
+/// </summary>
+public class EfDbContext : MaxDbContext, IDbContext
 {
-    public string? ConnectionString { get; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public EfDbContext(List<DatabaseOption> databases) : base(databases)
     {
-        base.OnModelCreating(modelBuilder);
-        ApplyConfigurations(modelBuilder);
     }
 
-    /// <summary>
-    /// 注册映射配置
-    /// </summary>
-    /// <param name="modelBuilder">ModelBuilder</param>
-    private void ApplyConfigurations(ModelBuilder modelBuilder)
+    protected override DatabaseOption SelectDatabase(List<DatabaseOption> databases)
     {
-        var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains(AppDomain.CurrentDomain.FriendlyName[..AppDomain.CurrentDomain.FriendlyName.IndexOf('.')]));
-
-        foreach (var item in cls)
+        if (databases.Count == 0)
         {
-            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(item.Name));
-            modelBuilder.ApplyConfigurationsFromAssembly(assembly);
+            throw new MaxException(ResultCode.ConnectionIsNull);
         }
+        return databases[0];
     }
 }
