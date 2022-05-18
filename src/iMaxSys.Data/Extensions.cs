@@ -70,8 +70,8 @@ public static class Extensions
         Type root = typeof(IRepositoryBase);                    //仓储接口标识
         Type iroot = typeof(IRepository<>);                     //范型仓储接口标识
         Type irroot = typeof(IReadOnlyRepository<>);            //范型只读仓储接口标识
-        IEnumerable<Type>? irepositories;
-        IEnumerable<Type>? irrepositories;
+        IEnumerable<Type>? irepositories;                       //读写仓储集合
+        IEnumerable<Type>? irrepositories;                      //只读仓储集合
 
         //获取所有仓储实现类
         var repositories = types.Where(t => t.GetInterfaces().Any(x => x == root));
@@ -94,6 +94,7 @@ public static class Extensions
 
             foreach (var irepository in irepositories)
             {
+                //按scoped注册
                 services.AddScoped(irepository, repository);
             }
         }

@@ -6,7 +6,7 @@ using iMaxSys.Max.DependencyInjection;
 
 using iMaxSys.Data.Entities.App;
 using iMaxSys.Data.Repositories;
-using iMaxSys.Data.Repositories.EFCore;
+using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Identity.Data.EFCore;
 
 namespace iMaxSys.Identity.Services

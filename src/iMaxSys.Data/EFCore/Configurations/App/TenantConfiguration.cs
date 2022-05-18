@@ -13,7 +13,7 @@
 
 using iMaxSys.Data.Entities.App;
 
-namespace iMaxSys.Data.EFCore.Repositories.Configurations.App;
+namespace iMaxSys.Data.EFCore.Configurations.App;
 
 /// <summary>
 /// Tenant映射配置

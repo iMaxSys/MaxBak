@@ -14,7 +14,7 @@
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
-using iMaxSys.Data.Repositories.EFCore;
+using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
