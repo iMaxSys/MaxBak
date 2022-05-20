@@ -16,8 +16,6 @@
     <None Remove="Dapper" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Repositories\" />
-    <None Remove="Repositories\EFCore\" />
-    <None Remove="Repositories\Dapper\" />
     <None Remove="Common\" />
     <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
     <None Remove="EFCore\" />
@@ -40,8 +38,6 @@
     <Folder Include="Entities\" />
     <Folder Include="Entities\App\" />
     <Folder Include="Repositories\" />
-    <Folder Include="Repositories\EFCore\" />
-    <Folder Include="Repositories\Dapper\" />
     <Folder Include="Common\" />
     <Folder Include="EFCore\" />
     <Folder Include="Dapper\" />

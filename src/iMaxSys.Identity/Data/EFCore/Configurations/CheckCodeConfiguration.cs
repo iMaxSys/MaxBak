@@ -12,7 +12,7 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Identity.Data.Entities;
-using iMaxSys.Data.Repositories.EFCore.Configurations;
+using iMaxSys.Data.EFCore.Configurations;
 
 namespace iMaxSys.Identity.Data.EFCore.Configurations;
 

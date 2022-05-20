@@ -19,11 +19,6 @@ namespace iMaxSys.Max.Options
     public class IdentityOption
     {
         /// <summary>
-        /// Databases
-        /// </summary>
-        public List<DatabaseOption>? Databases { get; set; }
-
-        /// <summary>
         /// 过期分钟数,默认4320(3天)
         /// </summary>
         public int Expires { get; set; } = 4320;
@@ -49,5 +44,11 @@ namespace iMaxSys.Max.Options
         /// 开放API,默认全开放
         /// </summary>
         public string OpenRouters { get; set; } = "*";
+
+        /// <summary>
+        /// Databases
+        /// </summary>
+        public List<DatabaseOption>? Databases { get; set; }
+
     }
 }

@@ -12,8 +12,6 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Options;
-using iMaxSys.Max.Exceptions;
-using iMaxSys.Data.Common;
 using iMaxSys.Data.DbContexts;
 
 namespace iMaxSys.Data.EFCore;
@@ -51,13 +49,25 @@ public abstract class MaxDbContext : DbContext, IDbContextBase
     /// <param name="modelBuilder">ModelBuilder</param>
     private static void ApplyConfigurations(ModelBuilder modelBuilder)
     {
-        var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains(AppDomain.CurrentDomain.FriendlyName[..AppDomain.CurrentDomain.FriendlyName.IndexOf('.')]));
+        //throw new Exception(Assembly.GetExecutingAssembly().GetName().Name);
+        //var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains(AppDomain.CurrentDomain.FriendlyName[..AppDomain.CurrentDomain.FriendlyName.IndexOf('.')]));
+
+        var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Identity"));
 
         foreach (var item in cls)
         {
             var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(item.Name));
             modelBuilder.ApplyConfigurationsFromAssembly(assembly);
         }
+
+        //映射Core模块配置
+        //var c = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Identity")).FirstOrDefault();
+
+        //var a = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(c.Name));
+        //modelBuilder.ApplyConfigurationsFromAssembly(a);
+
+        ////映射本模块配置
+        //modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
     }
 
     /// <summary>

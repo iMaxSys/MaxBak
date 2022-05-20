@@ -1,6 +1,8 @@
 using iMaxSys.Max;
 using iMaxSys.Data;
 using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +38,7 @@ static void ConfigureConfiguration(ConfigurationManager configuration)
 static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
 {
     services.AddMax(configuration);
-    //services.AddMaxIdentity(configuration);
-    services.AddDbContext<MaxIdentityContext>().AddUnitOfWork<MaxIdentityContext>();
+    services.AddMaxIdentity(configuration);
     services.AddSwaggerGen();
 }
 static void ConfigureMiddleware(IApplicationBuilder app, IServiceProvider services)

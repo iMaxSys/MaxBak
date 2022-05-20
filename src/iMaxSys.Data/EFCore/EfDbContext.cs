@@ -21,7 +21,7 @@ namespace iMaxSys.Data.EFCore;
 /// <summary>
 /// read/write dbcontext
 /// </summary>
-public class EfDbContext : MaxDbContext, IDbContext
+public class EfDbContext : EfReadOnlyDbContext, IDbContext
 {
     public EfDbContext(List<DatabaseOption> databases) : base(databases)
     {

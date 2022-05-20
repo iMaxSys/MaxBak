@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Collection;
 using iMaxSys.Data.Entities;
+using iMaxSys.Data.DbContexts;
 using iMaxSys.Data.Repositories;
 
 namespace iMaxSys.Data.EFCore.Repositories;
@@ -21,14 +22,26 @@ namespace iMaxSys.Data.EFCore.Repositories;
 /// EF Core只读范型仓储
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public class EfReadOnlyRepository<TEntity> : IReadOnlyRepository<TEntity> where TEntity : Entity
+public abstract class EfReadOnlyRepository<TEntity> : IReadOnlyRepository<TEntity> where TEntity : Entity
 {
     protected readonly DbContext _dbContext;
     protected readonly DbSet<TEntity> _dbSet;
 
+    /// <summary>
+    /// Code
+    /// </summary>
     public int Code => _dbContext.GetType().GetHashCode();
 
-    public EfReadOnlyRepository(DbContext dbContext)
+    /// <summary>
+    /// ConnectionString
+    /// </summary>
+    public string? ConnectionString => _dbContext.Database.GetConnectionString();
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="dbContext"></param>
+    public EfReadOnlyRepository(EfReadOnlyDbContext dbContext)
     {
         _dbContext = dbContext;
         _dbSet = _dbContext.Set<TEntity>();

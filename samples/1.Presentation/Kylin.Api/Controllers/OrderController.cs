@@ -1,3 +1,4 @@
+using iMaxSys.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kylin.Api.Controllers
@@ -6,10 +7,17 @@ namespace Kylin.Api.Controllers
     [Route("[controller]/[action]")]
     public class OrderController : ControllerBase
     {
-        [HttpGet]
-        public string Submit()
+        private readonly ICheckCodeService _checkCodeService;
+
+        public OrderController(ICheckCodeService checkCodeService)
         {
-            return $"this is a order from {DateTime.Now}";
+            _checkCodeService = checkCodeService;
+        }
+        [HttpGet]
+        public async Task<string> Submit()
+        {
+            string result = await _checkCodeService.Get();
+            return $"this is a order from {result}";
         }
     }
 }

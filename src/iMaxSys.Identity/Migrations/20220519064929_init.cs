@@ -204,117 +204,72 @@ namespace iMaxSys.Identity.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "tenant",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false),
-                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    alias = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    quick_code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    logo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    start = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    end = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    status = table.Column<int>(type: "int", nullable: false),
-                    is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    create_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    creator_id = table.Column<long>(type: "bigint", nullable: false),
-                    creator = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    reviser_id = table.Column<long>(type: "bigint", nullable: false),
-                    reviser = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    revise_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_tenant", x => x.id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "xpp",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false),
-                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    alias = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    source = table.Column<int>(type: "int", nullable: false),
-                    account_id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    app_id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    app_key = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    status = table.Column<int>(type: "int", nullable: false),
-                    is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    create_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    creator_id = table.Column<long>(type: "bigint", nullable: false),
-                    creator = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    reviser_id = table.Column<long>(type: "bigint", nullable: false),
-                    reviser = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    revise_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_xpp", x => x.id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "member",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
-                    user_id = table.Column<long>(type: "bigint", nullable: false),
-                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    user_id = table.Column<long>(type: "bigint", nullable: false, comment: "外接Id"),
+                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "姓名")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    quick_code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    id_number = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "身份证号码")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    gender = table.Column<int>(type: "int", nullable: false),
-                    birthday = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    login_name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    quick_code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "速查码")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    password = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    birthday = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "生日"),
+                    marital_status = table.Column<int>(type: "int", nullable: false, comment: "婚姻状况"),
+                    gender = table.Column<int>(type: "int", nullable: false, comment: "性别(0男,1女,2未知)"),
+                    nation = table.Column<int>(type: "int", nullable: false, comment: "民族(默认0:未知)"),
+                    education = table.Column<int>(type: "int", nullable: false, comment: "教育程度(默认0:未知)"),
+                    party = table.Column<int>(type: "int", nullable: false, comment: "政党(默认0:未知)"),
+                    user_name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "登录名")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    salt = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    password = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "密码")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    nick_name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    salt = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "盐")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    mobile = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    nick_name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "昵称")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    country_code = table.Column<int>(type: "int", nullable: false, comment: "国家代码(默认中国:86)"),
+                    mobile = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "移动电话号码")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    avatar = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                    phone = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "电话号码")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    type = table.Column<int>(type: "int", nullable: false),
-                    failed_count = table.Column<int>(type: "int", nullable: false),
-                    department_id = table.Column<long>(type: "bigint", nullable: false),
-                    xpp_source = table.Column<int>(type: "int", nullable: false),
-                    account_source = table.Column<int>(type: "int", nullable: false),
-                    start = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    end = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    join_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    join_ip = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "电子邮箱")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    last_login = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    last_ip = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    avatar = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, comment: "头像")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    is_official = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
-                    status = table.Column<int>(type: "int", nullable: false),
+                    country = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "国家")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    province = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "省")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    city = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "市")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    district = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "区/县")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    street = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "街道/乡镇")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    community = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "社区/村")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    area_code = table.Column<long>(type: "bigint", nullable: false, comment: "区域代码from国家统计局"),
+                    address = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, comment: "地址")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    zipcode = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "邮编")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    type = table.Column<int>(type: "int", nullable: false, comment: "类型"),
+                    failed_count = table.Column<int>(type: "int", nullable: false, comment: "登录失败次数"),
+                    department_id = table.Column<long>(type: "bigint", nullable: false, comment: "部门id"),
+                    xpp_source = table.Column<int>(type: "int", nullable: false, comment: "应用来源"),
+                    account_source = table.Column<int>(type: "int", nullable: false, comment: "账号来源"),
+                    start = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "启用时间"),
+                    end = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "停用时间"),
+                    join_time = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "加入/激活时间"),
+                    join_ip = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "加入Ip")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    last_login = table.Column<DateTime>(type: "datetime(6)", nullable: false, comment: "最后登录时间"),
+                    last_ip = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "最后登录IP")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    is_official = table.Column<bool>(type: "tinyint(1)", nullable: false, comment: "是否正式成员"),
+                    status = table.Column<int>(type: "int", nullable: false, comment: "状态"),
                     is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     create_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     creator_id = table.Column<long>(type: "bigint", nullable: false),
@@ -335,7 +290,8 @@ namespace iMaxSys.Identity.Migrations
                         principalTable: "department",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                })
+                },
+                comment: "成员")
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -382,48 +338,6 @@ namespace iMaxSys.Identity.Migrations
                         principalTable: "menu",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "xpp_sns",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false),
-                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    alias = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    xpp_id = table.Column<long>(type: "bigint", nullable: false),
-                    source = table.Column<int>(type: "int", nullable: false),
-                    account_id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    app_id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    app_secret = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    status = table.Column<int>(type: "int", nullable: false),
-                    is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    create_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    creator_id = table.Column<long>(type: "bigint", nullable: false),
-                    creator = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    reviser_id = table.Column<long>(type: "bigint", nullable: false),
-                    reviser = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    revise_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_xpp_sns", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_xpp_sns_xpp_xpp_id",
-                        column: x => x.xpp_id,
-                        principalTable: "xpp",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -485,6 +399,7 @@ namespace iMaxSys.Identity.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false),
                     member_id = table.Column<long>(type: "bigint", nullable: false),
                     role_id = table.Column<long>(type: "bigint", nullable: false),
+                    xpp_id = table.Column<long>(type: "bigint", nullable: false),
                     status = table.Column<int>(type: "int", nullable: false),
                     is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     create_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -541,9 +456,9 @@ namespace iMaxSys.Identity.Migrations
                 column: "department_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_member_login_name",
+                name: "IX_member_id_number",
                 table: "member",
-                column: "login_name");
+                column: "id_number");
 
             migrationBuilder.CreateIndex(
                 name: "IX_member_mobile",
@@ -559,6 +474,11 @@ namespace iMaxSys.Identity.Migrations
                 name: "IX_member_tenant_id",
                 table: "member",
                 column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_member_user_name",
+                table: "member",
+                column: "user_name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_member_ext_member_id",
@@ -622,9 +542,9 @@ namespace iMaxSys.Identity.Migrations
                 column: "tenant_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_role_member_member_id",
+                name: "IX_role_member_member_id_xpp_id_tenant_id_role_id",
                 table: "role_member",
-                column: "member_id");
+                columns: new[] { "member_id", "xpp_id", "tenant_id", "role_id" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_role_member_role_id",
@@ -635,26 +555,6 @@ namespace iMaxSys.Identity.Migrations
                 name: "IX_role_member_tenant_id",
                 table: "role_member",
                 column: "tenant_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_role_member_tenant_id_member_id",
-                table: "role_member",
-                columns: new[] { "tenant_id", "member_id" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_role_member_tenant_id_role_id",
-                table: "role_member",
-                columns: new[] { "tenant_id", "role_id" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_tenant_name_code",
-                table: "tenant",
-                columns: new[] { "name", "code" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_xpp_sns_xpp_id",
-                table: "xpp_sns",
-                column: "xpp_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -675,12 +575,6 @@ namespace iMaxSys.Identity.Migrations
                 name: "role_member");
 
             migrationBuilder.DropTable(
-                name: "tenant");
-
-            migrationBuilder.DropTable(
-                name: "xpp_sns");
-
-            migrationBuilder.DropTable(
                 name: "menu");
 
             migrationBuilder.DropTable(
@@ -688,9 +582,6 @@ namespace iMaxSys.Identity.Migrations
 
             migrationBuilder.DropTable(
                 name: "role");
-
-            migrationBuilder.DropTable(
-                name: "xpp");
 
             migrationBuilder.DropTable(
                 name: "department");

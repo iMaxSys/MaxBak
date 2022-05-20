@@ -11,11 +11,20 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Data.Entities;
 using iMaxSys.Data.Repositories;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
+public interface IIdentityRepository<T> : IRepository<T> where T : Entity
+{
+}
+
+public interface IIdentityReadOnlyRepository<T> : IReadOnlyRepository<T> where T : Entity
+{
+}
+
+/*
 /// <summary>
 /// 身份仓储
 /// </summary>
@@ -35,3 +44,4 @@ public interface IIdentityRepository : IRepositoryBase
     /// <returns></returns>
     Task<IMember?> ReadAsync(string memberId);
 }
+*/

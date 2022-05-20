@@ -27,7 +27,7 @@ public class ServiceBase
     protected readonly IGenericCache Cache;
     protected readonly IUnitOfWork UnitOfWork;
 
-    public ServiceBase(IMapper mapper, IOptions<MaxOption> option, IGenericCache genericCache, UnitOfWork<MaxIdentityContext> unitOfWork)
+    public ServiceBase(IMapper mapper, IOptions<MaxOption> option, IGenericCache genericCache, UnitOfWork<IdentityContext> unitOfWork)
     {
         Mapper = mapper;
         Option = option.Value;

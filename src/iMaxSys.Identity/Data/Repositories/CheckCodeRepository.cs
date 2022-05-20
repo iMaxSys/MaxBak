@@ -22,7 +22,7 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// </summary>
 public class CheckCodeRepository : EfRepository<CheckCode>, ICheckCodeRepository
 {
-    public CheckCodeRepository(MaxIdentityContext context) : base(context)
+    public CheckCodeRepository(IdentityContext context) : base(context)
     {
     }
 }

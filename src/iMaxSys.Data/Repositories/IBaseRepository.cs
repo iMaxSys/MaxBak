@@ -18,4 +18,5 @@ namespace iMaxSys.Data.Repositories;
 /// </summary>
 public interface IRepositoryBase
 {
+    string? ConnectionString { get; }
 }

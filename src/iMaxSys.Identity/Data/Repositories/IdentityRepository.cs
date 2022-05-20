@@ -14,8 +14,29 @@
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Repositories;
 using iMaxSys.Identity.Data.Repositories;
+using iMaxSys.Data.EFCore.Repositories;
+using iMaxSys.Data.Entities;
+using iMaxSys.Identity.Data.EFCore;
 
 namespace iMaxSys.Identity.Data.Repositories;
+
+/// <summary>
+/// 身份通用仓储
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class IdentityRepository<T> : EfRepository<T>, IIdentityRepository<T> where T : Entity
+{
+    public IdentityRepository(IdentityContext context) : base(context)
+    {
+    }
+}
+
+public class IdentityReadOnlyRepository<T> : EfReadOnlyRepository<T>, IIdentityReadOnlyRepository<T> where T : Entity
+{
+    public IdentityReadOnlyRepository(IdentityReadOnlyContext context) : base(context)
+    {
+    }
+}
 
 /*
 public class IdentityRepository : IIdentityRepository

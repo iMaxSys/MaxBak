@@ -15,6 +15,8 @@ using iMaxSys.Max.Extentions;
 using iMaxSys.Data.Common.Enums;
 using iMaxSys.Data.Repositories;
 using iMaxSys.Max.Options;
+using iMaxSys.Data.EFCore.Repositories;
+using iMaxSys.Max.Collection;
 
 namespace iMaxSys.Data;
 
@@ -33,6 +35,7 @@ public static class Extensions
     /// <returns></returns>
     public static IServiceCollection AddUnitOfWork<T>(this IServiceCollection services) where T : DbContext
     {
+        services.AddDbContext<T>();
         services.AddScoped<IUnitOfWork<T>, UnitOfWork<T>>();
         services.AddScoped<IUnitOfWork, UnitOfWork<T>>();
         RegisterRepositories(services);
@@ -48,6 +51,8 @@ public static class Extensions
     /// <returns></returns>
     public static IServiceCollection AddUnitOfWork<T, K>(this IServiceCollection services) where T : DbContext where K : DbContext
     {
+        services.AddUnitOfWork<T>();
+        services.AddUnitOfWork<K>();
         services.AddScoped<IUnitOfWork<T, K>, UnitOfWork<T, K>>();
         services.AddScoped<IUnitOfWork, UnitOfWork<T, K>>();
         RegisterRepositories(services);
@@ -75,6 +80,8 @@ public static class Extensions
 
         //获取所有仓储实现类
         var repositories = types.Where(t => t.GetInterfaces().Any(x => x == root));
+
+        //遍历实现类，进行注册
         foreach (var repository in repositories)
         {
             var interfaces = repository.GetInterfaces();
@@ -82,24 +89,25 @@ public static class Extensions
             //按范型(ef<>&xx<>)和非范型(定制)处理
             if (repository.IsGenericType)
             {
-                //范型实现只取范型接口
-                irepositories = interfaces.Where(x => x.IsGenericType && x == iroot).Select(x => x.GenericTypeArguments.Length > 0 && x.GenericTypeArguments[0].IsGenericParameter ? x.GetGenericTypeDefinition() : x);
-                irrepositories = interfaces.Where(x => x.IsGenericType && x == irroot).Select(x => x.GenericTypeArguments.Length > 0 && x.GenericTypeArguments[0].IsGenericParameter ? x.GetGenericTypeDefinition() : x);
+                //to-do:只读和读写会重复注册
+                //范型读写
+                irepositories = interfaces.Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == iroot).Select(x => x.GenericTypeArguments.Length > 0 && x.GenericTypeArguments[0].IsGenericParameter ? x.GetGenericTypeDefinition() : x);
+                irepositories.ForEach(x => services.AddScoped(x, repository));
+
+                //范型只读
+                irrepositories = interfaces.Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == irroot).Select(x => x.GenericTypeArguments.Length > 0 && x.GenericTypeArguments[0].IsGenericParameter ? x.GetGenericTypeDefinition() : x);
+                irrepositories.ForEach(x => services.AddScoped(x, repository));
             }
             else
             {
                 //非范型只取非范型非仓储标识接口
-                irepositories = interfaces.Where(x => !x.IsGenericType && x != root);
+                interfaces.Where(x => !x.IsGenericType && x != root).ForEach(x => services.AddScoped(x, repository));
             }
 
-            foreach (var irepository in irepositories)
-            {
-                //按scoped注册
-                services.AddScoped(irepository, repository);
-            }
+
         }
 
-        //var x = services.Where(x => x.ServiceType.GetInterfaces().Any(i => i == root));
+        var x = services.Where(x => x.ServiceType.GetInterfaces().Any(i => i == root));
 
         _registered = true;
     }
@@ -114,20 +122,20 @@ public static class Extensions
     //    };
     //}
 
-    private static DbContextOptionsBuilder UseDatabase(DbContextOptionsBuilder optionsBuilder, List<DatabaseOption> databases, ref int index)
-    {
-        int idx = index % databases.Count;
-        index = ++index > 1024 ? 0 : index;
-        return UseDatabase(optionsBuilder, databases[idx]);
-    }
+    //private static DbContextOptionsBuilder UseDatabase(DbContextOptionsBuilder optionsBuilder, List<DatabaseOption> databases, ref int index)
+    //{
+    //    int idx = index % databases.Count;
+    //    index = ++index > 1024 ? 0 : index;
+    //    return UseDatabase(optionsBuilder, databases[idx]);
+    //}
 
-    private static DbContextOptionsBuilder UseDatabase(DbContextOptionsBuilder optionsBuilder, DatabaseOption database)
-    {
-        return database.Type switch
-        {
-            0 => optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.LatestSupportedServerVersion),
-            1 => optionsBuilder.UseSqlServer(database.Connection),
-            _ => optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.LatestSupportedServerVersion),
-        };
-    }
+    //private static DbContextOptionsBuilder UseDatabase(DbContextOptionsBuilder optionsBuilder, DatabaseOption database)
+    //{
+    //    return database.Type switch
+    //    {
+    //        0 => optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.LatestSupportedServerVersion),
+    //        1 => optionsBuilder.UseSqlServer(database.Connection),
+    //        _ => optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.LatestSupportedServerVersion),
+    //    };
+    //}
 }

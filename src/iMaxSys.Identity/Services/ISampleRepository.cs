@@ -30,7 +30,7 @@ namespace iMaxSys.Identity.Services
 
     public class SampleRepository : EfRepository<XppSns>, ISampleRepository
     {
-        public SampleRepository(MaxIdentityContext context) : base(context)
+        public SampleRepository(IdentityContext context) : base(context)
         {
         }
     }

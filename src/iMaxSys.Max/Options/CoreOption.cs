@@ -23,7 +23,7 @@ public class CoreOption
     /// <summary>
     /// Databases
     /// </summary>
-    public List<DatabaseOption>? Databases { get; set; }
+    public List<DatabaseOption> Databases { get; set; } = new();
 }
 
 /// <summary>

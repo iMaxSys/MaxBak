@@ -23,9 +23,17 @@ namespace iMaxSys.Data;
 /// </summary>
 /// <typeparam name="T">读写</typeparam>
 /// <typeparam name="K">只读</typeparam>
-public class UnitOfWork<T, K> : UnitOfWork<T>, IUnitOfWork<T, K> where T : DbContext where K : DbContext
+public class UnitOfWork<T, K> : IUnitOfWork<T, K> where T : DbContext where K : DbContext
 {
+    protected readonly T _context;
     protected readonly K _readOnlyContext;
+    protected readonly IServiceProvider _serviceProvider;
+
+    /// <summary>
+    /// Gets the db context.
+    /// </summary>
+    /// <returns>The instance of type <typeparamref name="TContext"/>.</returns>
+    public T DbContext => _context;
 
     /// <summary>
     /// Gets the read only db context.
@@ -37,54 +45,13 @@ public class UnitOfWork<T, K> : UnitOfWork<T>, IUnitOfWork<T, K> where T : DbCon
     /// 构造
     /// </summary>
     /// <param name="context"></param>
+    /// <param name="onlyContext"></param>
     /// <param name="serviceProvider"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public UnitOfWork(T context, K readOnlyContext, IServiceProvider serviceProvider) : base(context, serviceProvider)
-    {
-        _readOnlyContext = readOnlyContext ?? throw new ArgumentNullException(nameof(readOnlyContext));
-    }
-
-    /// <summary>
-    /// 获取只读范型仓储
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
-    /// <exception cref="MaxException"></exception>
-    public IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : Entity
-    {
-        var respositoy = _serviceProvider.GetServices<IReadOnlyRepository<TEntity>>().FirstOrDefault(x => x.Code == _readOnlyContext.GetType().GetHashCode());
-        if (respositoy == null)
-        {
-            throw new MaxException(ResultCode.CantGetRepository);
-        }
-        return respositoy;
-    }
-}
-
-/// <summary>
-/// UnitOfWork<T>
-/// </summary>
-/// <typeparam name="T"></typeparam>
-public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
-{
-    protected readonly T _context;
-    protected readonly IServiceProvider _serviceProvider;
-
-    /// <summary>
-    /// Gets the db context.
-    /// </summary>
-    /// <returns>The instance of type <typeparamref name="TContext"/>.</returns>
-    public T DbContext => _context;
-
-    /// <summary>
-    /// 构造
-    /// </summary>
-    /// <param name="context"></param>
-    /// <param name="serviceProvider"></param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public UnitOfWork(T context, IServiceProvider serviceProvider)
+    public UnitOfWork(T context, K onlyContext, IServiceProvider serviceProvider)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _readOnlyContext = onlyContext ?? throw new ArgumentNullException(nameof(onlyContext));
         _serviceProvider = serviceProvider;
     }
 
@@ -104,6 +71,24 @@ public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
         }
         return respositoy;
     }
+
+    /// <summary>
+    /// 获取只读范型仓储
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : Entity
+    {
+        var respositories = _serviceProvider.GetServices<IReadOnlyRepository<TEntity>>();
+        var respositoy = _serviceProvider.GetServices<IReadOnlyRepository<TEntity>>().FirstOrDefault(x => x.Code == _readOnlyContext.GetType().GetHashCode());
+        if (respositoy == null)
+        {
+            throw new MaxException(ResultCode.CantGetRepository);
+        }
+        return respositoy;
+    }
+
 
     /// <summary>
     /// 获取定制仓储
@@ -161,5 +146,16 @@ public class UnitOfWork<T> : IUnitOfWork<T> where T : DbContext
         ts.Complete();
 
         return count;
+    }
+}
+
+/// <summary>
+/// UnitOfWork<T>
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class UnitOfWork<T> : UnitOfWork<T, T>, IUnitOfWork<T> where T : DbContext
+{
+    public UnitOfWork(T context, T onlyContext, IServiceProvider serviceProvider) : base(context, onlyContext, serviceProvider)
+    {
     }
 }

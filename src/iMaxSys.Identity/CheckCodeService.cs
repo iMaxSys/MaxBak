@@ -31,11 +31,11 @@ namespace iMaxSys.Identity;
 public class CheckCodeService : ICheckCodeService
 {
     private readonly MaxOption _option;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork<IdentityContext, IdentityReadOnlyContext> _unitOfWork;
     private readonly ICheckCodeRepository _checkCodeRepository;
     private readonly IRepository<CheckCode> _repository;
 
-    public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork, IRepository<CheckCode> repository)
+    public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork<IdentityContext, IdentityReadOnlyContext> unitOfWork, IRepository<CheckCode> repository)
     {
         _option = option.Value;
         _unitOfWork = unitOfWork;
@@ -140,5 +140,28 @@ public class CheckCodeService : ICheckCodeService
             Expires = _option.Identity.CheckCodeExpires,
             BizName = bizName
         };
+    }
+
+    public async Task<string> Get()
+    {
+        CheckCode checkCode = new();
+        checkCode.BizId = 100;
+        checkCode.Code = "9527";
+        checkCode.CreateTime = DateTime.Now;
+        checkCode.CreatorId = 0;
+        checkCode.Creator = "babylon";
+        checkCode.MemberId = 0;
+        checkCode.XppId = 0;
+        checkCode.To = "13987877898";
+
+        var repo = _unitOfWork.GetRepository<CheckCode>();
+        await repo.AddAsync(checkCode);
+        await _unitOfWork.SaveChangesAsync();
+
+        var repo1 = _unitOfWork.GetReadOnlyRepository<CheckCode>();
+        var ck = await repo1.FirstOrDefaultAsync();
+        var id = ck?.Id;
+
+        return $"{id}";
     }
 }

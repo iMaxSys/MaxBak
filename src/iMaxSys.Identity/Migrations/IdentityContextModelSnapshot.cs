@@ -2,7 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iMaxSys.Identity.Data.EFCore;
 
@@ -10,285 +10,19 @@ using iMaxSys.Identity.Data.EFCore;
 
 namespace iMaxSys.Identity.Migrations
 {
-    [DbContext(typeof(MaxIdentityContext))]
-    [Migration("20211220071814_init")]
-    partial class init
+    [DbContext(typeof(IdentityContext))]
+    partial class IdentityContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            modelBuilder.Entity("iMaxSys.Data.Entities.App.Tenant", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-                    b.Property<string>("Alias")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("alias");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("code");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("create_time");
-
-                    b.Property<string>("Creator")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("creator");
-
-                    b.Property<long>("CreatorId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("creator_id");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("description");
-
-                    b.Property<DateTime>("End")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("end");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Logo")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("logo");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("QuickCode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("quick_code");
-
-                    b.Property<DateTime?>("ReviseTime")
-                        .IsRequired()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("revise_time");
-
-                    b.Property<string>("Reviser")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("reviser");
-
-                    b.Property<long>("ReviserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("reviser_id");
-
-                    b.Property<DateTime>("Start")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("start");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int")
-                        .HasColumnName("status");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name", "Code");
-
-                    b.ToTable("tenant", (string)null);
-                });
-
-            modelBuilder.Entity("iMaxSys.Data.Entities.App.Xpp", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    b.Property<string>("AccountId")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("account_id");
-
-                    b.Property<string>("Alias")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("alias");
-
-                    b.Property<string>("AppId")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("app_id");
-
-                    b.Property<string>("AppKey")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("app_key");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("create_time");
-
-                    b.Property<string>("Creator")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("creator");
-
-                    b.Property<long>("CreatorId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("creator_id");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("description");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("name");
-
-                    b.Property<DateTime?>("ReviseTime")
-                        .IsRequired()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("revise_time");
-
-                    b.Property<string>("Reviser")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("reviser");
-
-                    b.Property<long>("ReviserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("reviser_id");
-
-                    b.Property<int>("Source")
-                        .HasColumnType("int")
-                        .HasColumnName("source");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int")
-                        .HasColumnName("status");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("xpp", (string)null);
-                });
-
-            modelBuilder.Entity("iMaxSys.Data.Entities.App.XppSns", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    b.Property<string>("AccountId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("account_id");
-
-                    b.Property<string>("Alias")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("alias");
-
-                    b.Property<string>("AppId")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("app_id");
-
-                    b.Property<string>("AppSecret")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("app_secret");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("create_time");
-
-                    b.Property<string>("Creator")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("creator");
-
-                    b.Property<long>("CreatorId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("creator_id");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("description");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("name");
-
-                    b.Property<DateTime?>("ReviseTime")
-                        .IsRequired()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("revise_time");
-
-                    b.Property<string>("Reviser")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("reviser");
-
-                    b.Property<long>("ReviserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("reviser_id");
-
-                    b.Property<int>("Source")
-                        .HasColumnType("int")
-                        .HasColumnName("source");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int")
-                        .HasColumnName("status");
-
-                    b.Property<long>("XppId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("xpp_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("XppId");
-
-                    b.ToTable("xpp_sns", (string)null);
-                });
-
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.CheckCode", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.CheckCode", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -305,23 +39,23 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("code");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("content");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -329,11 +63,11 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("creator_id");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("expires");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<long>("MemberId")
@@ -342,13 +76,13 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -366,7 +100,7 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("To")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("to");
 
                     b.Property<long>("XppId")
@@ -382,7 +116,7 @@ namespace iMaxSys.Identity.Migrations
                     b.ToTable("check_code", (string)null);
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Department", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Department", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -391,17 +125,17 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Alias")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("alias");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -410,28 +144,28 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("Descripton")
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("descripton");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("name");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -455,7 +189,7 @@ namespace iMaxSys.Identity.Migrations
                     b.ToTable("department", (string)null);
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Member", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Member", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -463,26 +197,67 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<int>("AccountSource")
                         .HasColumnType("int")
-                        .HasColumnName("account_source");
+                        .HasColumnName("account_source")
+                        .HasComment("账号来源");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("address")
+                        .HasComment("地址");
+
+                    b.Property<long>("AreaCode")
+                        .HasColumnType("bigint")
+                        .HasColumnName("area_code")
+                        .HasComment("区域代码from国家统计局");
 
                     b.Property<string>("Avatar")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("avatar");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("avatar")
+                        .HasComment("头像");
 
                     b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("birthday");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("birthday")
+                        .HasComment("生日");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("city")
+                        .HasComment("市");
+
+                    b.Property<string>("Community")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("community")
+                        .HasComment("社区/村");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("country")
+                        .HasComment("国家");
+
+                    b.Property<int>("CountryCode")
+                        .HasColumnType("int")
+                        .HasColumnName("country_code")
+                        .HasComment("国家代码(默认中国:86)");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -491,101 +266,156 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<long>("DepartmentId")
                         .HasColumnType("bigint")
-                        .HasColumnName("department_id");
+                        .HasColumnName("department_id")
+                        .HasComment("部门id");
+
+                    b.Property<string>("District")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("district")
+                        .HasComment("区/县");
+
+                    b.Property<int>("Education")
+                        .HasColumnType("int")
+                        .HasColumnName("education")
+                        .HasComment("教育程度(默认0:未知)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("email");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("email")
+                        .HasComment("电子邮箱");
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("end");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("end")
+                        .HasComment("停用时间");
 
                     b.Property<int>("FailedCount")
                         .HasColumnType("int")
-                        .HasColumnName("failed_count");
+                        .HasColumnName("failed_count")
+                        .HasComment("登录失败次数");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int")
-                        .HasColumnName("gender");
+                        .HasColumnName("gender")
+                        .HasComment("性别(0男,1女,2未知)");
+
+                    b.Property<string>("IdNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("id_number")
+                        .HasComment("身份证号码");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<bool>("IsOfficial")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_official");
+                        .HasColumnType("bit")
+                        .HasColumnName("is_official")
+                        .HasComment("是否正式成员");
 
-                    b.Property<string>("JoinIp")
+                    b.Property<string>("JoinIP")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("join_ip");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("join_ip")
+                        .HasComment("加入Ip");
 
                     b.Property<DateTime>("JoinTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("join_time");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("join_time")
+                        .HasComment("加入/激活时间");
 
-                    b.Property<string>("LastIp")
+                    b.Property<string>("LastIP")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("last_ip");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("last_ip")
+                        .HasComment("最后登录IP");
 
                     b.Property<DateTime>("LastLogin")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("last_login");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("last_login")
+                        .HasComment("最后登录时间");
 
-                    b.Property<string>("LoginName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("login_name");
+                    b.Property<int>("MaritalStatus")
+                        .HasColumnType("int")
+                        .HasColumnName("marital_status")
+                        .HasComment("婚姻状况");
 
                     b.Property<string>("Mobile")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("mobile");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("mobile")
+                        .HasComment("移动电话号码");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("name");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("name")
+                        .HasComment("姓名");
+
+                    b.Property<int>("Nation")
+                        .HasColumnType("int")
+                        .HasColumnName("nation")
+                        .HasComment("民族(默认0:未知)");
 
                     b.Property<string>("NickName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("nick_name");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("nick_name")
+                        .HasComment("昵称");
+
+                    b.Property<int>("Party")
+                        .HasColumnType("int")
+                        .HasColumnName("party")
+                        .HasComment("政党(默认0:未知)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("password");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("password")
+                        .HasComment("密码");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("phone")
+                        .HasComment("电话号码");
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("province")
+                        .HasComment("省");
 
                     b.Property<string>("QuickCode")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("quick_code");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("quick_code")
+                        .HasComment("速查码");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -595,16 +425,26 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Salt")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("salt");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("salt")
+                        .HasComment("盐");
 
                     b.Property<DateTime>("Start")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("start");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("start")
+                        .HasComment("启用时间");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
-                        .HasColumnName("status");
+                        .HasColumnName("status")
+                        .HasComment("状态");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("street")
+                        .HasComment("街道/乡镇");
 
                     b.Property<long>("TenantId")
                         .HasColumnType("bigint")
@@ -612,21 +452,38 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("int")
-                        .HasColumnName("type");
+                        .HasColumnName("type")
+                        .HasComment("类型");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint")
-                        .HasColumnName("user_id");
+                        .HasColumnName("user_id")
+                        .HasComment("外接Id");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("user_name")
+                        .HasComment("登录名");
 
                     b.Property<int>("XppSource")
                         .HasColumnType("int")
-                        .HasColumnName("xpp_source");
+                        .HasColumnName("xpp_source")
+                        .HasComment("应用来源");
+
+                    b.Property<string>("Zipcode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("zipcode")
+                        .HasComment("邮编");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("LoginName");
+                    b.HasIndex("IdNumber");
 
                     b.HasIndex("Mobile");
 
@@ -634,10 +491,14 @@ namespace iMaxSys.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
+                    b.HasIndex("UserName");
+
                     b.ToTable("member", (string)null);
+
+                    b.HasComment("成员");
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.MemberExt", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.MemberExt", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -646,27 +507,27 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Avatar")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
+                        .HasColumnType("nvarchar(500)")
                         .HasColumnName("avatar");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("city");
 
                     b.Property<string>("Country")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("country");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -674,7 +535,7 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("creator_id");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("expires");
 
                     b.Property<int>("Gender")
@@ -682,7 +543,7 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("gender");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<long>("MemberId")
@@ -692,41 +553,41 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Mobile")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("mobile");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("name");
 
                     b.Property<string>("NickName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("nick_name");
 
                     b.Property<string>("OpenId")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("open_id");
 
                     b.Property<string>("Province")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("province");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -743,7 +604,7 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("Token")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("token");
 
                     b.Property<long>("XppSnsId")
@@ -762,7 +623,7 @@ namespace iMaxSys.Identity.Migrations
                     b.ToTable("member_ext", (string)null);
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.MemberSession", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.MemberSession", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -771,17 +632,17 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Avatar")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
+                        .HasColumnType("nvarchar(500)")
                         .HasColumnName("avatar");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -789,21 +650,21 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("creator_id");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("expires");
 
                     b.Property<string>("Ip")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("ip");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<bool>("IsOfficial")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_official");
 
                     b.Property<long>("MemberId")
@@ -813,24 +674,24 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("NickName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("nick_name");
 
                     b.Property<string>("OpenId")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("open_id");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -839,7 +700,7 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("SessionKey")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("session_key");
 
                     b.Property<int>("Status")
@@ -853,13 +714,13 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("token");
 
                     b.Property<string>("UnionId")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("union_id");
 
                     b.Property<long>("XppSnsId")
@@ -877,7 +738,7 @@ namespace iMaxSys.Identity.Migrations
                     b.ToTable("member_session", (string)null);
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Menu", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Menu", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -886,23 +747,23 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Alias")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("alias");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("code");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -915,16 +776,16 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("description");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("icon");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<int>("Lv")
@@ -934,24 +795,24 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("name");
 
                     b.Property<string>("QuickCode")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("quick_code");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -961,7 +822,7 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Router")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("router");
 
                     b.Property<int>("Rv")
@@ -974,7 +835,7 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("Style")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("style");
 
                     b.Property<long>("TenantId")
@@ -994,7 +855,7 @@ namespace iMaxSys.Identity.Migrations
                     b.ToTable("menu", (string)null);
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Operation", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Operation", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -1003,23 +864,23 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Alias")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("alias");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("code");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -1028,16 +889,16 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("Descripton")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("descripton");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("icon");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<long>("MenuId")
@@ -1047,24 +908,24 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("name");
 
                     b.Property<string>("QuickCode")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("quick_code");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -1074,7 +935,7 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Router")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("router");
 
                     b.Property<int>("Status")
@@ -1083,7 +944,7 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("Style")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("style");
 
                     b.Property<long>("TenantId")
@@ -1105,7 +966,7 @@ namespace iMaxSys.Identity.Migrations
                     b.ToTable("operation", (string)null);
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Role", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Role", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -1114,23 +975,23 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Alias")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("alias");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("code");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -1139,53 +1000,53 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("Descripton")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("descripton");
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("end");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("icon");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<string>("MenuIds")
                         .HasMaxLength(5000)
-                        .HasColumnType("varchar(5000)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("menu_ids");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("name");
 
                     b.Property<string>("OperationIds")
                         .HasMaxLength(5000)
-                        .HasColumnType("varchar(5000)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("operation_ids");
 
                     b.Property<string>("QuickCode")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("quick_code");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -1193,7 +1054,7 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("reviser_id");
 
                     b.Property<DateTime>("Start")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("start");
 
                     b.Property<int>("Status")
@@ -1202,7 +1063,7 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<string>("Style")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("style");
 
                     b.Property<long>("TenantId")
@@ -1220,20 +1081,20 @@ namespace iMaxSys.Identity.Migrations
                     b.ToTable("role", (string)null);
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.RoleMember", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.RoleMember", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("create_time");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("creator");
 
                     b.Property<long>("CreatorId")
@@ -1241,7 +1102,7 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("creator_id");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
                     b.Property<long>("MemberId")
@@ -1250,13 +1111,13 @@ namespace iMaxSys.Identity.Migrations
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("revise_time");
 
                     b.Property<string>("Reviser")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("reviser");
 
                     b.Property<long>("ReviserId")
@@ -1275,35 +1136,24 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("tenant_id");
 
-                    b.HasKey("Id");
+                    b.Property<long>("XppId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("xpp_id");
 
-                    b.HasIndex("MemberId");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
                     b.HasIndex("TenantId");
 
-                    b.HasIndex("TenantId", "MemberId");
-
-                    b.HasIndex("TenantId", "RoleId");
+                    b.HasIndex("MemberId", "XppId", "TenantId", "RoleId");
 
                     b.ToTable("role_member", (string)null);
                 });
 
-            modelBuilder.Entity("iMaxSys.Data.Entities.App.XppSns", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Member", b =>
                 {
-                    b.HasOne("iMaxSys.Data.Entities.App.Xpp", "Xpp")
-                        .WithMany("XppSns")
-                        .HasForeignKey("XppId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Xpp");
-                });
-
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Member", b =>
-                {
-                    b.HasOne("iMaxSys.Identity.Data.Models.Department", "Department")
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Department", "Department")
                         .WithMany("Members")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1312,9 +1162,9 @@ namespace iMaxSys.Identity.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.MemberExt", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.MemberExt", b =>
                 {
-                    b.HasOne("iMaxSys.Identity.Data.Models.Member", "Member")
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Member", "Member")
                         .WithMany("MemberExts")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1323,9 +1173,9 @@ namespace iMaxSys.Identity.Migrations
                     b.Navigation("Member");
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Operation", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Operation", b =>
                 {
-                    b.HasOne("iMaxSys.Identity.Data.Models.Menu", "Menu")
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Menu", "Menu")
                         .WithMany("Operations")
                         .HasForeignKey("MenuId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1334,15 +1184,15 @@ namespace iMaxSys.Identity.Migrations
                     b.Navigation("Menu");
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.RoleMember", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.RoleMember", b =>
                 {
-                    b.HasOne("iMaxSys.Identity.Data.Models.Member", "Member")
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Member", "Member")
                         .WithMany("RoleMembers")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("iMaxSys.Identity.Data.Models.Role", "Role")
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Role", "Role")
                         .WithMany("RoleMembers")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1353,29 +1203,24 @@ namespace iMaxSys.Identity.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("iMaxSys.Data.Entities.App.Xpp", b =>
-                {
-                    b.Navigation("XppSns");
-                });
-
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Department", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Department", b =>
                 {
                     b.Navigation("Members");
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Member", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Member", b =>
                 {
                     b.Navigation("MemberExts");
 
                     b.Navigation("RoleMembers");
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Menu", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Menu", b =>
                 {
                     b.Navigation("Operations");
                 });
 
-            modelBuilder.Entity("iMaxSys.Identity.Data.Models.Role", b =>
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Role", b =>
                 {
                     b.Navigation("RoleMembers");
                 });

@@ -60,4 +60,7 @@ public interface ICheckCodeService : IDependency
     /// <param name="code"></param>
     /// <returns></returns>
     //Task CheckAsync(BizConfig bizConfig, string to, string code);
+
+
+    Task<string> Get();
 }

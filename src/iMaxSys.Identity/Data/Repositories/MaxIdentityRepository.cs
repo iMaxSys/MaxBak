@@ -12,7 +12,7 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Data.Entities;
-using iMaxSys.Data.Repositories.EFCore;
+using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Identity.Data.EFCore;
 
 namespace iMaxSys.Identity.Data.Repositories;
@@ -21,9 +21,9 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// 身份通用仓储
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class MaxIdentityRepository<T> : EfRepository<T>, IMaxIdentityRepository<T> where T : Entity
-{
-    public MaxIdentityRepository(MaxIdentityContext context) : base(context)
-    {
-    }
-}
+//public class MaxIdentityRepository<T> : EfRepository<T>, IMaxIdentityRepository<T> where T : Entity
+//{
+//    public MaxIdentityRepository(IdentityContext context) : base(context)
+//    {
+//    }
+//}

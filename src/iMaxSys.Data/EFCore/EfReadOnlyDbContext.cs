@@ -21,14 +21,14 @@ namespace iMaxSys.Data.EFCore;
 /// <summary>
 /// 只读上下文
 /// </summary>
-public class ReadOnlyDbContext : MaxDbContext, IReadOnlyDbContext
+public class EfReadOnlyDbContext : MaxDbContext, IReadOnlyDbContext
 {
     private static int _index = 0;
 
-    public ReadOnlyDbContext(List<DatabaseOption> databases) : base(databases)
+    public EfReadOnlyDbContext(List<DatabaseOption> databases) : base(databases)
     {
     }
-
+     
     /// <summary>
     /// 选择数据库
     /// 0为主库(读写),1+为从库(只读)
@@ -43,8 +43,7 @@ public class ReadOnlyDbContext : MaxDbContext, IReadOnlyDbContext
             if (databases.Count > 1)
             {
                 //去除主库
-                databases.RemoveAt(0);
-                DatabaseOption database = databases[_index % databases.Count];
+                DatabaseOption database = databases[_index % (databases.Count - 1) + 1];
                 _index = ++_index > 1024 ? 0 : _index;
                 return database;
             }

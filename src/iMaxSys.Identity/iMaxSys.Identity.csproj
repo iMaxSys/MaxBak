@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Common\" />
+    <None Remove="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
@@ -24,5 +25,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\20220519064929_init.cs" />
+    <Compile Remove="Migrations\20220519064929_init.Designer.cs" />
+    <Compile Remove="Migrations\IdentityContextModelSnapshot.cs" />
   </ItemGroup>
 </Project>

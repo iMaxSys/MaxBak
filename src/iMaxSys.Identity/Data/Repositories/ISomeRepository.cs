@@ -1,7 +1,6 @@
 ﻿
-
 using iMaxSys.Data.Repositories;
-using iMaxSys.Data.Repositories.EFCore;
+using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 
@@ -33,7 +32,7 @@ namespace iMaxSys.Identity.Data.Repositories
 
 	public class BabyRepository : EfRepository<CheckCode>, IBabyRepository
 	{
-        public BabyRepository(MaxIdentityContext context) : base(context)
+        public BabyRepository(IdentityContext context) : base(context)
         {
         }
 

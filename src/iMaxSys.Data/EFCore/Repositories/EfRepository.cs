@@ -23,13 +23,12 @@ namespace iMaxSys.Data.EFCore.Repositories;
 /// <typeparam name="TEntity"></typeparam>
 public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRepository<TEntity> where TEntity : Entity
 {
-    
     /// <summary>
     /// AutoCommit
     /// </summary>
     public virtual bool AutoCommit { get; set; } = false;
 
-    public EfRepository(DbContext dbContext) : base(dbContext)
+    public EfRepository(EfDbContext dbContext) : base(dbContext)
     {
     }
 
