@@ -23,6 +23,8 @@ public class DapperRepository<TDbContext> : IDapperRepository where TDbContext :
 {
     private readonly TDbContext _context;
 
+    public string? ConnectionString => throw new NotImplementedException();
+
     public DapperRepository(TDbContext context)
     {
         _context = context;
@@ -37,6 +39,7 @@ public class DapperRepository<TDbContext> : IDapperRepository where TDbContext :
     /// 事务
     /// </summary>
     public IDbContextTransaction? Transaction => _context.Database.CurrentTransaction;
+
 
     /// <summary>
     /// ExecuteAsync

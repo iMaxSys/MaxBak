@@ -36,6 +36,14 @@ public class TenantConfiguration : MasterEntityConfiguration<Tenant>
         builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255);
         //Logo
         builder.Property(x => x.Logo).HasColumnName("logo").HasMaxLength(255);
+        //Contact
+        builder.Property(x => x.Contact).HasColumnName("contact").HasMaxLength(50);
+        //Phone
+        builder.Property(x => x.Phone).HasColumnName("phone").HasMaxLength(50);
+        //Mail
+        builder.Property(x => x.Mail).HasColumnName("mail").HasMaxLength(50);
+        //Address
+        builder.Property(x => x.Address).HasColumnName("address").HasMaxLength(255);
         //Start
         builder.Property(x => x.Start).HasColumnName("start").IsRequired();
         //End

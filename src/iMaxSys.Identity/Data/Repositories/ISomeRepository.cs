@@ -13,6 +13,8 @@ namespace iMaxSys.Identity.Data.Repositories
 
 	public class SomeRepository : ISomeRepository
 	{
+        public string? ConnectionString => throw new NotImplementedException();
+
         public void ChangeTable(string table)
         {
             throw new NotImplementedException();

@@ -55,7 +55,6 @@ public static class Extensions
         services.AddUnitOfWork<K>();
         services.AddScoped<IUnitOfWork<T, K>, UnitOfWork<T, K>>();
         services.AddScoped<IUnitOfWork, UnitOfWork<T, K>>();
-        RegisterRepositories(services);
         return services;
     }
 

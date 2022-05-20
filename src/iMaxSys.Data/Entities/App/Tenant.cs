@@ -51,6 +51,26 @@ public class Tenant : MasterEntity
     public string? Logo { get; set; }
 
     /// <summary>
+    /// contact
+    /// </summary>
+    public string? Contact { get; set; }
+
+    /// <summary>
+    /// phone
+    /// </summary>
+    public string? Phone { get; set; }
+
+    /// <summary>
+    /// mail
+    /// </summary>
+    public string? Mail { get; set; }
+
+    /// <summary>
+    /// mail
+    /// </summary>
+    public string? Address { get; set; }
+
+    /// <summary>
     /// Start
     /// </summary>
     public DateTime Start { get; set; }

@@ -144,18 +144,30 @@ public class CheckCodeService : ICheckCodeService
 
     public async Task<string> Get()
     {
-        CheckCode checkCode = new();
-        checkCode.BizId = 100;
-        checkCode.Code = "9527";
-        checkCode.CreateTime = DateTime.Now;
-        checkCode.CreatorId = 0;
-        checkCode.Creator = "babylon";
-        checkCode.MemberId = 0;
-        checkCode.XppId = 0;
-        checkCode.To = "13987877898";
+        //CheckCode checkCode = new();
+        //checkCode.BizId = 100;
+        //checkCode.Code = "9527";
+        //checkCode.CreateTime = DateTime.Now;
+        //checkCode.CreatorId = 0;
+        //checkCode.Creator = "babylon";
+        //checkCode.MemberId = 0;
+        //checkCode.XppId = 0;
+        //checkCode.To = "13987877898";
 
-        var repo = _unitOfWork.GetRepository<CheckCode>();
-        await repo.AddAsync(checkCode);
+        //var repo = _unitOfWork.GetRepository<CheckCode>();
+        //await repo.AddAsync(checkCode);
+
+        CheckCode checkCode1 = new();
+        checkCode1.BizId = 100;
+        checkCode1.Code = "9528";
+        checkCode1.CreateTime = DateTime.Now;
+        checkCode1.CreatorId = 0;
+        checkCode1.Creator = "baby";
+        checkCode1.MemberId = 0;
+        checkCode1.XppId = 0;
+        checkCode1.To = "13987877898";
+
+        await _repository.AddAsync(checkCode1);
         await _unitOfWork.SaveChangesAsync();
 
         var repo1 = _unitOfWork.GetReadOnlyRepository<CheckCode>();
