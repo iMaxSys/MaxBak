@@ -102,8 +102,6 @@ public static class Extensions
                 //非范型只取非范型非仓储标识接口
                 interfaces.Where(x => !x.IsGenericType && x != root).ForEach(x => services.AddScoped(x, repository));
             }
-
-
         }
 
         var x = services.Where(x => x.ServiceType.GetInterfaces().Any(i => i == root));
