@@ -49,7 +49,6 @@ namespace iMaxSys.Caching
                 _ => _serviceProvider.GetRequiredService<IRedisService>(),
             };
         }
-
     }
 }
 

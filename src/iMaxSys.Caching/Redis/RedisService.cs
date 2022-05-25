@@ -22,6 +22,11 @@ public class RedisService : IRedisService
     private readonly IDatabase _database;
     private readonly long _appId;
 
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="appId"></param>
     public RedisService(string connection, long appId)
     {
         _connection = ConnectionMultiplexer.Connect(connection);
@@ -29,6 +34,10 @@ public class RedisService : IRedisService
         _appId = appId;
     }
 
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="option"></param>
     public RedisService(IOptions<MaxOption> option)
     {
         _connection = ConnectionMultiplexer.Connect(option.Value.Caching.Connection);
@@ -50,48 +59,109 @@ public class RedisService : IRedisService
         return await _database.KeyExistsAsync(GetKey(key, global));
     }
 
+    /// <summary>
+    /// Get
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="key"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public T? Get<T>(string key, bool global = false)
     {
         var value = _database.StringGet(GetKey(key, global));
         return value.IsNull ? default : JsonSerializer.Deserialize<T>(value);
     }
 
+    /// <summary>
+    /// GetAsync
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="key"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task<T?> GetAsync<T>(string key, bool global = false)
     {
         var value = await _database.StringGetAsync(GetKey(key, global));
         return value.IsNull ? default : JsonSerializer.Deserialize<T>(value);
     }
 
+    /// <summary>
+    /// Set
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="global"></param>
     public void Set(string key, object value, bool global = false)
     {
         _database.StringSet(GetKey(key, global), JsonSerializer.Serialize(value));
     }
 
+    /// <summary>
+    /// SetAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task SetAsync(string key, object value, bool global = false)
     {
         await _database.StringSetAsync(GetKey(key, global), JsonSerializer.Serialize(value));
     }
 
+    /// <summary>
+    /// Set
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="expire"></param>
+    /// <param name="global"></param>
     public void Set(string key, object value, DateTime? expire, bool global = false)
     {
         _database.StringSet(GetKey(key, global), JsonSerializer.Serialize(value), expire - DateTime.Now);
     }
 
+    /// <summary>
+    /// SetAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="expire"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task SetAsync(string key, object value, DateTime? expire, bool global = false)
     {
         await _database.StringSetAsync(GetKey(key, global), JsonSerializer.Serialize(value), expire - DateTime.Now);
     }
 
+    /// <summary>
+    /// Delete
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public bool Delete(string key, bool global = false)
     {
         return _database.KeyDelete(GetKey(key, global));
     }
 
+    /// <summary>
+    /// DeleteAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task<bool> DeleteAsync(string key, bool global = false)
     {
         return await _database.KeyDeleteAsync(GetKey(key, global));
     }
 
+    /// <summary>
+    /// HashSetAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="ht"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task HashSetAsync(string key, Hashtable ht, bool global = false)
     {
         int i = 0;
@@ -103,11 +173,25 @@ public class RedisService : IRedisService
         await _database.HashSetAsync(GetKey(key, global), hashEntries);
     }
 
+    /// <summary>
+    /// HashSetAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="field"></param>
+    /// <param name="value"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task HashSetAsync(string key, string field, string value, bool global = false)
     {
         await _database.HashSetAsync(GetKey(key, global), field, value);
     }
 
+    /// <summary>
+    /// HashGetAllAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task<Hashtable> HashGetAllAsync(string key, bool global = false)
     {
         Hashtable ht = new();
@@ -119,11 +203,25 @@ public class RedisService : IRedisService
         return ht;
     }
 
+    /// <summary>
+    /// HashGetAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="field"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task<string> HashGetAsync(string key, string field, bool global = false)
     {
         return await _database.HashGetAsync(GetKey(key, global), field);
     }
 
+    /// <summary>
+    /// HashDeleteAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="field"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     public async Task HashDeleteAsync(string key, string field, bool global = false)
     {
         await _database.HashDeleteAsync(GetKey(key, global), field);

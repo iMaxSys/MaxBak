@@ -17,5 +17,17 @@ namespace iMaxSys.Caching;
 
 public interface ICacheFactory
 {
+    /// <summary>
+    /// 获取缓存服务
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="connection"></param>
+    /// <returns></returns>
     ICache GetService(CacheServer source, string connection);
+
+    /// <summary>
+    /// 获取缓存服务from config
+    /// </summary>
+    /// <returns></returns>
+    ICache GetService();
 }

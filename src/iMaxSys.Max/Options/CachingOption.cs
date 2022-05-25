@@ -18,6 +18,9 @@ namespace iMaxSys.Max.Options
     /// </summary>
     public class CachingOption
     {
+        /// <summary>
+        /// Type[0:max, 1:redis]
+        /// </summary>
         public int Type { get; set; } = 0;
 
         /// <summary>
