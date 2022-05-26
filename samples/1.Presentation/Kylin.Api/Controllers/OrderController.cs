@@ -13,11 +13,5 @@ namespace Kylin.Api.Controllers
         {
             _checkCodeService = checkCodeService;
         }
-        [HttpGet]
-        public async Task<string> Submit()
-        {
-            string result = await _checkCodeService.Get();
-            return $"this is a order from {result}";
-        }
     }
 }

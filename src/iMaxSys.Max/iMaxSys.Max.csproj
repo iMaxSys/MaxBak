@@ -31,6 +31,7 @@
     <None Remove="Environment\Access\" />
     <None Remove="Dapper" />
     <None Remove="Common\Enums\" />
+    <None Remove="Middlewares\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Net\Http\HttpClient.cs" />
@@ -49,5 +50,6 @@
   <ItemGroup>
     <Folder Include="Environment\Access\" />
     <Folder Include="Common\Enums\" />
+    <Folder Include="Middlewares\" />
   </ItemGroup>
 </Project>

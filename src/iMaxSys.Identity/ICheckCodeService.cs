@@ -11,8 +11,9 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Identity.Models;
+using iMaxSys.Max.Common;
 using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity;
 
@@ -21,6 +22,11 @@ namespace iMaxSys.Identity;
 /// </summary>
 public interface ICheckCodeService : IDependency
 {
+    /// <summary>
+    /// 验证码生成处理
+    /// </summary>
+    public CheckCodeCreatedHandler CheckCodeCreatedHandler { get; set; }
+
     /// <summary>
     /// 生成验证码
     /// </summary>
@@ -50,7 +56,7 @@ public interface ICheckCodeService : IDependency
     /// <param name="bizConfig"></param>
     /// <param name="to"></param>
     /// <returns></returns>
-    //Task<CheckCodeModel> MakeAsync(BizConfig bizConfig, string to);
+    //Task<CheckCodeModel> MakeAsync(BizConfig bizConfig, long memberId, string to);
 
     /// <summary>
     /// 校验
@@ -60,7 +66,4 @@ public interface ICheckCodeService : IDependency
     /// <param name="code"></param>
     /// <returns></returns>
     //Task CheckAsync(BizConfig bizConfig, string to, string code);
-
-
-    Task<string> Get();
 }

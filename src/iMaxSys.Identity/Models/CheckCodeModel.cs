@@ -26,7 +26,7 @@ public class CheckCodeModel
     /// <summary>
     /// Expires
     /// </summary>
-    public int Expires { get; set; } = 0;
+    public DateTime Expires { get; set; }
 
     /// <summary>
     /// BizName

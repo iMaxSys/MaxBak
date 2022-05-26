@@ -22,6 +22,7 @@ using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Data.Repositories;
+using iMaxSys.Max.Common;
 
 namespace iMaxSys.Identity;
 
@@ -31,16 +32,22 @@ namespace iMaxSys.Identity;
 public class CheckCodeService : ICheckCodeService
 {
     private readonly MaxOption _option;
-    private readonly IUnitOfWork<IdentityContext, IdentityReadOnlyContext> _unitOfWork;
-    private readonly ICheckCodeRepository _checkCodeRepository;
-    private readonly IRepository<CheckCode> _repository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork<IdentityContext, IdentityReadOnlyContext> unitOfWork, IRepository<CheckCode> repository)
+    /// <summary>
+    /// 验证码生成处理
+    /// </summary>
+    public CheckCodeCreatedHandler? CheckCodeCreatedHandler { get; set; }
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="option"></param>
+    /// <param name="unitOfWork"></param>
+    public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork unitOfWork)
     {
         _option = option.Value;
         _unitOfWork = unitOfWork;
-        _checkCodeRepository = _unitOfWork.GetCustomRepository<ICheckCodeRepository>();
-        _repository = repository;
     }
 
     /// <summary>
@@ -58,9 +65,6 @@ public class CheckCodeService : ICheckCodeService
         {
             throw new MaxException(ResultCode.CheckCodeCantNull);
         }
-
-        //定制仓储
-        var repository = _unitOfWork.GetCustomRepository<ICheckCodeRepository>();
 
         var xppSns = await _unitOfWork.GetRepository<XppSns>().FindAsync(sid);
 
@@ -134,46 +138,40 @@ public class CheckCodeService : ICheckCodeService
         await _unitOfWork.GetRepository<CheckCode>().AddAsync(checkCode);
         await _unitOfWork.SaveChangesAsync();
 
-        return new CheckCodeModel
+
+        CheckCodeModel model = new()
         {
-            Code = code,
-            Expires = _option.Identity.CheckCodeExpires,
+            Code = checkCode.Code,
+            Expires = checkCode.Expires,
             BizName = bizName
         };
+
+        //同步或异步
+        CheckCodeCreatedHandler?.Invoke(model);
+
+        return model;
+
     }
 
-    public async Task<string> Get()
-    {
-        //CheckCode checkCode = new();
-        //checkCode.BizId = 100;
-        //checkCode.Code = "9527";
-        //checkCode.CreateTime = DateTime.Now;
-        //checkCode.CreatorId = 0;
-        //checkCode.Creator = "babylon";
-        //checkCode.MemberId = 0;
-        //checkCode.XppId = 0;
-        //checkCode.To = "13987877898";
-
-        //var repo = _unitOfWork.GetRepository<CheckCode>();
-        //await repo.AddAsync(checkCode);
-
-        CheckCode checkCode1 = new();
-        checkCode1.BizId = 100;
-        checkCode1.Code = "9528";
-        checkCode1.CreateTime = DateTime.Now;
-        checkCode1.CreatorId = 0;
-        checkCode1.Creator = "baby";
-        checkCode1.MemberId = 0;
-        checkCode1.XppId = 0;
-        checkCode1.To = "13987877898";
-
-        await _repository.AddAsync(checkCode1);
-        await _unitOfWork.SaveChangesAsync();
-
-        var repo1 = _unitOfWork.GetReadOnlyRepository<CheckCode>();
-        var ck = await repo1.FirstOrDefaultAsync();
-        var id = ck?.Id;
-
-        return $"{id}";
-    }
+    /// <summary>
+    /// 生成
+    /// </summary>
+    /// <param name="sid"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="bizId"></param>
+    /// <param name="bizName"></param>
+    /// <param name="memberId"></param>
+    /// <param name="to"></param>
+    /// <returns></returns>
+    //public async Task<CheckCodeModel> MakeAsync(BizConfig bizConfig, long memberId, string to)
+    //{
+    //    return await MakeAsync(bizConfig.Sid, bizConfig.TenantId, bizConfig.BizId, bizConfig.BizName, memberId, to);
+    //}
 }
+
+/// <summary>
+/// 验证码生成处理
+/// </summary>
+/// <param name="model"></param>
+/// <returns></returns>
+public delegate Task CheckCodeCreatedHandler(CheckCodeModel model);

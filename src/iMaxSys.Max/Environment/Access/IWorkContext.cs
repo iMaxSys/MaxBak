@@ -37,6 +37,11 @@ namespace iMaxSys.Max.Environment.Access
         ISession Session { get; }
 
         /// <summary>
+        /// AppInfo
+        /// </summary>
+        //AppInfo? AppInfo { get; }
+
+        /// <summary>
         /// IP
         /// </summary>
         string IP { get; set; }
