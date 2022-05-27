@@ -10,13 +10,6 @@
 //作者：陶剑扬
 //日期：2019-11-15
 //----------------------------------------------------------------
-using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-
-using iMaxSys.Max.Caching;
-using iMaxSys.Max.Options;
-using iMaxSys.Max.Caching.Redis;
 
 namespace iMaxSys.Max.Environment.Access
 {

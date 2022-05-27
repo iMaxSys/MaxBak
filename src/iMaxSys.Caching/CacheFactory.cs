@@ -11,10 +11,6 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using Microsoft.Extensions.Options;
-
-using iMaxSys.Caching.Common.Enums;
-
 namespace iMaxSys.Caching
 {
     public class CacheFactory : ICacheFactory
@@ -32,7 +28,7 @@ namespace iMaxSys.Caching
             _option = option.Value;
         }
 
-        public ICache GetService(CacheServer source, string connection)
+        public ICache GetService(int source, string connection)
         {
             return source switch
             {

@@ -12,8 +12,6 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Caching;
-using iMaxSys.Max.Options;
-using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Max.Environment.Access;
@@ -31,10 +29,10 @@ public class SessionStore : ISessionStore
 
     public string Key => throw new NotImplementedException();
 
-    public SessionStore(IOptions<MaxOption> maxOption, IGenericCache cache)
+    public SessionStore(IOptions<MaxOption> maxOption, ICacheFactory cacheFactory)
     {
         _maxOption = maxOption.Value;
-        _cache = cache;
+        _cache = cacheFactory.GetService();
         _id = Guid.NewGuid().ToString().Replace("-", "");
     }
 
@@ -57,7 +55,7 @@ public class SessionStore : ISessionStore
     {
         if (string.IsNullOrWhiteSpace(Id))
         {
-            throw new MaxException(ResultCode.CantSetSession);
+            throw new MaxException(MaxCode.CantSetSession);
         }
         _cache.Set($"{TAG_SESSION}{Id}:{key}", data, DateTime.Now.AddMinutes(_maxOption.Identity.Expires));
     }
@@ -66,7 +64,7 @@ public class SessionStore : ISessionStore
     {
         if (string.IsNullOrWhiteSpace(Id))
         {
-            throw new MaxException(ResultCode.CantSetSession);
+            throw new MaxException(MaxCode.CantSetSession);
         }
         await _cache.SetAsync($"{TAG_SESSION}{Id}:{key}", data, DateTime.Now.AddMinutes(_maxOption.Identity.Expires));
     }

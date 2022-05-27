@@ -12,11 +12,7 @@
 //日期：2021-11-30
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Options;
-using iMaxSys.Max.Caching;
-using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Common.Enums;
-using iMaxSys.Max.Caching.Redis;
 
 namespace iMaxSys.Max.Environment.Access;
 
@@ -53,7 +49,7 @@ public class Session : ISession
     {
         if (string.IsNullOrWhiteSpace(Id))
         {
-            throw new MaxException(ResultCode.CantSetSession);
+            throw new MaxException(MaxCode.CantSetSession);
         }
         _sessionStore.Set(key, data);
     }
@@ -62,7 +58,7 @@ public class Session : ISession
     {
         if (string.IsNullOrWhiteSpace(Id))
         {
-            throw new MaxException(ResultCode.CantSetSession);
+            throw new MaxException(MaxCode.CantSetSession);
         }
         await _sessionStore.SetAsync(key, data);
     }

@@ -53,4 +53,24 @@ public enum ResultCode
     /// </summary>
     [Description("角色不存在")]
     RoleNotExists = 106101,
+    /// <summary>
+    /// 验证码请求过快
+    /// </summary>
+    [Description("验证码请求过快")]
+    CheckCodeTimeLimit = 106301,
+    /// <summary>
+    /// 验证码不可为空
+    /// </summary>
+    [Description("验证码不可为空")]
+    CheckCodeCantNull = 106302,
+    /// <summary>
+    /// 验证码无效或不存在
+    /// </summary>
+    [Description("验证码失效或不存在")]
+    CheckCodeNotExists = 106303,
+    /// <summary>
+    /// 验证码错误
+    /// </summary>
+    [Description("验证码错误")]
+    CheckCodeError = 106304,
 }

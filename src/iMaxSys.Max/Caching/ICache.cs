@@ -13,6 +13,9 @@
 
 namespace iMaxSys.Max.Caching;
 
+/// <summary>
+/// ICache
+/// </summary>
 public interface ICache
 {
     /// <summary>

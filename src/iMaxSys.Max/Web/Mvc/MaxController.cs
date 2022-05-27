@@ -88,7 +88,7 @@ public abstract class MaxController : Controller
     /// <returns></returns>
     protected Result Result(Enum resultCode, object data)
     {
-        if (resultCode.GetHashCode() == ResultCode.Success.GetHashCode())
+        if (resultCode.GetHashCode() == MaxCode.Success.GetHashCode())
         {
             return Success(data);
         }
@@ -104,7 +104,7 @@ public abstract class MaxController : Controller
     /// <returns></returns>
     protected virtual Result Fail()
     {
-        return ResultCode.Fail.Result();
+        return MaxCode.Fail.Result();
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public abstract class MaxController : Controller
     /// <returns></returns>
     protected virtual Result Fail(object data)
     {
-        return ResultCode.Fail.Result(data);
+        return MaxCode.Fail.Result(data);
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ public abstract class MaxController : Controller
     /// <returns></returns>
     protected virtual Result Success()
     {
-        return ResultCode.Success.Result();
+        return MaxCode.Success.Result();
     }
 
     /// <summary>
@@ -132,7 +132,7 @@ public abstract class MaxController : Controller
     /// <returns></returns>
     protected virtual Result Success(object data)
     {
-        return ResultCode.Success.Result(data);
+        return MaxCode.Success.Result(data);
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public abstract class MaxController : Controller
     /// <returns></returns>
     protected virtual Result<T> Success<T>(T data)
     {
-        return ResultCode.Success.Result<T>(data);
+        return MaxCode.Success.Result<T>(data);
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ public abstract class MaxController : Controller
     protected virtual Result Deny(object data)
     {
         HttpContext.Response.StatusCode = HttpStatusCode.Forbidden.GetHashCode();
-        return ResultCode.Unauthorized.Result(data);
+        return MaxCode.Unauthorized.Result(data);
     }
 
     /// <summary>
@@ -175,7 +175,7 @@ public abstract class MaxController : Controller
 
         //检查消息体是否为空
         if (!Request.Body.CanSeek || string.IsNullOrWhiteSpace(text))
-            throw new MaxException(ResultCode.RequestIsEmpty, HttpStatusCode.BadRequest);
+            throw new MaxException(MaxCode.RequestIsEmpty, HttpStatusCode.BadRequest);
 
         return text;
     }

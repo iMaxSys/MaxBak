@@ -9,9 +9,9 @@ public class DayIncreaseService : ISerialService
 
     public readonly ICache _cache;
 
-    public DayIncreaseService(IGenericCache _genericCache)
+    public DayIncreaseService(ICacheFactory cacheFactory)
     {
-        _cache = _genericCache;
+        _cache = cacheFactory.GetService();
     }
 
     public async Task<int> Next(string id)

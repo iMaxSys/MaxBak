@@ -12,8 +12,6 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Caching;
-using iMaxSys.Max.Options;
-using iMaxSys.Max.Environment.Access;
 
 namespace iMaxSys.Max.Environment.Access;
 
@@ -24,10 +22,10 @@ public class ApplicationStore : IApplicationStore
     private readonly ICache _cache;
     private readonly MaxOption _maxOption;
 
-    public ApplicationStore(IOptions<MaxOption> maxOption, IGenericCache cache)
+    public ApplicationStore(IOptions<MaxOption> maxOption, ICacheFactory cacheFactory)
     {
         _maxOption = maxOption.Value;
-        _cache = cache;
+        _cache = cacheFactory.GetService();
     }
 
     public T? Get<T>(string key)
