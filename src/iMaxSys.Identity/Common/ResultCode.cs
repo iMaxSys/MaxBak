@@ -25,22 +25,28 @@ public enum ResultCode
     ConnectionIsNull = 106000,
 
     /// <summary>
+    /// 请求Headers中无token
+    /// </summary>
+    [Description("需要提供Token")]
+    NeedToken = 106001,
+
+    /// <summary>
     /// token不可为空
     /// </summary>
     [Description("token不可为空")]
-    TokenCantNull = 106001,
+    TokenCantNull = 106002,
 
     /// <summary>
     /// 成员id不可为空
     /// </summary>
     [Description("成员id不可为空")]
-    MemberIdCantNull = 1062002,
+    MemberIdCantNull = 1062003,
 
     /// <summary>
     /// 成员不存在
     /// </summary>
     [Description("成员不存在")]
-    MemberNotExists = 106003,
+    MemberNotExists = 106004,
 
     /// <summary>
     /// 角色id不可为空
@@ -52,25 +58,25 @@ public enum ResultCode
     /// 角色不存在
     /// </summary>
     [Description("角色不存在")]
-    RoleNotExists = 106101,
+    RoleNotExists = 106105,
     /// <summary>
     /// 验证码请求过快
     /// </summary>
     [Description("验证码请求过快")]
-    CheckCodeTimeLimit = 106301,
+    CheckCodeTimeLimit = 106306,
     /// <summary>
     /// 验证码不可为空
     /// </summary>
     [Description("验证码不可为空")]
-    CheckCodeCantNull = 106302,
+    CheckCodeCantNull = 106307,
     /// <summary>
     /// 验证码无效或不存在
     /// </summary>
     [Description("验证码失效或不存在")]
-    CheckCodeNotExists = 106303,
+    CheckCodeNotExists = 106308,
     /// <summary>
     /// 验证码错误
     /// </summary>
     [Description("验证码错误")]
-    CheckCodeError = 106304,
+    CheckCodeError = 106309,
 }

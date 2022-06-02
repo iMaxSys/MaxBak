@@ -147,6 +147,34 @@ public class UnitOfWork<T, K> : IUnitOfWork<T, K> where T : DbContext where K : 
 
         return count;
     }
+
+    /// <summary>
+    /// 切换数据库
+    /// </summary>
+    /// <param name="database"></param>
+    public void ChangeDatabase(string database)
+    {
+        //var connection = _context.Database.GetDbConnection();
+        //if (connection.State.HasFlag(ConnectionState.Open))
+        //{
+        //    connection.ChangeDatabase(database);
+        //}
+        //else
+        //{
+        //    var connectionString = Regex.Replace(connection.ConnectionString.Replace(" ", ""), @"(?<=[Dd]atabase=)\w+(?=;)", database, RegexOptions.Singleline);
+        //    connection.ConnectionString = connectionString;
+        //}
+
+        //// Following code only working for mysql.
+        //var items = _context.Model.GetEntityTypes();
+        //foreach (var item in items)
+        //{
+        //    if (item is IConventionEntityType entityType)
+        //    {
+        //        entityType.SetSchema(database);
+        //    }
+        //}
+    }
 }
 
 /// <summary>

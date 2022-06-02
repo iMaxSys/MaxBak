@@ -22,6 +22,12 @@ namespace iMaxSys.Data;
 public interface IUnitOfWork
 {
     /// <summary>
+    /// 切换数据库
+    /// </summary>
+    /// <param name="database"></param>
+    void ChangeDatabase(string database);
+
+    /// <summary>
     /// 提交
     /// </summary>
     /// <returns></returns>

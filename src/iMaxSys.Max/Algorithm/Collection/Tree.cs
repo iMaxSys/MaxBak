@@ -43,12 +43,22 @@ public interface ITreeNode
     /// <summary>
     /// Code
     /// </summary>
-    public string Code { get; set; }
+    public string? Code { get; set; }
+
+    /// <summary>
+    /// QuickCode
+    /// </summary>
+    public string? QuickCode { get; set; }
 
     /// <summary>
     /// Name
     /// </summary>
     public string? Name { get; set; }
+
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string? Alias { get; set; }
 
     /// <summary>
     /// Description
@@ -99,6 +109,12 @@ public interface ITreeNode
     /// node collection
     /// </summary>
     public IList<ITreeNode>? Nodes { get; set; }
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="store"></param>
+    void Init(ITreeStore store);
 }
 
 /// <summary>
@@ -132,9 +148,19 @@ public class TreeNode : ITreeNode
     public string? Code { get; set; }
 
     /// <summary>
+    /// QuickCode
+    /// </summary>
+    public string? QuickCode { get; set; }
+
+    /// <summary>
     /// Name
     /// </summary>
     public string? Name { get; set; }
+
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string? Alias { get; set; }
 
     /// <summary>
     /// Description
@@ -185,6 +211,45 @@ public class TreeNode : ITreeNode
     /// node collection
     /// </summary>
     public IList<ITreeNode>? Nodes { get; set; }
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    public TreeNode()
+    {
+    }
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="store"></param>
+    public TreeNode(ITreeStore store)
+    {
+        Init(store);
+    }
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="store"></param>
+    public void Init(ITreeStore store)
+    {
+        Id = store.Id;
+        Index = store.Index;
+        IsLeaf = store.IsLeaf;
+        Code = store.Code;
+        QuickCode = store.QuickCode;
+        Name = store.Name;
+        Alias = store.Alias;
+        Description = store.Description;
+        Icon = store.Icon;
+        SelectedIcon = store.SelectedIcon;
+        Style = store.Style;
+        Data = store.Data;
+        Action = store.Action;
+        Ext = store.Ext;
+        Status = store.Status;
+    }
 }
 
 /// <summary>
@@ -213,9 +278,19 @@ public interface ITreeStore
     public string? Code { get; set; }
 
     /// <summary>
+    /// QuickCode
+    /// </summary>
+    public string? QuickCode { get; set; }
+
+    /// <summary>
     /// Name
     /// </summary>
     public string? Name { get; set; }
+
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string? Alias { get; set; }
 
     /// <summary>
     /// Description
@@ -271,6 +346,12 @@ public interface ITreeStore
     /// Status
     /// </summary>
     public int Status { get; set; }
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="treeNode"></param>
+    void Init(ITreeNode treeNode);
 }
 
 /// <summary>
@@ -299,9 +380,19 @@ public class TreeStore : ITreeStore
     public string? Code { get; set; }
 
     /// <summary>
+    /// QuickCode
+    /// </summary>
+    public string? QuickCode { get; set; }
+
+    /// <summary>
     /// Name
     /// </summary>
     public string? Name { get; set; }
+
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string? Alias { get; set; }
 
     /// <summary>
     /// Description
@@ -357,6 +448,45 @@ public class TreeStore : ITreeStore
     /// Status
     /// </summary>
     public int Status { get; set; }
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    public TreeStore()
+    {
+    }
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="treeNode"></param>
+    public TreeStore(ITreeNode treeNode)
+    {
+        Init(treeNode);
+    }
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="treeNode"></param>
+    public void Init(ITreeNode treeNode)
+    {
+        Id = treeNode.Id;
+        Index = treeNode.Index;
+        IsLeaf = treeNode.IsLeaf;
+        Code = treeNode.Code;
+        QuickCode = treeNode.QuickCode;
+        Name = treeNode.Name;
+        Alias = treeNode.Alias;
+        Description = treeNode.Description;
+        Icon = treeNode.Icon;
+        SelectedIcon = treeNode.SelectedIcon;
+        Style = treeNode.Style;
+        Data = treeNode.Data;
+        Action = treeNode.Action;
+        Ext = treeNode.Ext;
+        Status = treeNode.Status;
+    }
 }
 
 #endregion
@@ -379,6 +509,11 @@ public class Tree
     /// 节点集(平面集)
     /// </summary>
     private IList<ITreeNode>? _nodeSet;
+
+    /// <summary>
+    /// 存储集
+    /// </summary>
+    private IList<ITreeStore>? _storeSet;
 
     /// <summary>
     /// 根/树结构
@@ -413,7 +548,14 @@ public class Tree
     /// <summary>
     /// 节点存储(平面存储)
     /// </summary>
-    public IList<ITreeStore>? Stores { get; }
+    public IList<ITreeStore>? Stores { get => _storeSet; }
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    public Tree()
+    {
+    }
 
     /// <summary>
     /// 构造
@@ -467,7 +609,7 @@ public class Tree
     /// <summary>
     /// 设置子节点
     /// </summary>
-    /// <param name="stores">树形存错集合</param>
+    /// <param name="stores">树形存储集合</param>
     /// <param name="node">节点</param>
     private void SetNodes(IList<ITreeStore> stores, ITreeNode node)
     {
@@ -498,24 +640,9 @@ public class Tree
     /// </summary>
     /// <param name="store">树形存储</param>
     /// <returns></returns>
-    private static ITreeNode MakeNode(ITreeStore store)
+    private static ITreeNode MakeNode(ITreeStore treeStore)
     {
-        return new TreeNode
-        {
-            Id = store.Id,
-            Index = store.Index,
-            IsLeaf = store.IsLeaf,
-            Code = store.Code,
-            Name = store.Name,
-            Description = store.Description,
-            Icon = store.Icon,
-            SelectedIcon = store.SelectedIcon,
-            Style = store.Style,
-            Data = store.Data,
-            Action = store.Action,
-            Ext = store.Ext,
-            Status = store.Status,
-        };
+        return new TreeNode(treeStore);
     }
 
     /// <summary>
@@ -523,24 +650,9 @@ public class Tree
     /// </summary>
     /// <param name="store">树形节点</param>
     /// <returns></returns>
-    private static ITreeStore MakeStore(ITreeNode node)
+    private static ITreeStore MakeStore(ITreeNode treeNode)
     {
-        return new TreeStore
-        {
-            Id = node.Id,
-            Index = node.Index,
-            IsLeaf = node.IsLeaf,
-            Code = node.Code,
-            Name = node.Name,
-            Description = node.Description,
-            Icon = node.Icon,
-            SelectedIcon = node.SelectedIcon,
-            Style = node.Style,
-            Data = node.Data,
-            Action = node.Action,
-            Ext = node.Ext,
-            Status = node.Status,
-        };
+        return new TreeStore(treeNode);
     }
 
     /// <summary>
@@ -727,7 +839,6 @@ public class Tree
     /// <param name="index"></param>
     public void Move(int id, int index)
     {
-
     }
 }
 

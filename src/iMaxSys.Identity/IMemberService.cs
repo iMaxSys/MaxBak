@@ -87,6 +87,16 @@ public interface IMemberService : IDependency
     Task RegisterAsync(RegisterModel model);
 
     /// <summary>
+    /// 登录:code登录
+    /// </summary>
+    /// <param name="sid"></param>
+    /// <param name="type"></param>
+    /// <param name="code"></param>
+    /// <param name="ip"></param>
+    /// <returns></returns>
+    Task<AccessChain> LoginAsync(long sid, int type, string code, string ip);
+
+    /// <summary>
     /// 登录:用户名&密码
     /// </summary>
     /// <param name="userName"></param>
@@ -104,16 +114,6 @@ public interface IMemberService : IDependency
     /// <param name="ip"></param>
     /// <returns></returns>
     Task<AccessChain> LoginAsync(int[] types, string userName, string password, string ip);
-
-    /// <summary>
-    /// 登录:code登录
-    /// </summary>
-    /// <param name="sid"></param>
-    /// <param name="type"></param>
-    /// <param name="code"></param>
-    /// <param name="ip"></param>
-    /// <returns></returns>
-    Task<AccessChain> LoginAsync(long sid, int type, string code, string ip);
 
     /// <summary>
     /// 登出

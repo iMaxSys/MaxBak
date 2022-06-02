@@ -146,23 +146,7 @@ public class CheckCodeService : ICheckCodeService
         CheckCodeCreatedHandler?.Invoke(model);
 
         return model;
-
     }
-
-    /// <summary>
-    /// 生成
-    /// </summary>
-    /// <param name="sid"></param>
-    /// <param name="tenantId"></param>
-    /// <param name="bizId"></param>
-    /// <param name="bizName"></param>
-    /// <param name="memberId"></param>
-    /// <param name="to"></param>
-    /// <returns></returns>
-    //public async Task<CheckCodeModel> MakeAsync(BizConfig bizConfig, long memberId, string to)
-    //{
-    //    return await MakeAsync(bizConfig.Sid, bizConfig.TenantId, bizConfig.BizId, bizConfig.BizName, memberId, to);
-    //}
 }
 
 /// <summary>

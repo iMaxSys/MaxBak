@@ -26,7 +26,6 @@ using iMaxSys.Identity.Data.Entities;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
 using iMaxSys.Data.Entities.App;
 
-/*
 namespace iMaxSys.Identity;
 
 /// <summary>
@@ -41,7 +40,7 @@ public class MemberService : ServiceBase, IMemberService
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<MaxIdentityContext> unitOfWork, IUserProvider userProvider) : base(mapper, option, unitOfWork)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserProvider userProvider) : base(mapper, option, unitOfWork)
     {
         _userProvider = userProvider;
     }
@@ -569,4 +568,3 @@ public class MemberService : ServiceBase, IMemberService
 
     #endregion
 }
-*/

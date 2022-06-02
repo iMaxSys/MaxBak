@@ -12,33 +12,10 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Algorithm.Collection;
 
 namespace iMaxSys.Max.Identity.Domain;
 
-public class Department : IDepartment
+public class Department : TreeNode, IDepartment
 {
-    /// <summary>
-    /// Id
-    /// </summary>
-    public long Id { get; set; }
-
-    /// <summary>
-    /// 名称
-    /// </summary>
-    public string? Name { get; set; }
-
-    /// <summary>
-    /// 别名
-    /// </summary>
-    public string? Alias { get; set; }
-
-    /// <summary>
-    /// 描述
-    /// </summary>
-    public string? Descripton { get; set; }
-
-    /// <summary>
-    /// 状态
-    /// </summary>
-    public Status Status { get; set; }
 }

@@ -11,7 +11,6 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Common;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Identity.Models;
 
@@ -49,21 +48,4 @@ public interface ICheckCodeService : IDependency
     /// <param name="code"></param>
     /// <returns></returns>
     Task CheckAsync(long sid, long bizId, long memberId, string to, string code);
-
-    /// <summary>
-    /// 生成
-    /// </summary>
-    /// <param name="bizConfig"></param>
-    /// <param name="to"></param>
-    /// <returns></returns>
-    //Task<CheckCodeModel> MakeAsync(BizConfig bizConfig, long memberId, string to);
-
-    /// <summary>
-    /// 校验
-    /// </summary>
-    /// <param name="bizConfig"></param>
-    /// <param name="to"></param>
-    /// <param name="code"></param>
-    /// <returns></returns>
-    //Task CheckAsync(BizConfig bizConfig, string to, string code);
 }

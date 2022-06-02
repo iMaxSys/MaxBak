@@ -15,6 +15,7 @@ using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Environment.Access;
 using iMaxSys.Max.Common.Enums;
+using iMaxSys.Identity.Common;
 
 namespace iMaxSys.Identity;
 
@@ -34,7 +35,7 @@ public class IdentityMiddleware
         _option = option.Value;
     }
 
-    public async Task Invoke(HttpContext context)
+    public async Task InvokeAsync(HttpContext context)
     {
         await Access(context);
         await _next(context);
@@ -60,7 +61,7 @@ public class IdentityMiddleware
         if ("*" != _option.Identity.OpenRouters && !_option.Identity.OpenRouters.Contains(router.ToLower()) && !context.Request.Headers.ContainsKey(FLAG_TOKEN))
         {
             //Headers中无token
-            throw new MaxException(MaxCode.NeedToken, router);
+            throw new MaxException(ResultCode.NeedToken, router);
         }
 
         if (context.Request.Headers.TryGetValue(FLAG_TOKEN, out StringValues values))

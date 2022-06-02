@@ -11,6 +11,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Caching;
 using iMaxSys.Max.Options;
 using iMaxSys.Data;
 using iMaxSys.Identity.Data.EFCore;

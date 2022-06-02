@@ -11,6 +11,9 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Caching;
+using iMaxSys.Caching.Common.Enums;
+
 namespace iMaxSys.Caching
 {
     public class CacheFactory : ICacheFactory
@@ -30,7 +33,7 @@ namespace iMaxSys.Caching
 
         public ICache GetService(int source, string connection)
         {
-            return source switch
+            return (CacheServer)source switch
             {
                 CacheServer.Redis => _serviceProvider.GetRequiredService<IRedisService>(),
                 _ => _serviceProvider.GetRequiredService<IRedisService>(),

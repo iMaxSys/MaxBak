@@ -159,17 +159,17 @@ public interface IMember
     /// <summary>
     /// 角色
     /// </summary>
-    //IRole Role { get; set; }
+    IRole Role { get; set; }
 
     /// <summary>
     /// 部门
     /// </summary>
-    //IDepartment Department { get; set; }
+    IDepartment Department { get; set; }
 
     /// <summary>
     /// 租户
     /// </summary>
-    //ITenant Tenant { get; set; }
+    ITenant Tenant { get; set; }
 }
 
 /// <summary>

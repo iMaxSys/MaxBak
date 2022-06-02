@@ -157,17 +157,17 @@ public class Member : IMember
     /// <summary>
     /// 角色
     /// </summary>
-    //public IRole Role { get; set; }
+    public IRole Role { get; set; } = new Role();
 
     /// <summary>
     /// 部门
     /// </summary>
-    //public IDepartment Department { get; set; }
+    public IDepartment Department { get; set; } = new Department();
 
     /// <summary>
     /// 租户
     /// </summary>
-    //public ITenant Tenant { get; set; }
+    public ITenant Tenant { get; set; } = new Tenant();
 }
 
 public class Member<T> : Member, IMember<T>
