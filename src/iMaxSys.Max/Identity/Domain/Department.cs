@@ -16,6 +16,6 @@ using iMaxSys.Max.Algorithm.Collection;
 
 namespace iMaxSys.Max.Identity.Domain;
 
-public class Department : TreeNode, IDepartment
-{
-}
+//public class Department : TreeNode, IDepartment
+//{
+//}

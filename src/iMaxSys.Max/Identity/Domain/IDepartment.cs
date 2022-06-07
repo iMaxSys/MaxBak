@@ -19,6 +19,6 @@ namespace iMaxSys.Max.Identity.Domain;
 /// <summary>
 /// 部门
 /// </summary>
-public interface IDepartment : ITreeNode
-{
-}
+//public interface IDepartment : ITreeNode
+//{
+//}

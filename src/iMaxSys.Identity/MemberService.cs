@@ -28,6 +28,7 @@ using iMaxSys.Data.Entities.App;
 
 namespace iMaxSys.Identity;
 
+/*
 /// <summary>
 /// MemberService
 /// </summary>
@@ -567,4 +568,4 @@ public class MemberService : ServiceBase, IMemberService
     }
 
     #endregion
-}
+}*/

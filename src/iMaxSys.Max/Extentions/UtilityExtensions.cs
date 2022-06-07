@@ -103,9 +103,9 @@ public static class UtilityExtensions
     /// <param name="source"></param>
     /// <param name="action"></param>
     /// <param name="actionIfNull"></param>
-    public static void IfNotNull<T>(this T source, Action<T> action, Action? actionIfNull = null) where T : class
+    public static void IfNotNull<T>(this T? source, Action<T> action, Action? actionIfNull = null) where T : class
     {
-        if (source != null)
+        if (source is not null)
         {
             action(source);
         }
@@ -124,9 +124,9 @@ public static class UtilityExtensions
     /// <param name="func"></param>
     /// <param name="ifNull"></param>
     /// <returns></returns>
-    public static TResult IfNotNull<T, TResult>(this T source, Func<T, TResult> func, Func<TResult>? ifNull = null) where T : class where TResult : new()
+    public static TResult IfNotNull<T, TResult>(this T? source, Func<T, TResult> func, Func<TResult>? ifNull = null) where T : class where TResult : new()
     {
-        return source != null ? func(source) : (ifNull != null ? ifNull() : new TResult());
+        return source is not null ? func(source) : (ifNull is not null ? ifNull() : new TResult());
     }
 
     /// <summary>

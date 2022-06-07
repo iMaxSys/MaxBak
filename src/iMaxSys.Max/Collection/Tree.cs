@@ -47,9 +47,8 @@ public class Tree : TreeNode
     /// <param name="name"></param>
     public Tree(long id, string name) : base(id, name)
     {
-        _stores = new();
         TreeNode root = new(id, name);
-        _stores.Add(root);
+        Stores.Add(root);
 
         //事件绑定
         Nodes.AddNodeEvent += Nodes_AddNodeEvent;
@@ -58,8 +57,6 @@ public class Tree : TreeNode
         Nodes.ClearNodeEvent += Nodes_ClearNodeEvent;
     }
 
-
-
     /// <summary>
     /// Add
     /// </summary>
@@ -67,21 +64,38 @@ public class Tree : TreeNode
     /// <param name="e"></param>
     private void Nodes_AddNodeEvent(object? sender, AddNodeEventArgs e)
     {
-        TreeNode? last = _stores?.Where(x => x.Parent?.Id == e.Parent?.Id).LastOrDefault();
+        TreeNode? last = Stores.Where(x => x.Parent?.Id == e.Parent.Id).LastOrDefault();
         //有同级子节点
         if (last is not null)
         {
-            e.Current._lv = last.Lv + 1;
-            e.Current._rv = e.Current._lv + 1;
+            e.Current._lv = last.Rv + 1;
+            e.Current._rv = e.Current.Lv + 1;
+            e.Current._previous = last;
+            e.Current._parent = last.Parent;
+            e.Current._next = last.Next;
+            e.Current._index = last.Index + 1;
+            e.Current._depth = last.Depth;
+            last._next = e.Current;
         }
         else
         {
-            e.Current._lv = e.Parent?.Lv + 1 ?? 0;
-            e.Current._rv = e.Current._lv + 1;
+            e.Current._lv = e.Parent.Lv;
+            e.Current._rv = e.Parent.Lv + 1;
+            e.Current._index = e.Parent.Index + 1;
+            e.Current._depth = e.Parent.Depth + 1;
+            e.Current._previous = e.Parent;
+            e.Current._next = e.Parent;
+            e.Parent._next = e.Current;
         }
 
+        //加入当前节点
+        Stores.Add(e.Current);
+
         //后续节点+2
-        _stores?.Where(x => x.Lv > e.Current.Rv).ForEach(x => { x._lv += 2; x._rv += 2; });
+        Stores.Where(x => x.Rv > e.Current.Rv && x.Lv > 0).ForEach(x => { x._lv += 2; x._rv += 2; x._index += 1; });
+
+        //刷新根节点
+        RefreshRoot();
     }
 
     /// <summary>
@@ -91,9 +105,18 @@ public class Tree : TreeNode
     /// <param name="e"></param>
     private void Nodes_RemoveNodeEvent(object? sender, RemoveNodeEventArgs e)
     {
-        _stores?.Remove(e.Current);
-        //后续节点-2
-        _stores?.Where(x => x.Lv > e.Current.Rv).ForEach(x => { x._lv -= 2; x._rv -= 2; });
+        //当前节点左右差
+        int co = e.Current.Rv - e.Current.Lv + 1;
+        //当前节点总数(自身+所有子节点)
+        int cc = co / 2;
+
+        //移除本身和子节点
+        Stores.Where(x => x.Lv >= e.Current.Lv && x.Rv <= e.Current.Rv).ForEach(x => Stores.Remove(x));
+
+        //后续节点-co
+        Stores.Where(x => x.Lv > e.Current.Rv).ForEach(x => { x._lv -= co; x._rv -= co; x._index -= cc; });
+
+        RefreshRoot();
     }
 
     private void Nodes_InsertNodeEvent(object? sender, InsertNodeEventArgs e)
@@ -109,6 +132,10 @@ public class Tree : TreeNode
     /// <param name="before"></param>
     public void Insert(TreeNode target, TreeNode current, bool before = true)
     {
+        int lv = target.Lv;
+        int rv = target.Rv;
+        int index = target.Index;
+
         if (before)
         {
             //替换
@@ -117,8 +144,47 @@ public class Tree : TreeNode
             current._index = target._index;
             current._parent = target._parent;
             //后续节点+2
-            _stores?.Where(x => x.Lv > current.Rv).ForEach(x => { x._lv += 2; x._rv += 2; });
+
+            //后续节点递增
+            Stores.Where(x => x.Lv >= target.Lv && x.Lv > 0).ForEach(x => { x._lv += 2; x._rv += 2; x._index++; });
+
+            current._lv = lv;
+            current._rv = rv;
+            current._index = index;
+            current._previous = target.Previous;
+            current._depth = target.Depth;
+            current._next = target;
+            target._previous!._next = current;
+            target._previous = current;
+
+            //加入当前节点
+            Stores.Add(current);
+
+            RefreshRoot();
         }
+        else
+        {
+            current._lv = target.Rv + 1;
+            current._rv = current.Lv + 1;
+            current._previous = target;
+            current._parent = target.Parent;
+            current._next = target.Next;
+            current._index = target.Index + 1;
+            current._depth = target.Depth;
+            target._next = current;
+            target._next._previous = current;
+
+            //加入当前节点
+            Stores.Add(current);
+
+            //后续节点+2
+            Stores.Where(x => x.Rv > current.Rv && x.Lv > 0).ForEach(x => { x._lv += 2; x._rv += 2; x._index += 1; });
+
+            //刷新根节点
+            RefreshRoot();
+        }
+
+
     }
 
     /// <summary>
@@ -129,33 +195,30 @@ public class Tree : TreeNode
     /// <param name="before"></param>
     public void Move(TreeNode target, TreeNode current, bool before = true)
     {
-        //左节点偏移量
-        int loffset = current.Lv - target.Lv;
-        //右节点偏移量
-        int roffset = current.Rv - target.Rv - 2;
-        //当前节点偏移量
-        int coffset = current.Rv - current.Lv;
+        //当前节点左右差
+        int co = current.Rv - current.Lv + 1 + (before ? 0 : -2);
         //当前节点总数(自身+所有子节点)
-        int ccount = (coffset + 1) / 2;
-        //索引偏移量
-        int idx = (current.Lv - target.Lv) / 2;
+        int cc = co / 2;
+        //lv偏移量
+        int lo = current.Lv - target.Lv + (before ? 0 : -2);
+        //节点偏移量
+        int no = (current.Lv - target.Lv + 1) / 2 - (before ? 0 : 1);
         //深度偏移量
-        int doffset = current.Depth - target.Depth;
+        int eo = current.Depth - target.Depth;
 
         if (before)
         {
-            //区间节点
-            _stores?.Where(x => x.Lv >= target.Lv && x.Lv < current.Lv).ForEach(x => { x._lv += roffset; x._rv += roffset; x._index += ccount; });
+            //区间节点-右节点和索引
+            Stores.Where(x => (before ? x.Lv >= target.Lv : x.Lv > target.Rv) && x.Rv < current.Lv).ForEach(x => { x._rv += co; });
 
-            //修改本节点的所有节点
-            _stores?.Where(x => x.Lv >= current.Lv && x.Rv <= current.Rv).ForEach(x => { x._lv -= loffset; x._rv -= loffset; x._index -= idx; x._depth -= doffset; });
+            //区间节点-左节点和索引
+            Stores.Where(x => (before ? x.Lv >= target.Lv : x.Lv > target.Rv) && x.Lv < current.Lv).ForEach(x => { x._lv += co; x._index += cc; });
 
-            //替换
-            current._parent = target._parent;
-
-            //后续节点+2
-            _stores?.Where(x => x.Lv > current.Rv).ForEach(x => { x._lv += 2; x._rv += 2; });
+            //自身及子节点
+            Stores.Where(x => x.Lv >= current.Lv && x.Rv <= current.Rv).ForEach(x => { x._lv -= lo; x._rv -= lo; x._index -= no; x._depth -= eo; });
         }
+        current._parent = target._parent;
+        current._depth = target._depth;
     }
 
     /// <summary>
@@ -165,10 +228,32 @@ public class Tree : TreeNode
     /// <param name="e"></param>
     private void Nodes_ClearNodeEvent(object? sender, ClearNodeEventArgs e)
     {
-        _stores?.RemoveRange(e.Current.Index, e.Current.Nodes.Count);
+        Stores.RemoveRange(e.Current.Index, e.Current.Nodes.Count);
 
         //后续节点-countx2
-        _stores?.Where(x => x.Lv > e.Current.Rv).ForEach(x => { x._lv -= e.Current.Nodes.Count * 2; x._rv -= e.Current.Nodes.Count * 2; });
+        Stores.Where(x => x.Lv > e.Current.Rv).ForEach(x => { x._lv -= e.Current.Nodes.Count * 2; x._rv -= e.Current.Nodes.Count * 2; });
+    }
+
+    public string ToJson()
+    {
+        JsonSerializerOptions options = new()
+        {
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            WriteIndented = true
+        };
+
+        return JsonSerializer.Serialize(this, options);
+    }
+
+    /// <summary>
+    /// 刷新根节点
+    /// </summary>
+    private void RefreshRoot()
+    {
+        Stores[0]._lv = 0;
+        this._lv = 0;
+        Stores[0]._rv = AllNodesCount * 2 - 1;
+        this._rv = Stores[0]._rv;
     }
 }
 
@@ -178,7 +263,7 @@ public class Tree : TreeNode
 public class TreeNode
 {
     internal int _lv = 0;
-    internal int _rv = 0;
+    internal int _rv = 1;
     internal int _depth = 0;
     internal int _index = 0;
 
@@ -186,12 +271,12 @@ public class TreeNode
     internal TreeNode? _previous;
     internal TreeNode? _next;
 
-    protected List<TreeNode>? _stores;
+    private List<TreeNode>? _stores;
 
     /// <summary>
     /// 节点集
     /// </summary>
-    public List<TreeNode> Stores { get => _stores = _parent?._stores ?? new(); }
+    protected List<TreeNode> Stores { get => _parent?.Stores ?? (_stores ??= new()); }
 
     /// <summary>
     /// Id
@@ -216,7 +301,7 @@ public class TreeNode
     /// <summary>
     /// IsLeaf
     /// </summary>
-    public bool IsLeaf { get => NodesCount > 0; }
+    public bool IsLeaf { get => NodesCount == 0; }
 
     /// <summary>
     /// Depth
@@ -402,9 +487,10 @@ public class TreeNode
     /// 设置父节点
     /// </summary>
     /// <param name="parent"></param>
-    internal void SetParent(TreeNode? parent)
+    internal void SetParent(TreeNode parent)
     {
         _parent = parent;
+        _stores = parent._stores;
     }
 
     /// <summary>
@@ -645,12 +731,12 @@ public class TreeNodeCollection : IList<TreeNode>
         throw new NotImplementedException();
     }
 
-    public bool Remove(TreeNode item)
+    public void RemoveAt(int index)
     {
         throw new NotImplementedException();
     }
 
-    public void RemoveAt(int index)
+    bool ICollection<TreeNode>.Remove(TreeNode item)
     {
         throw new NotImplementedException();
     }
@@ -669,7 +755,7 @@ public class AddNodeEventArgs : EventArgs
     /// <summary>
     /// Parent
     /// </summary>
-    public TreeNode? Parent { get; }
+    public TreeNode Parent { get; }
 
     /// <summary>
     /// Current
@@ -681,7 +767,7 @@ public class AddNodeEventArgs : EventArgs
     /// </summary>
     /// <param name="parent"></param>
     /// <param name="current"></param>
-    public AddNodeEventArgs(TreeNode? parent, TreeNode current)
+    public AddNodeEventArgs(TreeNode parent, TreeNode current)
     {
         Parent = parent;
         Current = current;
@@ -706,7 +792,7 @@ public class InsertNodeEventArgs : EventArgs
     /// <summary>
     /// 插入目标前or后
     /// </summary>
-    public bool Before { get; }
+    public bool Before { get; } = true;
 
     /// <summary>
     /// 构造

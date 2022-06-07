@@ -162,7 +162,7 @@ public class Member : IMember
     /// <summary>
     /// 部门
     /// </summary>
-    public IDepartment Department { get; set; } = new Department();
+    //public IDepartment Department { get; set; } = new Department();
 
     /// <summary>
     /// 租户

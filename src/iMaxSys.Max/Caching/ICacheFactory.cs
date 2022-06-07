@@ -13,7 +13,7 @@
 
 namespace iMaxSys.Max.Caching;
 
-public interface ICacheFactory
+public interface ICacheFactory : ISingleton
 {
     /// <summary>
     /// 获取缓存服务

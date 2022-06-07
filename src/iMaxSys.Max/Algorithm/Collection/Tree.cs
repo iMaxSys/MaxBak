@@ -11,6 +11,7 @@
 //日期：2021-11-16
 //----------------------------------------------------------------
 
+/*
 namespace iMaxSys.Max.Algorithm.Collection;
 
 #region TreeNode
@@ -843,3 +844,5 @@ public class Tree
 }
 
 #endregion
+
+*/
