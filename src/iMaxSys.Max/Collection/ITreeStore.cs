@@ -23,7 +23,7 @@ public interface ITreeStore : IDependency
     /// </summary>
     /// <param name="treeNode"></param>
     /// <returns></returns>
-    Task<TreeNode> AddAsync(TreeNode treeNode);
+    Task<LrTreeNode> AddAsync(LrTreeNode treeNode);
 
     /// <summary>
     /// 移除节点
@@ -37,7 +37,7 @@ public interface ITreeStore : IDependency
     /// </summary>
     /// <param name="treeNode"></param>
     /// <returns></returns>
-    Task RemoveAsync(TreeNode treeNode);
+    Task RemoveAsync(LrTreeNode treeNode);
 
     /// <summary>
     /// 移动节点
@@ -53,5 +53,5 @@ public interface ITreeStore : IDependency
     /// <param name="at">index</param>
     /// <param name="treeNode"></param>
     /// <returns></returns>
-    Task MoveAsync(long at, TreeNode treeNode);
+    Task MoveAsync(long at, LrTreeNode treeNode);
 }
