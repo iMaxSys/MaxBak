@@ -67,6 +67,23 @@ public interface IUnitOfWork
     /// <typeparam name="TRepository"></typeparam>
     /// <returns></returns>
     TRepository GetCustomRepository<TRepository>() where TRepository : IRepositoryBase;
+
+    /// <summary>
+    /// 执行Sql命令
+    /// </summary>
+    /// <param name="sql">sql</param>
+    /// <param name="parameters">The parameters.</param>
+    /// <returns>The number of state entities written to database.</returns>
+    int ExecuteSqlCommand(string sql, params object[] parameters);
+
+    /// <summary>
+    /// 获取数据对象集
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="sql"></param>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    IQueryable<TEntity> FromSql<TEntity>(string sql, params object[] parameters) where TEntity : Entity;
 }
 
 /// <summary>

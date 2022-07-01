@@ -11,6 +11,8 @@
 //日期：2022-05-31
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Collection.Trees;
+
 namespace iMaxSys.Max.Collection;
 
 /// <summary>

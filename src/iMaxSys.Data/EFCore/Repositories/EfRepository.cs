@@ -28,6 +28,10 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// </summary>
     public virtual bool AutoCommit { get; set; } = false;
 
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="dbContext"></param>
     public EfRepository(EfDbContext dbContext) : base(dbContext)
     {
     }
@@ -181,4 +185,13 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     }
 
     #endregion
+
+    /// <summary>
+    /// Executes the specified raw SQL command.
+    /// </summary>
+    /// <param name="sql">The raw SQL.</param>
+    /// <param name="parameters">The parameters.</param>
+    /// <returns>The number of state entities written to database.</returns>
+    protected int ExecuteSql(string sql, params object[] parameters) => _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+
 }

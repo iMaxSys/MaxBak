@@ -1,5 +1,6 @@
 using iMaxSys.Identity;
 using iMaxSys.Max.Collection;
+using iMaxSys.Max.Collection.Trees;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kylin.Api.Controllers

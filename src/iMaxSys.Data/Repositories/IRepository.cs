@@ -133,10 +133,3 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> where TEnti
     /// <param name="state">The entity state.</param>
     void ChangeEntityState(TEntity entity, EntityState state);
 }
-
-/// <summary>
-/// 仓储标识接口
-/// </summary>
-//public interface IRepository
-//{
-//}

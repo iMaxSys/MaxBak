@@ -1,31 +1,26 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2025 Care Co.,Ltd.
+//Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: Menu.cs
-//摘要: Menu 
+//文件: TenantMasterEntity.cs
+//摘要: TenantMasterEntity
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2018-03-07
+//日期：2017-11-16
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Common.Enums;
-using iMaxSys.Max.Collection.Trees;
-using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Identity.Data.Entities;
+namespace iMaxSys.Data.Entities;
 
-/// <summary>
-/// Menu
-/// </summary>
-public class Menu : TenantMasterEntity, ITreeNode
+public abstract class TreeEntity : TenantMasterEntity
 {
     /// <summary>
-    /// XppId
+    /// Name
     /// </summary>
-    public long XppId { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// ParentId
@@ -33,19 +28,9 @@ public class Menu : TenantMasterEntity, ITreeNode
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// Name
+    /// Type
     /// </summary>
-    public string Name { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 左值
-    /// </summary>
-    public int Lv { get; set; }
-
-    /// <summary>
-    /// 右值
-    /// </summary>
-    public int Rv { get; set; }
+    public int Type { get; set; }
 
     /// <summary>
     /// 索引/序号
@@ -53,24 +38,14 @@ public class Menu : TenantMasterEntity, ITreeNode
     public int Index { get; set; }
 
     /// <summary>
-    /// Level
-    /// </summary>
-    public int Level { get; set; } = 0;
-
-    /// <summary>
-    /// IsLeaf
-    /// </summary>
-    public bool IsRoot { get; set; } = false;
-
-    /// <summary>
     /// IsLeaf
     /// </summary>
     public bool IsLeaf { get; set; } = true;
 
     /// <summary>
-    /// Type
+    /// Level
     /// </summary>
-    public int Type { get; set; }
+    public int Level { get; set; } = 0;
 
     /// <summary>
     /// Code
@@ -140,15 +115,15 @@ public class Menu : TenantMasterEntity, ITreeNode
     /// <summary>
     /// 上级部门
     /// </summary>
-    public virtual Menu? Parent { get; set; }
+    public virtual TreeEntity? Parent { get; set; }
 
     /// <summary>
     /// 下级部门
     /// </summary>
-    public virtual ICollection<Menu>? Menus { get; set; }
+    public virtual ICollection<TreeEntity>? Children { get; set; }
+}
 
-    /// <summary>
-    /// Operations
-    /// </summary>
-    public virtual ICollection<Operation>? Operations { get; set; }
+public class MyTree : TreeEntity
+{
+    public override TreeEntity? Parent { get; set; }
 }

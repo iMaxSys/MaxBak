@@ -80,7 +80,7 @@ public class UnitOfWork<T, K> : IUnitOfWork<T, K> where T : DbContext where K : 
     /// <exception cref="MaxException"></exception>
     public IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : Entity
     {
-        var respositories = _serviceProvider.GetServices<IReadOnlyRepository<TEntity>>();
+        //var respositories = _serviceProvider.GetServices<IReadOnlyRepository<TEntity>>();
         var respositoy = _serviceProvider.GetServices<IReadOnlyRepository<TEntity>>().FirstOrDefault(x => x.Code == _readOnlyContext.GetType().GetHashCode());
         if (respositoy == null)
         {
@@ -175,6 +175,23 @@ public class UnitOfWork<T, K> : IUnitOfWork<T, K> where T : DbContext where K : 
         //    }
         //}
     }
+
+    /// <summary>
+    /// 执行Sql命令
+    /// </summary>
+    /// <param name="sql">The raw SQL.</param>
+    /// <param name="parameters">The parameters.</param>
+    /// <returns>The number of state entities written to database.</returns>
+    public int ExecuteSqlCommand(string sql, params object[] parameters) => _context.Database.ExecuteSqlRaw(sql, parameters);
+
+    /// <summary>
+    /// 获取数据对象集
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="sql"></param>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public IQueryable<TEntity> FromSql<TEntity>(string sql, params object[] parameters) where TEntity : Entity => _context.Set<TEntity>().FromSqlRaw(sql, parameters);
 }
 
 /// <summary>

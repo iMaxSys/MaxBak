@@ -49,7 +49,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     /// <remarks>This method default no-tracking query.</remarks>
     IPagedList<TEntity> GetPagedList(Expression<Func<TEntity, bool>>? predicate = null,
                                      Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-                                     Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                     Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                      int pageIndex = 0,
                                      int pageSize = 50,
                                      bool disableTracking = true,
@@ -72,7 +72,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     /// <remarks>This method default no-tracking query.</remarks>
     Task<IPagedList<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>>? predicate = null,
                                                 Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-                                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                                 int pageIndex = 0,
                                                 int pageSize = 50,
                                                 bool disableTracking = true,
@@ -95,7 +95,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     IPagedList<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
                                               Expression<Func<TEntity, bool>>? predicate = null,
                                               Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                               int pageIndex = 0,
                                               int pageSize = 50,
                                               bool disableTracking = true,
@@ -120,7 +120,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     Task<IPagedList<TResult>> GetPagedListAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
                                                          Expression<Func<TEntity, bool>>? predicate = null,
                                                          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-                                                         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                                         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                                          int pageIndex = 0,
                                                          int pageSize = 50,
                                                          bool disableTracking = true,
@@ -139,7 +139,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     /// <remarks>This method defaults to a read-only, no-tracking query.</remarks>
     TEntity? FirstOrDefault(Expression<Func<TEntity, bool>>? predicate = null,
                               Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                               bool disableTracking = true,
                               bool ignoreQueryFilters = false);
 
@@ -157,7 +157,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     TResult? FirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
                                        Expression<Func<TEntity, bool>>? predicate = null,
                                        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-                                       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                        bool disableTracking = true,
                                        bool ignoreQueryFilters = false) where TResult : class;
 
@@ -176,7 +176,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     /// <remarks>Ex: This method defaults to a read-only, no-tracking query. </remarks>
     Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
         bool disableTracking = true,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
@@ -198,7 +198,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     Task<TResult?> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
         bool disableTracking = true,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default) where TResult : class;
@@ -252,7 +252,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
     IQueryable<TEntity> All(Expression<Func<TEntity, bool>>? predicate = null,
                                               Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                               bool disableTracking = true,
                                               bool ignoreQueryFilters = false);
 
@@ -270,7 +270,7 @@ public interface IReadOnlyRepository<TEntity> : IRepositoryBase where TEntity : 
     IQueryable<TResult> All<TResult>(Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
         bool disableTracking = true,
         bool ignoreQueryFilters = false) where TResult : class;
 

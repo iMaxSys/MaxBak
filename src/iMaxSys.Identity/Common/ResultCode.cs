@@ -79,4 +79,24 @@ public enum ResultCode
     /// </summary>
     [Description("验证码错误")]
     CheckCodeError = 106309,
+    /// <summary>
+    /// 无效的父级部门
+    /// </summary>
+    [Description("无效的父级部门")]
+    ParentDepartmentIsInvalid = 106400,
+    /// <summary>
+    /// 无效的部门
+    /// </summary>
+    [Description("无效的部门")]
+    DepartmentIsInvalid = 106401,
+    /// <summary>
+    /// 该部门下还有下属部门
+    /// </summary>
+    [Description("该部门下还有下属部门")]
+    HasChildren = 106402,
+    /// <summary>
+    /// 该部门下还有成员
+    /// </summary>
+    [Description("该部门下还有成员")]
+    HasMember = 106403,
 }

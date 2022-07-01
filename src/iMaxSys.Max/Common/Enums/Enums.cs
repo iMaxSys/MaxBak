@@ -56,6 +56,29 @@ public enum Gender
 }
 
 /// <summary>
+/// 节点位置
+/// </summary>
+public enum NodePosition
+{
+    /// <summary>
+    /// 子
+    /// </summary>
+    [Description("子")]
+    Sub = 0,
+    /// <summary>
+    /// 前
+    /// </summary>
+    [Description("前")]
+    Before = 1,
+
+    /// <summary>
+    /// 后
+    /// </summary>
+    [Description("后")]
+    After = 2,
+}
+
+/// <summary>
 /// 应用来源
 /// </summary>
 public enum XppSource

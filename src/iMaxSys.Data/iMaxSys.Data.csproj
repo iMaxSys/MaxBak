@@ -24,15 +24,16 @@
     <None Remove="DbContexts\" />
     <None Remove="Dapper\Repositories\" />
     <None Remove="EFCore\Configurations\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
     <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -45,5 +46,6 @@
     <Folder Include="DbContexts\" />
     <Folder Include="Dapper\Repositories\" />
     <Folder Include="EFCore\Configurations\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

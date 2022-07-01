@@ -32,4 +32,28 @@ public enum ResultCode
     /// </summary>
     [Description("无法获取定制仓储")]
     CantGetCustomRepository = 102002,
+
+    /// <summary>
+    /// 无效的父节点
+    /// </summary>
+    [Description("无效的父节点")]
+    ParentIsInvalid = 102030,
+
+    /// <summary>
+    /// 无效的目标节点
+    /// </summary>
+    [Description("无效的目标节点")]
+    TargetIsInvalid = 102031,
+
+    /// <summary>
+    /// 无效的当前节点
+    /// </summary>
+    [Description("无效的当前节点")]
+    CurrentIsInvalid = 102032,
+
+    /// <summary>
+    /// 存在子节点
+    /// </summary>
+    [Description("存在子节点")]
+    HasChildren = 102033,
 }

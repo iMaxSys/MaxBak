@@ -69,7 +69,7 @@ public class RedisService : IRedisService
     public T? Get<T>(string key, bool global = false)
     {
         var value = _database.StringGet(GetKey(key, global));
-        return value.IsNull ? default : JsonSerializer.Deserialize<T>(value);
+        return value.IsNull ? default : JsonSerializer.Deserialize<T>(value.ToString());
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class RedisService : IRedisService
     public async Task<T?> GetAsync<T>(string key, bool global = false)
     {
         var value = await _database.StringGetAsync(GetKey(key, global));
-        return value.IsNull ? default : JsonSerializer.Deserialize<T>(value);
+        return value.IsNull ? default : JsonSerializer.Deserialize<T>(value.ToString());
     }
 
     /// <summary>
@@ -212,7 +212,8 @@ public class RedisService : IRedisService
     /// <returns></returns>
     public async Task<string> HashGetAsync(string key, string field, bool global = false)
     {
-        return await _database.HashGetAsync(GetKey(key, global), field);
+        var value = await _database.HashGetAsync(GetKey(key, global), field);
+        return value.IsNull ? String.Empty : value.ToString();
     }
 
     /// <summary>

@@ -3,6 +3,8 @@ dotnet tool install --global dotnet-ef
 
 dotnet tool update --global dotnet-ef
 
+dotnet tool remove --global dotnet-ef
+
 dotnet ef migrations add init  -c IdentityContext
 dotnet ef database update -c IdentityContext
 

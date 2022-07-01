@@ -28,29 +28,45 @@ public class MenuConfiguration : TenantMasterEntityConfiguration<Menu>
         //名称
         builder.Property(x => x.XppId).HasColumnName("xpp_id").IsRequired();
         //名称
-        builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
+        builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired().HasComment("名称");
+        //父节点id
+        builder.Property(x => x.ParentId).HasColumnName("parent_id").IsRequired().HasComment("父节点id");
+        //类型
+        builder.Property(x => x.Type).HasColumnName("type").IsRequired().HasComment("类型");
+        //索引
+        builder.Property(x => x.Index).HasColumnName("Index").IsRequired().HasComment("索引");
+        //深度
+        builder.Property(x => x.Level).HasColumnName("level").IsRequired().HasComment("深度");
+        //是否根节点
+        builder.Property(x => x.IsRoot).HasColumnName("is_root").IsRequired().HasComment("是否根点");
+        //是否叶节点
+        builder.Property(x => x.IsLeaf).HasColumnName("is_leaf").IsRequired().HasComment("是否叶节点");
         //别名
-        builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).IsRequired();
+        builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).HasComment("是否叶节点");
+        //描述
+        builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255).HasComment("描述");
         //Code
-        builder.Property(x => x.Code).HasColumnName("code").HasMaxLength(50).IsRequired();
-        //Code
-        builder.Property(x => x.QuickCode).HasColumnName("quick_code").HasMaxLength(50).IsRequired();
-        //Description
-        builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(50);
-        //Icon
-        builder.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(50);
+        builder.Property(x => x.Code).HasColumnName("code").HasMaxLength(50).HasComment("Code");
+        //QuickCode
+        builder.Property(x => x.QuickCode).HasColumnName("quick_code").HasMaxLength(50).HasComment("QuickCode");
+        //Action
+        builder.Property(x => x.Action).HasColumnName("action").HasMaxLength(50).HasComment("Action");
+        //Data
+        builder.Property(x => x.Data).HasColumnName("data").HasMaxLength(255).HasComment("Data");
+        //Ext
+        builder.Property(x => x.Ext).HasColumnName("ext").HasMaxLength(255).HasComment("Ext");
         //Style
-        builder.Property(x => x.Style).HasColumnName("style").HasMaxLength(50);
-        //Router
-        builder.Property(x => x.Router).HasColumnName("router").HasMaxLength(50);
-        //Router
-        builder.Property(x => x.Lv).HasColumnName("lv").IsRequired();
-        //Router
-        builder.Property(x => x.Rv).HasColumnName("rv").IsRequired();
-        //Router
-        builder.Property(x => x.Deep).HasColumnName("deep").IsRequired();
-        //Status
+        builder.Property(x => x.Style).HasColumnName("style").HasMaxLength(50).HasComment("Style");
+        //SelectedStyle
+        builder.Property(x => x.SelectedStyle).HasColumnName("selected_style").HasMaxLength(50).HasComment("SelectedStyle");
+        //Icon
+        builder.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(50).HasComment("icon");
+        //SelectedIcon
+        builder.Property(x => x.SelectedIcon).HasColumnName("selected_icon").HasMaxLength(50).HasComment("SelectedIcon");
+        //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
+        //关系
+        builder.HasOne(x => x.Parent).WithMany(x => x.Menus).HasForeignKey(x => x.ParentId).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
         //Index
         builder.HasIndex(x => new { x.TenantId, x.XppId });
         //ToTable
