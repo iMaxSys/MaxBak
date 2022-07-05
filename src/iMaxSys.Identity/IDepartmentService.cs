@@ -14,46 +14,14 @@
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Identity.Models;
+using iMaxSys.Data.Services;
+using iMaxSys.Identity.Data.Entities;
 
 namespace iMaxSys.Identity;
 
 /// <summary>
 /// 部门服务接口
 /// </summary>
-public interface IDepartmentService : IDependency
+public interface IDepartmentService : ITreeService<Department, DepartmentModel>, IDependency
 {
-    /// <summary>
-    /// 获取部门
-    /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    Task<DepartmentModel> GetAsync(long tenantId, long id);
-
-    /// <summary>
-    /// 添加部门
-    /// </summary>
-    /// <param name="tenantId">租户id</param>
-    /// <param name="parentId">父节点id</param>
-    /// <param name="model">部门</param>
-    /// <returns></returns>
-    Task<DepartmentModel> AddAsync(long tenantId, long? parentId, DepartmentModel model);
-
-    /// <summary>
-    /// 移除部门
-    /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    Task RemoveAsync(long tenantId, long id);
-
-    /// <summary>
-    /// 移动部门
-    /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="currentId"></param>
-    /// <param name="targetId"></param>
-    /// <param name="position"></param>
-    /// <returns></returns>
-    Task<DepartmentModel> MoveAsync(long tenantId, long currentId, long targetId, NodePosition position);
 }

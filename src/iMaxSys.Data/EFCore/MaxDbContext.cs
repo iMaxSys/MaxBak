@@ -98,5 +98,18 @@ public abstract class MaxDbContext : DbContext, IDbContextBase
                 optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.LatestSupportedServerVersion);
                 break;
         }
+
+        //switch (database.Type)
+        //{
+        //    case 0:
+        //        optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.AutoDetect(database.Connection));
+        //        break;
+        //    case 1:
+        //        optionsBuilder.UseSqlServer(database.Connection);
+        //        break;
+        //    default:
+        //        optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.AutoDetect(database.Connection));
+        //        break;
+        //}
     }
 }

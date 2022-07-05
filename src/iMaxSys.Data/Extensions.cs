@@ -35,7 +35,7 @@ public static class Extensions
     /// <returns></returns>
     public static IServiceCollection AddUnitOfWork<T>(this IServiceCollection services) where T : DbContext
     {
-        services.AddDbContext<T>();
+        services.AddDbContext<T>(ServiceLifetime.Scoped);
         services.AddScoped<IUnitOfWork<T>, UnitOfWork<T>>();
         services.AddScoped<IUnitOfWork, UnitOfWork<T>>();
         RegisterRepositories(services);

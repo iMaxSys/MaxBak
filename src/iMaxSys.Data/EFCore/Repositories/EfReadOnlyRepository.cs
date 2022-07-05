@@ -827,7 +827,7 @@ public abstract class EfReadOnlyRepository<TEntity> : IReadOnlyRepository<TEntit
     /// A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
     /// </param>
     /// <returns></returns>
-    public Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default) => predicate == null ? _dbSet.AnyAsync(cancellationToken) : _dbSet.AnyAsync(predicate, cancellationToken);
+    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default) => predicate == null ? await _dbSet.AnyAsync(cancellationToken) : await _dbSet.AnyAsync(predicate, cancellationToken);
 
     #endregion
 

@@ -25,8 +25,10 @@ public class DepartmentConfiguration : TenantMasterEntityConfiguration<Departmen
     {
         //基类配置
         base.Configures(builder);
+        //XppId
+        builder.Property(x => x.XppId).HasColumnName("xpp_id").IsRequired();
         //父节点id
-        builder.Property(x => x.ParentId).HasColumnName("parent_id").IsRequired().HasComment("父节点id");
+        builder.Property(x => x.ParentId).HasColumnName("parent_id").IsRequired(false).HasComment("父节点id");
         //名称
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired().HasComment("名称");
         //左值
@@ -43,18 +45,16 @@ public class DepartmentConfiguration : TenantMasterEntityConfiguration<Departmen
         builder.Property(x => x.IsLeaf).HasColumnName("is_leaf").IsRequired().HasComment("是否叶节点");
         //类型
         builder.Property(x => x.Type).HasColumnName("type").IsRequired().HasComment("类型");
-        //别名
-        builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).HasComment("是否叶节点");
-        //描述
-        builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255).HasComment("描述");
         //Code
         builder.Property(x => x.Code).HasColumnName("code").HasMaxLength(50).HasComment("Code");
         //QuickCode
         builder.Property(x => x.QuickCode).HasColumnName("quick_code").HasMaxLength(50).HasComment("QuickCode");
-        //Data
-        builder.Property(x => x.Data).HasColumnName("data").HasMaxLength(255).HasComment("Data");
-        //Ext
-        builder.Property(x => x.Ext).HasColumnName("ext").HasMaxLength(255).HasComment("Ext");
+        //值
+        builder.Property(x => x.Value).HasColumnName("value").HasMaxLength(50).HasComment("值");
+        //别名
+        builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).HasComment("是否叶节点");
+        //描述
+        builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255).HasComment("描述");
         //Style
         builder.Property(x => x.Style).HasColumnName("style").HasMaxLength(50).HasComment("Style");
         //SelectedStyle
@@ -63,6 +63,8 @@ public class DepartmentConfiguration : TenantMasterEntityConfiguration<Departmen
         builder.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(50).HasComment("icon");
         //SelectedIcon
         builder.Property(x => x.SelectedIcon).HasColumnName("selected_icon").HasMaxLength(50).HasComment("SelectedIcon");
+        //Ext
+        builder.Property(x => x.Ext).HasColumnName("ext").HasMaxLength(255).HasComment("Ext");
         //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //关系

@@ -11,14 +11,14 @@ using iMaxSys.Identity.Data.EFCore;
 namespace iMaxSys.Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20220519064929_init")]
+    [Migration("20220705090641_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.CheckCode", b =>
@@ -122,10 +122,16 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("Alias")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("alias");
+                        .HasColumnName("alias")
+                        .HasComment("是否叶节点");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("code")
+                        .HasComment("Code");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
@@ -141,20 +147,70 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("creator_id");
 
-                    b.Property<string>("Descripton")
+                    b.Property<string>("Description")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
-                        .HasColumnName("descripton");
+                        .HasColumnName("description")
+                        .HasComment("描述");
+
+                    b.Property<string>("Ext")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("ext")
+                        .HasComment("Ext");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("icon")
+                        .HasComment("icon");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("int")
+                        .HasColumnName("index")
+                        .HasComment("索引");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_deleted");
 
+                    b.Property<bool>("IsLeaf")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_leaf")
+                        .HasComment("是否叶节点");
+
+                    b.Property<bool>("IsRoot")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_root")
+                        .HasComment("是否根点");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int")
+                        .HasColumnName("level")
+                        .HasComment("深度");
+
+                    b.Property<int>("Lv")
+                        .HasColumnType("int")
+                        .HasColumnName("lv")
+                        .HasComment("左值");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("name");
+                        .HasColumnName("name")
+                        .HasComment("名称");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("parent_id")
+                        .HasComment("父节点id");
+
+                    b.Property<string>("QuickCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("quick_code")
+                        .HasComment("QuickCode");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
@@ -171,19 +227,61 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("reviser_id");
 
+                    b.Property<int>("Rv")
+                        .HasColumnType("int")
+                        .HasColumnName("rv")
+                        .HasComment("右值");
+
+                    b.Property<string>("SelectedIcon")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("selected_icon")
+                        .HasComment("SelectedIcon");
+
+                    b.Property<string>("SelectedStyle")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("selected_style")
+                        .HasComment("SelectedStyle");
+
                     b.Property<int>("Status")
                         .HasColumnType("int")
                         .HasColumnName("status");
+
+                    b.Property<string>("Style")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("style")
+                        .HasComment("Style");
 
                     b.Property<long>("TenantId")
                         .HasColumnType("bigint")
                         .HasColumnName("tenant_id");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int")
+                        .HasColumnName("type")
+                        .HasComment("类型");
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("value")
+                        .HasComment("值");
+
+                    b.Property<long>("XppId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("xpp_id");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("TenantId");
+
+                    b.HasIndex("TenantId", "Name");
+
+                    b.HasIndex("TenantId", "QuickCode");
 
                     b.ToTable("department", (string)null);
                 });
@@ -743,17 +841,23 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    b.Property<string>("Alias")
-                        .IsRequired()
+                    b.Property<string>("Action")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("alias");
+                        .HasColumnName("action")
+                        .HasComment("Action");
+
+                    b.Property<string>("Alias")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("alias")
+                        .HasComment("是否叶节点");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("code");
+                        .HasColumnName("code")
+                        .HasComment("Code");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
@@ -769,39 +873,70 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("creator_id");
 
-                    b.Property<int>("Deep")
-                        .HasColumnType("int")
-                        .HasColumnName("deep");
-
                     b.Property<string>("Description")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("description");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("description")
+                        .HasComment("描述");
+
+                    b.Property<string>("Ext")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("ext")
+                        .HasComment("Ext");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("icon");
+                        .HasColumnName("icon")
+                        .HasComment("icon");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("int")
+                        .HasColumnName("Index")
+                        .HasComment("索引");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_deleted");
 
+                    b.Property<bool>("IsLeaf")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_leaf")
+                        .HasComment("是否叶节点");
+
+                    b.Property<bool>("IsRoot")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_root")
+                        .HasComment("是否根点");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int")
+                        .HasColumnName("level")
+                        .HasComment("深度");
+
                     b.Property<int>("Lv")
                         .HasColumnType("int")
-                        .HasColumnName("lv");
+                        .HasColumnName("lv")
+                        .HasComment("左值");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("name");
+                        .HasColumnName("name")
+                        .HasComment("名称");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("parent_id")
+                        .HasComment("父节点id");
 
                     b.Property<string>("QuickCode")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("quick_code");
+                        .HasColumnName("quick_code")
+                        .HasComment("QuickCode");
 
                     b.Property<DateTime?>("ReviseTime")
                         .IsRequired()
@@ -818,15 +953,22 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("reviser_id");
 
-                    b.Property<string>("Router")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("router");
-
                     b.Property<int>("Rv")
                         .HasColumnType("int")
-                        .HasColumnName("rv");
+                        .HasColumnName("rv")
+                        .HasComment("右值");
+
+                    b.Property<string>("SelectedIcon")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("selected_icon")
+                        .HasComment("SelectedIcon");
+
+                    b.Property<string>("SelectedStyle")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("selected_style")
+                        .HasComment("SelectedStyle");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
@@ -835,17 +977,31 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<string>("Style")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("style");
+                        .HasColumnName("style")
+                        .HasComment("Style");
 
                     b.Property<long>("TenantId")
                         .HasColumnType("bigint")
                         .HasColumnName("tenant_id");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int")
+                        .HasColumnName("type")
+                        .HasComment("类型");
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("value")
+                        .HasComment("值");
 
                     b.Property<long>("XppId")
                         .HasColumnType("bigint")
                         .HasColumnName("xpp_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("TenantId");
 
@@ -1150,6 +1306,16 @@ namespace iMaxSys.Identity.Migrations
                     b.ToTable("role_member", (string)null);
                 });
 
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Department", b =>
+                {
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Department", "Parent")
+                        .WithMany("Departments")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Member", b =>
                 {
                     b.HasOne("iMaxSys.Identity.Data.Entities.Department", "Department")
@@ -1170,6 +1336,16 @@ namespace iMaxSys.Identity.Migrations
                         .IsRequired();
 
                     b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Menu", b =>
+                {
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Menu", "Parent")
+                        .WithMany("Menus")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Operation", b =>
@@ -1204,6 +1380,8 @@ namespace iMaxSys.Identity.Migrations
 
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Department", b =>
                 {
+                    b.Navigation("Departments");
+
                     b.Navigation("Members");
                 });
 
@@ -1216,6 +1394,8 @@ namespace iMaxSys.Identity.Migrations
 
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Menu", b =>
                 {
+                    b.Navigation("Menus");
+
                     b.Navigation("Operations");
                 });
 

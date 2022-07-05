@@ -11,16 +11,29 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Options;
-using iMaxSys.Max.Exceptions;
-using iMaxSys.Max.Identity.Domain;
+
 using iMaxSys.Data;
+using iMaxSys.Data.Services;
+using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Models;
-using iMaxSys.Identity.Data.EFCore;
-using iMaxSys.Identity.Data.Repositories;
-using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 
 namespace iMaxSys.Identity;
+
+public class MenuService : TreeService<Menu, MenuModel>, IMenuService
+{
+    /// <summary>
+    /// _unitOfWork
+    /// </summary>
+    //private readonly IUnitOfWork _unitOfWork;
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="unitOfWork"></param>
+    public MenuService(IMapper mapper, IUnitOfWork unitOfWork) : base(mapper, unitOfWork)
+    {
+    }
+}
 
 /*
 /// <summary>

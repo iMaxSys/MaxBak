@@ -10,14 +10,18 @@ namespace Kylin.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly ICheckCodeService _checkCodeService;
+        private readonly IDepartmentService _departmentService;
+        private readonly IMenuService _menuService;
 
-        public OrderController(ICheckCodeService checkCodeService)
+        public OrderController(ICheckCodeService checkCodeService, IDepartmentService departmentService, IMenuService menuService)
         {
             _checkCodeService = checkCodeService;
+            _departmentService = departmentService;
+            _menuService = menuService;
         }
 
         [HttpGet]
-        public string ToJson()
+        public async Task<string> ToJson()
         {
             /*
             LrTree tree = new(0, "earth");
@@ -43,6 +47,18 @@ namespace Kylin.Api.Controllers
 
             return tree.ToJson();
             */
+
+            iMaxSys.Identity.Models.DepartmentModel model = new();
+            model.Name = "中国";
+            model.Code = "001";
+
+            await _departmentService.AddAsync(0, null, model);
+
+            iMaxSys.Identity.Models.MenuModel model1 = new();
+            model1.Name = "菜单1";
+            model1.Code = "001";
+
+            await _menuService.AddAsync(0, null, model1);
 
 
 

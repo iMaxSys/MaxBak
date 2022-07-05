@@ -16,6 +16,7 @@
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Common\" />
     <None Remove="Migrations\" />
+    <None Remove="Mapper\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
@@ -26,6 +27,7 @@
   <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Mappers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20220519064929_init.cs" />

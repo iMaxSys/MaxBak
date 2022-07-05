@@ -51,11 +51,36 @@ namespace iMaxSys.Identity.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
-                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    parent_id = table.Column<long>(type: "bigint", nullable: true, comment: "父节点id"),
+                    xpp_id = table.Column<long>(type: "bigint", nullable: false),
+                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "名称")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    alias = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    lv = table.Column<int>(type: "int", nullable: false, comment: "左值"),
+                    rv = table.Column<int>(type: "int", nullable: false, comment: "右值"),
+                    index = table.Column<int>(type: "int", nullable: false, comment: "索引"),
+                    level = table.Column<int>(type: "int", nullable: false, comment: "深度"),
+                    is_root = table.Column<bool>(type: "tinyint(1)", nullable: false, comment: "是否根点"),
+                    is_leaf = table.Column<bool>(type: "tinyint(1)", nullable: false, comment: "是否叶节点"),
+                    type = table.Column<int>(type: "int", nullable: false, comment: "类型"),
+                    code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "Code")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    descripton = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                    quick_code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "QuickCode")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    value = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "值")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    alias = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "是否叶节点")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, comment: "描述")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    style = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "Style")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    selected_style = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "SelectedStyle")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    icon = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "icon")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    selected_icon = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "SelectedIcon")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ext = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, comment: "Ext")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     status = table.Column<int>(type: "int", nullable: false),
                     is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -72,6 +97,12 @@ namespace iMaxSys.Identity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_department", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_department_department_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "department",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -122,25 +153,38 @@ namespace iMaxSys.Identity.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
                     xpp_id = table.Column<long>(type: "bigint", nullable: false),
-                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    parent_id = table.Column<long>(type: "bigint", nullable: true, comment: "父节点id"),
+                    name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "名称")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    alias = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    lv = table.Column<int>(type: "int", nullable: false, comment: "左值"),
+                    rv = table.Column<int>(type: "int", nullable: false, comment: "右值"),
+                    Index = table.Column<int>(type: "int", nullable: false, comment: "索引"),
+                    level = table.Column<int>(type: "int", nullable: false, comment: "深度"),
+                    is_root = table.Column<bool>(type: "tinyint(1)", nullable: false, comment: "是否根点"),
+                    is_leaf = table.Column<bool>(type: "tinyint(1)", nullable: false, comment: "是否叶节点"),
+                    type = table.Column<int>(type: "int", nullable: false, comment: "类型"),
+                    code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "Code")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    quick_code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "QuickCode")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    quick_code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    value = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "值")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    alias = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "是否叶节点")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    icon = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, comment: "描述")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    style = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    style = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "Style")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    router = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    selected_style = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "SelectedStyle")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    lv = table.Column<int>(type: "int", nullable: false),
-                    rv = table.Column<int>(type: "int", nullable: false),
-                    deep = table.Column<int>(type: "int", nullable: false),
+                    icon = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "icon")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    selected_icon = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "SelectedIcon")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    action = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "Action")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ext = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, comment: "Ext")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     status = table.Column<int>(type: "int", nullable: false),
                     is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     create_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -156,6 +200,12 @@ namespace iMaxSys.Identity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_menu", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_menu_menu_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "menu",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -441,14 +491,24 @@ namespace iMaxSys.Identity.Migrations
                 columns: new[] { "xpp_id", "tenant_id", "biz_id", "member_id", "to", "expires", "status" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_department_name",
+                name: "IX_department_parent_id",
                 table: "department",
-                column: "name");
+                column: "parent_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_department_tenant_id",
                 table: "department",
                 column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_department_tenant_id_name",
+                table: "department",
+                columns: new[] { "tenant_id", "name" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_department_tenant_id_quick_code",
+                table: "department",
+                columns: new[] { "tenant_id", "quick_code" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_member_department_id",
@@ -510,6 +570,11 @@ namespace iMaxSys.Identity.Migrations
                 name: "IX_member_session_xpp_sns_id_token",
                 table: "member_session",
                 columns: new[] { "xpp_sns_id", "token" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_menu_parent_id",
+                table: "menu",
+                column: "parent_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_menu_tenant_id",

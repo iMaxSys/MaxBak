@@ -30,7 +30,7 @@ namespace iMaxSys.Data.Services;
 /// <typeparam name="T">实体类型</typeparam>
 /// <typeparam name="M">返回类型</typeparam>
 /// <typeparam name="R">仓储类型</typeparam>
-public abstract class TreeService<T, M, R> : ITreeService<T, M, R> where T : Entity, ITreeNode, new() where M : TreeView
+public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, ITreeNode, new() where M : TreeView
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
@@ -39,7 +39,8 @@ public abstract class TreeService<T, M, R> : ITreeService<T, M, R> where T : Ent
     /// <summary>
     /// 构造
     /// </summary>
-    /// <param name="unitOfWork">uow</param>
+    /// <param name="mapper"></param>
+    /// <param name="unitOfWork"></param>
     public TreeService(IMapper mapper, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
@@ -160,7 +161,16 @@ public abstract class TreeService<T, M, R> : ITreeService<T, M, R> where T : Ent
         }
 
         await repository.AddAsync(current);
-        await _unitOfWork.SaveChangesAsync();
+
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+
+        }
+        catch (Exception ex)
+        {
+            var x = ex;
+        }
 
         model.Id = current.Id;
         model.ParentId = parent.Id;
@@ -235,7 +245,24 @@ public abstract class TreeService<T, M, R> : ITreeService<T, M, R> where T : Ent
         current.ParentId = parent.Id;
         current.IsLeaf = true;
         current.Level = parent.Level + 1;
-        current.Index = await _unitOfWork.GetRepository<T>().MaxAsync(x => x.TenantId == tenantId && x.ParentId == parent.Id, x => x.Index) + 1;
+
+        var repository = _unitOfWork.GetRepository<T>();
+
+        try
+        {
+            bool has = await repository.AnyAsync(x => x.TenantId == tenantId && x.ParentId == parent.Id);
+
+
+            if (has)
+            {
+                current.Index = await repository.MaxAsync(x => x.TenantId == tenantId && x.ParentId == parent.Id, x => x.Index) + 1;
+            }
+        }
+        catch (Exception ex)
+        {
+            var xx = ex;
+        }
+        
 
         await SetChildLevel(tenantId, current);
     }
@@ -282,13 +309,13 @@ public abstract class TreeService<T, M, R> : ITreeService<T, M, R> where T : Ent
     {
         //存在子节点
         bool hasChildren = await _repository.AnyAsync(x => x.TenantId == tenantId && x.ParentId == currentId);
-        
+
         if (hasChildren)
         {
             throw new MaxException(ResultCode.HasChildren);
         }
 
-        T? current = await _repository.FirstOrDefaultAsync(x=>x.TenantId == tenantId && x.Id == currentId);
+        T? current = await _repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == currentId);
 
         if (current is null)
         {

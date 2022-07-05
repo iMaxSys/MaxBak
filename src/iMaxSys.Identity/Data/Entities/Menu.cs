@@ -118,11 +118,6 @@ public class Menu : TenantMasterEntity, ITreeNode
     public string? SelectedIcon { get; set; }
 
     /// <summary>
-    /// Data
-    /// </summary>
-    public string? Data { get; set; }
-
-    /// <summary>
     /// Action
     /// </summary>
     public string? Action { get; set; }

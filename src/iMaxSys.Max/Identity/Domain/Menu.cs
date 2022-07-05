@@ -11,6 +11,7 @@
 //日期：2020-01-01
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Max.Identity.Domain;

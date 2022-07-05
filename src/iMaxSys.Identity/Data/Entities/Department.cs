@@ -118,11 +118,6 @@ public class Department : TenantMasterEntity, ITreeNode
     public string? SelectedIcon { get; set; }
 
     /// <summary>
-    /// Data
-    /// </summary>
-    public string? Data { get; set; }
-
-    /// <summary>
     /// Ext
     /// </summary>
     public string? Ext { get; set; }
