@@ -24,4 +24,5 @@ namespace iMaxSys.Identity;
 /// </summary>
 public interface IMenuService : ITreeService<Menu, MenuModel>, IDependency
 {
+    
 }

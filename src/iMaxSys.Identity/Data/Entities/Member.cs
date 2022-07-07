@@ -235,10 +235,10 @@ public class Member : TenantMasterEntity
     /// <summary>
     /// 会员扩展
     /// </summary>
-    public virtual IList<MemberExt>? MemberExts { get; set; }
+    public virtual ICollection<MemberExt>? MemberExts { get; set; }
 
     /// <summary>
     /// 角色
     /// </summary>
-    public virtual IList<RoleMember>? RoleMembers { get; set; }
+    public virtual ICollection<RoleMember>? RoleMembers { get; set; }
 }

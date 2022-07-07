@@ -11,7 +11,7 @@ using iMaxSys.Identity.Data.EFCore;
 namespace iMaxSys.Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20220705090641_init")]
+    [Migration("20220707075315_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1297,13 +1297,87 @@ namespace iMaxSys.Identity.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MemberId");
+
                     b.HasIndex("RoleId");
 
                     b.HasIndex("TenantId");
 
-                    b.HasIndex("MemberId", "XppId", "TenantId", "RoleId");
+                    b.HasIndex("TenantId", "MemberId", "RoleId", "XppId");
 
                     b.ToTable("role_member", (string)null);
+                });
+
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.RoleMenu", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("create_time");
+
+                    b.Property<string>("Creator")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("creator");
+
+                    b.Property<long>("CreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("creator_id");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<long>("MenuId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("menu_id");
+
+                    b.Property<DateTime?>("ReviseTime")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("revise_time");
+
+                    b.Property<string>("Reviser")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("reviser");
+
+                    b.Property<long>("ReviserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("reviser_id");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("role_id");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.Property<long>("TenantId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<long>("XppId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("xpp_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("TenantId", "RoleId", "MenuId", "XppId");
+
+                    b.ToTable("role_menu", (string)null);
                 });
 
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Department", b =>
@@ -1378,6 +1452,25 @@ namespace iMaxSys.Identity.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("iMaxSys.Identity.Data.Entities.RoleMenu", b =>
+                {
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Menu", "Menu")
+                        .WithMany("RoleMenus")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("iMaxSys.Identity.Data.Entities.Role", "Role")
+                        .WithMany("RoleMenus")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Department", b =>
                 {
                     b.Navigation("Departments");
@@ -1397,11 +1490,15 @@ namespace iMaxSys.Identity.Migrations
                     b.Navigation("Menus");
 
                     b.Navigation("Operations");
+
+                    b.Navigation("RoleMenus");
                 });
 
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.Role", b =>
                 {
                     b.Navigation("RoleMembers");
+
+                    b.Navigation("RoleMenus");
                 });
 #pragma warning restore 612, 618
         }

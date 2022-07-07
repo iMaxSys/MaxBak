@@ -90,4 +90,9 @@ public class Role : TenantMasterEntity
     /// Members
     /// </summary>
     public virtual IList<RoleMember>? RoleMembers { get; set; }
+
+    /// <summary>
+    /// RoleMenus
+    /// </summary>
+    public virtual IList<RoleMenu>? RoleMenus { get; set; }
 }

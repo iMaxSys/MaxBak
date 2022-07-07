@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: RoleMember.cs
-//摘要: RoleMember 
+//文件: RoleMenu.cs
+//摘要: RoleMenu 
 //说明:
 //
 //当前：1.0
@@ -11,16 +11,15 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Common;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data.Entities;
 
 namespace iMaxSys.Identity.Data.Entities;
 
 /// <summary>
-/// RoleMember
+/// RoleMenu
 /// </summary>
-public class RoleMember : TenantMasterEntity
+public class RoleMenu : TenantMasterEntity
 {
     /// <summary>
     /// RoleId
@@ -28,9 +27,9 @@ public class RoleMember : TenantMasterEntity
     public long RoleId { get; set; }
 
     /// <summary>
-    /// MemberId
+    /// MenuId
     /// </summary>
-    public long MemberId { get; set; }
+    public long MenuId { get; set; }
 
     /// <summary>
     /// XppId
@@ -43,12 +42,12 @@ public class RoleMember : TenantMasterEntity
     public Status Status { get; set; } = Status.Enable;
 
     /// <summary>
-    /// Role
+    /// Roles
     /// </summary>
     public Role Role { get; set; } = new();
 
     /// <summary>
-    /// Member
+    /// Menus
     /// </summary>
-    public Member Member { get; set; } = new();
+    public Menu Menu { get; set; } = new();
 }

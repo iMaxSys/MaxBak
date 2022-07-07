@@ -392,6 +392,44 @@ namespace iMaxSys.Identity.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "role_menu",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false),
+                    role_id = table.Column<long>(type: "bigint", nullable: false),
+                    menu_id = table.Column<long>(type: "bigint", nullable: false),
+                    xpp_id = table.Column<long>(type: "bigint", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false),
+                    is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    create_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    creator_id = table.Column<long>(type: "bigint", nullable: false),
+                    creator = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    reviser_id = table.Column<long>(type: "bigint", nullable: false),
+                    reviser = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    revise_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    tenant_id = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_role_menu", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_role_menu_menu_menu_id",
+                        column: x => x.menu_id,
+                        principalTable: "menu",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_role_menu_role_role_id",
+                        column: x => x.role_id,
+                        principalTable: "role",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "member_ext",
                 columns: table => new
                 {
@@ -447,8 +485,8 @@ namespace iMaxSys.Identity.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
-                    member_id = table.Column<long>(type: "bigint", nullable: false),
                     role_id = table.Column<long>(type: "bigint", nullable: false),
+                    member_id = table.Column<long>(type: "bigint", nullable: false),
                     xpp_id = table.Column<long>(type: "bigint", nullable: false),
                     status = table.Column<int>(type: "int", nullable: false),
                     is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -607,9 +645,9 @@ namespace iMaxSys.Identity.Migrations
                 column: "tenant_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_role_member_member_id_xpp_id_tenant_id_role_id",
+                name: "IX_role_member_member_id",
                 table: "role_member",
-                columns: new[] { "member_id", "xpp_id", "tenant_id", "role_id" });
+                column: "member_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_role_member_role_id",
@@ -620,6 +658,31 @@ namespace iMaxSys.Identity.Migrations
                 name: "IX_role_member_tenant_id",
                 table: "role_member",
                 column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_member_tenant_id_member_id_role_id_xpp_id",
+                table: "role_member",
+                columns: new[] { "tenant_id", "member_id", "role_id", "xpp_id" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_menu_menu_id",
+                table: "role_menu",
+                column: "menu_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_menu_role_id",
+                table: "role_menu",
+                column: "role_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_menu_tenant_id",
+                table: "role_menu",
+                column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_menu_tenant_id_role_id_menu_id_xpp_id",
+                table: "role_menu",
+                columns: new[] { "tenant_id", "role_id", "menu_id", "xpp_id" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -640,10 +703,13 @@ namespace iMaxSys.Identity.Migrations
                 name: "role_member");
 
             migrationBuilder.DropTable(
-                name: "menu");
+                name: "role_menu");
 
             migrationBuilder.DropTable(
                 name: "member");
+
+            migrationBuilder.DropTable(
+                name: "menu");
 
             migrationBuilder.DropTable(
                 name: "role");

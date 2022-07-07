@@ -11,7 +11,6 @@
 //日期：2019-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Identity.Models;
