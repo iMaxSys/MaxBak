@@ -20,6 +20,7 @@ using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data.Common;
 using iMaxSys.Data.Entities;
 using iMaxSys.Data.Repositories;
+using iMaxSys.Max.Extentions;
 
 namespace iMaxSys.Data.Services;
 
@@ -32,9 +33,9 @@ namespace iMaxSys.Data.Services;
 /// <typeparam name="R">仓储类型</typeparam>
 public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, ITreeNode, new() where M : TreeView
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IRepository<T> _repository;
+    protected readonly IMapper _mapper;
+    protected readonly IUnitOfWork _unitOfWork;
+    protected readonly IRepository<T> _repository;
 
     /// <summary>
     /// 构造
@@ -49,6 +50,39 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     }
 
     /// <summary>
+    /// 获取节点
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="currentId"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task<T> GetNodeAsync(long tenantId, long currentId)
+    {
+        T? target = await _repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == currentId);
+
+        if (target is not null)
+        {
+            return target;
+        }
+        else
+        {
+            throw new MaxException(ResultCode.TargetIsInvalid);
+        }
+    }
+
+    /// <summary>
+    /// 获取树
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    public async Task<ITree<T>?> GetAsync(long tenantId, long xppId)
+    {
+        var list = await _repository.AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
+        return list.ToTree((parent, child) => child.ParentId == parent.Id);
+    }
+
+    /// <summary>
     /// 插入节点
     /// </summary>
     /// <param name="tenantId"></param>
@@ -58,13 +92,11 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <returns></returns>
     public async Task InsertAsync(long tenantId, long targetId, M model, NodePosition position)
     {
-        T current = Make(tenantId, model);
-        await MoveAsync(tenantId, targetId, current, position);
+        T target = await GetNodeAsync(tenantId, targetId);
+        T current = Make(tenantId, target.XppId, model);
+        await MoveAsync(tenantId, target, current, position);
     }
 
-    /// <summary>
-    /// 移动节点
-    /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="targetId"></param>
     /// <param name="currentId"></param>
@@ -72,7 +104,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <returns></returns>
     public async Task MoveAsync(long tenantId, long targetId, long currentId, NodePosition position)
     {
-        T current = await GetAsync(tenantId, currentId);
+        T current = await GetNodeAsync(tenantId, currentId);
         await MoveAsync(tenantId, targetId, current, position);
     }
 
@@ -86,8 +118,12 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <returns></returns>
     private async Task MoveAsync(long tenantId, long targetId, T current, NodePosition position)
     {
-        T target = await GetAsync(tenantId, targetId);
+        T target = await GetNodeAsync(tenantId, targetId);
+        await MoveAsync(tenantId, target, current, position);
+    }
 
+    private async Task MoveAsync(long tenantId, T target, T current, NodePosition position)
+    {
         switch (position)
         {
             case NodePosition.Sub:
@@ -113,10 +149,11 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// 添加部门
     /// </summary>
     /// <param name="tenantId">租户id</param>
+    /// <param name="xppId">xppId</param>
     /// <param name="parentId">父节点id</param>
     /// <param name="model">模型</param>
     /// <returns></returns>
-    public async Task<M> AddAsync(long tenantId, long? parentId, M model)
+    public async Task<M> AddAsync(long tenantId, long xppId, long? parentId, M model)
     {
         T? parent;
         T current;
@@ -128,12 +165,13 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
             parent = new T
             {
                 Id = iMaxSys.Max.IdWorker.NextId(),
+                XppId = xppId,
                 IsRoot = true,
-                IsLeaf = false
+                IsLeaf = false,
             };
 
             //生成当前节点实体模型
-            current = await MakeChild(tenantId, parent, model);
+            current = await MakeChild(tenantId, xppId, parent, model);
             current.Index = 0;
 
             //保存根节点和当前节点,此处由于导航属性的问题,无法使用级联保存,所以使用分别保存
@@ -156,7 +194,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
                     parent.IsLeaf = false;
                 }
 
-                current = await MakeChild(tenantId, parent, model);
+                current = await MakeChild(tenantId, xppId, parent, model);
             }
         }
 
@@ -179,26 +217,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
         return model;
     }
 
-    /// <summary>
-    /// 获取节点
-    /// </summary>
-    /// <param name="tenantId">租户id</param>
-    /// <param name="id">节点id</param>
-    /// <returns>节点</returns>
-    /// <exception cref="MaxException"></exception>
-    private async Task<T> GetAsync(long tenantId, long id)
-    {
-        T? target = await _repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id);
 
-        if (target is not null)
-        {
-            return target;
-        }
-        else
-        {
-            throw new MaxException(ResultCode.TargetIsInvalid);
-        }
-    }
 
     /// <summary>
     /// 生成节点
@@ -206,10 +225,11 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <param name="tenantId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    private T Make(long tenantId, M model)
+    private T Make(long tenantId, long xppId, M model)
     {
         T current = _mapper.Map<T>(model);
         current.TenantId = tenantId;
+        current.XppId = xppId;
         model.TenantId = tenantId;
         if (model.Id > 0)
         {
@@ -225,9 +245,9 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <param name="parent">父节点</param>
     /// <param name="model">当前节点模型</param>
     /// <returns>数据模型</returns>
-    private async Task<T> MakeChild(long tenantId, T parent, M model)
+    private async Task<T> MakeChild(long tenantId, long xppId, T parent, M model)
     {
-        T current = Make(tenantId, model);
+        T current = Make(tenantId, xppId, model);
         await SetChild(tenantId, parent, current);
         return current;
     }
@@ -262,7 +282,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
         {
             var xx = ex;
         }
-        
+
 
         await SetChildLevel(tenantId, current);
     }
@@ -291,18 +311,6 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
         {
             item.Index += 1;
         }
-    }
-
-    public async Task<ITree<T>?> GetAsync(long tenantId, bool includeChildren)
-    {
-        var list = await _repository.AllAsync(x => x.TenantId == tenantId);
-        return list.ToTree((parent, child) => child.ParentId == parent.Id);
-    }
-
-    public async Task<ITree<T>?> GetAsync(long tenantId, long xppId, bool includeChildren)
-    {
-        var list = await _repository.AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
-        return list.ToTree((parent, child) => child.ParentId == parent.Id);
     }
 
     public async Task RemoveAsync(long tenantId, long currentId)

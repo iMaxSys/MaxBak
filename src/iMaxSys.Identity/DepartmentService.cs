@@ -19,15 +19,12 @@ using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.Repositories;
+using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Identity;
 
 public class DepartmentService : TreeService<Department, DepartmentModel>, IDepartmentService
 {
-    /// <summary>
-    /// _unitOfWork
-    /// </summary>
-    //private readonly IUnitOfWork _unitOfWork;
 
     /// <summary>
     /// 构造

@@ -23,20 +23,21 @@ namespace iMaxSys.Data.Services;
 public interface ITreeService<T, M> where T : Entity, ITreeNode, new() where M : ITreeNode
 {
     /// <summary>
-    /// 获取
+    /// 获取节点
     /// </summary>
     /// <param name="tenantId"></param>
-    /// <param name="includeChildren"></param>
+    /// <param name="currentId"></param>
     /// <returns></returns>
-    Task<ITree<T>?> GetAsync(long tenantId, bool includeChildren);
+    Task<T> GetNodeAsync(long tenantId, long currentId);
 
     /// <summary>
     /// 获取
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
     /// <param name="includeChildren"></param>
     /// <returns></returns>
-    Task<ITree<T>?> GetAsync(long tenantId, long xppId, bool includeChildren);
+    Task<ITree<T>?> GetAsync(long tenantId, long xppId);
 
     /// <summary>
     /// 插入
@@ -62,10 +63,11 @@ public interface ITreeService<T, M> where T : Entity, ITreeNode, new() where M :
     /// 新增
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
     /// <param name="parentId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<M> AddAsync(long tenantId, long? parentId, M model);
+    Task<M> AddAsync(long tenantId, long xppId, long? parentId, M model);
 
     /// <summary>
     /// 移除

@@ -21,7 +21,7 @@ namespace Kylin.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<string> ToJson()
+        public async Task<string?> ToJson()
         {
             /*
             LrTree tree = new(0, "earth");
@@ -45,43 +45,67 @@ namespace Kylin.Api.Controllers
             treeNode = new(103, "uk");
             tree.Nodes.Add(treeNode);
 
-            return tree.ToJson();
+            return tree.ToJson(); 
             */
 
             iMaxSys.Identity.Models.DepartmentModel model = new();
-            model.Name = "中国";
-            model.Code = "001";
+            model.Name = "DC";
+            model.Code = "022";
 
-            await _departmentService.AddAsync(0, null, model);
+            await _departmentService.AddAsync(0, 0, 763824386808479744, model);
 
-            iMaxSys.Identity.Models.MenuModel model1 = new();
-            model1.Name = "菜单1";
-            model1.Code = "001";
+            //iMaxSys.Identity.Models.DepartmentModel model = new();
+            //model.Name = "四川";
+            //model.Code = "028";
 
-            await _menuService.AddAsync(0, null, model1);
+            //await _departmentService.AddAsync(0, 763822752867024896, null, model);
+
+            //model = new();
+            //model.Name = "云南";
+            //model.Code = "087";
+
+            //await _departmentService.AddAsync(0, 763822752867024896, null, model);
+
+            //model = new();
+            //model.Name = "美国";
+            //model.Code = "002";
+
+            //await _departmentService.AddAsync(0, 0, null, model);
+
+            //await _departmentService.InsertAsync();
 
 
+            //iMaxSys.Identity.Models.MenuModel model1 = new();
+            //model1.Name = "菜单1";
+            //model1.Code = "001";
 
-            Tree tree = new(0, "earth");
-            tree.Nodes.Add(new(100, "china"));
-            tree.Nodes.Add(new(101, "usa"));
-            tree.Nodes.Add(new(102, "russia"));
+            //await _menuService.AddAsync(0, 0, null, model1);
 
-            tree.Nodes[0].Nodes.Add(new(1001, "yn"));
-            tree.Nodes[0].Nodes.Add(new(1002, "sc"));
-            tree.Nodes[0].Nodes.Add(new(1003, "bj"));
 
-            tree.Nodes[1].Nodes.Add(new(1011, "ny"));
-            tree.Nodes[1].Nodes.Add(new(1012, "dc"));
-            tree.Nodes[1].Nodes.Add(new(1013, "wf"));
+            var dept = await _departmentService.GetAsync(0, 0);
+            return dept?.ToJson();
 
-            TreeNode tn = new(102, "uk");
-            tn.Nodes.Add(new TreeNode(1021, "london"));
-            tn.Nodes.Add(new TreeNode(1022, "livepool"));
 
-            tree.Nodes.Add(tn);
+            //Tree tree = new(0, "earth");
+            //tree.Nodes.Add(new(100, "china"));
+            //tree.Nodes.Add(new(101, "usa"));
+            //tree.Nodes.Add(new(102, "russia"));
 
-            return tree.ToJson();
+            //tree.Nodes[0].Nodes.Add(new(1001, "yn"));
+            //tree.Nodes[0].Nodes.Add(new(1002, "sc"));
+            //tree.Nodes[0].Nodes.Add(new(1003, "bj"));
+
+            //tree.Nodes[1].Nodes.Add(new(1011, "ny"));
+            //tree.Nodes[1].Nodes.Add(new(1012, "dc"));
+            //tree.Nodes[1].Nodes.Add(new(1013, "wf"));
+
+            //TreeNode tn = new(102, "uk");
+            //tn.Nodes.Add(new TreeNode(1021, "london"));
+            //tn.Nodes.Add(new TreeNode(1022, "livepool"));
+
+            //tree.Nodes.Add(tn);
+
+            //return tree.ToJson();
         }
     }
 }
