@@ -16,6 +16,7 @@ using iMaxSys.Data;
 using iMaxSys.Data.Services;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Models;
+using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Identity;
 
@@ -32,6 +33,14 @@ public class MenuService : TreeService<Menu, MenuModel>, IMenuService
     /// <param name="unitOfWork"></param>
     public MenuService(IMapper mapper, IUnitOfWork unitOfWork) : base(mapper, unitOfWork)
     {
+    }
+
+    public async Task<ITree<Menu>?> GetAsync(long tenantId, long xppId, long roleId)
+    {
+        var repository = _unitOfWork.GetRepository<RoleMenu>();
+        var menus = await repository.AllAsync(predicate : x => x.TenantId == tenantId && x.XppId == xppId && x.RoleId == roleId, include : source => source.Include(y => y.Menu).ThenInclude(y => y.Operations));
+        var list = menus.Select(x => x.Menu);
+        return list.ToTree((parent, child) => child.ParentId == parent.Id);
     }
 }
 

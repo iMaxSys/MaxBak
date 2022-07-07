@@ -16,6 +16,7 @@ using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Data.Services;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Models;
+using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Identity;
 
@@ -24,5 +25,12 @@ namespace iMaxSys.Identity;
 /// </summary>
 public interface IMenuService : ITreeService<Menu, MenuModel>, IDependency
 {
-    
+    /// <summary>
+    /// 获取获取角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    Task<ITree<Menu>?> GetAsync(long tenantId, long xppId, long roleId);
 }

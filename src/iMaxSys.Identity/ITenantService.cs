@@ -10,12 +10,9 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
-/*
-using System.Threading.Tasks;
 
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
-
 using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity
@@ -35,17 +32,16 @@ namespace iMaxSys.Identity
         /// <summary>
         /// 新增租户
         /// </summary>
-        /// <param name="tenantModel"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        Task<ITenant> AddAsync(TenantModel tenantModel);
+        Task<ITenant> AddAsync(TenantModel model);
 
         /// <summary>
         /// 更新租户
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="tenantModel"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        Task<ITenant> UpdateAsync(TenantModel tenantModel);
+        Task<ITenant> UpdateAsync(TenantModel model);
 
         /// <summary>
         /// 移除租户
@@ -56,4 +52,3 @@ namespace iMaxSys.Identity
         Task RemoveAsync(long id);
     }
 }
-*/

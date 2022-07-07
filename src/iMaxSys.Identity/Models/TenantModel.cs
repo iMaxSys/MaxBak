@@ -18,7 +18,7 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 租户模型
 /// </summary>
-public class TenantResult
+public class TenantModel
 {
     /// <summary>
     /// Id

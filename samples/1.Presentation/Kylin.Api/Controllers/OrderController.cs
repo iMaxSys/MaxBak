@@ -81,14 +81,14 @@ namespace Kylin.Api.Controllers
 
             //await _menuService.AddAsync(0, 0, null, model1);
 
-            iMaxSys.Identity.Models.DepartmentModel model = new();
-            model.Id = 763824390721765376;
-            model.Name = "China";
-            await _departmentService.UpdateAsync(0, model);
+            //iMaxSys.Identity.Models.DepartmentModel model = new();
+            //model.Id = 763824390721765376;
+            //model.Name = "China";
+            //await _departmentService.UpdateAsync(0, model);
 
 
-            var dept = await _departmentService.GetAsync(0, 0);
-            return dept?.ToJson();
+            //var dept = await _departmentService.GetAsync(0, 0);
+            //return dept?.ToJson();
 
 
             //Tree tree = new(0, "earth");
@@ -111,6 +111,9 @@ namespace Kylin.Api.Controllers
             //tree.Nodes.Add(tn);
 
             //return tree.ToJson();
+
+            var menus = await _menuService.GetAsync(0, 0, 10000);
+            return menus?.ToJson();
         }
     }
 }

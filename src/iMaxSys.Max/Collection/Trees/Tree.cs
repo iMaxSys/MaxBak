@@ -48,7 +48,7 @@ public static class TreeExtensions
 	/// <typeparam name="T">Custom data type to associate with tree node.</typeparam>
 	/// <param name="items">The collection items.</param>
 	/// <param name="parentSelector">Expression to select parent.</param>
-	public static ITree<T>? ToTree<T>(this IList<T> items, Func<T, T, bool> parentSelector) where T : ITreeNode
+	public static ITree<T>? ToTree<T>(this IEnumerable<T> items, Func<T, T, bool> parentSelector) where T : ITreeNode
 	{
 		if (items == null) throw new ArgumentNullException(nameof(items));
 		var lookup = items.ToLookup(item => items.FirstOrDefault(parent => parentSelector(parent, item)), child => child);
