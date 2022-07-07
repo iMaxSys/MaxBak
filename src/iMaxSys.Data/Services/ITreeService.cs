@@ -77,4 +77,12 @@ public interface ITreeService<T, M> where T : Entity, ITreeNode, new() where M :
     /// <param name="model"></param>
     /// <returns></returns>
     Task RemoveAsync(long tenantId, long currentId);
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    Task UpdateAsync(long tenantId, M model);
 }

@@ -25,7 +25,6 @@ namespace iMaxSys.Identity;
 
 public class DepartmentService : TreeService<Department, DepartmentModel>, IDepartmentService
 {
-
     /// <summary>
     /// 构造
     /// </summary>

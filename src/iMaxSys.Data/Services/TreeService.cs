@@ -333,4 +333,18 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
 
         await _unitOfWork.SaveChangesAsync();
     }
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public async Task UpdateAsync(long tenantId, M model)
+    {
+        T target = await GetNodeAsync(tenantId, model.Id);
+         _mapper.Map(model, target);
+        _repository.Update(target);
+        await _unitOfWork.SaveChangesAsync();
+    }
 }

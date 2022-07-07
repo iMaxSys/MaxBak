@@ -48,11 +48,11 @@ namespace Kylin.Api.Controllers
             return tree.ToJson(); 
             */
 
-            iMaxSys.Identity.Models.DepartmentModel model = new();
-            model.Name = "DC";
-            model.Code = "022";
+            //iMaxSys.Identity.Models.DepartmentModel model = new();
+            //model.Name = "DC";
+            //model.Code = "022";
 
-            await _departmentService.AddAsync(0, 0, 763824386808479744, model);
+            //await _departmentService.AddAsync(0, 0, 763824386808479744, model);
 
             //iMaxSys.Identity.Models.DepartmentModel model = new();
             //model.Name = "四川";
@@ -80,6 +80,11 @@ namespace Kylin.Api.Controllers
             //model1.Code = "001";
 
             //await _menuService.AddAsync(0, 0, null, model1);
+
+            iMaxSys.Identity.Models.DepartmentModel model = new();
+            model.Id = 763824390721765376;
+            model.Name = "China";
+            await _departmentService.UpdateAsync(0, model);
 
 
             var dept = await _departmentService.GetAsync(0, 0);
