@@ -32,6 +32,5 @@
   <ItemGroup>
     <Compile Remove="Migrations\20220519064929_init.cs" />
     <Compile Remove="Migrations\20220519064929_init.Designer.cs" />
-    <Compile Remove="Migrations\IdentityContextModelSnapshot.cs" />
   </ItemGroup>
 </Project>

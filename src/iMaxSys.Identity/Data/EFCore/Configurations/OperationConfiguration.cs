@@ -43,8 +43,10 @@ public class OperationConfiguration : TenantMasterEntityConfiguration<Operation>
         builder.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(50);
         //Style
         builder.Property(x => x.Style).HasColumnName("style").HasMaxLength(50);
-        //Router
-        builder.Property(x => x.Router).HasColumnName("router").HasMaxLength(50).IsRequired();
+        //Type
+        builder.Property(x => x.Type).HasColumnName("type").IsRequired();
+        //Action
+        builder.Property(x => x.Action).HasColumnName("action").HasMaxLength(50).IsRequired();
         //Status
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //Menu

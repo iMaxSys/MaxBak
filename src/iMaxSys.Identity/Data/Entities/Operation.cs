@@ -68,9 +68,14 @@ public class Operation : TenantMasterEntity
     public string? Style { get; set; }
 
     /// <summary>
+    /// 类型
+    /// </summary>
+    public int Type { get; set; }
+
+    /// <summary>
     /// Router
     /// </summary>
-    public string Router { get; set; } = string.Empty;
+    public string Action { get; set; } = string.Empty;
 
     /// <summary>
     /// Status
