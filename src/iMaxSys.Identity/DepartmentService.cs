@@ -11,15 +11,10 @@
 //日期：2022-06-15
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Exceptions;
-using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data;
 using iMaxSys.Data.Services;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
-using iMaxSys.Identity.Common;
-using iMaxSys.Identity.Data.Repositories;
-using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Identity;
 

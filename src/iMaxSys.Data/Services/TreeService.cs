@@ -56,7 +56,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <param name="currentId"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<T> GetNodeAsync(long tenantId, long currentId)
+    public virtual async Task<T> GetNodeAsync(long tenantId, long currentId)
     {
         T? target = await _repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == currentId);
 
@@ -76,7 +76,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    public async Task<ITree<T>?> GetAsync(long tenantId, long xppId)
+    public virtual async Task<ITree<T>?> GetAsync(long tenantId, long xppId)
     {
         var list = await _repository.AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
         return list.ToTree((parent, child) => child.ParentId == parent.Id);
@@ -90,7 +90,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <param name="model"></param>
     /// <param name="position"></param>
     /// <returns></returns>
-    public async Task InsertAsync(long tenantId, long targetId, M model, NodePosition position)
+    public virtual async Task InsertAsync(long tenantId, long targetId, M model, NodePosition position)
     {
         T target = await GetNodeAsync(tenantId, targetId);
         T current = Make(tenantId, target.XppId, model);
@@ -102,7 +102,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <param name="currentId"></param>
     /// <param name="position"></param>
     /// <returns></returns>
-    public async Task MoveAsync(long tenantId, long targetId, long currentId, NodePosition position)
+    public virtual async Task MoveAsync(long tenantId, long targetId, long currentId, NodePosition position)
     {
         T current = await GetNodeAsync(tenantId, currentId);
         await MoveAsync(tenantId, targetId, current, position);
@@ -153,7 +153,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <param name="parentId">父节点id</param>
     /// <param name="model">模型</param>
     /// <returns></returns>
-    public async Task<M> AddAsync(long tenantId, long xppId, long? parentId, M model)
+    public virtual async Task<M> AddAsync(long tenantId, long xppId, long? parentId, M model)
     {
         T? parent;
         T current;
@@ -313,7 +313,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
         }
     }
 
-    public async Task RemoveAsync(long tenantId, long currentId)
+    public virtual async Task RemoveAsync(long tenantId, long currentId)
     {
         //存在子节点
         bool hasChildren = await _repository.AnyAsync(x => x.TenantId == tenantId && x.ParentId == currentId);
@@ -340,7 +340,7 @@ public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, I
     /// <param name="tenantId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    public async Task UpdateAsync(long tenantId, M model)
+    public virtual async Task UpdateAsync(long tenantId, M model)
     {
         T target = await GetNodeAsync(tenantId, model.Id);
          _mapper.Map(model, target);

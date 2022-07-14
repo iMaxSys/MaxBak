@@ -19,6 +19,11 @@ namespace iMaxSys.Max.Caching;
 public interface ICache
 {
     /// <summary>
+    /// 路径分隔符
+    /// </summary>
+    string Separator { get; }
+
+    /// <summary>
     /// 存在键
     /// </summary>
     /// <param name="key"></param>
@@ -75,10 +80,29 @@ public interface ICache
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
+    /// <param name="timeSpan"></param>
+    /// <param name="global"></param>
+    void Set(string key, object value, TimeSpan? timeSpan, bool global = false);
+
+    /// <summary>
+    /// 设置
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
     /// <param name="expire"></param>
     /// <param name="global"></param>
     /// <returns></returns>
     Task SetAsync(string key, object value, DateTime? expire, bool global = false);
+
+    /// <summary>
+    /// 设置
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="timeSpan"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
+    Task SetAsync(string key, object value, TimeSpan? timeSpan, bool global = false);
 
     /// <summary>
     /// 删除

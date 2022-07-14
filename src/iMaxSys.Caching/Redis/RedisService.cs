@@ -45,6 +45,11 @@ public class RedisService : IRedisService
         _appId = option.Value.XppId;
     }
 
+    /// <summary>
+    /// 路径分隔符
+    /// </summary>
+    public string Separator => ":";
+
     private string GetKey(string key, bool global = false)
     {
         return (global ? key : $"{_appId}:{key}");
@@ -120,6 +125,18 @@ public class RedisService : IRedisService
         _database.StringSet(GetKey(key, global), JsonSerializer.Serialize(value), expire - DateTime.Now);
     }
 
+    // <summary>
+    /// Set
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="timeSpan"></param>
+    /// <param name="global"></param>
+    public void Set(string key, object value, TimeSpan? timeSpan, bool global = false)
+    {
+        _database.StringSet(GetKey(key, global), JsonSerializer.Serialize(value), timeSpan);
+    }
+
     /// <summary>
     /// SetAsync
     /// </summary>
@@ -131,6 +148,19 @@ public class RedisService : IRedisService
     public async Task SetAsync(string key, object value, DateTime? expire, bool global = false)
     {
         await _database.StringSetAsync(GetKey(key, global), JsonSerializer.Serialize(value), expire - DateTime.Now);
+    }
+
+    /// <summary>
+    /// SetAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="timeSpan"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
+    public async Task SetAsync(string key, object value, TimeSpan? timeSpan, bool global = false)
+    {
+        await _database.StringSetAsync(GetKey(key, global), JsonSerializer.Serialize(value), timeSpan);
     }
 
     /// <summary>

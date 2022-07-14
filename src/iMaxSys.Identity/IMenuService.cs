@@ -11,12 +11,11 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-
+using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Data.Services;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Models;
-using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Identity;
 

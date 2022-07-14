@@ -20,21 +20,27 @@ using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Identity;
 
+/// <summary>
+/// 菜单服务
+/// </summary>
 public class MenuService : TreeService<Menu, MenuModel>, IMenuService
 {
     /// <summary>
-    /// _unitOfWork
-    /// </summary>
-    //private readonly IUnitOfWork _unitOfWork;
-
-    /// <summary>
     /// 构造
     /// </summary>
+    /// <param name="mapper"></param>
     /// <param name="unitOfWork"></param>
     public MenuService(IMapper mapper, IUnitOfWork unitOfWork) : base(mapper, unitOfWork)
     {
     }
 
+    /// <summary>
+    /// 获取角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
     public async Task<ITree<Menu>?> GetAsync(long tenantId, long xppId, long roleId)
     {
         var repository = _unitOfWork.GetRepository<RoleMenu>();
