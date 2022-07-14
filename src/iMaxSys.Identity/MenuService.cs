@@ -11,27 +11,36 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-
+using iMaxSys.Max.Extentions;
+using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Data;
 using iMaxSys.Data.Services;
-using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Models;
-using iMaxSys.Max.Collection.Trees;
+using iMaxSys.Identity.Common;
+using iMaxSys.Identity.Data.Entities;
+
+using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
+using DbRole = iMaxSys.Identity.Data.Entities.Role;
 
 namespace iMaxSys.Identity;
 
 /// <summary>
 /// 菜单服务
 /// </summary>
-public class MenuService : TreeService<Menu, MenuModel>, IMenuService
+public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
 {
+    private readonly IdentityCache _identityCache;
+
     /// <summary>
     /// 构造
     /// </summary>
     /// <param name="mapper"></param>
     /// <param name="unitOfWork"></param>
-    public MenuService(IMapper mapper, IUnitOfWork unitOfWork) : base(mapper, unitOfWork)
+    public MenuService(IMapper mapper, IUnitOfWork unitOfWork, IdentityCache identityCache) : base(mapper, unitOfWork)
     {
+        _identityCache = identityCache;
     }
 
     /// <summary>
@@ -41,12 +50,35 @@ public class MenuService : TreeService<Menu, MenuModel>, IMenuService
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<ITree<Menu>?> GetAsync(long tenantId, long xppId, long roleId)
+    public async Task<IMenu> GetAsync(long tenantId, long xppId, long roleId)
     {
-        var repository = _unitOfWork.GetRepository<RoleMenu>();
-        var menus = await repository.AllAsync(predicate : x => x.TenantId == tenantId && x.XppId == xppId && x.RoleId == roleId, include : source => source.Include(y => y.Menu).ThenInclude(y => y.Operations));
+        var repository = _unitOfWork.GetRepository<DbRole>();
+        var role = await repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
+
+        if (role is null)
+        {
+            throw new MaxException(ResultCode.RoleNotExists);
+        }
+
+        var menuIds = role.MenuIds?.ToLongArray();
+
         var list = menus.Select(x => x.Menu);
         return list.ToTree((parent, child) => child.ParentId == parent.Id);
+    }
+
+    /// <summary>
+    /// 匹配菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="ids"></param>
+    private async void MatchMenu(long tenantId, long xppId, long[] ids)
+    {
+        var repository = _unitOfWork.GetRepository<DbMenu>();
+        var list = await repository.AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
+        var menus = list.Where(x => !ids.Contains(x.Id));
+
+
     }
 }
 

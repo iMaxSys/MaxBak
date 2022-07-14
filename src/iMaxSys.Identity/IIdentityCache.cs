@@ -27,7 +27,15 @@ public interface IIdentityCache : ISingleton
     /// <param name="tenantId"></param>
     /// <param name="memberId"></param>
     /// <returns></returns>
-    Task<bool> HasMember(long tenantId, long memberId);
+    Task<bool> HasMemberAsync(long tenantId, long memberId);
+
+    /// <summary>
+    /// 获取member
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    Task<IMember> GetMemberAsync(long tenantId, long memberId);
 
     /// <summary>
     /// 设置member
@@ -35,7 +43,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="tenantId"></param>
     /// <param name="member"></param>
     /// <returns></returns>
-    Task SetMember(long tenantId, IMember member);
+    Task SetMemberAsync(long tenantId, IMember member);
 
     /// <summary>
     /// 租户应用菜单是否存在
@@ -43,7 +51,24 @@ public interface IIdentityCache : ISingleton
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<bool> HasTenantMenu(long tenantId, long xppId);
+    Task<bool> HasTenantMenuAsync(long tenantId, long xppId);
+
+    /// <summary>
+    /// 获取租户应用菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    Task<IMenu> GetTenantMenuAsync(long tenantId, long xppId);
+
+    /// <summary>
+    /// 设置租户应用菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="menu"></param>
+    /// <returns></returns>
+    Task SetTenantMenuAsync(long tenantId, long xppId, IMenu menu);
 
     /// <summary>
     /// 租户应用角色菜单是否存在
@@ -52,7 +77,26 @@ public interface IIdentityCache : ISingleton
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<bool> HasRoleMenu(long tenantId, long xppId, long roleId);
+    Task<bool> HasRoleMenuAsync(long tenantId, long xppId, long roleId);
+
+    /// <summary>
+    /// 获取租户应用角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    Task<IMenu> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
+
+    /// <summary>
+    /// 设置租户应用角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <param name="menu"></param>
+    /// <returns></returns>
+    Task SetRoleMenuAsync(long tenantId, long xppId, long roleId, IMenu menu);
 
     /// <summary>
     /// 角色是否存在
@@ -61,6 +105,23 @@ public interface IIdentityCache : ISingleton
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<bool> HasRole(long tenantId, long xppId, long roleId);
-}
+    Task<bool> HasRoleAsync(long tenantId, long xppId, long roleId);
 
+    /// <summary>
+    /// 获取角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    Task<IRole> GetRoleAsync(long tenantId, long xppId, long roleId);
+
+    /// <summary>
+    /// 设置角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    Task SetRoleAsync(long tenantId, long xppId, IRole role);
+}

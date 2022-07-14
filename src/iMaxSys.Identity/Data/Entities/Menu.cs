@@ -146,9 +146,4 @@ public class Menu : TenantMasterEntity, ITreeNode
     /// Operations
     /// </summary>
     public virtual ICollection<Operation>? Operations { get; set; }
-
-    /// <summary>
-    /// 角色
-    /// </summary>
-    public virtual ICollection<RoleMenu>? RoleMenus { get; set; }
 }

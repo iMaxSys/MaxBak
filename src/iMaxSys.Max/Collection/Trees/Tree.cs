@@ -54,7 +54,6 @@ public static class TreeExtensions
 		var lookup = items.ToLookup(item => items.FirstOrDefault(parent => parentSelector(parent, item)), child => child);
 		return Tree<T>.FromLookup(lookup!);
 	}
-
 }
 
 /// <summary>
