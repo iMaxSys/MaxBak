@@ -66,9 +66,14 @@ public class OperationModel
     public string? Style { get; set; }
 
     /// <summary>
-    /// Router
+    /// Action
     /// </summary>
-    public string? Router { get; set; }
+    public string? Action { get; set; }
+
+    /// <summary>
+    /// 是否可见
+    /// </summary>
+    public bool IsShow { get; set; }
 
     /// <summary>
     /// Status

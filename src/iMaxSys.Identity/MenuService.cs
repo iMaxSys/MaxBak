@@ -23,6 +23,7 @@ using iMaxSys.Identity.Data.Entities;
 
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
+using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Identity;
 
@@ -44,15 +45,26 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     }
 
     /// <summary>
+    /// 获取获取角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    public async Task<MenuModel> GetXppMenuAsync(long tenantId, long xppId)
+    {
+        var list = await _unitOfWork.GetRepository<DbMenu>().AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
+        return MakeMenu(list);
+    }
+
+    /// <summary>
     /// 获取角色菜单
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<IMenu> GetAsync(long tenantId, long xppId, long roleId)
+    public async Task<MenuModel> GetRoleMenuAsync(long tenantId, long xppId, long roleId)
     {
-        ITree<>
         var repository = _unitOfWork.GetRepository<DbRole>();
         var role = await repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
 
@@ -79,15 +91,23 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
-    /// <param name="ids"></param>
-    private async Task<IMenu> MatchMenu(long tenantId, long xppId, long[] ids)
+    /// <param name="menuIds"></param>
+    private async Task<IMenu> MatchMenu(long tenantId, long xppId, long[] menuIds, long[] operationIds)
     {
         var repository = _unitOfWork.GetRepository<DbMenu>();
-        var list = await repository.AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
-        var menus = list.Where(x => ids.Contains(x.Id) || ids.Contains(0));
+        var list = await repository.AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && (menuIds.Contains(x.Id) || menuIds.Contains(0)), include: source => source.Include(y => y.Operations == null ? null : y.Operations.Where(o => o.Status == Status.Enable && operationIds.Contains(o.Id))));
+        return MakeMenu(list);
+    }
 
-        var xx = list.ToTree((parent, child) => child.ParentId == parent.Id);
-
+    /// <summary>
+    /// 生成树
+    /// </summary>
+    /// <param name="list"></param>
+    /// <returns></returns>
+    private MenuModel MakeMenu(IList<DbMenu> list)
+    {
+        var tree = list.ToTree((parent, child) => child.ParentId == parent.Id);
+        return _mapper.Map<MenuModel>(tree);
     }
 }
 
