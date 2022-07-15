@@ -39,6 +39,8 @@ public class OperationConfiguration : TenantMasterEntityConfiguration<Operation>
         builder.Property(x => x.QuickCode).HasColumnName("quick_code").HasMaxLength(50).IsRequired();
         //Descripton
         builder.Property(x => x.Descripton).HasColumnName("descripton").HasMaxLength(50);
+        //Descripton
+        builder.Property(x => x.Value).HasColumnName("value").HasMaxLength(50);
         //Icon
         builder.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(50);
         //Style
@@ -47,6 +49,8 @@ public class OperationConfiguration : TenantMasterEntityConfiguration<Operation>
         builder.Property(x => x.Type).HasColumnName("type").IsRequired();
         //Action
         builder.Property(x => x.Action).HasColumnName("action").HasMaxLength(50).IsRequired();
+        //是否可见
+        builder.Property(x => x.IsShow).HasColumnName("is_show").IsRequired();
         //Status
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //Menu

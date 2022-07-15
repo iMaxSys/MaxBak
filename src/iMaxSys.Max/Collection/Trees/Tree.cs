@@ -171,16 +171,21 @@ public interface ITreeNode
 	/// </summary>
 	public string? Ext { get; set; }
 
-	/// <summary>
-	/// 状态
-	/// </summary>
-	public Status Status { get; set; }
+    /// <summary>
+    /// 是否可见
+    /// </summary>
+    public bool IsShow { get; set; }
+
+    /// <summary>
+    /// 状态
+    /// </summary>
+    public Status Status { get; set; }
 }
 
 /// <summary>
 /// 部门模型
 /// </summary>
-public abstract class TreeView : ITreeNode
+public abstract class TreeNode : ITreeNode
 {
 	/// <summary>
 	/// Id
@@ -291,6 +296,11 @@ public abstract class TreeView : ITreeNode
 	/// Ext
 	/// </summary>
 	public string? Ext { get; set; }
+
+	/// <summary>
+    /// 是否可见
+    /// </summary>
+	public bool IsShow { get; set; }
 
 	/// <summary>
 	/// Status
@@ -500,6 +510,7 @@ public class Tree<T> : ITree<T> where T : ITreeNode
 	}
 }
 
+/*
 //=======================范型树============================
 
 /// <summary>
@@ -1430,12 +1441,12 @@ public class Tree : TreeNode
 	/// <param name="stores"></param>
 	private void SetNodes(TreeNode parent, List<TreeStore> stores)
 	{
-		stores.Where(x => x.ParentId == parent.Id).ForEach(x =>
+		stores.Where((Func<TreeStore, bool>)(x => x.ParentId == parent.Id)).ForEach((Action<TreeStore>)(x =>
 		{
-			TreeNode treeNode = new(x);
+            TreeNode treeNode = new(x);
 			parent.Nodes.Add(treeNode);
-			SetNodes(treeNode, stores);
-		});
+            SetNodes(treeNode, stores);
+		}));
 	}
 }
 
@@ -1549,6 +1560,7 @@ public class Tree : TreeNode
 	///// </summary>
 	//public Common.Enums.Status Status { get; set; } = Common.Enums.Status.Disable;
 //}
+
 
 public class TreeNode
 {
@@ -2352,3 +2364,4 @@ public interface ITreeStoreProvider
 
 	Task UpdateAsync(TreeNode treeNode);
 }
+*/

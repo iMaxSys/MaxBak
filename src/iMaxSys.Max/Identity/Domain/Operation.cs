@@ -26,9 +26,14 @@ public class Operation : IOperation
     public long Id { get; set; }
 
     /// <summary>
-    /// MenuId
+    /// 名称
     /// </summary>
-    public long MenuId { get; set; }
+    public string? Name { get; set; }
+
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string? Alias { get; set; }
 
     /// <summary>
     /// Code
@@ -36,14 +41,19 @@ public class Operation : IOperation
     public string? Code { get; set; }
 
     /// <summary>
-    /// 名称
+    /// QuickCode
     /// </summary>
-    public string? Name { get; set; }
+    public string? QuickCode { get; set; }
 
     /// <summary>
     /// Descripton
     /// </summary>
     public string? Descripton { get; set; }
+
+    /// <summary>
+    /// Value
+    /// </summary>
+    public string? Value { get; set; }
 
     /// <summary>
     /// Icon
@@ -56,9 +66,19 @@ public class Operation : IOperation
     public string? Style { get; set; }
 
     /// <summary>
-    /// Router
+    /// 类型
     /// </summary>
-    public string? Router { get; set; }
+    public int Type { get; set; }
+
+    /// <summary>
+    /// Action
+    /// </summary>
+    public string? Action { get; set; }
+
+    /// <summary>
+    /// IsShow
+    /// </summary>
+    public bool IsShow { get; set; }
 
     /// <summary>
     /// Status

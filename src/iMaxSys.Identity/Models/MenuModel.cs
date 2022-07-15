@@ -11,6 +11,7 @@
 //日期：2019-11-16
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Identity.Models;
@@ -18,10 +19,6 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 菜单模型
 /// </summary>
-public class MenuModel : TreeView
+public class MenuModel : Menu
 {
-    /// <summary>
-    /// Action
-    /// </summary>
-    public string? Action { get; set; }
 }

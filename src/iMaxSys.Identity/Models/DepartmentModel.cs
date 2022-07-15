@@ -12,12 +12,13 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Collection.Trees;
+using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity.Models;
 
 /// <summary>
 /// 部门模型
 /// </summary>
-public class DepartmentModel : TreeView
+public class DepartmentModel : Department
 {
 }

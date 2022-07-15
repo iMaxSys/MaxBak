@@ -67,6 +67,8 @@ public class MenuConfiguration : TenantMasterEntityConfiguration<Menu>
         builder.Property(x => x.Action).HasColumnName("action").HasMaxLength(50).HasComment("Action");
         //Ext
         builder.Property(x => x.Ext).HasColumnName("ext").HasMaxLength(255).HasComment("Ext");
+        //是否可见
+        builder.Property(x => x.IsShow).HasColumnName("is_show").IsRequired();
         //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //关系

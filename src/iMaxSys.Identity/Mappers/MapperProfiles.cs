@@ -13,6 +13,7 @@
 
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
+using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 
 namespace iMaxSys.Identity.Mappers
 {
@@ -25,9 +26,8 @@ namespace iMaxSys.Identity.Mappers
         {
             CreateMap<DepartmentModel, Department>();
             CreateMap<Department, DepartmentModel>();
-            CreateMap<MenuModel, Menu>();
-            CreateMap<Menu, MenuModel>();
+            CreateMap<iMaxSys.Max.Identity.Domain.Menu, Menu>();
+            CreateMap<Menu, iMaxSys.Max.Identity.Domain.Menu>();
         }
     }
 }
-

@@ -26,42 +26,62 @@ public interface IOperation
     long Id { get; set; }
 
     /// <summary>
-    /// MenuId
+    /// 名称
     /// </summary>
-    long MenuId { get; set; }
+    public string Name { get; set; }
+
+    /// <summary>
+    /// 别名
+    /// </summary>
+    public string? Alias { get; set; }
 
     /// <summary>
     /// Code
     /// </summary>
-    string? Code { get; set; }
+    public string? Code { get; set; }
 
     /// <summary>
-    /// 名称
+    /// QuickCode
     /// </summary>
-    string? Name { get; set; }
+    public string? QuickCode { get; set; }
 
     /// <summary>
     /// Descripton
     /// </summary>
-    string? Descripton { get; set; }
+    public string? Descripton { get; set; }
+
+    /// <summary>
+    /// Value
+    /// </summary>
+    public string? Value { get; set; }
 
     /// <summary>
     /// Icon
     /// </summary>
-    string? Icon { get; set; }
+    public string? Icon { get; set; }
 
     /// <summary>
     /// Style
     /// </summary>
-    string? Style { get; set; }
+    public string? Style { get; set; }
+
+    /// <summary>
+    /// 类型
+    /// </summary>
+    public int Type { get; set; }
 
     /// <summary>
     /// Router
     /// </summary>
-    string? Router { get; set; }
+    public string? Action { get; set; }
+
+    /// <summary>
+    /// IsShow
+    /// </summary>
+    public bool IsShow { get; set; }
 
     /// <summary>
     /// Status
     /// </summary>
-    Status Status { get; set; }
+    public Status Status { get; set; }
 }

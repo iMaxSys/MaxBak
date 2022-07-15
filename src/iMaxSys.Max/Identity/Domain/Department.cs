@@ -12,10 +12,11 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Common.Enums;
-using iMaxSys.Max.Algorithm.Collection;
+using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Max.Identity.Domain;
 
-//public class Department : TreeNode, IDepartment
-//{
-//}
+public class Department : TreeNode, IDepartment
+{
+    public List<IDepartment>? Children { get; set; }
+}

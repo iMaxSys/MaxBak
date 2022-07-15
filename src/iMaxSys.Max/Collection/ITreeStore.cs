@@ -15,6 +15,7 @@ using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Max.Collection;
 
+/*
 /// <summary>
 /// 树形存储接口
 /// </summary>
@@ -57,3 +58,4 @@ public interface ITreeStore : IDependency
     /// <returns></returns>
     Task MoveAsync(long at, LrTreeNode treeNode);
 }
+*/

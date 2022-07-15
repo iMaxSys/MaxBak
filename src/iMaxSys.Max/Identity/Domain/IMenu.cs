@@ -12,55 +12,24 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Max.Identity.Domain;
 
-public interface IMenu
+/// <summary>
+/// 菜单接口
+/// </summary>
+public interface IMenu : ITreeNode
 {
     /// <summary>
-    /// Id
+    /// Action
     /// </summary>
-    long Id { get; set; }
-
-    /// <summary>
-    /// Code
-    /// </summary>
-    string? Code { get; set; }
-
-    /// <summary>
-    /// 名称
-    /// </summary>
-    string? Name { get; set; }
-
-    /// <summary>
-    /// Descripton
-    /// </summary>
-    string? Description { get; set; }
-
-    /// <summary>
-    /// Icon
-    /// </summary>
-    string? Icon { get; set; }
-
-    /// <summary>
-    /// Style
-    /// </summary>
-    string? Style { get; set; }
-
-    /// <summary>
-    /// Router
-    /// </summary>
-    string? Router { get; set; }
-
-    /// <summary>
-    /// Status
-    /// </summary>
-    Status Status { get; set; }
+    public string? Action { get; set; }
 
     /// <summary>
     /// Menus
     /// </summary>
-    List<IMenu>? Menus { get; set; }
+    List<IMenu>? Children { get; set; }
 
     /// <summary>
     /// Operations

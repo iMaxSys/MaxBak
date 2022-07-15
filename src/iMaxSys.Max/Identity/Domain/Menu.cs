@@ -20,52 +20,17 @@ namespace iMaxSys.Max.Identity.Domain;
 /// Menu
 /// 此处最终
 /// </summary>
-public class Menu : IMenu
+public class Menu : TreeNode, IMenu
 {
     /// <summary>
-    /// Id
+    /// Ext
     /// </summary>
-    public long Id { get; set; }
-
-    /// <summary>
-    /// Code
-    /// </summary>
-    public string? Code { get; set; }
-
-    /// <summary>
-    /// 名称
-    /// </summary>
-    public string? Name { get; set; }
-
-    /// <summary>
-    /// Description
-    /// </summary>
-    public string? Description { get; set; }
-
-    /// <summary>
-    /// Icon
-    /// </summary>
-    public string? Icon { get; set; }
-
-    /// <summary>
-    /// Style
-    /// </summary>
-    public string? Style { get; set; }
-
-    /// <summary>
-    /// Router
-    /// </summary>
-    public string? Router { get; set; }
-
-    /// <summary>
-    /// Status
-    /// </summary>
-    public Status Status { get; set; }
+    public string? Action { get; set; }
 
     /// <summary>
     /// Menus
     /// </summary>
-    public List<IMenu>? Menus { get; set; }
+    public List<IMenu>? Children { get; set; }
 
     /// <summary>
     /// Operations

@@ -133,6 +133,11 @@ public class Menu : TenantMasterEntity, ITreeNode
     public Status Status { get; set; } = Status.Enable;
 
     /// <summary>
+    /// 是否可见
+    /// </summary>
+    public bool IsShow { get; set; }
+
+    /// <summary>
     /// 上级部门
     /// </summary>
     public virtual Menu? Parent { get; set; }

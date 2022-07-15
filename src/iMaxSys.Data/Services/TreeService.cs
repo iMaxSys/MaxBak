@@ -31,7 +31,7 @@ namespace iMaxSys.Data.Services;
 /// <typeparam name="T">实体类型</typeparam>
 /// <typeparam name="M">返回类型</typeparam>
 /// <typeparam name="R">仓储类型</typeparam>
-public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, ITreeNode, new() where M : TreeView
+public abstract class TreeService<T, M> : ITreeService<T, M> where T : Entity, ITreeNode, new() where M : TreeNode
 {
     protected readonly IMapper _mapper;
     protected readonly IUnitOfWork _unitOfWork;

@@ -58,6 +58,11 @@ public class Operation : TenantMasterEntity
     public string? Descripton { get; set; }
 
     /// <summary>
+    /// Value
+    /// </summary>
+    public string? Value { get; set; }
+
+    /// <summary>
     /// Icon
     /// </summary>
     public string? Icon { get; set; }
@@ -76,6 +81,11 @@ public class Operation : TenantMasterEntity
     /// Router
     /// </summary>
     public string Action { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否可见
+    /// </summary>
+    public bool IsShow { get; set; }
 
     /// <summary>
     /// Status

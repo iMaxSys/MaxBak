@@ -65,6 +65,8 @@ public class DepartmentConfiguration : TenantMasterEntityConfiguration<Departmen
         builder.Property(x => x.SelectedIcon).HasColumnName("selected_icon").HasMaxLength(50).HasComment("SelectedIcon");
         //Ext
         builder.Property(x => x.Ext).HasColumnName("ext").HasMaxLength(255).HasComment("Ext");
+        //是否可见
+        builder.Property(x => x.IsShow).HasColumnName("is_show").IsRequired();
         //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //关系

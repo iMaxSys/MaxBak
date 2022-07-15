@@ -12,13 +12,15 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Common.Enums;
-using iMaxSys.Max.Algorithm.Collection;
+using iMaxSys.Max.Collection.Trees;
 
 namespace iMaxSys.Max.Identity.Domain;
 
 /// <summary>
 /// 部门
 /// </summary>
-//public interface IDepartment : ITreeNode
-//{
-//}
+public interface IDepartment : ITreeNode
+{
+    //子部门
+    public List<IDepartment>? Children { get; set; }
+}

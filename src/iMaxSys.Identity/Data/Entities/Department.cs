@@ -123,6 +123,11 @@ public class Department : TenantMasterEntity, ITreeNode
     public string? Ext { get; set; }
 
     /// <summary>
+    /// 是否可见
+    /// </summary>
+    public bool IsShow { get; set; }
+
+    /// <summary>
     /// 状态
     /// </summary>
     public Status Status { get; set; } = Status.Enable;

@@ -52,6 +52,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<IMenu> GetAsync(long tenantId, long xppId, long roleId)
     {
+        ITree<>
         var repository = _unitOfWork.GetRepository<DbRole>();
         var role = await repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
 
@@ -62,9 +63,16 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
 
         var menuIds = role.MenuIds?.ToLongArray();
 
+        //0为全部权限
+        if (menuIds?.Contains(0) == true)
+        {
+
+        }
+
         var list = menus.Select(x => x.Menu);
-        return list.ToTree((parent, child) => child.ParentId == parent.Id);
+        var xx = list.ToTree((parent, child) => child.ParentId == parent.Id);
     }
+
 
     /// <summary>
     /// 匹配菜单
@@ -72,12 +80,13 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <param name="ids"></param>
-    private async void MatchMenu(long tenantId, long xppId, long[] ids)
+    private async Task<IMenu> MatchMenu(long tenantId, long xppId, long[] ids)
     {
         var repository = _unitOfWork.GetRepository<DbMenu>();
         var list = await repository.AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
-        var menus = list.Where(x => !ids.Contains(x.Id));
+        var menus = list.Where(x => ids.Contains(x.Id) || ids.Contains(0));
 
+        var xx = list.ToTree((parent, child) => child.ParentId == parent.Id);
 
     }
 }
