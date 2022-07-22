@@ -17,6 +17,7 @@ using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity;
 
+/*
 /// <summary>
 /// 身份缓存
 /// </summary>
@@ -102,3 +103,4 @@ public class IdentityCache : IIdentityCache
     /// <returns></returns>
     public async Task<bool> HasRole(long tenantId, long xppId, long roleId) => await _cache.KeyExistsAsync($"{tagMenu}{xppId}{_cache.Separator}{tenantId}{_cache.Separator}{roleId}"); 
 }
+*/

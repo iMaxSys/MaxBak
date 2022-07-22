@@ -29,7 +29,7 @@ public interface IMenu : ITreeNode
     /// <summary>
     /// Menus
     /// </summary>
-    List<IMenu>? Children { get; set; }
+    LinkedList<IMenu>? Children { get; set; }
 
     /// <summary>
     /// Operations

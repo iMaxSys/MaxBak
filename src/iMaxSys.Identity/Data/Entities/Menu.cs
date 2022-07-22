@@ -145,10 +145,10 @@ public class Menu : TenantMasterEntity, ITreeNode
     /// <summary>
     /// 下级部门
     /// </summary>
-    public virtual ICollection<Menu>? Menus { get; set; }
+    public virtual List<Menu>? Menus { get; set; }
 
     /// <summary>
     /// Operations
     /// </summary>
-    public virtual ICollection<Operation>? Operations { get; set; }
+    public virtual List<Operation>? Operations { get; set; }
 }

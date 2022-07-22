@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Data;
@@ -23,7 +24,6 @@ using iMaxSys.Identity.Data.Entities;
 
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
-using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Identity;
 
@@ -32,20 +32,20 @@ namespace iMaxSys.Identity;
 /// </summary>
 public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
 {
-    private readonly IdentityCache _identityCache;
+    //身份缓存
+    //private readonly IdentityCache _identityCache;
 
     /// <summary>
     /// 构造
     /// </summary>
     /// <param name="mapper"></param>
     /// <param name="unitOfWork"></param>
-    public MenuService(IMapper mapper, IUnitOfWork unitOfWork, IdentityCache identityCache) : base(mapper, unitOfWork)
+    public MenuService(IMapper mapper, IUnitOfWork unitOfWork) : base(mapper, unitOfWork)
     {
-        _identityCache = identityCache;
+        //_identityCache = identityCache;
     }
-
     /// <summary>
-    /// 获取获取角色菜单
+    /// 获取应用色菜单
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
@@ -65,37 +65,29 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<MenuModel> GetRoleMenuAsync(long tenantId, long xppId, long roleId)
     {
+        IList<DbMenu> list;
         var repository = _unitOfWork.GetRepository<DbRole>();
         var role = await repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
 
+        //角色不存在
         if (role is null)
         {
             throw new MaxException(ResultCode.RoleNotExists);
         }
 
-        var menuIds = role.MenuIds?.ToLongArray();
+        long[] menuIds = role.MenuIds?.ToLongArray() ?? new long[] { -1 };
+        long[] operationIds = role.OperationIds?.ToLongArray() ?? new long[] { -1 };
 
         //0为全部权限
-        if (menuIds?.Contains(0) == true)
+        if (menuIds.Contains(0) == true)
         {
-
+            list = await _unitOfWork.GetRepository<DbMenu>().AllAsync(x => x.TenantId == tenantId && x.XppId == xppId, include: source => source.Include(y => y.Operations));
+        }
+        else
+        {
+            list = await _unitOfWork.GetRepository<DbMenu>().AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && menuIds.Contains(x.Id), include: source => source.Include(e => e.Operations!.Where(p => operationIds.Contains(p.Id))));
         }
 
-        var list = menus.Select(x => x.Menu);
-        var xx = list.ToTree((parent, child) => child.ParentId == parent.Id);
-    }
-
-
-    /// <summary>
-    /// 匹配菜单
-    /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="xppId"></param>
-    /// <param name="menuIds"></param>
-    private async Task<IMenu> MatchMenu(long tenantId, long xppId, long[] menuIds, long[] operationIds)
-    {
-        var repository = _unitOfWork.GetRepository<DbMenu>();
-        var list = await repository.AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && (menuIds.Contains(x.Id) || menuIds.Contains(0)), include: source => source.Include(y => y.Operations == null ? null : y.Operations.Where(o => o.Status == Status.Enable && operationIds.Contains(o.Id))));
         return MakeMenu(list);
     }
 
@@ -107,7 +99,9 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     private MenuModel MakeMenu(IList<DbMenu> list)
     {
         var tree = list.ToTree((parent, child) => child.ParentId == parent.Id);
-        return _mapper.Map<MenuModel>(tree);
+        var menu = _mapper.Map<MenuModel>(tree);
+        return menu;
+        //return new MenuModel();
     }
 }
 

@@ -12,71 +12,13 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity.Models;
 
 /// <summary>
 /// 操作模型
 /// </summary>
-public class OperationModel
+public class OperationModel : Operation
 {
-    /// <summary>
-    /// Id
-    /// </summary>
-    public long Id { get; set; }
-
-    /// <summary>
-    /// MenuId
-    /// </summary>
-    public long MenuId { get; set; }
-
-    /// <summary>
-    /// 名称
-    /// </summary>
-    public string Name { get; set; } = String.Empty;
-
-    /// <summary>
-    /// Alias
-    /// </summary>
-    public string Alias { get; set; } = String.Empty;
-
-    /// <summary>
-    /// Code
-    /// </summary>
-    public string Code { get; set; } = String.Empty;
-
-    /// <summary>
-    /// QuickCode
-    /// </summary>
-    public string QuickCode { get; set; } = String.Empty;
-
-    /// <summary>
-    /// Descripton
-    /// </summary>
-    public string? Descripton { get; set; }
-
-    /// <summary>
-    /// Icon
-    /// </summary>
-    public string? Icon { get; set; }
-
-    /// <summary>
-    /// Style
-    /// </summary>
-    public string? Style { get; set; }
-
-    /// <summary>
-    /// Action
-    /// </summary>
-    public string? Action { get; set; }
-
-    /// <summary>
-    /// 是否可见
-    /// </summary>
-    public bool IsShow { get; set; }
-
-    /// <summary>
-    /// Status
-    /// </summary>
-    public Status Status { get; set; } = Status.Enable;
 }

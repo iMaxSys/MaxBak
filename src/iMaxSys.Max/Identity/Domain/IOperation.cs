@@ -23,7 +23,12 @@ public interface IOperation
     /// <summary>
     /// Id
     /// </summary>
-    long Id { get; set; }
+    public long Id { get; set; }
+
+    /// <summary>
+    /// MenuId
+    /// </summary>
+    public long MenuId { get; set; }
 
     /// <summary>
     /// 名称

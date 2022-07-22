@@ -1,6 +1,9 @@
+using AutoMapper;
 using iMaxSys.Identity;
 using iMaxSys.Max.Collection;
 using iMaxSys.Max.Collection.Trees;
+using iMaxSys.Max.Extentions;
+using Kylin.Api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kylin.Api.Controllers
@@ -9,19 +12,21 @@ namespace Kylin.Api.Controllers
     [Route("[controller]/[action]")]
     public class OrderController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ICheckCodeService _checkCodeService;
         private readonly IDepartmentService _departmentService;
         private readonly IMenuService _menuService;
 
-        public OrderController(ICheckCodeService checkCodeService, IDepartmentService departmentService, IMenuService menuService)
+        public OrderController(IMapper mapper, ICheckCodeService checkCodeService, IDepartmentService departmentService, IMenuService menuService)
         {
+            _mapper = mapper;
             _checkCodeService = checkCodeService;
             _departmentService = departmentService;
             _menuService = menuService;
         }
 
         [HttpGet]
-        public async Task<string?> ToJson()
+        public async Task<object> ToJson()
         {
             /*
             LrTree tree = new(0, "earth");
@@ -112,8 +117,9 @@ namespace Kylin.Api.Controllers
 
             //return tree.ToJson();
 
-            var menus = await _menuService.GetAsync(0, 0, 10000);
-            return menus?.ToJson();
+            var menus = await _menuService.GetRoleMenuAsync(0, 0, 200);
+            var menu = _mapper.Map<MenuView>(menus);
+            return menus;
         }
     }
 }

@@ -36,7 +36,7 @@ public class MenuConfiguration : TenantMasterEntityConfiguration<Menu>
         //右值
         builder.Property(x => x.Rv).HasColumnName("rv").IsRequired().HasComment("右值");
         //索引
-        builder.Property(x => x.Index).HasColumnName("Index").IsRequired().HasComment("索引");
+        builder.Property(x => x.Index).HasColumnName("index").IsRequired().HasComment("索引");
         //深度
         builder.Property(x => x.Level).HasColumnName("level").IsRequired().HasComment("深度");
         //是否根节点

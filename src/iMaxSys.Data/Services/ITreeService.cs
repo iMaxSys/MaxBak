@@ -20,7 +20,7 @@ namespace iMaxSys.Data.Services;
 /// <summary>
 /// ITreeService
 /// </summary>
-public interface ITreeService<T, M> where T : Entity, ITreeNode, new() where M : ITreeNode
+public interface ITreeService<T, M> where T : Entity, ITreeNode, new()
 {
     /// <summary>
     /// 获取节点

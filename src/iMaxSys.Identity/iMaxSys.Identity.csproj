@@ -17,6 +17,7 @@
     <None Remove="Common\" />
     <None Remove="Migrations\" />
     <None Remove="Mapper\" />
+    <None Remove="Data\Mappers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
@@ -28,9 +29,11 @@
     <Folder Include="Common\" />
     <Folder Include="Migrations\" />
     <Folder Include="Mappers\" />
+    <Folder Include="Data\Mappers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20220519064929_init.cs" />
     <Compile Remove="Migrations\20220519064929_init.Designer.cs" />
+    <Compile Remove="Data\Mappers\IdentityMapperProfile.cs" />
   </ItemGroup>
 </Project>

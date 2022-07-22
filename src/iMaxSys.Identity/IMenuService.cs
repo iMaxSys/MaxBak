@@ -14,19 +14,22 @@
 using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Data.Services;
-using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Models;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Identity.Data.Entities;
+
+using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
+using DbRole = iMaxSys.Identity.Data.Entities.Role;
 
 namespace iMaxSys.Identity;
 
 /// <summary>
 /// 菜单服务接口
 /// </summary>
-public interface IMenuService : ITreeService<Menu, MenuModel>, IDependency
+public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
 {
     /// <summary>
-    /// 获取获取角色菜单
+    /// 获取应用色菜单
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
@@ -40,5 +43,5 @@ public interface IMenuService : ITreeService<Menu, MenuModel>, IDependency
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<IMenu> GetRoleMenuAsync(long tenantId, long xppId, long roleId)
+    Task<MenuModel> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
 }

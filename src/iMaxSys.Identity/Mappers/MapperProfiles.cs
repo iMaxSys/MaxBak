@@ -11,10 +11,16 @@
 //日期：2022-07-07
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Extentions;
+using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Identity.Models;
-using iMaxSys.Identity.Data.Entities;
+
+using DbTenant = iMaxSys.Data.Entities.App.Tenant;
+using DbRole = iMaxSys.Identity.Data.Entities.Role;
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
+using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using DbOperation = iMaxSys.Identity.Data.Entities.Operation;
 
 namespace iMaxSys.Identity.Mappers
 {
@@ -25,39 +31,109 @@ namespace iMaxSys.Identity.Mappers
     {
         public MapperProfiles()
         {
+            CreateMap<DbTenant, Tenant>();
+
+            CreateMap<DbRole, IRole>()
+                .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds == "*" ? new long[] { 0 } : s.MenuIds.ToLongArray())))
+                .ForMember(t => t.OperationIds, opt => opt.MapFrom(s => s.OperationIds == null ? null : (s.OperationIds == "*" ? new long[] { 0 } : s.OperationIds.ToLongArray())));
+
+
+            CreateMap<DbMember, IMember>()
+                .ForMember(t => t.UserName, opt => opt.MapFrom(s => s.UserName.IfNotNull(s.Mobile)))
+                .ForMember(t => t.Name, opt => opt.MapFrom(s => s.Name ?? s.NickName));
+
             CreateMap<DepartmentModel, Department>();
             CreateMap<Department, DepartmentModel>();
-            CreateMap<MenuModel, Menu>();
-            CreateMap<Menu, MenuModel>();
-            CreateMap<ITree<Menu>, MenuModel>()
-                .ForMember(t => t.Action, opt => opt.MapFrom(s => s.Data.Action))
-                .ForMember(t => t.Alias, opt => opt.MapFrom(s => s.Data.Alias))
-                .ForMember(t => t.Code, opt => opt.MapFrom(s => s.Data.Code))
-                .ForMember(t => t.Description, opt => opt.MapFrom(s => s.Data.Description))
-                .ForMember(t => t.Ext, opt => opt.MapFrom(s => s.Data.Ext))
-                .ForMember(t => t.Icon, opt => opt.MapFrom(s => s.Data.Icon))
-                .ForMember(t => t.Id, opt => opt.MapFrom(s => s.Data.Id))
-                .ForMember(t => t.Index, opt => opt.MapFrom(s => s.Data.Index))
-                .ForMember(t => t.IsLeaf, opt => opt.MapFrom(s => s.Data.IsLeaf))
-                .ForMember(t => t.IsRoot, opt => opt.MapFrom(s => s.Data.IsRoot))
-                .ForMember(t => t.IsShow, opt => opt.MapFrom(s => s.Data.IsShow))
-                .ForMember(t => t.Level, opt => opt.MapFrom(s => s.Data.Level))
-                .ForMember(t => t.Lv, opt => opt.MapFrom(s => s.Data.Lv))
-                .ForMember(t => t.Name, opt => opt.MapFrom(s => s.Data.Name))
-                .ForMember(t => t.ParentId, opt => opt.MapFrom(s => s.Data.ParentId))
-                .ForMember(t => t.QuickCode, opt => opt.MapFrom(s => s.Data.QuickCode))
-                .ForMember(t => t.Rv, opt => opt.MapFrom(s => s.Data.Rv))
-                .ForMember(t => t.SelectedIcon, opt => opt.MapFrom(s => s.Data.SelectedIcon))
-                .ForMember(t => t.SelectedStyle, opt => opt.MapFrom(s => s.Data.SelectedStyle))
-                .ForMember(t => t.Status, opt => opt.MapFrom(s => s.Data.Status))
-                .ForMember(t => t.Style, opt => opt.MapFrom(s => s.Data.Style))
-                .ForMember(t => t.TenantId, opt => opt.MapFrom(s => s.Data.TenantId))
-                .ForMember(t => t.Type, opt => opt.MapFrom(s => s.Data.Type))
-                .ForMember(t => t.Value, opt => opt.MapFrom(s => s.Data.Value))
-                .ForMember(t => t.XppId, opt => opt.MapFrom(s => s.Data.XppId))
-                .ForMember(t => t.Operations, opt => opt.MapFrom(s => s.Data.Operations));
+            //CreateMap<ITree<DbMenu>, IMenu>().As<MenuModel>();
+            CreateMap<MenuModel, DbMenu>();
+            CreateMap<DbMenu, MenuModel>();
+            CreateMap<DbOperation, OperationModel>();
+            CreateMap<OperationModel, DbOperation>();
+            CreateMap<DbOperation, IOperation>().As<OperationModel>();
+            //CreateMap<DbOperation, IOperation>();
 
-            CreateMap<Operation, OperationModel>();
+            CreateMap<ITree<DbMenu>, IMenu>()
+               .ForMember(t => t.Action, opt => opt.MapFrom(s => s.Data.Action))
+               .ForMember(t => t.Alias, opt => opt.MapFrom(s => s.Data.Alias))
+               .ForMember(t => t.Code, opt => opt.MapFrom(s => s.Data.Code))
+               .ForMember(t => t.Description, opt => opt.MapFrom(s => s.Data.Description))
+               .ForMember(t => t.Ext, opt => opt.MapFrom(s => s.Data.Ext))
+               .ForMember(t => t.Icon, opt => opt.MapFrom(s => s.Data.Icon))
+               .ForMember(t => t.Id, opt => opt.MapFrom(s => s.Data.Id))
+               .ForMember(t => t.Index, opt => opt.MapFrom(s => s.Data.Index))
+               .ForMember(t => t.IsLeaf, opt => opt.MapFrom(s => s.Data.IsLeaf))
+               .ForMember(t => t.IsRoot, opt => opt.MapFrom(s => s.Data.IsRoot))
+               .ForMember(t => t.IsShow, opt => opt.MapFrom(s => s.Data.IsShow))
+               .ForMember(t => t.Level, opt => opt.MapFrom(s => s.Data.Level))
+               .ForMember(t => t.Lv, opt => opt.MapFrom(s => s.Data.Lv))
+               .ForMember(t => t.Name, opt => opt.MapFrom(s => s.Data.Name))
+               .ForMember(t => t.ParentId, opt => opt.MapFrom(s => s.Data.ParentId))
+               .ForMember(t => t.QuickCode, opt => opt.MapFrom(s => s.Data.QuickCode))
+               .ForMember(t => t.Rv, opt => opt.MapFrom(s => s.Data.Rv))
+               .ForMember(t => t.SelectedIcon, opt => opt.MapFrom(s => s.Data.SelectedIcon))
+               .ForMember(t => t.SelectedStyle, opt => opt.MapFrom(s => s.Data.SelectedStyle))
+               .ForMember(t => t.Status, opt => opt.MapFrom(s => s.Data.Status))
+               .ForMember(t => t.Style, opt => opt.MapFrom(s => s.Data.Style))
+               .ForMember(t => t.Type, opt => opt.MapFrom(s => s.Data.Type))
+               .ForMember(t => t.Value, opt => opt.MapFrom(s => s.Data.Value))
+               .ForMember(t => t.Operations, opt => opt.MapFrom(s => s.Data.Operations))
+               .ForMember(t => t.Children, opt => opt.MapFrom(s => s.Children)).As<MenuModel>();
+
+            CreateMap<ITree<DbMenu>, MenuModel>()
+               .ForMember(t => t.Action, opt => opt.MapFrom(s => s.Data.Action))
+               .ForMember(t => t.Alias, opt => opt.MapFrom(s => s.Data.Alias))
+               .ForMember(t => t.Code, opt => opt.MapFrom(s => s.Data.Code))
+               .ForMember(t => t.Description, opt => opt.MapFrom(s => s.Data.Description))
+               .ForMember(t => t.Ext, opt => opt.MapFrom(s => s.Data.Ext))
+               .ForMember(t => t.Icon, opt => opt.MapFrom(s => s.Data.Icon))
+               .ForMember(t => t.Id, opt => opt.MapFrom(s => s.Data.Id))
+               .ForMember(t => t.Index, opt => opt.MapFrom(s => s.Data.Index))
+               .ForMember(t => t.IsLeaf, opt => opt.MapFrom(s => s.Data.IsLeaf))
+               .ForMember(t => t.IsRoot, opt => opt.MapFrom(s => s.Data.IsRoot))
+               .ForMember(t => t.IsShow, opt => opt.MapFrom(s => s.Data.IsShow))
+               .ForMember(t => t.Level, opt => opt.MapFrom(s => s.Data.Level))
+               .ForMember(t => t.Lv, opt => opt.MapFrom(s => s.Data.Lv))
+               .ForMember(t => t.Name, opt => opt.MapFrom(s => s.Data.Name))
+               .ForMember(t => t.ParentId, opt => opt.MapFrom(s => s.Data.ParentId))
+               .ForMember(t => t.QuickCode, opt => opt.MapFrom(s => s.Data.QuickCode))
+               .ForMember(t => t.Rv, opt => opt.MapFrom(s => s.Data.Rv))
+               .ForMember(t => t.SelectedIcon, opt => opt.MapFrom(s => s.Data.SelectedIcon))
+               .ForMember(t => t.SelectedStyle, opt => opt.MapFrom(s => s.Data.SelectedStyle))
+               .ForMember(t => t.Status, opt => opt.MapFrom(s => s.Data.Status))
+               .ForMember(t => t.Style, opt => opt.MapFrom(s => s.Data.Style))
+               .ForMember(t => t.Type, opt => opt.MapFrom(s => s.Data.Type))
+               .ForMember(t => t.Value, opt => opt.MapFrom(s => s.Data.Value))
+               .ForMember(t => t.Operations, opt => opt.MapFrom(s => s.Data.Operations))
+               .ForMember(t => t.Children, opt => opt.MapFrom(s => s.Children));
+
+            //CreateMap<Tree<DbMenu>, MenuModel>()
+            //    .ForMember(t => t.Action, opt => opt.MapFrom(s => s.Data.Action))
+            //    .ForMember(t => t.Alias, opt => opt.MapFrom(s => s.Data.Alias))
+            //    .ForMember(t => t.Code, opt => opt.MapFrom(s => s.Data.Code))
+            //    .ForMember(t => t.Description, opt => opt.MapFrom(s => s.Data.Description))
+            //    .ForMember(t => t.Ext, opt => opt.MapFrom(s => s.Data.Ext))
+            //    .ForMember(t => t.Icon, opt => opt.MapFrom(s => s.Data.Icon))
+            //    .ForMember(t => t.Id, opt => opt.MapFrom(s => s.Data.Id))
+            //    .ForMember(t => t.Index, opt => opt.MapFrom(s => s.Data.Index))
+            //    .ForMember(t => t.IsLeaf, opt => opt.MapFrom(s => s.Data.IsLeaf))
+            //    .ForMember(t => t.IsRoot, opt => opt.MapFrom(s => s.Data.IsRoot))
+            //    .ForMember(t => t.IsShow, opt => opt.MapFrom(s => s.Data.IsShow))
+            //    .ForMember(t => t.Level, opt => opt.MapFrom(s => s.Data.Level))
+            //    .ForMember(t => t.Lv, opt => opt.MapFrom(s => s.Data.Lv))
+            //    .ForMember(t => t.Name, opt => opt.MapFrom(s => s.Data.Name))
+            //    .ForMember(t => t.ParentId, opt => opt.MapFrom(s => s.Data.ParentId))
+            //    .ForMember(t => t.QuickCode, opt => opt.MapFrom(s => s.Data.QuickCode))
+            //    .ForMember(t => t.Rv, opt => opt.MapFrom(s => s.Data.Rv))
+            //    .ForMember(t => t.SelectedIcon, opt => opt.MapFrom(s => s.Data.SelectedIcon))
+            //    .ForMember(t => t.SelectedStyle, opt => opt.MapFrom(s => s.Data.SelectedStyle))
+            //    .ForMember(t => t.Status, opt => opt.MapFrom(s => s.Data.Status))
+            //    .ForMember(t => t.Style, opt => opt.MapFrom(s => s.Data.Style))
+            //    .ForMember(t => t.TenantId, opt => opt.MapFrom(s => s.Data.TenantId))
+            //    .ForMember(t => t.Type, opt => opt.MapFrom(s => s.Data.Type))
+            //    .ForMember(t => t.Value, opt => opt.MapFrom(s => s.Data.Value))
+            //    .ForMember(t => t.XppId, opt => opt.MapFrom(s => s.Data.XppId))
+            //    .ForMember(t => t.Operations, opt => opt.MapFrom(s => s.Data.Operations))
+            //    .ForMember(t => t.Children, opt => opt.MapFrom(s => s.Children));
         }
     }
 }

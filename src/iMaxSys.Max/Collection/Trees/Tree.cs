@@ -185,7 +185,7 @@ public interface ITreeNode
 /// <summary>
 /// 部门模型
 /// </summary>
-public abstract class TreeNode : ITreeNode
+public class TreeNode : ITreeNode
 {
 	/// <summary>
 	/// Id

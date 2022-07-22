@@ -30,7 +30,7 @@ public class Menu : TreeNode, IMenu
     /// <summary>
     /// Menus
     /// </summary>
-    public List<IMenu>? Children { get; set; }
+    public LinkedList<IMenu>? Children { get; set; }
 
     /// <summary>
     /// Operations
@@ -38,6 +38,7 @@ public class Menu : TreeNode, IMenu
     public List<IOperation>? Operations { get; set; }
 }
 
+/*
 /// <summary>
 /// MenuShadow
 /// </summary>
@@ -93,3 +94,4 @@ public class MenuShadow
     /// </summary>
     public List<Operation>? Operations { get; set; }
 }
+*/

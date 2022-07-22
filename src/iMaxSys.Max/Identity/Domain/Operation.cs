@@ -26,6 +26,11 @@ public class Operation : IOperation
     public long Id { get; set; }
 
     /// <summary>
+    /// MenuId
+    /// </summary>
+    public long MenuId { get; set; }
+
+    /// <summary>
     /// 名称
     /// </summary>
     public string? Name { get; set; }
