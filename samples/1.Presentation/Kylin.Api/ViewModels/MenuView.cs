@@ -134,12 +134,12 @@ namespace Kylin.Api.ViewModels
         /// <summary>
         /// Menus
         /// </summary>
-        LinkedList<MenuView>? Children { get; set; }
+        public LinkedList<MenuView>? Children { get; set; }
 
         /// <summary>
         /// Operations
         /// </summary>
-        List<OperationView>? Operations { get; set; }
+        public List<OperationView>? Operations { get; set; }
     }
 }
 
