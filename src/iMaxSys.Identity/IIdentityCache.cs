@@ -11,8 +11,8 @@
 //日期：2022-06-29
 //----------------------------------------------------------------
 
-using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Max.DependencyInjection;
 
 namespace iMaxSys.Identity;
 
@@ -35,7 +35,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="tenantId"></param>
     /// <param name="memberId"></param>
     /// <returns></returns>
-    Task<IMember> GetMemberAsync(long tenantId, long memberId);
+    Task<IMember?> GetMemberAsync(long tenantId, long memberId);
 
     /// <summary>
     /// 设置member
@@ -51,7 +51,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<bool> HasTenantMenuAsync(long tenantId, long xppId);
+    Task<bool> HasXppMenuAsync(long tenantId, long xppId);
 
     /// <summary>
     /// 获取租户应用菜单
@@ -59,7 +59,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<IMenu> GetTenantMenuAsync(long tenantId, long xppId);
+    Task<IMenu?> GetXppMenuAsync(long tenantId, long xppId);
 
     /// <summary>
     /// 设置租户应用菜单
@@ -68,7 +68,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="xppId"></param>
     /// <param name="menu"></param>
     /// <returns></returns>
-    Task SetTenantMenuAsync(long tenantId, long xppId, IMenu menu);
+    Task SetXppMenuAsync(long tenantId, long xppId, IMenu menu);
 
     /// <summary>
     /// 租户应用角色菜单是否存在
@@ -86,10 +86,10 @@ public interface IIdentityCache : ISingleton
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<IMenu> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
+    Task<IMenu?> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
-    /// 设置租户应用角色菜单
+    /// 设置租户角色菜单
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
@@ -114,7 +114,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<IRole> GetRoleAsync(long tenantId, long xppId, long roleId);
+    Task<IRole?> GetRoleAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// 设置角色

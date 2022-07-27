@@ -14,10 +14,10 @@
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity;
 
-/*
 /// <summary>
 /// 身份缓存
 /// </summary>
@@ -29,7 +29,7 @@ public class IdentityCache : IIdentityCache
     const string TAG = "id:";
     const string TAG_ACCESS = "a";
     const string TAG_MEMBER = "u";
-    const string TAG_TENANT = "t";
+    //const string TAG_TENANT = "t";
     const string TAG_ROLE = "r";
     const string TAG_MENU = "m";
 
@@ -64,18 +64,23 @@ public class IdentityCache : IIdentityCache
     /// <param name="tenantId"></param>
     /// <param name="memberId"></param>
     /// <returns></returns>
-    public async Task<bool> HasMember(long tenantId, long memberId) => await _cache.KeyExistsAsync($"{tagMember}{tenantId}{_cache.Separator}{memberId}", global);
+    public async Task<bool> HasMemberAsync(long tenantId, long memberId) => await _cache.KeyExistsAsync(GetMemberKey(tenantId, memberId), global);
 
     /// <summary>
-    /// SetMember
+    /// 获取member
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    public async Task<IMember?> GetMemberAsync(long tenantId, long memberId) => await _cache.GetAsync<MemberModel>(GetMemberKey(tenantId, memberId), global);
+
+    /// <summary>
+    /// SetMemberAsync
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="member"></param>
     /// <returns></returns>
-    public async Task SetMember(long tenantId, IMember member)
-    {
-        await _cache.SetAsync($"{tagMember}{tenantId}{_cache.Separator}{member.Id}", member, new TimeSpan(0, _option.Identity.Expires, 0));
-    }
+    public async Task SetMemberAsync(long tenantId, IMember member) => await _cache.SetAsync(GetMemberKey(tenantId, member.Id), member, new TimeSpan(0, _option.Identity.Expires, 0), global);
 
     /// <summary>
     /// HasTenantMenu
@@ -83,7 +88,24 @@ public class IdentityCache : IIdentityCache
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    public async Task<bool> HasTenantMenu(long tenantId, long xppId) => await _cache.KeyExistsAsync($"{tagMenu}{xppId}{_cache.Separator}{tenantId}");
+    public async Task<bool> HasXppMenuAsync(long tenantId, long xppId) => await _cache.KeyExistsAsync(GetXppMenuKey(tenantId, xppId), global);
+
+    /// <summary>
+    /// 获取租户应用菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    public async Task<IMenu?> GetXppMenuAsync(long tenantId, long xppId) => await _cache.GetAsync<MenuModel>(GetXppMenuKey(tenantId, xppId), global);
+
+    /// <summary>
+    /// 设置租户应用菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="menu"></param>
+    /// <returns></returns>
+    public async Task SetXppMenuAsync(long tenantId, long xppId, IMenu menu) => await _cache.SetAsync(GetXppMenuKey(tenantId, xppId), menu, new TimeSpan(0, _option.Identity.Expires, 0), global);
 
     /// <summary>
     /// HasRoleMenu
@@ -92,7 +114,26 @@ public class IdentityCache : IIdentityCache
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<bool> HasRoleMenu(long tenantId, long xppId, long roleId) => await _cache.KeyExistsAsync($"{tagMenu}{xppId}{_cache.Separator}{tenantId}{_cache.Separator}{roleId}");
+    public async Task<bool> HasRoleMenuAsync(long tenantId, long xppId, long roleId) => await _cache.KeyExistsAsync(GetRoleMenuKey(tenantId, xppId, roleId), global);
+
+    /// <summary>
+    /// HasRoleMenu
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public async Task<IMenu?> GetRoleMenuAsync(long tenantId, long xppId, long roleId) => await _cache.GetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, roleId), global);
+
+    /// <summary>
+    /// 设置租户角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <param name="menu"></param>
+    /// <returns></returns>
+    public async Task SetRoleMenuAsync(long tenantId, long xppId, long roleId, IMenu menu) => await _cache.SetAsync(GetRoleMenuKey(tenantId, xppId, roleId), menu, new TimeSpan(0, _option.Identity.Expires, 0), global);
 
     /// <summary>
     /// HasRole
@@ -101,6 +142,57 @@ public class IdentityCache : IIdentityCache
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<bool> HasRole(long tenantId, long xppId, long roleId) => await _cache.KeyExistsAsync($"{tagMenu}{xppId}{_cache.Separator}{tenantId}{_cache.Separator}{roleId}"); 
+    public async Task<bool> HasRoleAsync(long tenantId, long xppId, long roleId) => await _cache.KeyExistsAsync(GetRoleKey(tenantId, xppId, roleId), global);
+
+    /// <summary>
+    /// 获取角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public async Task<IRole?> GetRoleAsync(long tenantId, long xppId, long roleId) => await _cache.GetAsync<RoleModel>(GetRoleKey(tenantId, xppId, roleId), global);
+
+    /// <summary>
+    /// 设置角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    public async Task SetRoleAsync(long tenantId, long xppId, IRole role) => await _cache.SetAsync(GetRoleKey(tenantId, xppId, role.Id), role, new TimeSpan(0, _option.Identity.Expires, 0), global);
+
+    /// <summary>
+    /// 获取成员key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    private string GetMemberKey(long tenantId, long memberId) => $"{tagMember}{tenantId}{_cache.Separator}{memberId}";
+
+    /// <summary>
+    /// 获取应用菜单key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    private string GetXppMenuKey(long tenantId, long xppId) => $"{tagMenu}{xppId}{_cache.Separator}{tenantId}";
+
+    /// <summary>
+    /// 获取角色菜单key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    private string GetRoleMenuKey(long tenantId, long xppId, long roleId) => $"{tagMenu}{xppId}{_cache.Separator}{tenantId}{_cache.Separator}{roleId}";
+
+    /// <summary>
+    /// 获取角色key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    private string GetRoleKey(long tenantId, long xppId, long roleId) => $"{tagMenu}{xppId}{_cache.Separator}{tenantId}{_cache.Separator}{roleId}";
 }
-*/

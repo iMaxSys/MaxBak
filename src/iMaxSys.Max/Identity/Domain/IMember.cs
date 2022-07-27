@@ -47,6 +47,36 @@ public interface IMember
     DateTime? Birthday { get; set; }
 
     /// <summary>
+    /// 婚姻状况
+    /// </summary>
+    public MaritalStatus? MaritalStatus { get; set; }
+
+    /// <summary>
+    /// 民族(默认0:未知)
+    /// </summary>
+    public int? Nation { get; set; }
+
+    /// <summary>
+    /// 教育程度(默认0:未知)
+    /// </summary>
+    public int? Education { get; set; }
+
+    /// <summary>
+    /// 政党(默认0:未知)
+    /// </summary>
+    public int? Party { get; set; }
+
+    /// <summary>
+    /// 身份证号
+    /// </summary>
+    string? IdNumber { get; set; }
+
+    /// <summary>
+    /// 速查码
+    /// </summary>
+    string? QuickCode { get; set; }
+
+    /// <summary>
     /// 用户名
     /// </summary>
     string UserName { get; set; }
@@ -57,9 +87,19 @@ public interface IMember
     string? NickName { get; set; }
 
     /// <summary>
+    /// 国家代码(默认中国:86)
+    /// </summary>
+    int? CountryCode { get; set; }
+
+    /// <summary>
     /// 手机号码
     /// </summary>
     string? Mobile { get; set; }
+
+    /// <summary>
+    /// 电话号码
+    /// </summary>
+    string? Phone { get; set; }
 
     /// <summary>
     /// 电子邮箱
@@ -70,6 +110,51 @@ public interface IMember
     /// 头像
     /// </summary>
     string? Avatar { get; set; }
+
+    /// <summary>
+    /// 国家
+    /// </summary>
+    string? Country { get; set; }
+
+    /// <summary>
+    /// 省
+    /// </summary>
+    string? Province { get; set; }
+
+    /// <summary>
+    /// 城市
+    /// </summary>
+    string? City { get; set; }
+
+    /// <summary>
+    /// 区/县
+    /// </summary>
+    string? District { get; set; }
+
+    /// <summary>
+    /// 街道/乡镇
+    /// </summary>
+    string? Street { get; set; }
+
+    /// <summary>
+    /// 社区/村
+    /// </summary>
+    string? Community { get; set; }
+
+    /// <summary>
+    /// 区域代码from国家统计局
+    /// </summary>
+    long? AreaCode { get; set; }
+
+    /// <summary>
+    /// 地址
+    /// </summary>
+    string? Address { get; set; }
+
+    /// <summary>
+    /// 邮编
+    /// </summary>
+    string? Zipcode { get; set; }
 
     /// <summary>
     /// 类型

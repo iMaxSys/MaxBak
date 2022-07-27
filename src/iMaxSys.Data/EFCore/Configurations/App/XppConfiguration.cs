@@ -38,6 +38,8 @@ public class XppConfiguration : MasterEntityConfiguration<Xpp>
         builder.Property(x => x.AppId).HasColumnName("app_id").HasMaxLength(50);
         //AppKey
         builder.Property(x => x.AppKey).HasColumnName("app_key").HasMaxLength(50);
+        //Host
+        builder.Property(x => x.Host).HasColumnName("host").HasMaxLength(50);
         //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //index

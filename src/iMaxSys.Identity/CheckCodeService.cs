@@ -13,12 +13,12 @@
 
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data;
 using iMaxSys.Data.Entities.App;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Common;
-using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Identity;
 

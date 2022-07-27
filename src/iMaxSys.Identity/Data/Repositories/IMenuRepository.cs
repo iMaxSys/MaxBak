@@ -21,7 +21,7 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// <summary>
 /// 角色仓储接口
 /// </summary>
-public interface IMenuRepository : IRepository<DbMenu>
+public interface IMenuRepository : IIdentityRepository<DbMenu>
 {
     /// <summary>
     /// 读取租户角色菜单

@@ -34,7 +34,22 @@ public class Role : IRole
     /// <summary>
     /// Name
     /// </summary>
-    public string? Name { get; set; }
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Alias
+    /// </summary>
+    public string Alias { get; set; } = String.Empty;
+
+    /// <summary>
+    /// Code
+    /// </summary>
+    public string Code { get; set; } = String.Empty;
+
+    /// <summary>
+    /// QuickCode
+    /// </summary>
+    public string QuickCode { get; set; } = String.Empty;
 
     /// <summary>
     /// Descripton

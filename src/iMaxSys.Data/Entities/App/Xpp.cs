@@ -57,6 +57,11 @@ public class Xpp : MasterEntity
     public string? AppKey { get; set; }
 
     /// <summary>
+    /// Host
+    /// </summary>
+    public string? Host { get; set; }
+
+    /// <summary>
     /// 状态
     /// </summary>
     public Status Status { get; set; } = Status.Enable;

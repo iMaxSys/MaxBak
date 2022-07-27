@@ -11,6 +11,7 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
+/*
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
@@ -21,31 +22,17 @@ using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
-/*
 /// <summary>
 /// 菜单仓储
 /// </summary>
-public class MenuRepository : EfRepository<DbMenu>, IMenuRepository
+public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
 {
-    const string TAG = "id:";
-    const string TAG_MENU = "m:";
-    const string TAG_TENANT = "t:";
-    const string TAG_TENANT_MENU = $"{TAG}{TAG_MENU}";
-
-    private readonly IMapper _mapper;
-    private readonly MaxOption _option;
-    private readonly IIdentityCache _identityCache;
-
     /// <summary>
     /// 构造
     /// </summary>
     /// <param name="context"></param>
-    /// <param name="identityCache"></param>
-    public MenuRepository(IMapper mapper, IOptions<MaxOption> option, MaxIdentityContext context, IIdentityCache identityCache) : base(context)
+    public MenuRepository(IdentityContext context) : base(context)
     {
-        _mapper = mapper;
-        _option = option.Value;
-        _identityCache = identityCache;
     }
 
     public async Task<IMenu?> ReadAsync(long xppId, long tenantId, IRole role)

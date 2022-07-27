@@ -34,7 +34,22 @@ public interface IRole
     /// <summary>
     /// Name
     /// </summary>
-    string? Name { get; set; }
+    string Name { get; set; }
+
+    /// <summary>
+    /// Alias
+    /// </summary>
+    public string Alias { get; set; }
+
+    /// <summary>
+    /// Code
+    /// </summary>
+    public string Code { get; set; }
+
+    /// <summary>
+    /// QuickCode
+    /// </summary>
+    public string QuickCode { get; set; }
 
     /// <summary>
     /// Descripton
