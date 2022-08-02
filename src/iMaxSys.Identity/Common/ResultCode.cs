@@ -55,6 +55,12 @@ public enum ResultCode
     RoleIdCantNull = 106100,
 
     /// <summary>
+    /// 角色已存在
+    /// </summary>
+    [Description("角色已存在")]
+    RoleIsExists = 106104,
+
+    /// <summary>
     /// 角色不存在
     /// </summary>
     [Description("角色不存在")]

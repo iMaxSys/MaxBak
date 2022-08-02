@@ -57,16 +57,12 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
         //为空则刷新
         if (menu == null)
         {
-
-        }
-        else
-        {
-            return (MenuModel)menu;
+            var list = await _unitOfWork.GetRepository<DbMenu>().AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
+            menu = MakeMenu(list);
+            await _identityCache.SetXppMenuAsync(tenantId, xppId, menu);
         }
 
-
-        var list = await _unitOfWork.GetCustomRepository<IMenuRepository>().AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
-        return MakeMenu(list);
+        return (MenuModel)menu;
     }
 
     /// <summary>
@@ -78,9 +74,21 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<MenuModel> GetRoleMenuAsync(long tenantId, long xppId, long roleId)
     {
+        var role = await _identityCache.GetRoleAsync(tenantId, xppId, roleId);
+
+        //角色不存在
+        if (role is null)
+        {
+            var repository = _unitOfWork.GetRepository<DbRole>();
+            role = await repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
+
+            throw new MaxException(ResultCode.RoleNotExists);
+        }
+
+        var menu = await _identityCache.GetRoleMenuAsync(tenantId, xppId, roleId);
+
         IList<DbMenu> list;
-        var repository = _unitOfWork.GetRepository<DbRole>();
-        var role = await repository.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
+
 
         //角色不存在
         if (role is null)
@@ -116,8 +124,18 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
         return menu;
     }
 
-    //private Task<MenuModel> RefreshXppMenuAsync()
-    //{
+    /// <summary>
+    /// 刷新菜单缓存
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    private async Task<MenuModel> RefreshXppMenuAsync(long tenantId, long xppId)
+    {
+        var menu = await _identityCache.GetXppMenuAsync(tenantId, xppId);
+        if (menu is null)
+        {
 
-    //}
+        }
+        throw new MaxException(ResultCode.HasMember);
+    }
 }

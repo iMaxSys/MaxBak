@@ -13,8 +13,8 @@
 
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
-
 using iMaxSys.Identity.Models;
+using DbRole = iMaxSys.Identity.Data.Entities.Role;
 
 namespace iMaxSys.Identity;
 
@@ -24,51 +24,54 @@ namespace iMaxSys.Identity;
 public interface IRoleService : IDependency
 {
     /// <summary>
-    /// 获取角色
+    /// get
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<IRole?> GetAsync(long id);
+    Task<RoleModel> GetAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
-    /// 新增角色
+    /// refresh
     /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    Task<RoleModel> RefreshAsync(long tenantId, long xppId, long roleId);
+
+    /// <summary>
+    /// refresh
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="dbRole"></param>
+    /// <returns></returns>
+    Task<RoleModel> RefreshAsync(long tenantId, long xppId, DbRole dbRole);
+
+    /// <summary>
+    /// add
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<IRole> AddAsync(RoleModel model);
+    Task<RoleModel> AddAsync(long tenantId, long xppId, RoleModel model);
 
     /// <summary>
-    /// 更新角色
+    /// update
     /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<IRole> UpdateAsync(RoleModel model);
+    Task<RoleModel> UpdateAsync(long tenantId, long xppId, RoleModel model);
 
     /// <summary>
-    /// 移除角色
+    /// remove
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     Task RemoveAsync(long id);
-
-    /// <summary>
-    /// 获取角色菜单
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    Task<IMenu> GetMenuAsync(long id);
-
-    /// <summary>
-    /// 获取角色菜单
-    /// </summary>
-    /// <param name="role"></param>
-    /// <returns></returns>
-    Task<IMenu> GetMenuAsync(IRole role);
-
-    /// <summary>
-    /// 获取完整菜单
-    /// </summary>
-    /// <param name="tenantId">租户Id</param>
-    /// <returns></returns>
-    Task<IMenu> GetFullMenuAsync(long tenantId = 0);
 }

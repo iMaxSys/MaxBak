@@ -27,11 +27,6 @@ public interface IRole
     long Id { get; set; }
 
     /// <summary>
-    /// TenantId
-    /// </summary>
-    long TenantId { get; set; }
-
-    /// <summary>
     /// Name
     /// </summary>
     string Name { get; set; }

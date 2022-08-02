@@ -27,11 +27,6 @@ public class Role : IRole
     public long Id { get; set; }
 
     /// <summary>
-    /// TenantId
-    /// </summary>
-    public long TenantId { get; set; }
-
-    /// <summary>
     /// Name
     /// </summary>
     public string Name { get; set; } = string.Empty;

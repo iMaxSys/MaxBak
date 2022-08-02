@@ -33,14 +33,13 @@ namespace iMaxSys.Identity.Mappers
         {
             CreateMap<DbTenant, Tenant>();
 
-            CreateMap<DbRole, IRole>()
-                .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds == "*" ? new long[] { 0 } : s.MenuIds.ToLongArray())))
-                .ForMember(t => t.OperationIds, opt => opt.MapFrom(s => s.OperationIds == null ? null : (s.OperationIds == "*" ? new long[] { 0 } : s.OperationIds.ToLongArray())));
+            CreateMap<DbRole, RoleModel>()
+                .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds == "0" ? new long[] { 0 } : s.MenuIds.ToLongArray())))
+                .ForMember(t => t.OperationIds, opt => opt.MapFrom(s => s.OperationIds == null ? null : (s.OperationIds == "0" ? new long[] { 0 } : s.OperationIds.ToLongArray())));
 
-
-            CreateMap<DbMember, IMember>()
-                .ForMember(t => t.UserName, opt => opt.MapFrom(s => s.UserName.IfNotNull(s.Mobile)))
-                .ForMember(t => t.Name, opt => opt.MapFrom(s => s.Name ?? s.NickName));
+            CreateMap<RoleModel, DbRole>()
+                .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds[0] == 0 ? "0" : string.Join(",", s.MenuIds))))
+                .ForMember(t => t.OperationIds, opt => opt.MapFrom(s => s.OperationIds == null ? null : (s.OperationIds[0] == 0 ? "0" : string.Join(",", s.OperationIds))));
 
             CreateMap<DepartmentModel, Department>();
             CreateMap<Department, DepartmentModel>();
