@@ -26,7 +26,7 @@ namespace Kylin.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<object> ToJson()
+        public async Task<object?> ToJson()
         {
             /*
             LrTree tree = new(0, "earth");

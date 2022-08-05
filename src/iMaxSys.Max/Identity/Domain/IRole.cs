@@ -64,12 +64,12 @@ public interface IRole
     /// <summary>
     /// Menus("45675,45677")
     /// </summary>
-    long[]? MenuIds { get; set; }
+    long[] MenuIds { get; set; }
 
     /// <summary>
     /// Operations("45675,45677")
     /// </summary>
-    long[]? OperationIds { get; set; }
+    long[] OperationIds { get; set; }
 
     /// <summary>
     /// Start

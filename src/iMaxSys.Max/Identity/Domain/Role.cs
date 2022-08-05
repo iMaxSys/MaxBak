@@ -64,12 +64,12 @@ public class Role : IRole
     /// <summary>
     /// Menus("45675,45677")
     /// </summary>
-    public long[]? MenuIds { get; set; }
+    public long[] MenuIds { get; set; } = new long[] { -1 };
 
     /// <summary>
     /// Operations("45675,45677")
     /// </summary>
-    public long[]? OperationIds { get; set; }
+    public long[] OperationIds { get; set; } = new long[] { -1 };
 
     /// <summary>
     /// Start
