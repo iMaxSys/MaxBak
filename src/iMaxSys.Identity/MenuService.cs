@@ -13,7 +13,9 @@
 
 using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Collection.Trees;
+
 using iMaxSys.Data;
 using iMaxSys.Data.Services;
 using iMaxSys.Identity.Models;
@@ -22,7 +24,6 @@ using iMaxSys.Identity.Data.Repositories;
 
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
-using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity;
 
@@ -67,7 +68,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     }
 
     /// <summary>
-    /// 获取角色菜单 cx  
+    /// 获取角色菜单
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>

@@ -169,16 +169,19 @@ public class RoleService : IRoleService
     /// </summary>
     /// <param name="id">RoleId</param>
     /// <returns></returns>
-    public async Task RemoveAsync(long id)
+    public async Task RemoveAsync(long tenantId, long xppId, long roleId)
     {
-        var hasMember = await _unitOfWork.GetRepository<RoleMember>().AnyAsync(x => x.RoleId == id);
+        var hasMember = await _unitOfWork.GetRepository<RoleMember>().AnyAsync(x => x.RoleId == roleId);
         //判断角色之下是否还有成员
         if (hasMember)
         {
             throw new MaxException(ResultCode.RoleNotExists);
         }
-        _unitOfWork.GetRepository<DbRole>().Remove(id);
+        _unitOfWork.GetRepository<DbRole>().Remove(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
         await _unitOfWork.SaveChangesAsync();
+
+        //clear cache
+        await _identityCache.RemoveRoleAsync(tenantId, xppId, roleId);
     }
 
     #endregion

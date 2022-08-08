@@ -127,6 +127,12 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="entities">The entities.</param>
     public virtual void Delete(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
 
+    /// <summary>
+    /// Deletes the specified predicate.
+    /// </summary>
+    /// <param name="predicate"></param>
+    public virtual void Delete(Expression<Func<TEntity, bool>> predicate) => Delete(_dbSet.Where(predicate));
+
     #endregion
 
     #region Remove
@@ -166,6 +172,16 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="entities">The entities.</param>
     public virtual void Remove(IEnumerable<TEntity> entities)
     {
+        entities.ForEach(x => x.IsDeleted = true);
+    }
+
+    /// <summary>
+    /// Soft deletes the entity by the specified predicate.
+    /// </summary>
+    /// <param name="predicate"></param>
+    public virtual void Remove(Expression<Func<TEntity, bool>> predicate)
+    {
+        var entities = _dbSet.Where(predicate);
         entities.ForEach(x => x.IsDeleted = true);
     }
 

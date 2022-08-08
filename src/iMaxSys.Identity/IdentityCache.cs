@@ -163,6 +163,18 @@ public class IdentityCache : IIdentityCache
     public async Task SetRoleAsync(long tenantId, long xppId, IRole role) => await _cache.SetAsync(GetRoleKey(tenantId, xppId, role.Id), role, new TimeSpan(0, _option.Identity.Expires, 0), global);
 
     /// <summary>
+    /// 移除角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public async Task RemoveRoleAsync(long tenantId, long xppId, long roleId)
+    {
+        await _cache.DeleteAsync(GetRoleKey(tenantId, xppId, roleId), global);
+    }
+
+    /// <summary>
     /// 获取成员key
     /// </summary>
     /// <param name="tenantId"></param>

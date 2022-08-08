@@ -71,7 +71,9 @@ public interface IRoleService : IDependency
     /// <summary>
     /// remove
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
     /// <returns></returns>
-    Task RemoveAsync(long id);
+    Task RemoveAsync(long tenantId, long xppId, long roleId);
 }

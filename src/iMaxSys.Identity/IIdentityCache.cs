@@ -124,4 +124,13 @@ public interface IIdentityCache : ISingleton
     /// <param name="role"></param>
     /// <returns></returns>
     Task SetRoleAsync(long tenantId, long xppId, IRole role);
+
+    /// <summary>
+    /// 移除角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    Task RemoveRoleAsync(long tenantId, long xppId, long roleId);
 }

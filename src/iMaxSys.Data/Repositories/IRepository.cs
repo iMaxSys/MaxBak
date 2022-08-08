@@ -12,6 +12,7 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace iMaxSys.Data.Repositories;
 
@@ -103,6 +104,12 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> where TEnti
     void Delete(IEnumerable<TEntity> entities);
 
     /// <summary>
+    /// Soft deletes the entity by the specified predicate.
+    /// </summary>
+    /// <param name="predicate"></param>
+    void Delete(Expression<Func<TEntity, bool>> predicate);
+
+    /// <summary>
     /// Soft deletes the entity by the specified primary key.
     /// </summary>
     /// <param name="id">The primary key value.</param>
@@ -125,6 +132,12 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> where TEnti
     /// </summary>
     /// <param name="entities">The entities.</param>
     void Remove(IEnumerable<TEntity> entities);
+
+    /// <summary>
+    /// Soft deletes the entity by the specified predicate.
+    /// </summary>
+    /// <param name="predicate"></param>
+    void Remove(Expression<Func<TEntity, bool>> predicate);
 
     /// <summary>
     /// Change entity state for patch method on web api.
