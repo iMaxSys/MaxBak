@@ -11,11 +11,11 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Data.Services;
 using iMaxSys.Identity.Models;
-using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Identity.Data.Entities;
 
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
@@ -51,7 +51,7 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<MenuModel?> RefreshXppMenuAsync(long tenantId, long xppId);
+    Task<MenuModel?> RefreshAsync(long tenantId, long xppId);
 
     /// <summary>
     /// 刷新应用角色菜单
@@ -60,5 +60,5 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<MenuModel?> RefreshRoleMenuAsync(long tenantId, long xppId, long roleId);
+    Task<MenuModel?> RefreshAsync(long tenantId, long xppId, long roleId);
 }

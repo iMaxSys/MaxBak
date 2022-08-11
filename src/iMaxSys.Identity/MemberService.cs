@@ -18,31 +18,36 @@ using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data;
+using iMaxSys.Data.Entities.App;
+using iMaxSys.Data.Repositories;
 using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Repositories;
 using iMaxSys.Identity.Data.Entities;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using iMaxSys.Data.Entities.App;
 
 namespace iMaxSys.Identity;
 
-/*
 /// <summary>
 /// MemberService
 /// </summary>
-public class MemberService : ServiceBase, IMemberService
+public class MemberService : IMemberService
 {
-    /// <summary>
-    /// 用户提供者
-    /// </summary>
+    private readonly IMapper _mapper;
+    private readonly MaxOption _option;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIdentityCache _identityCache;
     private readonly IUserProvider _userProvider;
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserProvider userProvider) : base(mapper, option, unitOfWork)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork unitOfWork, IIdentityCache identityCache, IUserProvider userProvider)
     {
+        _mapper = mapper;
+        _option = option.Value;
+        _unitOfWork = unitOfWork;
+        _identityCache = identityCache;
         _userProvider = userProvider;
     }
 
@@ -62,7 +67,7 @@ public class MemberService : ServiceBase, IMemberService
             return null;
         }
 
-        IMemberRepository repository = UnitOfWork.GetCustomRepository<IMemberRepository>();
+        IMemberRepository repository = _unitOfWork.GetCustomRepository<IMemberRepository>();
 
         //先按Token获取uid
         IAccessSession? access = await repository.GetAccessSessionAsync(token);
@@ -568,4 +573,4 @@ public class MemberService : ServiceBase, IMemberService
     }
 
     #endregion
-}*/
+}

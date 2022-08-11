@@ -105,4 +105,9 @@ public enum ResultCode
     /// </summary>
     [Description("该部门下还有成员")]
     HasMember = 106403,
+    /// <summary>
+    /// 菜单不存在
+    /// </summary>
+    [Description("菜单不存在")]
+    MenuNotExits = 106500,
 }

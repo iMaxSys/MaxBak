@@ -11,14 +11,18 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-/*
 using iMaxSys.Max.Options;
+using iMaxSys.Max.Caching;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Data.EFCore.Repositories;
+using iMaxSys.Identity.Models;
+using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
+using StackExchange.Redis;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -31,16 +35,11 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// 构造
     /// </summary>
     /// <param name="context"></param>
-    public MenuRepository(IdentityContext context) : base(context)
+    public MenuRepository(IdentityContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context, mapper, option, cacheFactory)
     {
     }
 
-    public async Task<IMenu?> ReadAsync(long xppId, long tenantId, IRole role)
-    {
-        var menu = await ReadFullAsync(xppId, tenantId);
-        SetMatchMenus(menu, role.MenuIds, role.OperationIds);
-        return menu;
-    }
+    #region FindAsync
 
     /// <summary>
     /// 读取租户应用完整菜单
@@ -48,121 +47,143 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// <param name="xppId"></param>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<IMenu?> ReadFullAsync(long xppId, long tenantId)
+    public async Task<MenuModel?> GetAsync(long xppId, long tenantId)
     {
-        //读取租户全菜单缓存, 如无则取库刷新缓存
-        string key = $"{TAG_TENANT_MENU}{xppId}{tenantId}";
+        //取缓存
+        MenuModel? menu = await Cache.GetAsync<MenuModel>(GetXppMenuKey(tenantId, xppId), GLOBAL);
 
-        IMenu? menu = await _identityCache.GetAsync<Max.Identity.Domain.Menu>(key, true);
-
-        if (menu != null)
+        //为空则刷新
+        if (menu is null)
         {
-            return menu;
+            menu = await RefreshAsync(tenantId, xppId);
+        }
+
+        return menu;
+    }
+
+    public async Task<MenuModel?> GetAsync(long xppId, long tenantId, IRole role)
+    {
+        //取缓存
+        MenuModel? menu = await Cache.GetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, role.Id), GLOBAL);
+
+        //为空则刷新
+        if (menu == null)
+        {
+            menu = await RefreshAsync(tenantId, xppId, role);
+        }
+
+        return menu;
+    }
+
+    #endregion
+
+    #region FindAsync
+
+    /// <summary>
+    /// find role from database
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public async Task<DbMenu> FindAsync(long tenantId, long xppId, long id)
+    {
+        var dbMenu = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == id);
+
+        if (dbMenu is null)
+        {
+            throw new MaxException(ResultCode.MenuNotExits);
         }
         else
         {
-            return await RefreshAsync(xppId, tenantId);
-        }
-    }
-
-    /// <summary>
-    /// 刷新租户应用完整菜单缓存
-    /// </summary>
-    /// <param name="xppId"></param>
-    /// <param name="tenantId"></param>
-    /// <param name="expires"></param>
-    /// <returns></returns>
-    public async Task<IMenu?> RefreshAsync(long xppId, long tenantId, DateTime? expires = null)
-    {
-        IMenu? menu = null;
-        var menus = await AllAsync(x => x.XppId == xppId && x.TenantId == tenantId);
-        if (menus?.Count > 0)
-        {
-            menu = GetMenu(menus);
-            //设置租户全菜单缓存
-            await _identityCache.SetAsync($"{TAG_TENANT_MENU}{xppId}{tenantId}", expires ?? DateTime.Now.AddMinutes(_option.Identity.Refresh), true);
-        }
-        return menu;
-    }
-
-    #region 菜单操作
-
-    //==============================菜单操作==============================
-
-    /// <summary>
-    /// 设置匹配菜单s
-    /// </summary>
-    /// <param name="menu"></param>
-    /// <param name="ms"></param>
-    /// <param name="os"></param>
-    protected void SetMatchMenus(IMenu? menu, long[]? ms, long[]? os)
-    {
-        if (menu != null && menu.Menus != null && menu.Menus.Any())
-        {
-            menu.Menus.RemoveAll(x => ms != null && !ms.Contains(0) && !ms.Contains(x.Id));
-            menu.Menus.ForEach(x =>
-            {
-                x.Operations?.RemoveAll(x => os != null && !os.Contains(0) && !os.Contains(x.Id));
-                SetMatchMenus(x, ms, os);
-            });
-        }
-    }
-
-    private IMenu? GetMenu(IList<DbMenu> stores)
-    {
-        IMenu? menu = null;
-        var store = stores.FirstOrDefault(x => x.Lv == 0);
-        if (store != null)
-        {
-            menu = new Max.Identity.Domain.Menu
-            {
-                Id = store.Id,
-                Code = store.Code,
-                Name = store.Name,
-                Description = store.Description,
-                Icon = store.Icon,
-                Style = store.Style,
-                Router = store.Router,
-                Status = store.Status
-            };
-            SetNodes(stores, menu);
-        }
-
-        return menu;
-    }
-
-    private void SetNodes(IList<DbMenu> stores, IMenu menu)
-    {
-        //获取当前节点的下一层子节点
-        DbMenu? current = stores.FirstOrDefault(x => x.Id == menu.Id);
-        if (current != null)
-        {
-            var list = stores.Where(x => x.Deep == current.Deep + 1 && x.Lv > current.Lv && x.Rv < current.Rv).OrderBy(x => x.Lv);
-
-            if (list?.Count() > 0)
-            {
-                menu.Menus = new List<IMenu>();
-                foreach (var item in list)
-                {
-                    IMenu n = new Max.Identity.Domain.Menu
-                    {
-                        Id = item.Id,
-                        Code = item.Code,
-                        Name = item.Name,
-                        Description = item.Description,
-                        Icon = item.Icon,
-                        Style = item.Style,
-                        Router = item.Router,
-                        Status = item.Status,
-                        Operations = _mapper.Map<List<IOperation>>(item.Operations)
-                    };
-                    SetNodes(stores, n);
-                    menu.Menus.Add(n);
-                }
-            }
+            return dbMenu;
         }
     }
 
     #endregion
+
+    /// <summary>
+    /// 刷新应用菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId)
+    {
+        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
+        var menu = MakeMenu(list);
+        await Cache.SetAsync(GetXppMenuKey(tenantId, xppId), menu, new TimeSpan(0, Option.Identity.Expires, 0), GLOBAL);
+        return menu;
+    }
+
+    /// <summary>
+    /// 刷新应用角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role)
+    {
+        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && role.MenuIds.Contains(x.Id));
+        var menu = MakeMenu(list, role.MenuIds, role.OperationIds);
+        await Cache.SetAsync(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), GLOBAL);
+        return menu;
+    }
+
+    /// <summary>
+    /// 生成树
+    /// </summary>
+    /// <param name="list"></param>
+    /// <returns></returns>
+    private MenuModel MakeMenu(IList<DbMenu> list)
+    {
+        var tree = list.ToTree((parent, child) => child.ParentId == parent.Id);
+        var menu = Mapper.Map<MenuModel>(tree);
+        return menu;
+    }
+
+    private MenuModel MakeMenu(IList<DbMenu> list, long[] ids, long[] operationIds)
+    {
+        foreach (var item in list)
+        {
+            if (ids.Contains(item.Id))
+            {
+                //清除无权限操作
+                item.Operations?.ForEach(x =>
+                {
+                    if (operationIds.Contains(x.Id))
+                    {
+                        item.Operations?.Remove(x);
+                    }
+                });
+            }
+            else
+            {
+                //清除无权限菜单
+                list.Remove(item);
+            }
+        }
+
+        var tree = list.ToTree((parent, child) => child.ParentId == parent.Id);
+        var menu = Mapper.Map<MenuModel>(tree);
+        return menu;
+    }
+
+    /// <summary>
+    /// 获取应用菜单key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    private string GetXppMenuKey(long tenantId, long xppId) => $"{tagMenu}{xppId}{Cache.Separator}{tenantId}";
+
+    /// <summary>
+    /// 获取角色菜单key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    private string GetRoleMenuKey(long tenantId, long xppId, long roleId) => $"{tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}";
 }
-*/

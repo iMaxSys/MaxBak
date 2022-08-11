@@ -35,7 +35,6 @@ public class RoleService : IRoleService
     private readonly IMapper _mapper;
     private readonly MaxOption _option;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IIdentityCache _identityCache;
 
     /// <summary>
     /// 构造
@@ -43,38 +42,23 @@ public class RoleService : IRoleService
     /// <param name="mapper"></param>
     /// <param name="option"></param>
     /// <param name="unitOfWork"></param>
-    /// <param name="identityCache"></param>
-    public RoleService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork unitOfWork, IIdentityCache identityCache)
+    public RoleService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _option = option.Value;
         _unitOfWork = unitOfWork;
-        _identityCache = identityCache;
     }
 
     #region GetAsync
 
     /// <summary>
-    /// Get role
+    /// get
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     public async Task<RoleModel> GetAsync(long tenantId, long xppId, long roleId)
     {
-        RoleModel roleModel;
-        var role = await _identityCache.GetRoleAsync(tenantId, xppId, roleId);
-
-        //为空则刷新
-        if (role is null)
-        {
-            roleModel = await RefreshAsync(tenantId, xppId, roleId);
-        }
-        else
-        {
-            roleModel = (RoleModel)role;
-        }
-
-        return roleModel;
+        return await _unitOfWork.GetCustomRepository<IRoleRepository>().GetAsync(tenantId, xppId, roleId);
     }
 
     #endregion
@@ -90,24 +74,7 @@ public class RoleService : IRoleService
     /// <returns></returns>
     public async Task<RoleModel> RefreshAsync(long tenantId, long xppId, long roleId)
     {
-        var dbRole = await FindAsync(tenantId, xppId, roleId);
-        return await RefreshAsync(tenantId, xppId, dbRole);
-    }
-
-    /// <summary>
-    /// RefreshAsync
-    /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="xppId"></param>
-    /// <param name="roleId"></param>
-    /// <param name="dbRole"></param>
-    /// <returns></returns>
-    /// <exception cref="MaxException"></exception>
-    public async Task<RoleModel> RefreshAsync(long tenantId, long xppId, DbRole dbRole)
-    {
-        RoleModel roleModel = _mapper.Map<RoleModel>(dbRole);
-        await _identityCache.SetRoleAsync(tenantId, xppId, roleModel);
-        return roleModel;
+        return await _unitOfWork.GetCustomRepository<IRoleRepository>().RefreshAsync(tenantId, xppId, roleId);
     }
 
     #endregion
@@ -126,7 +93,7 @@ public class RoleService : IRoleService
         //重名判断
         await CheckNameAsync(tenantId, xppId, model);
         var dbRole = SetRole(tenantId, xppId, model);
-        await _unitOfWork.GetRepository<DbRole>().AddAsync(dbRole);
+        await _unitOfWork.GetCustomRepository<IRoleRepository>().AddAsync(dbRole);
         await _unitOfWork.SaveChangesAsync();
         model.Id = dbRole.Id;
         return model;
@@ -154,10 +121,11 @@ public class RoleService : IRoleService
 
         //更新
         role = SetRole(tenantId, xppId, model, role);
-        _unitOfWork.GetRepository<DbRole>().Update(role);
+        var reporitory = _unitOfWork.GetCustomRepository<IRoleRepository>();
+        reporitory.Update(role);
         await _unitOfWork.SaveChangesAsync();
 
-        return await RefreshAsync(tenantId, xppId, role);
+        return await reporitory.RefreshAsync(tenantId, xppId, role);
     }
 
     #endregion
@@ -177,11 +145,9 @@ public class RoleService : IRoleService
         {
             throw new MaxException(ResultCode.RoleNotExists);
         }
-        _unitOfWork.GetRepository<DbRole>().Remove(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
+        var reporitory = _unitOfWork.GetCustomRepository<IRoleRepository>();
+        await reporitory.RemoveAsync(tenantId, xppId, roleId);
         await _unitOfWork.SaveChangesAsync();
-
-        //clear cache
-        await _identityCache.RemoveRoleAsync(tenantId, xppId, roleId);
     }
 
     #endregion

@@ -15,6 +15,7 @@ using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Repositories;
 using iMaxSys.Identity.Data.Entities;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
+using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -24,24 +25,47 @@ namespace iMaxSys.Identity.Data.Repositories;
 public interface IRoleRepository : IRepository<DbRole>
 {
     /// <summary>
-    /// 读取角色
+    /// get
     /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<IRole?> ReadAsync(long roleId);
+    Task<RoleModel> GetAsync(long tenantId, long xppId, long roleId);
+
+    /// <summary>
+    /// find
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    Task<DbRole> FindAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// RemoveAsync
     /// </summary>
-    /// <param name="memberId"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
     /// <returns></returns>
-    Task RemoveAsync(long memberId);
+    Task RemoveAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
-    /// 刷新role缓存
+    /// RefreshAsync
     /// </summary>
-    /// <param name="role"></param>
-    /// <param name="expires"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
     /// <returns></returns>
-    Task RefreshAsync(IRole role, DateTime? expires = null);
+    Task<RoleModel> RefreshAsync(long tenantId, long xppId, long roleId);
+
+    /// <summary>
+    /// RefreshAsync
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="dbRole"></param>
+    /// <returns></returns>
+    Task<RoleModel> RefreshAsync(long tenantId, long xppId, DbRole dbRole);
 }

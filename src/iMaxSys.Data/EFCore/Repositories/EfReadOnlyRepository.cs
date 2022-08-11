@@ -574,7 +574,7 @@ public abstract class EfReadOnlyRepository<TEntity> : IReadOnlyRepository<TEntit
     /// </summary>
     /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
     /// <returns>A <see cref="Task{TEntity}" /> that represents the asynchronous insert operation.</returns>
-    public virtual ValueTask<TEntity?> FindAsync(params object[] keyValues) => _dbSet.FindAsync(keyValues);
+    public async virtual ValueTask<TEntity?> FindAsync(params object[] keyValues) => await _dbSet.FindAsync(keyValues);
 
     /// <summary>
     /// Finds an entity with the given primary key values. If found, is attached to the context and returned. If no entity is found, then null is returned.
@@ -582,7 +582,7 @@ public abstract class EfReadOnlyRepository<TEntity> : IReadOnlyRepository<TEntit
     /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     /// <returns>A <see cref="Task{TEntity}"/> that represents the asynchronous find operation. The task result contains the found entity or null.</returns>
-    public virtual ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken) => _dbSet.FindAsync(keyValues, cancellationToken);
+    public async virtual ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken) => await _dbSet.FindAsync(keyValues, cancellationToken);
 
     #endregion
 

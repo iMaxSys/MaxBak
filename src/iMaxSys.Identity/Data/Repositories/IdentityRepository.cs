@@ -17,6 +17,8 @@ using iMaxSys.Identity.Data.Repositories;
 using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Data.Entities;
 using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Max.Caching;
+using iMaxSys.Max.Options;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -26,8 +28,31 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// <typeparam name="T"></typeparam>
 public class IdentityRepository<T> : EfRepository<T>, IIdentityRepository<T> where T : Entity
 {
-    public IdentityRepository(IdentityContext context) : base(context)
+    //全局缓存标志
+    protected const bool GLOBAL = true;
+
+    protected const string TAG = "id:";
+    protected const string TAG_ACCESS = "a";
+    protected const string TAG_MEMBER = "u";
+    protected const string TAG_TENANT = "t";
+    protected const string TAG_ROLE = "r";
+    protected const string TAG_MENU = "m";
+
+    protected readonly string tagId = string.Empty;
+    protected readonly string tagAccess = string.Empty;
+    protected readonly string tagMember = string.Empty;
+    protected readonly string tagRole = string.Empty;
+    protected readonly string tagMenu = string.Empty;
+
+    protected readonly IMapper Mapper;
+    protected readonly ICache Cache;
+    protected readonly MaxOption Option;
+
+    public IdentityRepository(IdentityContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context)
     {
+        Mapper = mapper;
+        Option = option.Value;
+        Cache = cacheFactory.GetService();
     }
 }
 

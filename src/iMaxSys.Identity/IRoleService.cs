@@ -42,15 +42,6 @@ public interface IRoleService : IDependency
     Task<RoleModel> RefreshAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
-    /// refresh
-    /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="xppId"></param>
-    /// <param name="dbRole"></param>
-    /// <returns></returns>
-    Task<RoleModel> RefreshAsync(long tenantId, long xppId, DbRole dbRole);
-
-    /// <summary>
     /// add
     /// </summary>
     /// <param name="tenantId"></param>

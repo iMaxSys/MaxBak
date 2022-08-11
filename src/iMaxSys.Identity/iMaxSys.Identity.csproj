@@ -20,7 +20,7 @@
     <None Remove="Data\Mappers\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -35,5 +35,6 @@
     <Compile Remove="Migrations\20220519064929_init.cs" />
     <Compile Remove="Migrations\20220519064929_init.Designer.cs" />
     <Compile Remove="Data\Mappers\IdentityMapperProfile.cs" />
+    <Compile Remove="ServiceBase.cs" />
   </ItemGroup>
 </Project>
