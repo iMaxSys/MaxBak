@@ -33,6 +33,9 @@ namespace iMaxSys.Identity.Mappers
         {
             CreateMap<DbTenant, Tenant>();
 
+            CreateMap<DbMember, MemberModel>();
+            CreateMap<MemberModel, DbMember>();
+
             CreateMap<DbRole, RoleModel>()
                 .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds == "0" ? new long[] { 0 } : s.MenuIds.ToLongArray())))
                 .ForMember(t => t.OperationIds, opt => opt.MapFrom(s => s.OperationIds == null ? null : (s.OperationIds == "0" ? new long[] { 0 } : s.OperationIds.ToLongArray())));

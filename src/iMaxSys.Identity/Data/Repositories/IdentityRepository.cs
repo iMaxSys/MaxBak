@@ -29,20 +29,22 @@ namespace iMaxSys.Identity.Data.Repositories;
 public class IdentityRepository<T> : EfRepository<T>, IIdentityRepository<T> where T : Entity
 {
     //全局缓存标志
-    protected const bool GLOBAL = true;
+    protected const bool _global = true;
 
-    protected const string TAG = "id:";
+    protected const string TAG = "i";
     protected const string TAG_ACCESS = "a";
-    protected const string TAG_MEMBER = "u";
+    protected const string TAG_MEMBER = "m";
+    protected const string TAG_USER = "u";
     protected const string TAG_TENANT = "t";
     protected const string TAG_ROLE = "r";
-    protected const string TAG_MENU = "m";
+    protected const string TAG_MENU = "n";
 
-    protected readonly string tagId = string.Empty;
-    protected readonly string tagAccess = string.Empty;
-    protected readonly string tagMember = string.Empty;
-    protected readonly string tagRole = string.Empty;
-    protected readonly string tagMenu = string.Empty;
+    protected readonly string _tagId = string.Empty;
+    protected readonly string _tagAccess = string.Empty;
+    protected readonly string _tagMember = string.Empty;
+    protected readonly string _tagUser = string.Empty;
+    protected readonly string _tagRole = string.Empty;
+    protected readonly string _tagMenu = string.Empty;
 
     protected readonly IMapper Mapper;
     protected readonly ICache Cache;
@@ -53,6 +55,13 @@ public class IdentityRepository<T> : EfRepository<T>, IIdentityRepository<T> whe
         Mapper = mapper;
         Option = option.Value;
         Cache = cacheFactory.GetService();
+
+        _tagId = $"{TAG}{Cache.Separator}";
+        _tagAccess = $"{_tagId}{TAG_ACCESS}{Cache.Separator}";
+        _tagMember = $"{_tagId}{TAG_MEMBER}{Cache.Separator}";
+        _tagUser = $"{_tagId}{TAG_USER}{Cache.Separator}";
+        _tagRole = $"{_tagId}{TAG_ROLE}{Cache.Separator}";
+        _tagMenu = $"{_tagId}{TAG_MENU}{Cache.Separator}";
     }
 }
 

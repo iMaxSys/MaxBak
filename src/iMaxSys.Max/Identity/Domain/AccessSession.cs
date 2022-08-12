@@ -46,6 +46,11 @@ public class AccessSession : IAccessSession
     public long? MemberId { get; set; }
 
     /// <summary>
+    /// 类型
+    /// </summary>
+    public int Type { get; set; }
+
+    /// <summary>
     /// Token
     /// </summary>
     public string? Token { get; set; }

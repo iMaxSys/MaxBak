@@ -46,6 +46,11 @@ public interface IAccessSession
     long? MemberId { get; set; }
 
     /// <summary>
+    /// 类型
+    /// </summary>
+    int Type { get; set; }
+
+    /// <summary>
     /// Token
     /// </summary>
     string? Token { get; set; }

@@ -17,32 +17,25 @@ using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Identity.Data.EFCore;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
 /// <summary>
 /// 成员仓储
 /// </summary>
-public class MemberRepository : EfRepository<DbMember>, IMemberRepository
+public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
 {
-    const string TAG = "id:";
-    const string TAG_ACCESS = "a:";
-    const string TAG_MEMBER = "m:";
-    const string TAG_ACCESS_SECTION = $"{TAG}{TAG_ACCESS}";
-    const string TAG_MEMBER_SECTION = $"{TAG}{TAG_MEMBER}";
-
-    private readonly ICache _cache;
-    private readonly MaxOption _option;
 
     /// <summary>
     /// 构造
     /// </summary>
     /// <param name="context"></param>
-    /// <param name="identityCache"></param>
-    public MemberRepository(IOptions<MaxOption> option, IdentityContext context, ICacheFactory cacheFactory) : base(context)
+    /// <param name="mapper"></param>
+    /// <param name="option"></param>
+    /// <param name="cacheFactory"></param>
+    public MemberRepository(IdentityContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context, mapper, option, cacheFactory)
     {
-        _option = option.Value;
-        _cache = cacheFactory.GetService();
     }
 
     /// <summary>
@@ -52,7 +45,7 @@ public class MemberRepository : EfRepository<DbMember>, IMemberRepository
     /// <returns></returns>
     public async Task<IAccessSession?> GetAccessSessionAsync(string token)
     {
-        return await _cache.GetAsync<AccessSession>($"{TAG_MEMBER_SECTION}{token}", true);
+        return await Cache.GetAsync<AccessSession>(GetAccessKey(token), _global);
     }
 
     /// <summary>
@@ -60,9 +53,9 @@ public class MemberRepository : EfRepository<DbMember>, IMemberRepository
     /// </summary>
     /// <param name="memberId">成员id</param>
     /// <returns></returns>
-    public async Task<IMember?> ReadAsync(long memberId)
+    public async Task<IMember?> GetAsync(long memberId)
     {
-        return await _cache.GetAsync<Member>($"{TAG_MEMBER_SECTION}{memberId}", true);
+        return await Cache.GetAsync<Member>(GetMemberKey(memberId), true);
     }
 
     /// <summary>
@@ -76,7 +69,7 @@ public class MemberRepository : EfRepository<DbMember>, IMemberRepository
         this.Remove(memberId);
 
         //清除缓存
-        await _cache.DeleteAsync($"{TAG_MEMBER_SECTION}{memberId}", true);
+        await Cache.DeleteAsync(GetMemberKey(memberId), true);
     }
 
     /// <summary>
@@ -85,34 +78,85 @@ public class MemberRepository : EfRepository<DbMember>, IMemberRepository
     /// <param name="member"></param>
     /// <param name="expires"></param>
     /// <returns></returns>
-    public async Task RefreshAsync(IMember member, DateTime? expires = null)
+    public async Task RefreshAsync(long memberId)
     {
-        if (member.Id > 0)
+        var member = await FindAsync(memberId);
+        if (member is not null)
         {
-            await _cache.SetAsync($"{TAG_MEMBER_SECTION}{member.Id}", member, expires ?? DateTime.Now.AddMinutes(_option.Identity.Expires), true);
+            var model = Mapper.Map<MemberModel>(member);
+            await Cache.SetAsync(GetMemberKey(model.Id), model, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
         }
     }
 
     /// <summary>
-    /// 刷新AccessChain
+    /// 刷新member缓存
     /// </summary>
-    /// <param name="oldToken"></param>
-    /// <param name="accessChain"></param>
+    /// <param name="member"></param>
     /// <param name="expires"></param>
     /// <returns></returns>
-    public async Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain, DateTime? expires = null)
+    public async Task RefreshAsync(IMember member)
     {
-        //清除旧AccessSession和User
+        if (member.Id > 0)
+        {
+            await Cache.SetAsync(GetMemberKey(member.Id), member, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
+        }
+    }
+
+    //实体获取甚至缓存
+
+    public async Task RefreshAccessSessionAsync(string oldToken, IAccessSession accessSession, IMember? member = null, IUser? user = null)
+    {
         if (!string.IsNullOrWhiteSpace(oldToken))
         {
-            await _cache.DeleteAsync($"{TAG_ACCESS_SECTION}{oldToken}", true);
+            await Cache.DeleteAsync(GetAccessKey(oldToken), true);
         }
 
         //设置新缓存
-        await _cache.SetAsync($"{TAG_ACCESS_SECTION}{accessChain!.AccessSession!.Token}", accessChain.AccessSession, expires ?? DateTime.Now.AddMinutes(_option.Identity.Expires), true);
-        if (accessChain.AccessSession.MemberId > 0)
+        if (!string.IsNullOrWhiteSpace(accessSession.Token))
         {
-            await RefreshAsync(accessChain.Member!, expires);
+            await Cache.SetAsync(GetAccessKey(accessSession.Token), accessSession, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
+
+            if (accessSession.MemberId > 0 && member is not null)
+            {
+                await RefreshMemberAsync(member, user);
+            }
         }
     }
+
+    public async Task RefreshMemberAsync(IMember member, IUser? user = null)
+    {
+        await Cache.DeleteAsync(GetMemberKey(member.Id), true);
+        await Cache.SetAsync(GetMemberKey(member.Id), member, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
+        if (member.UserId > 0 && user is not null)
+        {
+            await RefreshUserAsync(user);
+        }
+    }
+
+    public async Task RefreshUserAsync(IUser user)
+    {
+        await Cache.DeleteAsync(GetUserKey(user.Id), true);
+        await Cache.SetAsync(GetUserKey(user.Id), user, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
+    }
+
+    /// <summary>
+    /// GetAccessKey
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    private string GetAccessKey(string token) => $"{_tagAccess}{token}";
+
+    /// <summary>
+    /// GetMemberKey
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    private string GetMemberKey(long memberId) => $"{_tagMember}{memberId}";
+
+    /// <summary>
+    /// GetUserKey
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    private string GetUserKey(long userId) => $"{_tagUser}{userId}";
 }

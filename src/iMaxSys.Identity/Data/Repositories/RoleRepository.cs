@@ -51,7 +51,7 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
         RoleModel roleModel;
 
         //取缓存
-        IRole? role = await Cache.GetAsync<RoleModel>(GetRoleKey(tenantId, xppId, roleId), GLOBAL);
+        IRole? role = await Cache.GetAsync<RoleModel>(GetRoleKey(tenantId, xppId, roleId), _global);
 
         //为空则刷新
         if (role is null)
@@ -102,7 +102,7 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
     {
         //软删除
         Remove(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == roleId);
-        await Cache.DeleteAsync(GetRoleKey(tenantId, xppId, roleId), GLOBAL);
+        await Cache.DeleteAsync(GetRoleKey(tenantId, xppId, roleId), _global);
     }
 
     #endregion
@@ -134,7 +134,7 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
     public async Task<RoleModel> RefreshAsync(long tenantId, long xppId, DbRole dbRole)
     {
         RoleModel roleModel = Mapper.Map<RoleModel>(dbRole);
-        await Cache.SetAsync(GetRoleKey(tenantId, xppId, dbRole.Id), dbRole, new TimeSpan(0, Option.Identity.Expires, 0), GLOBAL);
+        await Cache.SetAsync(GetRoleKey(tenantId, xppId, dbRole.Id), dbRole, new TimeSpan(0, Option.Identity.Expires, 0), _global);
         return roleModel;
     }
 
@@ -149,7 +149,7 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    private string GetRoleKey(long tenantId, long xppId, long roleId) => $"{tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}";
+    private string GetRoleKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}";
 
     #endregion
 }

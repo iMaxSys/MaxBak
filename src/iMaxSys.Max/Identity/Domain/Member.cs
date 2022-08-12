@@ -225,16 +225,6 @@ public class Member : IMember
     public long UserId { get; set; }
 
     /// <summary>
-    /// 用户json string
-    /// </summary>
-    public string? UserJson { get; set; }
-
-    /// <summary>
-    /// 用户
-    /// </summary>
-    public object? User { get; set; }
-
-    /// <summary>
     /// 状态
     /// </summary>
     public Status Status { get; set; }
@@ -247,7 +237,7 @@ public class Member : IMember
     /// <summary>
     /// 部门
     /// </summary>
-    //public IDepartment Department { get; set; } = new Department();
+    public IDepartment Department { get; set; } = new Department();
 
     /// <summary>
     /// 租户

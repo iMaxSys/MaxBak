@@ -227,16 +227,6 @@ public interface IMember
     long UserId { get; set; }
 
     /// <summary>
-    /// 用户json string
-    /// </summary>
-    string? UserJson { get; set; }
-
-    /// <summary>
-    /// 用户
-    /// </summary>
-    object? User { get; set; }
-
-    /// <summary>
     /// 状态
     /// </summary>
     Status Status { get; set; }
@@ -249,7 +239,7 @@ public interface IMember
     /// <summary>
     /// 部门
     /// </summary>
-    //IDepartment Department { get; set; }
+    IDepartment Department { get; set; }
 
     /// <summary>
     /// 租户

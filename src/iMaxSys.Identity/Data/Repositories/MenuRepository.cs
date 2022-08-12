@@ -50,7 +50,7 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     public async Task<MenuModel?> GetAsync(long xppId, long tenantId)
     {
         //取缓存
-        MenuModel? menu = await Cache.GetAsync<MenuModel>(GetXppMenuKey(tenantId, xppId), GLOBAL);
+        MenuModel? menu = await Cache.GetAsync<MenuModel>(GetXppMenuKey(tenantId, xppId), _global);
 
         //为空则刷新
         if (menu is null)
@@ -64,7 +64,7 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     public async Task<MenuModel?> GetAsync(long xppId, long tenantId, IRole role)
     {
         //取缓存
-        MenuModel? menu = await Cache.GetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, role.Id), GLOBAL);
+        MenuModel? menu = await Cache.GetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, role.Id), _global);
 
         //为空则刷新
         if (menu == null)
@@ -112,7 +112,7 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     {
         var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
         var menu = MakeMenu(list);
-        await Cache.SetAsync(GetXppMenuKey(tenantId, xppId), menu, new TimeSpan(0, Option.Identity.Expires, 0), GLOBAL);
+        await Cache.SetAsync(GetXppMenuKey(tenantId, xppId), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
         return menu;
     }
 
@@ -127,7 +127,7 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     {
         var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && role.MenuIds.Contains(x.Id));
         var menu = MakeMenu(list, role.MenuIds, role.OperationIds);
-        await Cache.SetAsync(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), GLOBAL);
+        await Cache.SetAsync(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
         return menu;
     }
 
@@ -176,7 +176,7 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    private string GetXppMenuKey(long tenantId, long xppId) => $"{tagMenu}{xppId}{Cache.Separator}{tenantId}";
+    private string GetXppMenuKey(long tenantId, long xppId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}";
 
     /// <summary>
     /// 获取角色菜单key
@@ -185,5 +185,5 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    private string GetRoleMenuKey(long tenantId, long xppId, long roleId) => $"{tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}";
+    private string GetRoleMenuKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}";
 }
