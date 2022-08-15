@@ -14,24 +14,28 @@
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Repositories;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using iMaxSys.Identity.Models;
+using iMaxSys.Max.Caching;
+using iMaxSys.Max.Exceptions;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
 public interface IMemberRepository : IRepository<DbMember>
 {
     /// <summary>
-    /// 获取访问Session
-    /// </summary>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    Task<IAccessSession?> GetAccessSessionAsync(string token);
-
-    /// <summary>
-    /// 读取成员
+    /// find
     /// </summary>
     /// <param name="memberId"></param>
     /// <returns></returns>
-    Task<IMember?> ReadAsync(long memberId);
+    /// <exception cref="MaxException"></exception>
+    Task<DbMember> FindAsync(long memberId);
+
+    /// <summary>
+    /// 获取成员
+    /// </summary>
+    /// <param name="memberId">成员id</param>
+    /// <returns></returns>
+    Task<IMember?> GetAsync(long memberId);
 
     /// <summary>
     /// RemoveAsync
@@ -41,19 +45,42 @@ public interface IMemberRepository : IRepository<DbMember>
     Task RemoveAsync(long memberId);
 
     /// <summary>
-    /// 刷新member缓存
+    /// 获取访问Session
     /// </summary>
-    /// <param name="member"></param>
-    /// <param name="expires"></param>
+    /// <param name="token">令牌</param>
     /// <returns></returns>
-    Task RefreshAsync(IMember member, DateTime? expires = null);
+    Task<IAccessSession?> GetAccessSessionAsync(string token);
 
     /// <summary>
-    /// 刷新AccessChain
+    /// 刷新访问session
     /// </summary>
     /// <param name="oldToken"></param>
-    /// <param name="accessChain"></param>
-    /// <param name="expires"></param>
+    /// <param name="accessSession"></param>
+    /// <param name="member"></param>
+    /// <param name="user"></param>
     /// <returns></returns>
-    Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain, DateTime? expires = null);
+    Task RefreshAccessSessionAsync(string oldToken, IAccessSession accessSession, IMember? member = null, IUser? user = null);
+
+    /// <summary>
+    /// refresh
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    Task RefreshMemberAsync(long memberId, IUser? user = null);
+
+    /// <summary>
+    /// refresh
+    /// </summary>
+    /// <param name="member"></param>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    Task RefreshMemberAsync(IMember member, IUser? user = null);
+
+    /// <summary>
+    /// refresh
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    Task RefreshUserAsync(IUser user);
 }

@@ -2,10 +2,9 @@
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: IIdentityConcreteProvider.cs
+//文件: IUserProvider.cs
 //摘要: 身份具体提供者接口
-//说明: 此处本应返回IRealMember接口，但是由于反系列化不支持接口，所以暂用RealMember类返回
-//      类型参数用于用户系统区别不同用户类型，不用也可
+//说明: 
 //
 //当前：1.0
 //作者：陶剑扬

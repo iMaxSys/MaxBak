@@ -13,11 +13,14 @@
 
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Caching;
+using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Data.Entities.App;
 using iMaxSys.Data.EFCore.Repositories;
+using iMaxSys.Identity.Models;
+using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.EFCore;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -39,13 +42,23 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     }
 
     /// <summary>
-    /// 获取访问Session
+    /// find
     /// </summary>
-    /// <param name="token">令牌</param>
+    /// <param name="memberId"></param>
     /// <returns></returns>
-    public async Task<IAccessSession?> GetAccessSessionAsync(string token)
+    /// <exception cref="MaxException"></exception>
+    public async Task<DbMember> FindAsync(long memberId)
     {
-        return await Cache.GetAsync<AccessSession>(GetAccessKey(token), _global);
+        var dbMenu = await FirstOrDefaultAsync(x => x.Id == memberId);
+
+        if (dbMenu is null)
+        {
+            throw new MaxException(ResultCode.MemberNotExists);
+        }
+        else
+        {
+            return dbMenu;
+        }
     }
 
     /// <summary>
@@ -73,37 +86,23 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     }
 
     /// <summary>
-    /// 刷新member缓存
+    /// 获取访问Session
     /// </summary>
-    /// <param name="member"></param>
-    /// <param name="expires"></param>
+    /// <param name="token">令牌</param>
     /// <returns></returns>
-    public async Task RefreshAsync(long memberId)
+    public async Task<IAccessSession?> GetAccessSessionAsync(string token)
     {
-        var member = await FindAsync(memberId);
-        if (member is not null)
-        {
-            var model = Mapper.Map<MemberModel>(member);
-            await Cache.SetAsync(GetMemberKey(model.Id), model, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
-        }
+        return await Cache.GetAsync<AccessSession>(GetAccessKey(token), _global);
     }
 
     /// <summary>
-    /// 刷新member缓存
+    /// 刷新访问session
     /// </summary>
+    /// <param name="oldToken"></param>
+    /// <param name="accessSession"></param>
     /// <param name="member"></param>
-    /// <param name="expires"></param>
+    /// <param name="user"></param>
     /// <returns></returns>
-    public async Task RefreshAsync(IMember member)
-    {
-        if (member.Id > 0)
-        {
-            await Cache.SetAsync(GetMemberKey(member.Id), member, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
-        }
-    }
-
-    //实体获取甚至缓存
-
     public async Task RefreshAccessSessionAsync(string oldToken, IAccessSession accessSession, IMember? member = null, IUser? user = null)
     {
         if (!string.IsNullOrWhiteSpace(oldToken))
@@ -121,6 +120,13 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
                 await RefreshMemberAsync(member, user);
             }
         }
+    }
+
+    public async Task RefreshMemberAsync(long memberId, IUser? user = null)
+    {
+        var member = await FindAsync(memberId);
+        var model = Mapper.Map<MemberModel>(member);
+        await RefreshMemberAsync(model, user);
     }
 
     public async Task RefreshMemberAsync(IMember member, IUser? user = null)

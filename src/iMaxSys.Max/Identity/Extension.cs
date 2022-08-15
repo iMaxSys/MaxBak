@@ -20,6 +20,7 @@ namespace iMaxSys.Max.Identity;
 /// </summary>
 public static class Extensions
 {
+    /*
     /// <summary>
     /// 获取具体用户
     /// </summary>
@@ -70,4 +71,5 @@ public static class Extensions
             }
         }
     }
+    */
 }
