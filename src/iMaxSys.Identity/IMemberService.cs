@@ -55,7 +55,7 @@ public interface IMemberService : IDependency
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<IMember?> UpdateAsync(MemberModel model);
+    Task<IMember> UpdateAsync(MemberModel model);
 
     /// <summary>
     /// 刷新成员缓存

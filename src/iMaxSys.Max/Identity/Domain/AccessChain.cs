@@ -31,5 +31,5 @@ public class AccessChain : IAccessChain
     /// <summary>
     /// User
     /// </summary>
-    public object? User { get; set; }
+    public IUser? User { get; set; }
 }

@@ -43,22 +43,22 @@ public class XppSns : MasterEntity
     /// <summary>
     /// 社交平台账号来源
     /// </summary>
-    public PlatformSource Source { get; set; }
+    public SnsSource Source { get; set; }
 
     /// <summary>
     /// 第三方平台原始Id
     /// </summary>
-    public string? AccountId { get; set; }
+    public string AccountId { get; set; } = String.Empty;
 
     /// <summary>
     /// AppId
     /// </summary>
-    public string? AppId { get; set; }
+    public string AppId { get; set; } = String.Empty;
 
     /// <summary>
     /// AppSecret
     /// </summary>
-    public string? AppSecret { get; set; }
+    public string AppSecret { get; set; } = String.Empty;
 
     /// <summary>
     /// 状态

@@ -37,16 +37,64 @@ public enum ResultCode
     TokenCantNull = 106002,
 
     /// <summary>
+    /// 无效的AccessSession
+    /// </summary>
+    [Description("无效的AccessSession")]
+    AccessSessionIsNull = 106003,
+
+    /// <summary>
     /// 成员id不可为空
     /// </summary>
     [Description("成员id不可为空")]
-    MemberIdCantNull = 1062003,
+    MemberIdCantNull = 1062004,
 
     /// <summary>
     /// 成员不存在
     /// </summary>
     [Description("成员不存在")]
-    MemberNotExists = 106004,
+    MemberNotExists = 106005,
+
+    /// <summary>
+    /// 成员已存在
+    /// </summary>
+    [Description("成员已存在")]
+    UserExists = 106006,
+
+    /// <summary>
+    /// 无效的XppSnsId
+    /// </summary>
+    [Description("无效的应用社交Id")]
+    XppSnsIdNotExists = 106007,
+
+    /// <summary>
+    /// 用户名不可为空
+    /// </summary>
+    [Description("用户名不可为空")]
+    UserNameCantNull = 106008,
+
+    /// <summary>
+    /// 密码强度弱
+    /// </summary>
+    [Description("密码强度弱")]
+    PasswordIsWeak = 106009,
+
+    /// <summary>
+    /// 无效的手机号码
+    /// </summary>
+    [Description("无效的手机号码")]
+    MobileIsInvalid = 106010,
+
+    /// <summary>
+    /// 代码和OpenId不可同时为空
+    /// </summary>
+    [Description("Code和OpenId不可同时为空")]
+    CodeOpenIdCantNull = 106011,
+
+    /// <summary>
+    /// 获取手机号码失败
+    /// </summary>
+    [Description("获取手机号码失败")]
+    GetMobileFail = 106012,
 
     /// <summary>
     /// 角色id不可为空

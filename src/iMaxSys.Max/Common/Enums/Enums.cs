@@ -123,7 +123,7 @@ public enum XppSource
 /// <summary>
 /// 账号/社交平台来源
 /// </summary>
-public enum PlatformSource
+public enum SnsSource
 {
     /// <summary>
     /// 本体系

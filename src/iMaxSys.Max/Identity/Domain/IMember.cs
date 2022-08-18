@@ -184,7 +184,7 @@ public interface IMember
     /// <summary>
     /// 账号来源
     /// </summary>
-    PlatformSource AccountSource { get; set; }
+    SnsSource AccountSource { get; set; }
 
     /// <summary>
     /// 启用时间

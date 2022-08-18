@@ -13,6 +13,7 @@
 
 namespace iMaxSys.Sns.Common;
 
+/*
 /// <summary>
 /// 平台
 /// </summary>
@@ -43,3 +44,4 @@ public enum SnsSource
     [Description("QQ")]
     QQ = 40
 }
+*/

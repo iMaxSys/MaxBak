@@ -490,6 +490,71 @@ public static class UtilityExtensions
     public static string IfNullOrEmpty(this string value, string defaultValue) => (!value.IsNullOrEmpty() ? value : defaultValue);
 
     /// <summary>
+    /// 是否为手机号码
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static bool IsMobile(this string value) => System.Text.RegularExpressions.Regex.IsMatch(value, @"^1[3456789]\d{9}$");
+
+    /// <summary>
+    /// 是否为合法身份证号
+    /// </summary>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static bool IsIDNumber(this string source)
+    {
+        bool match = false;
+        string pattern = @"^\d{17}(?:\d|X)$";
+        string birth = source.Substring(6, 8).Insert(6, "-").Insert(4, "-");
+        DateTime time = new DateTime();
+
+        int[] arr_weight = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };     // 加权数组
+        string[] id_last = { "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2" };   // 校验数组
+        int sum = 0;
+        for (int i = 0; i < 17; i++)
+        {
+            sum += arr_weight[i] * int.Parse(source[i].ToString());
+        }
+        int result = sum % 11;  // 实际校验位的值
+
+        if (Regex.IsMatch(source, pattern))                         // 18位格式检查
+        {
+            if (DateTime.TryParse(birth, out time))                 // 出生日期检查
+            {
+                if (id_last[result] == source[17].ToString())       // 校验位检查
+                {
+                    //Console.WriteLine("身份证号格式正确!");
+                    match = true;
+                }
+                else
+                {
+                    //Console.WriteLine("最后一位校验错误!");
+                }
+            }
+            else
+            {
+                //Console.WriteLine("出生日期验证失败!");
+            }
+        }
+        else
+        {
+            //Console.WriteLine("身份证号格式错误!");
+        }
+
+        return match;
+    }
+
+    /// <summary>
+    /// 字符串是否强壮
+    /// </summary>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static bool IsStrong(this string source)
+    {
+        return source.Length > 6 && source.Length < 24;
+    }
+
+    /// <summary>
     /// 序列化为Json字符串
     /// </summary>
     /// <param name="value"></param>

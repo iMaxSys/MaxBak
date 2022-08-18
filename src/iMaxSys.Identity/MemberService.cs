@@ -25,6 +25,11 @@ using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Repositories;
 using iMaxSys.Identity.Data.Entities;
+using iMaxSys.Sns;
+using iMaxSys.Sns.Api;
+using iMaxSys.Sns.Common.Auth;
+using iMaxSys.Sns.Common.Open;
+
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
 
 namespace iMaxSys.Identity;
@@ -37,18 +42,22 @@ public class MemberService : IMemberService
     private readonly IMapper _mapper;
     private readonly MaxOption _option;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IIdentityCache _identityCache;
     private readonly IUserProvider _userProvider;
+    private readonly ISnsFactory _snsFactory;
+    private readonly ICheckCodeService _checkCodeService;
+
+    private IUser _user;
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork unitOfWork, IIdentityCache identityCache, IUserProvider userProvider)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork unitOfWork, IUserProvider userProvider, ISnsFactory snsFactory, ICheckCodeService checkCodeService)
     {
         _mapper = mapper;
         _option = option.Value;
         _unitOfWork = unitOfWork;
-        _identityCache = identityCache;
         _userProvider = userProvider;
+        _snsFactory = snsFactory;
+        _checkCodeService = checkCodeService;
     }
 
     #endregion
@@ -77,27 +86,50 @@ public class MemberService : IMemberService
             return null;
         }
 
-        //按mid获取member
+        //按memberId获取member
         IMember? member = null;
+        IUser? user = null;
+
         if (access.MemberId.HasValue)
         {
-            member = await repository.ReadAsync(access.MemberId.Value);
+            //get member
+            member = await GetAsync(access.MemberId.Value);
 
-            if (member != null)
+            if (access.MemberId is not null)
             {
-                var type = _userProvider.GetType(member.Type);
-                if (type != null)
-                {
-                    member.User = member.GetUser(type);
-                }
+                //get user
+                user = await _userProvider.GetAsync(access.MemberId.Value, access.Type);
             }
         }
 
         return new AccessChain
         {
             AccessSession = access,
-            Member = member
+            Member = member,
+            User = user
         };
+    }
+
+    #endregion
+
+    #region RefreshAcceeChainAsync
+
+    /// <summary>
+    /// 刷新AcceeChain缓存
+    /// </summary>
+    /// <param name="oldToken"></param>
+    /// <param name="accessChain"></param>
+    /// <returns></returns>
+    public async Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain)
+    {
+        if (accessChain.AccessSession is not null)
+        {
+            await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(oldToken, accessChain.AccessSession, accessChain.Member, accessChain.User);
+        }
+        else
+        {
+            throw new MaxException(ResultCode.MemberNotExists);
+        }
     }
 
     #endregion
@@ -115,9 +147,9 @@ public class MemberService : IMemberService
     {
         DbMember dbMember = new();
         SetNewMember(model, xppId, dbMember);
-        await UnitOfWork.GetCustomRepository<IMemberRepository>().AddAsync(dbMember);
-        await UnitOfWork.SaveChangesAsync();
-        return Mapper.Map<IMember>(dbMember);
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().AddAsync(dbMember);
+        await _unitOfWork.SaveChangesAsync();
+        return _mapper.Map<MemberModel>(dbMember);
     }
 
     #endregion
@@ -131,8 +163,8 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task RemoveAsync(long memberId)
     {
-        await UnitOfWork.GetCustomRepository<IMemberRepository>().RemoveAsync(memberId);
-        await UnitOfWork.SaveChangesAsync();
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RemoveAsync(memberId);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     #endregion
@@ -146,15 +178,7 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task<IMember?> GetAsync(long id)
     {
-        var member = await UnitOfWork.GetCustomRepository<IMemberRepository>().FindAsync(id);
-        if (member != null)
-        {
-            return Mapper.Map<IMember>(member);
-        }
-        else
-        {
-            throw new MaxException(IdentityResultEnum.MemberNotExists);
-        }
+        return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetAsync(id);
     }
 
     #endregion
@@ -166,28 +190,27 @@ public class MemberService : IMemberService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<IMember?> UpdateAsync(MemberModel model)
+    public async Task<IMember> UpdateAsync(MemberModel model)
     {
         //成员id判空
-        if (!model.Id.HasValue)
+        if (model.Id == 0)
         {
-            throw new MaxException(IdentityResultEnum.MemberIdCantNull);
+            throw new MaxException(ResultCode.MemberIdCantNull);
         }
 
-        IMemberRepository respoitory = UnitOfWork.GetCustomRepository<IMemberRepository>();
+        IMemberRepository respoitory = _unitOfWork.GetCustomRepository<IMemberRepository>();
         var member = await respoitory.FindAsync(model.Id);
         if (member == null)
         {
-            throw new MaxException(IdentityResultEnum.MemberNotExists);
+            throw new MaxException(ResultCode.MemberNotExists);
         }
 
         SetMember(model, member);
         respoitory.Update(member);
-        await UnitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
-        var result = Mapper.Map<IMember>(member);
+        var result = _mapper.Map<MemberModel>(member);
         await RefreshAsync(result);
-
         return result;
     }
 
@@ -216,25 +239,13 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task RefreshAsync(IMember member)
     {
-        await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAsync(member);
+        IUser user = await _userProvider.GetAsync(member.Id, member.Type);
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(member, user);
     }
 
     #endregion
 
-    #region RefreshAcceeChainAsync
 
-    /// <summary>
-    /// 刷新AcceeChain缓存
-    /// </summary>
-    /// <param name="oldToken"></param>
-    /// <param name="accessChain"></param>
-    /// <returns></returns>
-    public async Task RefreshAcceeChainAsync(string oldToken, IAccessChain accessChain)
-    {
-        await UnitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessChainAsync(oldToken, accessChain);
-    }
-
-    #endregion
 
     #region RegisterAsync
 
@@ -244,22 +255,24 @@ public class MemberService : IMemberService
         bool needCheckCode = true;
 
         //账号平台来源
-        PlatformSource source = PlatformSource.Max;
+        SnsSource source = SnsSource.Max;
 
         //获取sns
-        var xppSns = await UnitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == model.XppSnsId, null, x => x.Include(y => y.Xpp));
+        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == model.XppSnsId, null, x => x.Include(y => y.Xpp));
 
-        AccessConfig accessConfig = await CheckSnsAccountAsync(sns, model.Code);
-        source = sns.Source;
+        if (xppSns is null)
+        {
+            throw new MaxException(ResultCode.XppSnsIdNotExists);
+        }
 
-        //获取手机号对应的会员信息
-        ISpecification<DbMember> spec2 = new Specification<DbMember>(x => x.Id == model.MemberId || x.Mobile == mobile || (!string.IsNullOrWhiteSpace(model.UserName) && x.LoginName == model.UserName)).AddInclude(x => x.MemberExts).ApplyTracking();
-        var repo = _unitOfWork.GetRepo<DbMember>();
+        AccessConfig accessConfig = await CheckSnsAccountAsync(xppSns, model.Code);
+        source = xppSns.Source;
 
-        DbMember dbMember = await repo.FirstOrDefaultAsync(spec2);
+        var repository = _unitOfWork.GetRepository<DbMember>();
+        var dbMember = await repository.FirstOrDefaultAsync(x => x.Id == model.MemberId || x.Mobile == mobile || x.UserName == model.UserName, null, x => x.Include(y => y.MemberExts));
 
         //用户名密码注册,需要判断是否用该手机号注册过,其他方式注册存在多社交账户绑定同一member,就不判断
-        if (sns.Source == PlatformSource.Max && dbMember != null || dbMember.IsOfficial)
+        if (dbMember != null && (xppSns.Source == SnsSource.Max || dbMember.IsOfficial))
         {
             throw new MaxException(ResultCode.UserExists);
         }
@@ -274,38 +287,48 @@ public class MemberService : IMemberService
 
         switch (source)
         {
-            case PlatformSource.Max:
-                if (string.IsNullOrWhiteSpace(model.UserName))
+            case SnsSource.Max:
+                if (model.UserName.IsNullOrWhiteSpace())
                 {
                     throw new MaxException(ResultCode.UserNameCantNull);
                 }
-                if (string.IsNullOrWhiteSpace(model.Password))
+                if (!model.Password.IsStrong())
                 {
-                    throw new MaxException(ResultCode.PasswordCantNull);
+                    throw new MaxException(ResultCode.PasswordIsWeak);
                 }
-                //是否需要手机号码
-                if (sns.Xapp.NeedMobile && string.IsNullOrWhiteSpace(model.Mobile))
+                if (xppSns.Xpp.NeedMobile && !model.Mobile.IsMobile())
                 {
-                    throw new MaxException(ResultCode.NeedMobile);
+                    throw new MaxException(ResultCode.MobileIsInvalid);
                 }
                 break;
-            case PlatformSource.WeChat:
+
+            case SnsSource.WeChat:
                 //有code,就不需要openId,但二者不可同时为空
-                if (string.IsNullOrWhiteSpace(model.Code) && string.IsNullOrWhiteSpace(model.OpenId))
+                if (model.Code.IsNullOrWhiteSpace() && model.OpenId.IsNullOrWhiteSpace())
                 {
                     throw new MaxException(ResultCode.CodeOpenIdCantNull);
                 }
+
                 //是否需要手机号码
-                if (sns.Xapp.NeedMobile && string.IsNullOrWhiteSpace(model.Mobile) && string.IsNullOrWhiteSpace(model.EncryptedData))
+                if (xppSns.Xpp.NeedMobile && model.Mobile.IsNullOrWhiteSpace() && model.EncryptedData.IsNullOrWhiteSpace())
                 {
-                    throw new MaxException(ResultCode.NeedMobile);
+                    throw new MaxException(ResultCode.MobileIsInvalid);
                 }
+
                 //社交平台获取电话号码,则不需要验证码
-                if (!string.IsNullOrWhiteSpace(model.EncryptedData))
+                if (!model.EncryptedData.IsNullOrWhiteSpace())
                 {
-                    ISpecification<MemberSession> spec = new Specification<MemberSession>(x => x.XappSnsId == model.XappSnsId && x.Token == model.Token);
-                    MemberSession xmemberSession = await _unitOfWork.GetRepo<MemberSession>().FirstOrDefaultAsync(spec);
-                    SnsPhoneNumber phoneNumber = GetSnsPhoneNumber(model.XappSnsId, model.EncryptedData, xmemberSession.SessionKey, model.IV);
+                    MemberSession? memberSession = await _unitOfWork.GetRepository<MemberSession>().FirstOrDefaultAsync(x => x.XppSnsId == model.XppSnsId && x.Token == model.Token);
+                    if (memberSession is null)
+                    {
+                        throw new MaxException(ResultCode.AccessSessionIsNull);
+                    }
+
+                    SnsPhoneNumber? phoneNumber  = _snsFactory.GetService(SnsSource.WeChat).GetPhoneNumber(model.EncryptedData, memberSession.SessionKey, model.IV);
+                    if (phoneNumber is null)
+                    {
+                        throw new MaxException(ResultCode.GetMobileFail);
+                    }
                     mobile = phoneNumber.PurePhoneNumber;
                     needCheckCode = false;
                 }
@@ -317,7 +340,7 @@ public class MemberService : IMemberService
         if (needCheckCode)
         {
             //检查验证码
-            await _checkCodeService.CheckAsync(model.XappSnsId, BizSource.BindCheckCode.GetHashCode(), model.MemberId, model.Mobile, model.CheckCode);
+            await _checkCodeService.CheckAsync(model.XppSnsId, BizSource.BindCheckCode.GetHashCode(), model.MemberId, mobile, model.CheckCode);
         }
 
         IUser user = await ActiveUserAsync(mobile, model.Avatar, model.Type);
@@ -544,13 +567,20 @@ public class MemberService : IMemberService
     /// <returns></returns>
     private async Task<IUser?> GetUserAsync(long id, int type)
     {
-        if (id > 0 && _userProvider != null)
+        if (_user is not null)
         {
-            return await _userProvider.GetAsync(id, type);
+            return _user;
         }
         else
         {
-            return null;
+            if (id > 0 && _userProvider != null)
+            {
+                return await _userProvider.GetAsync(id, type);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
@@ -562,15 +592,110 @@ public class MemberService : IMemberService
     /// <returns></returns>
     private async Task<IUser?> GetUserAsync(string mobile, int type)
     {
-        if (!string.IsNullOrWhiteSpace(mobile) && _userProvider != null)
+        if (_user is not null)
         {
-            return await _userProvider.GetAsync(mobile, type);
+            return _user;
         }
         else
         {
-            return null;
+            if (!mobile.IsNullOrWhiteSpace() && _userProvider != null)
+            {
+                return await _userProvider.GetAsync(mobile, type);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
+    /// <summary>
+    /// 激活
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private async Task<IUser?> ActiveUserAsync(string mobile, string avatar, int type)
+    {
+        if (_user is null && !mobile.IsNullOrWhiteSpace() && _userProvider is not null)
+        {
+            _user = await _userProvider.ActivateAsync(mobile, avatar, type);
+        }
+
+        return _user;
+    }
+
     #endregion
+
+    /// <summary>
+    /// 检查社交账号是否已绑定过系统账号
+    /// </summary>
+    /// <param name="sns"></param>
+    /// <param name="code"></param>
+    /// <returns></returns>
+    private async Task<AccessConfig> CheckSnsAccountAsync(XppSns sns, string code)
+    {
+        var ac = await GetAccessConfigAsync(sns, code);
+
+        //社交账号是否绑定过
+        //bool exsits = await _unitOfWork.GetRepo<MemberExt>().ExistAsync(x => x.XappSnsId == sns.Id && x.OpenId == ac.OpenId);
+        //if (exsits)
+        //{
+        //    throw new MaxException(ResultEnum.SnsIsBind);
+        //}
+
+        return ac;
+    }
+
+    /// <summary>
+    /// 获取访问配置
+    /// </summary>
+    /// <param name="sns"></param>
+    /// <param name="code"></param>
+    /// <returns></returns>
+    private async Task<AccessConfig> GetAccessConfigAsync(XppSns sns, string code)
+    {
+        SnsAuth snsAuth = new SnsAuth
+        {
+            AppId = sns.AppId,
+            AppSecret = sns.AppSecret,
+            Code = code
+        };
+
+        AccessConfig accessConfig = await _snsFactory.GetService(sns.Source).GetAccessConfigAsync(snsAuth);
+        accessConfig.AccountId = sns.AccountId;
+        accessConfig.SnsSource = (SnsSource)sns.Source;
+        accessConfig.Status = sns.Status;
+
+        var token = MakeAccessToken();
+        accessConfig.Token = token.Token;
+        accessConfig.Expires = token.Expires;
+
+        return accessConfig;
+    }
+
+    /// <summary>
+    /// 生成访问令牌
+    /// </summary>
+    /// <returns></returns>
+    private IAccessToken MakeAccessToken()
+    {
+        return new AccessToken
+        {
+            Token = Guid.NewGuid().ToString().Replace("-", ""),
+            Expires = DateTime.Now.AddMinutes(_option.Identity.Expires),
+        };
+    }
+
+    /// <summary>
+    /// 检查密码强度, 待扩展
+    /// </summary>
+    /// <param name="source"></param>
+    private void CheckPassword(string source)
+    {
+        if (source.Length < 6 || source.Length > 24)
+        {
+            throw new MaxException(ResultCode.PasswordIsWeak);
+        }
+    }
 }

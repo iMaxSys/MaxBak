@@ -37,6 +37,11 @@ public class Xpp : MasterEntity
     public string? Description { get; set; }
 
     /// <summary>
+    /// 新用户注册是否需要手机号
+    /// </summary>
+    public bool NeedMobile { get; set; } = true;
+
+    /// <summary>
     /// XppSource
     /// </summary>
     public XppSource Source { get; set; }

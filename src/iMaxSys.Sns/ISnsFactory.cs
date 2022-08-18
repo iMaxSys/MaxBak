@@ -11,7 +11,7 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
-using iMaxSys.Sns.Common;
+using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Sns;
 

@@ -30,6 +30,8 @@ public class XppConfiguration : MasterEntityConfiguration<Xpp>
         builder.Property(x => x.Alias).HasColumnName("alias").HasMaxLength(50).IsRequired();
         //Description
         builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255);
+        //NeedMobile
+        builder.Property(x => x.NeedMobile).HasColumnName("need_mobile").IsRequired(); ;
         //AppSource
         builder.Property(x => x.Source).HasColumnName("source").IsRequired(); ;
         //第三方平台原始Id(暂不使用)

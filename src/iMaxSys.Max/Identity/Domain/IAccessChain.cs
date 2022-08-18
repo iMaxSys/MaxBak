@@ -31,5 +31,5 @@ public interface IAccessChain
     /// <summary>
     /// User
     /// </summary>
-    object? User { get; set; }
+    IUser? User { get; set; }
 }

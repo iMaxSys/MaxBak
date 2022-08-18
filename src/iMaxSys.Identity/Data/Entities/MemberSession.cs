@@ -49,7 +49,7 @@ public class MemberSession : TenantMasterEntity
     /// <summary>
     /// SessionKey:目前微信的session_key有效期是三天
     /// </summary>
-    public string? SessionKey { get; set; }
+    public string SessionKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 名字

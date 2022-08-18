@@ -21,7 +21,7 @@ public class AccessToken : IAccessToken
     /// <summary>
     /// 令牌
     /// </summary>
-    public string? Token { get; set; }
+    public string Token { get; set; } = string.Empty;
 
     /// <summary>
     /// 过期时间(分钟)

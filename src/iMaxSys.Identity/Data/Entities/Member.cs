@@ -185,7 +185,7 @@ public class Member : TenantMasterEntity
     /// <summary>
     /// 账号来源
     /// </summary>
-    public PlatformSource AccountSource { get; set; }
+    public SnsSource AccountSource { get; set; }
 
     /// <summary>
     /// 启用时间

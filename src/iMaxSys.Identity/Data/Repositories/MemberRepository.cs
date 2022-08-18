@@ -68,7 +68,8 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     /// <returns></returns>
     public async Task<IMember?> GetAsync(long memberId)
     {
-        return await Cache.GetAsync<Member>(GetMemberKey(memberId), true);
+        var member = await Cache.GetAsync<MemberModel>(GetMemberKey(memberId), true);
+        return member ?? await RefreshMemberAsync(memberId);
     }
 
     /// <summary>
@@ -122,14 +123,15 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
         }
     }
 
-    public async Task RefreshMemberAsync(long memberId, IUser? user = null)
+    public async Task<IMember> RefreshMemberAsync(long memberId, IUser? user = null)
     {
         var member = await FindAsync(memberId);
         var model = Mapper.Map<MemberModel>(member);
         await RefreshMemberAsync(model, user);
+        return model;
     }
 
-    public async Task RefreshMemberAsync(IMember member, IUser? user = null)
+    public async Task<IMember> RefreshMemberAsync(IMember member, IUser? user = null)
     {
         await Cache.DeleteAsync(GetMemberKey(member.Id), true);
         await Cache.SetAsync(GetMemberKey(member.Id), member, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
@@ -137,6 +139,7 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
         {
             await RefreshUserAsync(user);
         }
+        return member;
     }
 
     public async Task RefreshUserAsync(IUser user)
