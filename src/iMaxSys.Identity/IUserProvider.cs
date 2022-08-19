@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity;
 
@@ -51,7 +52,14 @@ public interface IUserProvider : IDependency
     /// <param name="key">关键值,例如手机号码</param>
     /// <param name="type">类型</param>
     /// <returns></returns>
-    Task<User> ActivateAsync(string key, string avatar, int type = 0);
+    //Task<User> ActivateAsync(string key, string avatar, int type = 0);
+
+    /// <summary>
+    /// RegisterAsync
+    /// </summary>
+    /// <param name="registerModel"></param>
+    /// <returns></returns>
+    Task<IUser> RegisterAsync(RegisterModel registerModel);
 
     /// <summary>
     /// 获取类型

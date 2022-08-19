@@ -43,82 +43,97 @@ public class RegisterModel
     /// <summary>
     /// OpenId
     /// </summary>
-    public string OpenId { get; set; } = string.Empty;
+    public string? OpenId { get; set; }
 
     /// <summary>
     /// 社交平台code
     /// </summary>
-    public string Code { get; set; } = string.Empty;
+    public string? Code { get; set; }
 
     /// <summary>
     /// 验证码
     /// </summary>
-    public string CheckCode { get; set; } = string.Empty;
+    public string? CheckCode { get; set; }
 
     /// <summary>
     /// 社交平台加密数据（微信绑定电话）
     /// </summary>
-    public string EncryptedData { get; set; } = string.Empty;
+    public string? EncryptedData { get; set; }
 
     /// <summary>
     /// IV
     /// </summary>
-    public string IV { get; set; } = string.Empty;
+    public string? IV { get; set; }
 
     /// <summary>
     /// Token
     /// </summary>
-    public string Token { get; set; } = string.Empty;
+    public string? Token { get; set; }
 
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string? Name { get; set; }
 
     /// <summary>
     /// 用户名
     /// </summary>
-    public string UserName { get; set; } = string.Empty;
+    public string? UserName { get; set; }
 
     /// <summary>
     /// 密码
     /// </summary>
-    public string Password { get; set; } = string.Empty;
+    public string? Password { get; set; }
 
     /// <summary>
     /// 昵称
     /// </summary>
-    public string NickName { get; set; } = string.Empty;
+    public string? NickName { get; set; }
 
     /// <summary>
     /// PhoneNumber
     /// </summary>
-    public string Mobile { get; set; } = string.Empty;
+    public string? Mobile { get; set; }
+
+    /// <summary>
+    /// Email
+    /// </summary>
+    public string? Email { get; set; }
+
+    /// <summary>
+    /// Birthday
+    /// </summary>
+    public DateTime? Birthday { get; set; }
 
     /// <summary>
     /// 国家
     /// </summary>
-    public string Country { get; set; } = string.Empty;
+    public string? Country { get; set; } = string.Empty;
 
     /// <summary>
     /// 省
     /// </summary>
-    public string Province { get; set; } = string.Empty;
+    public string? Province { get; set; } = string.Empty;
 
     /// <summary>
     /// 城市
     /// </summary>
-    public string City { get; set; } = string.Empty;
+    public string? City { get; set; } = string.Empty;
 
     /// <summary>
     /// 头像
     /// </summary>
-    public string Avatar { get; set; } = string.Empty;
+    public string? Avatar { get; set; }
 
     /// <summary>
     /// 性别(0未知,1男,2女)
     /// </summary>
     public Gender Gender { get; set; }
+
+    /// <summary>
+    /// XppSource
+    /// </summary>
+    public XppSource XppSource { get; set; }
 
     /// <summary>
     /// IP
