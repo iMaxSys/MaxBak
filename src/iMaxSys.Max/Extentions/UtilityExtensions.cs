@@ -11,6 +11,7 @@
 //日期：2020-11-15
 //----------------------------------------------------------------
 
+using System.Linq;
 using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Max.Extentions;
@@ -94,6 +95,28 @@ public static class UtilityExtensions
         {
             return value;
         }
+    }
+
+    /// <summary>
+    /// 引用类型为空判断
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static bool IsNull<T>(this T? source) where T : class
+    {
+        return source is null;
+    }
+
+    /// <summary>
+    /// 引用类型非空判断
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static bool IsNotNull<T>(this T? source) where T : class
+    {
+        return source is not null;
     }
 
     /// <summary>
@@ -472,29 +495,29 @@ public static class UtilityExtensions
     /// <summary>
     /// 指示指定的 <see cref="System.String"/> 对象是 null 还是 System.String.Empty 字符串。
     /// </summary>
-    public static bool IsNullOrEmpty(this String data) => String.IsNullOrEmpty(data);
+    public static bool IsNullOrEmpty(this string? source) => string.IsNullOrEmpty(source);
 
     /// <summary>
     /// 指示指定的字符串是 null、空还是仅由空白字符组成。
     /// </summary>
-    public static bool IsNullOrWhiteSpace(this String data) => String.IsNullOrWhiteSpace(data);
+    public static bool IsNullOrWhiteSpace(this string? source) => string.IsNullOrWhiteSpace(source);
 
     /// <summary>
     /// 如果指定的 <see cref="System.String"/> 对象字符串是 null、空还是仅由空白字符组成则返回默认值。
     /// </summary>
-    public static string IfNullOrWhiteSpace(this string value, string defaultValue) => (!value.IsNullOrWhiteSpace() ? value : defaultValue);
+    public static string IfNullOrWhiteSpace(this string? source, string defaultValue) => (string.IsNullOrWhiteSpace(source) ? defaultValue : source);
 
     /// <summary>
     /// 如果指定的 <see cref="System.String"/> 对象是 null 或 System.Empty 字符串则返回默认值。
     /// </summary>
-    public static string IfNullOrEmpty(this string value, string defaultValue) => (!value.IsNullOrEmpty() ? value : defaultValue);
+    public static string IfNullOrEmpty(this string source, string defaultValue) => (source.IsNullOrEmpty() ? defaultValue : source);
 
     /// <summary>
     /// 是否为手机号码
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static bool IsMobile(this string value) => System.Text.RegularExpressions.Regex.IsMatch(value, @"^1[3456789]\d{9}$");
+    public static bool IsMobile(this string? value) => value.IsNotNull() && System.Text.RegularExpressions.Regex.IsMatch(value!, @"^1[3456789]\d{9}$");
 
     /// <summary>
     /// 是否为合法身份证号
@@ -549,9 +572,9 @@ public static class UtilityExtensions
     /// </summary>
     /// <param name="source"></param>
     /// <returns></returns>
-    public static bool IsStrong(this string source)
+    public static bool IsStrong(this string? source)
     {
-        return source.Length > 6 && source.Length < 24;
+        return source?.Length > 6 && source?.Length < 24;
     }
 
     /// <summary>
@@ -604,21 +627,40 @@ public static class UtilityExtensions
     /// <summary>
     /// 字符串转化为Int
     /// </summary>
-    public static int? ToInt(this string source) => int.TryParse(source, out int result) ? result : null;
+    //public static int? ToInt(this string source) => int.TryParse(source, out int result) ? result : null;
+
+    /// <summary>
+    /// 字符串转化为Int
+    /// </summary>
+    public static int ToInt(this string source) => int.Parse(source);
 
     /// <summary>
     /// 字符串转化为Long
     /// </summary>
     /// <param name="source">字符串</param>
     /// <returns></returns>
-    public static long? ToLong(this string source) => long.TryParse(source, out long result) ? result : null;
+    //public static long? ToLong(this string source) => long.TryParse(source, out long result) ? result : null;
+
+    /// <summary>
+    /// 字符串转化为Long
+    /// </summary>
+    /// <param name="source">字符串</param>
+    /// <returns></returns>
+    public static long ToLong(this string source) => long.Parse(source);
 
     /// <summary>
     /// 字符串转化为Decimal
     /// </summary>
     /// <param name="source">字符串</param>
     /// <returns></returns>
-    public static decimal? ToDecimal(this string source) => decimal.TryParse(source, out decimal result) ? result : null;
+    //public static decimal? ToDecimal(this string source) => decimal.TryParse(source, out decimal result) ? result : null;
+
+    /// <summary>
+    /// 字符串转化为Decimal
+    /// </summary>
+    /// <param name="source">字符串</param>
+    /// <returns></returns>
+    public static decimal ToDecimal(this string source) => decimal.Parse(source);
 
     /// <summary>
     /// 字符串转化为Long
@@ -659,4 +701,30 @@ public static class UtilityExtensions
               (Expression.And(expr1.Body, invokedExpr), expr1.Parameters);
     }
 
+    /// <summary>
+    /// 移除符合条件的项
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="predicate"></param>
+    /// <returns></returns>
+    public static int Remove<T>(this ICollection<T>? source, Func<T, bool> predicate)
+    {
+        if (source is not null)
+        {
+            var list = source.Where(predicate);
+            if (list is not null)
+            {
+                foreach (var item in list)
+                {
+                    source.Remove(item);
+                }
+            }
+            return list?.Count() ?? 0;
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }

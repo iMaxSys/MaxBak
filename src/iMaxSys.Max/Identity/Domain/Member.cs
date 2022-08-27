@@ -37,7 +37,7 @@ public class Member : IMember
     /// <summary>
     /// 性别(0男,1女,2未知)
     /// </summary>
-    public Gender Gender { get; set; }
+    public Gender? Gender { get; set; }
 
     /// <summary>
     /// 生日
@@ -77,7 +77,7 @@ public class Member : IMember
     /// <summary>
     /// 登录名/用户名
     /// </summary>
-    public string UserName { get; set; } = string.Empty;
+    public string? UserName { get; set; }
 
     /// <summary>
     /// 昵称
@@ -187,7 +187,7 @@ public class Member : IMember
     /// <summary>
     /// 启用时间
     /// </summary>
-    public DateTime Start { get; set; }
+    public DateTime? Start { get; set; }
 
     /// <summary>
     /// 停用时间

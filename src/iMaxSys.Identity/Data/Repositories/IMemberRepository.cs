@@ -11,12 +11,12 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Identity.Domain;
-using iMaxSys.Data.Repositories;
-using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using iMaxSys.Identity.Models;
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Data.Repositories;
+using iMaxSys.Identity.Models;
+using DbMember = iMaxSys.Identity.Data.Entities.Member;
 
 namespace iMaxSys.Identity.Data.Repositories;
 

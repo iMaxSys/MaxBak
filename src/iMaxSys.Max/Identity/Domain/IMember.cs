@@ -39,7 +39,7 @@ public interface IMember
     /// <summary>
     /// 性别(0男,1女,2未知)
     /// </summary>
-    Gender Gender { get; set; }
+    Gender? Gender { get; set; }
 
     /// <summary>
     /// 生日
@@ -79,7 +79,7 @@ public interface IMember
     /// <summary>
     /// 用户名
     /// </summary>
-    string UserName { get; set; }
+    string? UserName { get; set; }
 
     /// <summary>
     /// 昵称
@@ -189,7 +189,7 @@ public interface IMember
     /// <summary>
     /// 启用时间
     /// </summary>
-    DateTime Start { get; set; }
+    DateTime? Start { get; set; }
 
     /// <summary>
     /// 停用时间
@@ -234,12 +234,12 @@ public interface IMember
     /// <summary>
     /// 角色
     /// </summary>
-    IRole Role { get; set; }
+    IRole? Role { get; set; }
 
     /// <summary>
     /// 部门
     /// </summary>
-    IDepartment Department { get; set; }
+    IDepartment? Department { get; set; }
 
     /// <summary>
     /// 租户

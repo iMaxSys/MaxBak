@@ -26,6 +26,16 @@ public class RegisterModel
     public long XppSnsId { get; set; }
 
     /// <summary>
+    /// TenantId
+    /// </summary>
+    public long TenantId { get; set; }
+
+    /// <summary>
+    /// 推荐人Id
+    /// </summary>
+    public long ReferrerId { get; set; }
+
+    /// <summary>
     /// 注册方式
     /// </summary>
     public int Way { get; set; }
@@ -36,14 +46,14 @@ public class RegisterModel
     public int Type { get; set; }
 
     /// <summary>
-    /// MemberId
-    /// </summary>
-    public long MemberId { get; set; }
-
-    /// <summary>
     /// OpenId
     /// </summary>
     public string? OpenId { get; set; }
+
+    /// <summary>
+    /// UnionId
+    /// </summary>
+    public string? UnionId { get; set; }
 
     /// <summary>
     /// 社交平台code
@@ -58,17 +68,17 @@ public class RegisterModel
     /// <summary>
     /// 社交平台加密数据（微信绑定电话）
     /// </summary>
-    public string? EncryptedData { get; set; }
+    //public string? EncryptedData { get; set; }
 
     /// <summary>
     /// IV
     /// </summary>
-    public string? IV { get; set; }
+    //public string? IV { get; set; }
 
     /// <summary>
     /// Token
     /// </summary>
-    public string? Token { get; set; }
+    //public string? Token { get; set; }
 
     /// <summary>
     /// 名称
@@ -91,9 +101,9 @@ public class RegisterModel
     public string? NickName { get; set; }
 
     /// <summary>
-    /// PhoneNumber
+    /// Mobile
     /// </summary>
-    public string? Mobile { get; set; }
+    public long Mobile { get; set; }
 
     /// <summary>
     /// Email
@@ -128,15 +138,24 @@ public class RegisterModel
     /// <summary>
     /// 性别(0未知,1男,2女)
     /// </summary>
-    public Gender Gender { get; set; }
+    public Gender? Gender { get; set; }
 
     /// <summary>
     /// XppSource
     /// </summary>
-    public XppSource XppSource { get; set; }
+    //public XppSource XppSource { get; set; }
 
     /// <summary>
     /// IP
     /// </summary>
     public string IP { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="mobile"></param>
+    public RegisterModel(long mobile)
+    {
+        Mobile = mobile;
+    }
 }

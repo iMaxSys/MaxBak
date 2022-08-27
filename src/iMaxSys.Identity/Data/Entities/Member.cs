@@ -28,6 +28,11 @@ public class Member : TenantMasterEntity
     public long UserId { get; set; }
 
     /// <summary>
+    /// 推荐人Id
+    /// </summary>
+    public long ReferrerId { get; set; }
+
+    /// <summary>
     /// 姓名
     /// </summary>
     public string Name { get; set; } = string.Empty;
@@ -51,11 +56,11 @@ public class Member : TenantMasterEntity
     /// 婚姻状况
     /// </summary>
     public MaritalStatus MaritalStatus { get; set; } = MaritalStatus.Single;
-    
+
     /// <summary>
     /// 性别(0男,1女,2未知)
     /// </summary>
-    public Gender Gender { get; set; }
+    public Gender Gender { get; set; } = Gender.Unknown;
 
     /// <summary>
     /// 民族(默认0:未知)
@@ -100,7 +105,7 @@ public class Member : TenantMasterEntity
     /// <summary>
     /// 手机号码
     /// </summary>
-    public string Mobile { get; set; } = string.Empty;
+    public long Mobile { get; set; }
 
     /// <summary>
     /// 电话号码
@@ -115,7 +120,7 @@ public class Member : TenantMasterEntity
     /// <summary>
     /// 头像
     /// </summary>
-    public string Avatar { get; set; } = string.Empty;
+    public string? Avatar { get; set; }
 
     /// <summary>
     /// 国家

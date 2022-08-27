@@ -15,4 +15,21 @@ namespace iMaxSys.Sns.Common;
 
 public enum ResultCode
 {
+    /// <summary>
+    /// 用户名不可为空
+    /// </summary>
+    [Description("用户名不可为空")]
+    UserNameCantNull = 107000,
+
+    /// <summary>
+    /// 密码强度弱
+    /// </summary>
+    [Description("密码强度弱")]
+    PasswordIsWeak = 107001,
+
+    /// <summary>
+    /// 无效的手机号码
+    /// </summary>
+    [Description("无效的手机号码")]
+    MobileIsInvalid = 107002,
 }

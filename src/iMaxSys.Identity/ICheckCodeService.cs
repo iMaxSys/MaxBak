@@ -43,9 +43,8 @@ public interface ICheckCodeService : IDependency
     /// </summary>
     /// <param name="sid"></param>
     /// <param name="bizId"></param>
-    /// <param name="memberId"></param>
     /// <param name="to"></param>
     /// <param name="code"></param>
     /// <returns></returns>
-    Task CheckAsync(long sid, long bizId, long memberId, string to, string code);
+    Task CheckAsync(long sid, long bizId, string? to, string? code);
 }

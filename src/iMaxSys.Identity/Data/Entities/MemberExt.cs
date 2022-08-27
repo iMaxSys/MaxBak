@@ -38,6 +38,11 @@ public class MemberExt : TenantMasterEntity
     public string OpenId { get; set; } = string.Empty;
 
     /// <summary>
+    /// UnionId
+    /// </summary>
+    public string UnionId { get; set; } = string.Empty;
+
+    /// <summary>
     /// Token
     /// </summary>
     public string? Token { get; set; }
@@ -45,42 +50,12 @@ public class MemberExt : TenantMasterEntity
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 昵称
-    /// </summary>
-    public string NickName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// PhoneNumber
-    /// </summary>
-    public string Mobile { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 国家
-    /// </summary>
-    public string? Country { get; set; }
-
-    /// <summary>
-    /// 省
-    /// </summary>
-    public string? Province { get; set; }
-
-    /// <summary>
-    /// 城市
-    /// </summary>
-    public string? City { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// 头像
     /// </summary>
-    public string Avatar { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 性别
-    /// </summary>
-    public Gender Gender { get; set; }
+    public string? Avatar { get; set; }
 
     /// <summary>
     /// 过期时间
@@ -90,7 +65,7 @@ public class MemberExt : TenantMasterEntity
     /// <summary>
     /// 状态
     /// </summary>
-    public Status Status { get; set; }
+    public Status Status { get; set; } = Status.Enable;
 
     /// <summary>
     ///  会员信息

@@ -19,6 +19,7 @@ using iMaxSys.Data.Entities.App;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Common;
+using iMaxSys.Max.Extentions;
 
 namespace iMaxSys.Identity;
 
@@ -55,9 +56,14 @@ public class CheckCodeService : ICheckCodeService
     /// <param name="to"></param>
     /// <param name="code"></param>
     /// <returns></returns>
-    public async Task CheckAsync(long sid, long bizId, long memberId, string to, string code)
+    public async Task CheckAsync(long sid, long bizId, string? to, string? code)
     {
-        if (string.IsNullOrWhiteSpace(code))
+        if (to.IsNullOrWhiteSpace())
+        {
+            throw new MaxException(ResultCode.ToCantNull);
+        }
+
+        if (code.IsNullOrWhiteSpace())
         {
             throw new MaxException(ResultCode.CheckCodeCantNull);
         }

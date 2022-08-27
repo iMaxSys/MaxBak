@@ -13,10 +13,12 @@
     <None Remove="Weibo\" />
     <None Remove="AliPay\" />
     <None Remove="QQ\" />
+    <None Remove="Max\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Weibo\" />
     <Folder Include="AliPay\" />
     <Folder Include="QQ\" />
+    <Folder Include="Max\" />
   </ItemGroup>
 </Project>

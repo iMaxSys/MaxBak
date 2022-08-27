@@ -20,7 +20,7 @@ namespace iMaxSys.Max.Security.Cryptography
     /// <summary>
     /// SHA1
     /// </summary>
-    public static class Sh1
+    public static class SHA1
     {
         /// <summary>
         /// 用SHA1加密字符串
@@ -31,7 +31,7 @@ namespace iMaxSys.Max.Security.Cryptography
         /// <returns></returns>
         public static string Hash(this string source, bool isReplace = true, bool isToLower = false)
         {
-            string shastring = BitConverter.ToString(SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(source)));
+            string shastring = BitConverter.ToString(System.Security.Cryptography.SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(source)));
             if (isReplace)
             {
                 shastring = shastring.Replace("-", "");

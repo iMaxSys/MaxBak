@@ -119,20 +119,25 @@ public enum ResultCode
     [Description("验证码请求过快")]
     CheckCodeTimeLimit = 106306,
     /// <summary>
+    /// 验证目标不可为空
+    /// </summary>
+    [Description("验证目标不可为空")]
+    ToCantNull = 106307,
+    /// <summary>
     /// 验证码不可为空
     /// </summary>
     [Description("验证码不可为空")]
-    CheckCodeCantNull = 106307,
+    CheckCodeCantNull = 1063078,
     /// <summary>
     /// 验证码无效或不存在
     /// </summary>
     [Description("验证码失效或不存在")]
-    CheckCodeNotExists = 106308,
+    CheckCodeNotExists = 106309,
     /// <summary>
     /// 验证码错误
     /// </summary>
     [Description("验证码错误")]
-    CheckCodeError = 106309,
+    CheckCodeError = 106310,
     /// <summary>
     /// 无效的父级部门
     /// </summary>

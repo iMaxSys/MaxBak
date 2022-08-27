@@ -21,15 +21,15 @@ public class SnsPhoneNumber
     /// <summary>
     /// 用户绑定的手机号（国外手机号会有区号）
     /// </summary>
-    public string PhoneNumber { get; set; } = String.Empty;
+    public string PhoneNumber { get; set; } = string.Empty;
 
     /// <summary>
     /// 没有区号的手机号
     /// </summary>
-    public string PurePhoneNumber { get; set; } = String.Empty;
+    public string PurePhoneNumber { get; set; } = string.Empty;
 
     /// <summary>
     /// 区号
     /// </summary>
-    public string CountryCode { get; set; } = String.Empty;
+    public string CountryCode { get; set; } = string.Empty;
 }

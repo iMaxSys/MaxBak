@@ -11,6 +11,7 @@
 //日期：2019-05-26
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Security.Cryptography;
 using iMaxSys.Sns.Api;
 using iMaxSys.Sns.Common.Auth;
 using iMaxSys.Sns.Common.Open;
@@ -81,8 +82,7 @@ public class WeChatService : IWeChatService
     /// <returns></returns>
     public SnsPhoneNumber? GetPhoneNumber(string data, string key, string iv)
     {
-        return new SnsPhoneNumber();
-        //string json = AES.Decrypt(data, key, iv);
-        //return JsonSerializer.Deserialize<WeChatPhoneNumber>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        string json = AES.Decrypt(data, key, iv);
+        return JsonSerializer.Deserialize<WeChatPhoneNumber>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 }

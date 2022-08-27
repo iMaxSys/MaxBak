@@ -14,6 +14,7 @@
 using iMaxSys.Sns.Common;
 using iMaxSys.Sns.WeChat;
 using iMaxSys.Sns.AliPay;
+using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Sns;
 

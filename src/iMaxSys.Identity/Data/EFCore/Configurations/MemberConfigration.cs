@@ -27,6 +27,8 @@ public class MemberConfiguration : TenantMasterEntityConfiguration<Member>
         base.Configures(builder);
         //外接Id
         builder.Property(x => x.UserId).HasColumnName("user_id").IsRequired().HasComment("外接Id");
+        //推荐人Id
+        builder.Property(x => x.ReferrerId).HasColumnName("referrer_id").IsRequired().HasComment("推荐人Id");
         //姓名
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired().HasComment("姓名");
         //身份证号码
@@ -56,7 +58,7 @@ public class MemberConfiguration : TenantMasterEntityConfiguration<Member>
         //国家代码(默认中国:86)
         builder.Property(x => x.CountryCode).HasColumnName("country_code").IsRequired().HasComment("国家代码(默认中国:86)");
         //移动电话号码
-        builder.Property(x => x.Mobile).HasColumnName("mobile").HasMaxLength(50).IsRequired().HasComment("移动电话号码");
+        builder.Property(x => x.Mobile).HasColumnName("mobile").IsRequired().HasComment("移动电话号码");
         //电话号码
         builder.Property(x => x.Phone).HasColumnName("phone").HasMaxLength(50).IsRequired().HasComment("电话号码");
         //电子邮箱
