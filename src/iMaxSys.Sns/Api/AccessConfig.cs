@@ -25,11 +25,11 @@ public class AccessConfig
     /// 租户Id
     /// </summary>
     public long TenantId { get; set; }
-
+    
     /// <summary>
     /// 账号来源
     /// </summary>
-    public Common.SnsSource SnsSource { get; set; }
+    public SnsSource SnsSource { get; set; }
 
     /// <summary>
     /// AccountId（第三方平台主体Id,例如微信公众号原始Id）

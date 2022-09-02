@@ -21,6 +21,7 @@ using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.EFCore;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using iMaxSys.Max.Extentions;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -97,14 +98,12 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     }
 
     /// <summary>
-    /// 刷新访问session
+    /// 刷新访问Chain
     /// </summary>
+    /// <param name="accessChain"></param>
     /// <param name="oldToken"></param>
-    /// <param name="accessSession"></param>
-    /// <param name="member"></param>
-    /// <param name="user"></param>
     /// <returns></returns>
-    public async Task RefreshAccessSessionAsync(string oldToken, IAccessSession accessSession, IMember? member = null, IUser? user = null)
+    public async Task RefreshAccessSessionAsync(IAccessChain accessChain, string? oldToken = null)
     {
         if (!string.IsNullOrWhiteSpace(oldToken))
         {
@@ -112,13 +111,13 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
         }
 
         //设置新缓存
-        if (!string.IsNullOrWhiteSpace(accessSession.Token))
+        if (accessChain.AccessSession is not null && !string.IsNullOrWhiteSpace(accessChain.AccessSession?.Token))
         {
-            await Cache.SetAsync(GetAccessKey(accessSession.Token), accessSession, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
+            await Cache.SetAsync(GetAccessKey(accessChain.AccessSession.Token), accessChain.AccessSession, DateTime.Now.AddMinutes(Option.Identity.Expires), true);
 
-            if (accessSession.MemberId > 0 && member is not null)
+            if (accessChain.AccessSession.MemberId > 0 && accessChain.Member is not null)
             {
-                await RefreshMemberAsync(member, user);
+                await RefreshMemberAsync(accessChain.Member, accessChain.User);
             }
         }
     }

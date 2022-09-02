@@ -34,9 +34,12 @@ using iMaxSys.Sns.Common.Auth;
 using iMaxSys.Sns.Common.Open;
 
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using AutoMapper.Execution;
+using System.Net;
+using System.Security.Cryptography;
+using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
+using System.Diagnostics.Metrics;
 using System.Reflection;
-using System.Xml.Linq;
-using iMaxSys.Data.EFCore.Repositories;
 
 namespace iMaxSys.Identity;
 
@@ -118,6 +121,158 @@ public class MemberService : IMemberService
 
     #endregion
 
+    #region RegisterAsync
+
+    public async Task<IAccessToken> RegisterAsync(RegisterModel registerModel)
+    {
+        bool needCheckCode = true;
+
+        //存在检查
+        var repository = _unitOfWork.GetRepository<DbMember>();
+        var dbMember = await repository.FirstOrDefaultAsync(x => x.Mobile == registerModel.Mobile || x.Email == registerModel.Email || x.UserName == registerModel.UserName, null, x => x.Include(y => y.MemberExts));
+        if (dbMember is not null)
+        {
+            throw new MaxException(ResultCode.UserExists);
+        }
+
+        //获取xppSns
+        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == registerModel.XppSnsId, null, x => x.Include(y => y.Xpp));
+
+        if (xppSns is null)
+        {
+            throw new MaxException(ResultCode.XppSnsIdNotExists);
+        }
+
+        //验证mobile,email,openId,code
+        if (!registerModel.Mobile.ToString().IsMobile())
+        {
+            throw new MaxException(ResultCode.MobileIsInvalid);
+        }
+
+        if (xppSns.Source == SnsSource.Max)
+        {
+            if (registerModel.UserName.IsNullOrWhiteSpace())
+            {
+                throw new MaxException(ResultCode.UserNameCantNull);
+            }
+            if (!registerModel.Password.IsStrong())
+            {
+                throw new MaxException(ResultCode.PasswordIsWeak);
+            }
+        }
+        else
+        {
+            //有code,就不需要openId,但二者不可同时为空
+            if (registerModel.Code.IsNullOrWhiteSpace() && registerModel.OpenId.IsNullOrWhiteSpace())
+            {
+                throw new MaxException(ResultCode.CodeOpenIdCantNull);
+            }
+
+            //社交平台获取电话号码, 则不需要验证码
+            /*
+            if (!registerModel.EncryptedData.IsNullOrWhiteSpace())
+            {
+                MemberSession? memberSession = await _unitOfWork.GetRepository<MemberSession>().FirstOrDefaultAsync(x => x.XppSnsId == registerModel.XppSnsId && x.Token == registerModel.Token);
+                if (memberSession is null)
+                {
+                    throw new MaxException(ResultCode.AccessSessionIsNull);
+                }
+
+                SnsPhoneNumber? phoneNumber = _snsFactory.GetService(SnsSource.WeChat).GetPhoneNumber(registerModel.EncryptedData!, memberSession.SessionKey, registerModel.IV!);
+                if (phoneNumber is null)
+                {
+                    throw new MaxException(ResultCode.GetMobileFail);
+                }
+                mobile = phoneNumber.PurePhoneNumber;
+                needCheckCode = false;
+            }
+            */
+        }
+
+        //检查验证码
+        if (needCheckCode)
+        {
+            await _checkCodeService.CheckAsync(registerModel.XppSnsId, BizSource.BindCheckCode.GetHashCode(), registerModel.Mobile.ToString(), registerModel.CheckCode);
+        }
+
+        //外接用户注册
+        _user = await RegisterUserAsync(registerModel);
+
+        //new member
+        dbMember = new DbMember();
+        //设置注册信息
+        SetNewMember(registerModel, _user, dbMember, xppSns.Xpp.Source, xppSns.Source, registerModel.TenantId, xppSns.XppId);
+
+        //持久化
+        await repository.AddAsync(dbMember);
+        await _unitOfWork.SaveChangesAsync();
+
+        //刷新缓存
+        AccessConfig? accessConfig = null;
+
+        if (registerModel.Code is not null && !registerModel.Code.IsNullOrEmpty())
+        {
+            accessConfig = await GetAccessConfigAsync(xppSns, registerModel.Code);
+        }
+
+        MemberModel member = _mapper.Map<MemberModel>(dbMember);
+        return await RefreshAccessChainAsync(accessConfig, xppSns, member, _user);
+    }
+
+    #endregion
+
+    #region RefreshAccessChainAsync
+
+    /// <summary>
+    /// RefreshAccessChainAsync
+    /// </summary>
+    /// <param name="accessConfig"></param>
+    /// <param name="xppSns"></param>
+    /// <param name="member"></param>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    public async Task<IAccessToken> RefreshAccessChainAsync(AccessConfig? accessConfig, XppSns xppSns, IMember member, IUser? user)
+    {
+        var token = MakeAccessToken();
+
+        //生成AccessSession
+        IAccessSession accessSession = new AccessSession
+        {
+            XppSnsId = xppSns.Id,
+            AccountId = accessConfig?.AccountId,
+            AppId = accessConfig?.AppId,
+            Avatar = member.Avatar,
+            Name = member.Name,
+            SessionKey = accessConfig?.SessionKey,
+            OpenId = accessConfig?.OpenId,
+            UnionId = accessConfig?.UnionId,
+            TenantId = accessConfig?.TenantId,
+            Token = token.Token,
+            Expires = token.Expires,
+            XppSource = xppSns.Xpp.Source.GetHashCode(),
+            AccountSource = xppSns.Source.GetHashCode(),
+            MemberId = member.Id,
+            IsLogin = true,
+            Status = member.Status,
+            IsOfficial = member.IsOfficial
+        };
+
+        //生成AccessChain
+        IAccessChain accessChain = new AccessChain
+        {
+            AccessSession = accessSession,
+            Member = member,
+            User = user
+        };
+
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(accessChain);
+
+        return token;
+    }
+
+    #endregion
+
+    /*
     #region RefreshAcceeChainAsync
 
     /// <summary>
@@ -139,6 +294,7 @@ public class MemberService : IMemberService
     }
 
     #endregion
+    */
 
     #region AddAsync
 
@@ -247,237 +403,6 @@ public class MemberService : IMemberService
     {
         IUser user = await _userProvider.GetAsync(member.Id, member.Type);
         await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(member, user);
-    }
-
-    #endregion
-
-
-
-    #region RegisterAsync
-
-    public async Task RegisterAsync(RegisterModel registerModel)
-    {
-        bool needCheckCode = true;
-
-        //存在检查
-        var repository = _unitOfWork.GetRepository<DbMember>();
-        var dbMember = await repository.FirstOrDefaultAsync(x => x.Mobile == registerModel.Mobile || x.Email == registerModel.Email || x.UserName == registerModel.UserName, null, x => x.Include(y => y.MemberExts));
-        if (dbMember is not null)
-        {
-            throw new MaxException(ResultCode.UserExists);
-        }
-
-        //获取xppSns
-        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == registerModel.XppSnsId, null, x => x.Include(y => y.Xpp));
-
-        if (xppSns is null)
-        {
-            throw new MaxException(ResultCode.XppSnsIdNotExists);
-        }
-
-
-
-        /*
-        //此代码快功能应移到ISns实现类
-        if (xppSns.Source == SnsSource.Max)
-        {
-            if (registerModel.UserName.IsNullOrWhiteSpace())
-            {
-                throw new MaxException(ResultCode.UserNameCantNull);
-            }
-            if (!registerModel.Password.IsStrong())
-            {
-                throw new MaxException(ResultCode.PasswordIsWeak);
-            }
-            if (xppSns.Xpp.NeedMobile && !registerModel.Mobile.IsMobile())
-            {
-                throw new MaxException(ResultCode.MobileIsInvalid);
-            }
-        }
-        else
-        {
-            //有code,就不需要openId,但二者不可同时为空
-            if (registerModel.Code.IsNullOrWhiteSpace() && registerModel.OpenId.IsNullOrWhiteSpace())
-            {
-                throw new MaxException(ResultCode.CodeOpenIdCantNull);
-            }
-
-            //是否需要手机号码
-            if (xppSns.Xpp.NeedMobile && (registerModel.Mobile.IsNullOrWhiteSpace()) && registerModel.EncryptedData.IsNullOrWhiteSpace())
-            {
-                throw new MaxException(ResultCode.MobileIsInvalid);
-            }
-
-            //社交平台获取电话号码, 则不需要验证码
-            if (!registerModel.EncryptedData.IsNullOrWhiteSpace())
-            {
-                MemberSession? memberSession = await _unitOfWork.GetRepository<MemberSession>().FirstOrDefaultAsync(x => x.XppSnsId == registerModel.XppSnsId && x.Token == registerModel.Token);
-                if (memberSession is null)
-                {
-                    throw new MaxException(ResultCode.AccessSessionIsNull);
-                }
-
-                SnsPhoneNumber? phoneNumber = _snsFactory.GetService(SnsSource.WeChat).GetPhoneNumber(registerModel.EncryptedData!, memberSession.SessionKey, registerModel.IV!);
-                if (phoneNumber is null)
-                {
-                    throw new MaxException(ResultCode.GetMobileFail);
-                }
-                mobile = phoneNumber.PurePhoneNumber;
-                needCheckCode = false;
-            }
-        }
-        */
-
-        //检查验证码
-        if (needCheckCode)
-        {
-            await _checkCodeService.CheckAsync(registerModel.XppSnsId, BizSource.BindCheckCode.GetHashCode(), registerModel.Mobile.ToString(), registerModel.CheckCode);
-        }
-
-        //外接用户注册
-        _user = await RegisterUserAsync(registerModel);
-
-        dbMember = new DbMember();
-
-        //设置注册信息
-        SetNewMember(registerModel, _user, dbMember, xppSns.Xpp.Source, xppSns.Source, registerModel.TenantId, xppSns.XppId);
-
-        //新会员
-        if (dbMember == null)
-        {
-            dbMember = new DbMember
-            {
-                TenantId = _user?.TenantId ?? 0,
-                Name = ((((_user?.Name ?? _user?.NickName) ?? registerModel.Name) ?? registerModel.UserName) ?? registerModel.NickName) ?? mobile.ToString(),
-                NickName = ((_user?.NickName) ?? registerModel.NickName) ?? mobile.ToString(),
-                Mobile = mobile,
-                UserName = registerModel.UserName ?? mobile.ToString(),
-                Salt = Guid.NewGuid().ToString().Replace("-", ""),
-                AccountSource = xppSns.Source,
-                JoinTime = DateTime.Now,
-                JoinIP = registerModel.IP,
-                Start = DateTime.Now,
-                Gender = _user?.Gender ?? registerModel.Gender,
-                Avatar = _user?.Avatar ?? registerModel.Avatar,
-                LastIP = registerModel.IP,
-                LastLogin = DateTime.Now,
-                IsOfficial = _user?.IsOfficial ?? false,
-                Status = Status.Enable,
-                Type = registerModel.Type,
-                MemberExts = new List<MemberExt>(),
-                Email = registerModel.Email ?? string.Empty,
-                Birthday = registerModel.Birthday,
-                XppSource = xppSns.Xpp.Source
-            };
-
-
-
-            MemberExt ext1 = new MemberExt
-            {
-                TenantId = dbMember.TenantId,
-                OpenId = registerModel.OpenId,
-                Expires = DateTime.Now.AddMinutes(_option.Identity.Expires),
-                NickName = registerModel.NickName,
-                Mobile = registerModel.Mobile,
-                Avatar = registerModel.Avatar,
-                Country = registerModel.Country,
-                Province = registerModel.Province,
-                City = registerModel.City,
-                Gender = registerModel.Gender,
-                XppSnsId = xppSns.Id,
-                Name = registerModel.NickName,
-                Status = Status.Enable,
-                Token = registerModel.Token
-            };
-
-            dbMember.MemberExts.Add(ext1);
-            await repository.AddAsync(dbMember);
-        }
-        else
-        {
-            dbMember.UserId = _user?.Id ?? 0;
-            dbMember.TenantId = _user?.TenantId ?? 0;
-            dbMember.Name = (((_user?.Name ?? _user?.NickName) ?? registerModel.Name) ?? registerModel.NickName) ?? mobile;
-            dbMember.IsOfficial = _user?.IsOfficial ?? false;
-            dbMember.Mobile = _user?.Mobile ?? "";
-
-            //是否存在用户同一应用同一账号来源的绑定信息
-            //ISpecification<MemberExt> spec3 = new Specification<MemberExt>(x => x.XappSnsId == model.XappSnsId && x.MemberId == dbMember.Id);
-            //spec3.ApplyTracking();
-            //MemberExt memberExt = await _unitOfWork.GetRepo<MemberExt>().FirstOrDefaultAsync(spec3);
-
-            MemberExt? memberExt = dbMember.MemberExts?.FirstOrDefault(x => x.XppSnsId == registerModel.XppSnsId && x.MemberId == dbMember.Id);
-            if (memberExt is null)
-            {
-                dbMember.MemberExts = new List<MemberExt>();
-                MemberExt ext2 = new MemberExt
-                {
-                    TenantId = dbMember.TenantId,
-                    MemberId = dbMember.Id,
-                    OpenId = registerModel.OpenId,
-                    NickName = registerModel.NickName,
-                    Avatar = registerModel.Avatar,
-                    Mobile = registerModel.Mobile,
-                    Name = registerModel.NickName,
-                    Country = registerModel.Country,
-                    Province = registerModel.Province,
-                    City = registerModel.City,
-                    Gender = registerModel.Gender,
-                    Expires = DateTime.Now.AddMinutes(_option.Identity.Expires),
-                    Status = Status.Enable,
-                    Token = registerModel.Token
-                };
-                dbMember.MemberExts.Add(ext2);
-            }
-            else
-            {
-                memberExt.TenantId = dbMember.TenantId;
-                memberExt.XppSnsId = registerModel.XppSnsId;
-                memberExt.OpenId = registerModel.OpenId;
-                memberExt.NickName = registerModel.NickName;
-                memberExt.Avatar = registerModel.Avatar;
-                memberExt.Mobile = registerModel.Mobile;
-                memberExt.Name = registerModel.NickName;
-                memberExt.Country = registerModel.Country;
-                memberExt.Province = registerModel.Province;
-                memberExt.City = registerModel.City;
-                memberExt.Gender = registerModel.Gender;
-                memberExt.Expires = DateTime.Now.AddMinutes(_option.Identity.Expires);
-                memberExt.Status = Status.Enable;
-                memberExt.Token = registerModel.Token;
-            }
-
-            if (dbMember.Name.IsNullOrWhiteSpace())
-            {
-                dbMember.Name = _user?.Name ?? registerModel.Name;
-            }
-
-            if (dbMember.UserName.IsNullOrWhiteSpace())
-            {
-                dbMember.UserName = registerModel.UserName.IsNullOrWhiteSpace() ?? (model.Mobile ?? user.Mobile);
-            }
-
-            if (string.IsNullOrWhiteSpace(dbMember.Password))
-            {
-                dbMember.Password = MakePassword(PASSWORD, dbMember.Salt);
-            }
-
-            if (string.IsNullOrWhiteSpace(dbMember.NickName))
-            {
-                dbMember.NickName = model.NickName ?? user.NickName;
-            }
-
-            if (string.IsNullOrWhiteSpace(dbMember.Avatar))
-            {
-                dbMember.Avatar = model.Avatar ?? user.Avatar;
-            }
-
-            await repo.UpdateAsync(dbMember);
-        }
-
-        await _unitOfWork.SaveChangesAsync();
-
-        await UpdateSession(model.Token, sns.Id, model.OpenId);
     }
 
     #endregion
@@ -758,9 +683,9 @@ public class MemberService : IMemberService
         accessConfig.SnsSource = (SnsSource)sns.Source;
         accessConfig.Status = sns.Status;
 
-        var token = MakeAccessToken();
-        accessConfig.Token = token.Token;
-        accessConfig.Expires = token.Expires;
+        //var token = MakeAccessToken();
+        //accessConfig.Token = token.Token;
+        //accessConfig.Expires = token.Expires;
 
         return accessConfig;
     }
@@ -799,10 +724,5 @@ public class MemberService : IMemberService
     private bool CheckPassword(string password, string source, string salt)
     {
         return MakePassword(source, salt) == password;
-    }
-
-    private void SetMember(RegisterModel model, DbMember member)
-    {
-
     }
 }

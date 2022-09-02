@@ -52,14 +52,12 @@ public interface IMemberRepository : IRepository<DbMember>
     Task<IAccessSession?> GetAccessSessionAsync(string token);
 
     /// <summary>
-    /// 刷新访问session
+    /// 刷新访问Chain
     /// </summary>
-    /// <param name="oldToken"></param>
-    /// <param name="accessSession"></param>
-    /// <param name="member"></param>
-    /// <param name="user"></param>
+    /// <param name="accessChain"></param>
+    /// <param name="oldToken">旧token</param>
     /// <returns></returns>
-    Task RefreshAccessSessionAsync(string oldToken, IAccessSession accessSession, IMember? member = null, IUser? user = null);
+    Task RefreshAccessSessionAsync(IAccessChain accessChain, string? oldToken = null);
 
     /// <summary>
     /// refresh
