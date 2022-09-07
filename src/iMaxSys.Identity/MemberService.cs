@@ -121,9 +121,138 @@ public class MemberService : IMemberService
 
     #endregion
 
+    #region LoginAsync
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sid"></param>
+    /// <param name="type"></param>
+    /// <param name="code"></param>
+    /// <param name="ip"></param>
+    /// <returns></returns>
+    public async Task<IAccessChain> LoginAsync(long xppSnsId, int type, string code, string ip)
+    {
+        DbMember dbMember;
+
+        //获取xppSns
+        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == xppSnsId, null, x => x.Include(y => y.Xpp));
+
+        if (xppSns is null)
+        {
+            throw new MaxException(ResultCode.XppSnsIdNotExists);
+        }
+
+        DateTime now = DateTime.Now;
+        bool isOfficial = true;
+        //IAccessToken token = MakeAccessToken();
+
+        //取访问配置
+        AccessConfig accessConfig = await GetAccessConfigAsync(xppSns, code);
+        var memberExt = await _unitOfWork.GetRepository<MemberExt>().FirstOrDefaultAsync(x => x.XppSnsId == xppSnsId && x.OpenId == accessConfig.OpenId, null, x => x.Include(y => y.Member));
+
+        //有表示已是会员,无进行快速注册,注册完成为非正式
+        if (memberExt == null)
+        {
+            dbMember = new DbMember
+            {
+                Type = type,
+                Start = now,
+                XppSource = xppSns.Xpp.Source,
+                AccountSource = xppSns.Source,
+                Salt = Guid.NewGuid().ToString().Replace("-", ""),
+                JoinTime = now,
+                JoinIP = ip,
+                LastLogin = now,
+                LastIP = ip,
+                IsOfficial = isOfficial,
+                Status = Status.Enable,
+                MemberExts = new List<MemberExt>()
+            };
+
+            dbMember.MemberExts.Add(new MemberExt
+            {
+                XppSnsId = xppSnsId,
+                OpenId = accessConfig.OpenId,
+                Status = Status.Enable
+            });
+
+            await _unitOfWork.GetRepository<DbMember>().AddAsync(dbMember);
+            await _unitOfWork.SaveChangesAsync();
+        }
+        else
+        {
+            dbMember = memberExt.Member;
+            dbMember.LastIP = ip;
+            dbMember.LastLogin = now;
+            await CheckStatus(dbMember);
+        }
+
+        /*
+
+        AccessSession accessSession = new AccessSession
+        {
+            XppSnsId = xppSnsId,
+            AccountId = accessConfig.AccountId,
+            AppId = accessConfig.AppId,
+            Avatar = accessConfig.Avatar,
+            Name = accessConfig.NickName,
+            SessionKey = accessConfig.SessionKey,
+            OpenId = accessConfig.OpenId,
+            UnionId = accessConfig.UnionId,
+            TenantId = accessConfig.TenantId,
+            Token = token.Token,
+            Expires = token.Expires,
+            XppSource = xppSns.Xpp.Source,
+            AccountSource = xppSns.Source,
+            MemberId = dbMember.Id,
+            IsLogin = true,
+            Status = dbMember.Status,
+            IsOfficial = dbMember.IsOfficial
+        };
+
+        //生成AccessChain
+        IAccessChain accessChain = new AccessChain
+        {
+            AccessSession = accessSession,
+            Member = _mapper.Map<IMember>(dbMember),
+            User = _user
+        };
+
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(accessChain);
+
+        */
+
+        MemberModel member = _mapper.Map<MemberModel>(dbMember);
+        IAccessChain accessChain = await RefreshAccessChainAsync(accessConfig, null, xppSns, member, _user);
+
+        MemberSession memberSession = new MemberSession
+        {
+            Avatar = accessConfig.Avatar,
+            XppSnsId = xppSnsId,
+            Token = accessChain.AccessSession.Token,
+            Expires = accessChain.AccessSession.Expires,
+            OpenId = accessConfig.OpenId,
+            NickName = accessConfig.NickName,
+            SessionKey = accessConfig.SessionKey,
+            Status = Status.Enable,
+            MemberId = dbMember.Id,
+            UnionId = accessConfig.UnionId,
+            IsOfficial = isOfficial
+        };
+
+        await _unitOfWork.GetRepository<MemberSession>().AddAsync(memberSession);
+        await _unitOfWork.SaveChangesAsync();
+
+        return accessChain;
+
+    }
+
+    #endregion
+
     #region RegisterAsync
 
-    public async Task<IAccessToken> RegisterAsync(RegisterModel registerModel)
+    public async Task<IAccessChain> RegisterAsync(RegisterModel registerModel)
     {
         bool needCheckCode = true;
 
@@ -216,7 +345,7 @@ public class MemberService : IMemberService
         }
 
         MemberModel member = _mapper.Map<MemberModel>(dbMember);
-        return await RefreshAccessChainAsync(accessConfig, xppSns, member, _user);
+        return await RefreshAccessChainAsync(accessConfig, null, xppSns, member, _user);
     }
 
     #endregion
@@ -227,30 +356,48 @@ public class MemberService : IMemberService
     /// RefreshAccessChainAsync
     /// </summary>
     /// <param name="accessConfig"></param>
+    /// <param name="accessToken"></param>
     /// <param name="xppSns"></param>
     /// <param name="member"></param>
     /// <param name="user"></param>
     /// <returns></returns>
-    public async Task<IAccessToken> RefreshAccessChainAsync(AccessConfig? accessConfig, XppSns xppSns, IMember member, IUser? user)
+    public async Task<IAccessChain> RefreshAccessChainAsync(AccessConfig? accessConfig, IAccessToken? accessToken, XppSns xppSns, IMember member, IUser? user)
     {
-        var token = MakeAccessToken();
+        var token = accessToken ?? MakeAccessToken();
 
-        //生成AccessSession
-        IAccessSession accessSession = new AccessSession
+        MemberSession memberSession = new MemberSession
+        {
+            XppSnsId = xppSns.Id,
+            Token = token.Token,
+            Expires = token.Expires,
+            Status = user?.Status ?? member.Status,
+            MemberId = member.Id,
+            IsOfficial = user?.IsOfficial ?? member.IsOfficial
+        };
+
+        accessConfig?.OpenId.IfNotNull(x => memberSession.OpenId = x);
+        accessConfig?.UnionId.IfNotNull(x => memberSession.UnionId = x);
+        accessConfig?.NickName.IfNotNull(x => memberSession.NickName = x);
+        accessConfig?.Avatar.IfNotNull(x => memberSession.Avatar = x);
+
+        //await _unitOfWork.GetRepository<MemberSession>().AddAsync(memberSession);
+        //await _unitOfWork.SaveChangesAsync();
+
+        AccessSession accessSession = new AccessSession
         {
             XppSnsId = xppSns.Id,
             AccountId = accessConfig?.AccountId,
             AppId = accessConfig?.AppId,
-            Avatar = member.Avatar,
-            Name = member.Name,
+            Avatar = accessConfig?.Avatar,
+            Name = accessConfig?.NickName,
             SessionKey = accessConfig?.SessionKey,
             OpenId = accessConfig?.OpenId,
             UnionId = accessConfig?.UnionId,
-            TenantId = accessConfig?.TenantId,
+            TenantId = accessConfig?.TenantId ?? 0,
             Token = token.Token,
             Expires = token.Expires,
-            XppSource = xppSns.Xpp.Source.GetHashCode(),
-            AccountSource = xppSns.Source.GetHashCode(),
+            XppSource = xppSns.Xpp.Source,
+            AccountSource = xppSns.Source,
             MemberId = member.Id,
             IsLogin = true,
             Status = member.Status,
@@ -262,12 +409,11 @@ public class MemberService : IMemberService
         {
             AccessSession = accessSession,
             Member = member,
-            User = user
+            User = _user
         };
 
         await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(accessChain);
-
-        return token;
+        return accessChain;
     }
 
     #endregion
@@ -677,15 +823,11 @@ public class MemberService : IMemberService
             AppSecret = sns.AppSecret,
             Code = code
         };
-
+        //to-do: max的赋值
         AccessConfig accessConfig = await _snsFactory.GetService(sns.Source).GetAccessConfigAsync(snsAuth);
         accessConfig.AccountId = sns.AccountId;
         accessConfig.SnsSource = (SnsSource)sns.Source;
         accessConfig.Status = sns.Status;
-
-        //var token = MakeAccessToken();
-        //accessConfig.Token = token.Token;
-        //accessConfig.Expires = token.Expires;
 
         return accessConfig;
     }
@@ -724,5 +866,27 @@ public class MemberService : IMemberService
     private bool CheckPassword(string password, string source, string salt)
     {
         return MakePassword(source, salt) == password;
+    }
+
+    /// <summary>
+    /// 检查用户状态
+    /// </summary>
+    /// <param name="dbMember"></param>
+    /// <returns></returns>
+    private async Task CheckStatus(DbMember dbMember)
+    {
+        IUser? user = await GetUserAsync(dbMember.UserId, dbMember.Type);
+
+        //禁用判断
+        if (dbMember?.Status == Status.Disable || user?.Status == Status.Disable)
+        {
+            throw new MaxException(ResultCode.UserIsDisable);
+        }
+
+        //过期判断
+        if (dbMember?.End < DateTime.Now || user?.End < DateTime.Now)
+        {
+            throw new MaxException(ResultCode.UserIsExpired);
+        }
     }
 }

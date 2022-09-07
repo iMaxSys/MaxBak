@@ -61,40 +61,51 @@ public enum ResultCode
     UserExists = 106006,
 
     /// <summary>
+    /// 用户被禁用
+    /// </summary>
+    [Description("用户被禁用")]
+    UserIsDisable = 106007,
+    /// <summary>
+    /// 用户已经过期
+    /// </summary>
+    [Description("用户已经过期")]
+    UserIsExpired = 106008,
+
+    /// <summary>
     /// 无效的XppSnsId
     /// </summary>
     [Description("无效的应用社交Id")]
-    XppSnsIdNotExists = 106007,
+    XppSnsIdNotExists = 106009,
 
     /// <summary>
     /// 用户名不可为空
     /// </summary>
     [Description("用户名不可为空")]
-    UserNameCantNull = 106008,
+    UserNameCantNull = 106010,
 
     /// <summary>
     /// 密码强度弱
     /// </summary>
     [Description("密码强度弱")]
-    PasswordIsWeak = 106009,
+    PasswordIsWeak = 106011,
 
     /// <summary>
     /// 无效的手机号码
     /// </summary>
     [Description("无效的手机号码")]
-    MobileIsInvalid = 106010,
+    MobileIsInvalid = 106012,
 
     /// <summary>
     /// 代码和OpenId不可同时为空
     /// </summary>
     [Description("Code和OpenId不可同时为空")]
-    CodeOpenIdCantNull = 106011,
+    CodeOpenIdCantNull = 106013,
 
     /// <summary>
     /// 获取手机号码失败
     /// </summary>
     [Description("获取手机号码失败")]
-    GetMobileFail = 106012,
+    GetMobileFail = 106014,
 
     /// <summary>
     /// 角色id不可为空

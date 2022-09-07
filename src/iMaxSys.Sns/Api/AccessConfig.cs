@@ -74,12 +74,12 @@ public class AccessConfig
     /// <summary>
     /// 令牌
     /// </summary>
-    public string Token { get; set; } = String.Empty;
+    //public string Token { get; set; } = String.Empty;
 
     /// <summary>
     /// 过期时间
     /// </summary>
-    public DateTime Expires { get; set; }
+    //public DateTime Expires { get; set; }
 
     /// <summary>
     /// 状态

@@ -21,7 +21,7 @@ public interface IAccessChain
     /// <summary>
     /// AccessSession
     /// </summary>
-    IAccessSession? AccessSession { get; set; }
+    IAccessSession AccessSession { get; set; }
 
     /// <summary>
     /// Member

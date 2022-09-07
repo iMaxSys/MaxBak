@@ -21,7 +21,7 @@ public class AccessChain : IAccessChain
     /// <summary>
     /// AccessSession
     /// </summary>
-    public IAccessSession? AccessSession { get; set; }
+    public IAccessSession AccessSession { get; set; } = new AccessSession();
 
     /// <summary>
     /// Member

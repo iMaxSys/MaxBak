@@ -28,12 +28,12 @@ public class AccessSession : IAccessSession
     /// <summary>
     /// 来源Id/应用来源
     /// </summary>
-    public long XppSource { get; set; }
+    public XppSource XppSource { get; set; }
 
     /// <summary>
     /// 账号来源/社交来源
     /// </summary>
-    public int AccountSource { get; set; }
+    public SnsSource AccountSource { get; set; }
 
     /// <summary>
     /// 租户Id
@@ -53,7 +53,12 @@ public class AccessSession : IAccessSession
     /// <summary>
     /// Token
     /// </summary>
-    public string? Token { get; set; }
+    public string? Token { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Token过期时间
+    /// </summary>
+    public DateTime Expires { get; set; } = DateTime.Now;
 
     /// <summary>
     /// 第三方平台原始Id
@@ -89,11 +94,6 @@ public class AccessSession : IAccessSession
     /// 第三方平台统一Id
     /// </summary>
     public string? UnionId { get; set; }
-
-    /// <summary>
-    /// Token过期时间
-    /// </summary>
-    public DateTime Expires { get; set; }
 
     /// <summary>
     /// 是否是正式用户

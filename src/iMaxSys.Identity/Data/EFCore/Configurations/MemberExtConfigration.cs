@@ -35,13 +35,13 @@ public class MemberExtConfiguration : TenantMasterEntityConfiguration<MemberExt>
         //UnionId
         builder.Property(x => x.UnionId).HasColumnName("union_id").HasMaxLength(50).IsRequired();
         //Token
-        builder.Property(x => x.Token).HasColumnName("token").HasMaxLength(50);
+        //builder.Property(x => x.Token).HasColumnName("token").HasMaxLength(50);
         //名称
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50);
         //头像
         builder.Property(x => x.Avatar).HasColumnName("avatar").HasMaxLength(500);
         //过期时间
-        builder.Property(x => x.Expires).HasColumnName("expires").IsRequired();
+        //builder.Property(x => x.Expires).HasColumnName("expires").IsRequired();
         //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //会员信息

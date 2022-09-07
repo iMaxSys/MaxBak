@@ -28,12 +28,12 @@ public interface IAccessSession
     /// <summary>
     /// 来源Id/应用来源
     /// </summary>
-    long XppSource { get; set; }
+    XppSource XppSource { get; set; }
 
     /// <summary>
     /// 账号来源/社交来源
     /// </summary>
-    int AccountSource { get; set; }
+    SnsSource AccountSource { get; set; }
 
     /// <summary>
     /// 租户Id
@@ -53,7 +53,12 @@ public interface IAccessSession
     /// <summary>
     /// Token
     /// </summary>
-    string? Token { get; set; }
+    string Token { get; set; }
+
+    /// <summary>
+    /// Token过期时间
+    /// </summary>
+    DateTime Expires { get; set; }
 
     /// <summary>
     /// 第三方平台原始Id
@@ -89,11 +94,6 @@ public interface IAccessSession
     /// 第三方平台统一Id
     /// </summary>
     string? UnionId { get; set; }
-
-    /// <summary>
-    /// Token过期时间
-    /// </summary>
-    DateTime Expires { get; set; }
 
     /// <summary>
     /// 是否正式用户

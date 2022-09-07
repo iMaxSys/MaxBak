@@ -36,7 +36,7 @@ public class MemberSessionConfiguration : TenantMasterEntityConfiguration<Member
         //第三方平台Id
         builder.Property(x => x.OpenId).HasColumnName("open_id").HasMaxLength(50).IsRequired();
         //SessionKey
-        builder.Property(x => x.SessionKey).HasColumnName("session_key").HasMaxLength(50);
+        builder.Property(x => x.SessionKey).HasColumnName("session_key").HasMaxLength(50).IsRequired();
         //名字
         builder.Property(x => x.NickName).HasColumnName("nick_name").HasMaxLength(50).IsRequired();
         //头像

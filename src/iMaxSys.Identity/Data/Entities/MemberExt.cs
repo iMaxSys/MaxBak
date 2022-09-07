@@ -45,7 +45,7 @@ public class MemberExt : TenantMasterEntity
     /// <summary>
     /// Token
     /// </summary>
-    public string? Token { get; set; }
+    //public string? Token { get; set; }
 
     /// <summary>
     /// 名称
@@ -60,7 +60,7 @@ public class MemberExt : TenantMasterEntity
     /// <summary>
     /// 过期时间
     /// </summary>
-    public DateTime Expires { get; set; }
+    //public DateTime Expires { get; set; }
 
     /// <summary>
     /// 状态
