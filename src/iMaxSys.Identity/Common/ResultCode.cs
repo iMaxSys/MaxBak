@@ -84,28 +84,40 @@ public enum ResultCode
     UserNameCantNull = 106010,
 
     /// <summary>
+    /// 密码不可为空
+    /// </summary>
+    [Description("密码不可为空")]
+    PasswordCantNull = 106011,
+
+    /// <summary>
     /// 密码强度弱
     /// </summary>
     [Description("密码强度弱")]
-    PasswordIsWeak = 106011,
+    PasswordIsWeak = 106012,
+
+    /// <summary>
+    /// 密码错误
+    /// </summary>
+    [Description("密码错误")]
+    PasswordError = 106013,
 
     /// <summary>
     /// 无效的手机号码
     /// </summary>
     [Description("无效的手机号码")]
-    MobileIsInvalid = 106012,
+    MobileIsInvalid = 1060134,
 
     /// <summary>
     /// 代码和OpenId不可同时为空
     /// </summary>
     [Description("Code和OpenId不可同时为空")]
-    CodeOpenIdCantNull = 106013,
+    CodeOpenIdCantNull = 106015,
 
     /// <summary>
     /// 获取手机号码失败
     /// </summary>
     [Description("获取手机号码失败")]
-    GetMobileFail = 106014,
+    GetMobileFail = 106016,
 
     /// <summary>
     /// 角色id不可为空

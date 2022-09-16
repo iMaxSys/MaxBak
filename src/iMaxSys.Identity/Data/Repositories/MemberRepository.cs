@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Caching;
+using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Entities.App;
@@ -21,7 +22,6 @@ using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.EFCore;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using iMaxSys.Max.Extentions;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -85,6 +85,16 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
 
         //清除缓存
         await Cache.DeleteAsync(GetMemberKey(memberId), true);
+    }
+
+    /// <summary>
+    /// 移除访问session
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public async Task RemoveAccessSessionAsync(string token)
+    {
+        await Cache.DeleteAsync(GetAccessKey(token), _global);
     }
 
     /// <summary>

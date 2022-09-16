@@ -92,7 +92,7 @@ public class Member : IMember
     /// <summary>
     /// 手机号码
     /// </summary>
-    public string? Mobile { get; set; }
+    public long Mobile { get; set; }
 
     /// <summary>
     /// 电话号码
@@ -232,12 +232,12 @@ public class Member : IMember
     /// <summary>
     /// 角色
     /// </summary>
-    public IRole Role { get; set; } = new Role();
+    public IList<IRole>? Roles { get; set; }
 
     /// <summary>
     /// 部门
     /// </summary>
-    public IDepartment Department { get; set; } = new Department();
+    public IDepartment? Department { get; set; }
 
     /// <summary>
     /// 租户

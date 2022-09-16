@@ -36,5 +36,5 @@ public interface ISns
     /// <param name="key"></param>
     /// <param name="iv"></param>
     /// <returns></returns>
-    SnsPhoneNumber? GetPhoneNumber(string data, string key, string iv);
+    SnsPhoneNumber GetPhoneNumber(string data, string key, string iv);
 }

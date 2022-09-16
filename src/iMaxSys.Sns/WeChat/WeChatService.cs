@@ -80,9 +80,16 @@ public class WeChatService : IWeChatService
     /// <param name="key"></param>
     /// <param name="iv"></param>
     /// <returns></returns>
-    public SnsPhoneNumber? GetPhoneNumber(string data, string key, string iv)
+    public SnsPhoneNumber GetPhoneNumber(string data, string key, string iv)
     {
         string json = AES.Decrypt(data, key, iv);
-        return JsonSerializer.Deserialize<WeChatPhoneNumber>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var phoneNumber = JsonSerializer.Deserialize<WeChatPhoneNumber>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        if (phoneNumber is null)
+        {
+            throw new MaxException(WeChatResultCode.GetWeChatPhoneNumberError, json);
+        }
+
+        return phoneNumber;
     }
 }

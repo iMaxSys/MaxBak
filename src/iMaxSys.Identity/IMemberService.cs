@@ -15,26 +15,66 @@ using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Identity.Models;
 using iMaxSys.Sns.Common.Open;
+using iMaxSys.Data.Entities.App;
+using iMaxSys.Sns.Api;
+
+using DbMember = iMaxSys.Identity.Data.Entities.Member;
 
 namespace iMaxSys.Identity;
 
 public interface IMemberService : IDependency
 {
     /// <summary>
-    /// 获取AccessChain
+    /// 登录
     /// </summary>
-    /// <param name="token">令牌</param>
+    /// <param name="xppSnsId"></param>
+    /// <param name="type"></param>
+    /// <param name="code"></param>
+    /// <param name="ip"></param>
     /// <returns></returns>
-    Task<IAccessChain?> GetAccessChainAsync(string token);
+    Task<IAccessChain> LoginAsync(long xppSnsId, int type, string code, string ip);
+
+    /// <summary>
+    /// login
+    /// </summary>
+    /// <param name="xppSnsId"></param>
+    /// <param name="userName"></param>
+    /// <param name="password"></param>
+    /// <param name="ip"></param>
+    /// <returns></returns>
+    Task<IAccessChain> LoginAsync(long xppSnsId, int type, string userName, string password, string ip);
+
+    /// <summary>
+    /// login user
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <param name="userId"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    Task<IUser?> LoginUserAsync(long memberId, long userId, int type);
+
+    /// <summary>
+    /// 注册
+    /// </summary>
+    /// <param name="registerModel"></param>
+    /// <returns></returns>
+    Task<IAccessChain> RegisterAsync(RegisterModel registerModel);
+
+    /// <summary>
+    /// RegisterUserAsync
+    /// </summary>
+    /// <param name="registerModel"></param>
+    /// <returns></returns>
+    Task<IUser?> RegisterUserAsync(RegisterModel registerModel);
 
     /// <summary>
     /// Add member
     /// </summary>
     /// <param name="model"></param>
     /// <param name="xppId"></param>
-    /// <param name="roleId"></param>
+    /// <param name="roleIds"></param>
     /// <returns></returns>
-    Task<IMember> AddAsync(MemberModel model, long xppId, long roleId);
+    Task<IMember> AddAsync(MemberModel model, long xppId, long[]? roleIds);
 
     /// <summary>
     /// 移除成员
@@ -54,8 +94,17 @@ public interface IMemberService : IDependency
     /// 更新用户信息
     /// </summary>
     /// <param name="model"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleIds"></param>
     /// <returns></returns>
-    Task<IMember> UpdateAsync(MemberModel model);
+    Task<IMember> UpdateAsync(MemberModel model, long xppId, long[]? roleIds);
+
+    /// <summary>
+    /// 获取AccessChain
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task<IAccessChain?> GetAccessChainAsync(string token);
 
     /// <summary>
     /// 刷新成员缓存
@@ -74,46 +123,22 @@ public interface IMemberService : IDependency
     /// <summary>
     /// 刷新AcceeChain缓存
     /// </summary>
-    /// <param name="oldToken"></param>
-    /// <param name="accessChain"></param>
+    /// <param name="xppSns"></param>
+    /// <param name="memberId"></param>
+    /// <param name="accessConfig"></param>
+    /// <param name="accessToken"></param>
     /// <returns></returns>
-    Task RefreshAcceeChainAsync(string oldToken, IAccessChain accessChain);
+    Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
 
     /// <summary>
-    /// 注册
+    /// 刷新AcceeChain缓存
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="xppSns"></param>
+    /// <param name="member"></param>
+    /// <param name="accessConfig"></param>
+    /// <param name="accessToken"></param>
     /// <returns></returns>
-    Task RegisterAsync(RegisterModel model);
-
-    /// <summary>
-    /// 登录:code登录
-    /// </summary>
-    /// <param name="sid"></param>
-    /// <param name="type"></param>
-    /// <param name="code"></param>
-    /// <param name="ip"></param>
-    /// <returns></returns>
-    Task<AccessChain> LoginAsync(long sid, int type, string code, string ip);
-
-    /// <summary>
-    /// 登录:用户名&密码
-    /// </summary>
-    /// <param name="userName"></param>
-    /// <param name="password"></param>
-    /// <param name="ip"></param>
-    /// <returns></returns>
-    Task<AccessChain> LoginAsync(string userName, string password, string ip);
-
-    /// <summary>
-    /// 登录:用户名&密码
-    /// </summary>
-    /// <param name="types"></param>
-    /// <param name="userName"></param>
-    /// <param name="password"></param>
-    /// <param name="ip"></param>
-    /// <returns></returns>
-    Task<AccessChain> LoginAsync(int[] types, string userName, string password, string ip);
+    Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
 
     /// <summary>
     /// 登出
@@ -121,14 +146,6 @@ public interface IMemberService : IDependency
     /// <param name="token"></param>
     /// <returns></returns>
     Task LogoutAsync(string token);
-
-    /// <summary>
-    /// 绑定(1.成员本定社交账号,2.先有社交账户成员绑定密码成员)
-    /// </summary>
-    /// <param name="token"></param>
-    /// <param name="openId"></param>
-    /// <returns></returns>
-    Task BindAsync(string token, string openId);
 
     /// <summary>
     /// 修改密码
@@ -147,5 +164,5 @@ public interface IMemberService : IDependency
     /// <param name="key"></param>
     /// <param name="iv"></param>
     /// <returns></returns>
-    SnsPhoneNumber GetSnsPhoneNumber(long sid, string data, string key, string iv);
+    Task<SnsPhoneNumber> GetSnsPhoneNumber(long sid, string data, string key, string iv);
 }

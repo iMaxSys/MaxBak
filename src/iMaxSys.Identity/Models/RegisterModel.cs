@@ -12,6 +12,7 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity.Models;
 
@@ -141,21 +142,22 @@ public class RegisterModel
     public Gender? Gender { get; set; }
 
     /// <summary>
-    /// XppSource
+    /// 身份证号码
     /// </summary>
-    //public XppSource XppSource { get; set; }
+    public string? IdNumber { get; set; }
 
     /// <summary>
     /// IP
     /// </summary>
-    public string IP { get; set; } = string.Empty;
+    public string IP { get; set; }
 
     /// <summary>
     /// 构造
     /// </summary>
     /// <param name="mobile"></param>
-    public RegisterModel(long mobile)
+    public RegisterModel(long mobile, string ip)
     {
         Mobile = mobile;
+        IP = ip;
     }
 }

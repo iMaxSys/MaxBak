@@ -45,6 +45,13 @@ public interface IMemberRepository : IRepository<DbMember>
     Task RemoveAsync(long memberId);
 
     /// <summary>
+    /// 移除访问session
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task RemoveAccessSessionAsync(string token);
+
+    /// <summary>
     /// 获取访问Session
     /// </summary>
     /// <param name="token">令牌</param>
@@ -65,7 +72,7 @@ public interface IMemberRepository : IRepository<DbMember>
     /// <param name="memberId"></param>
     /// <param name="user"></param>
     /// <returns></returns>
-    Task RefreshMemberAsync(long memberId, IUser? user = null);
+    Task<IMember> RefreshMemberAsync(long memberId, IUser? user = null);
 
     /// <summary>
     /// refresh
@@ -73,7 +80,7 @@ public interface IMemberRepository : IRepository<DbMember>
     /// <param name="member"></param>
     /// <param name="user"></param>
     /// <returns></returns>
-    Task RefreshMemberAsync(IMember member, IUser? user = null);
+    Task<IMember> RefreshMemberAsync(IMember member, IUser? user = null);
 
     /// <summary>
     /// refresh

@@ -94,7 +94,7 @@ public interface IMember
     /// <summary>
     /// 手机号码
     /// </summary>
-    string? Mobile { get; set; }
+    long Mobile { get; set; }
 
     /// <summary>
     /// 电话号码
@@ -234,7 +234,7 @@ public interface IMember
     /// <summary>
     /// 角色
     /// </summary>
-    IRole? Role { get; set; }
+    IList<IRole>? Roles { get; set; }
 
     /// <summary>
     /// 部门

@@ -47,19 +47,19 @@ public interface IUserProvider : IDependency
     Task CheckAsync(string key, int type = 0);
 
     /// <summary>
-    /// 激活成员
-    /// </summary>
-    /// <param name="key">关键值,例如手机号码</param>
-    /// <param name="type">类型</param>
-    /// <returns></returns>
-    //Task<User> ActivateAsync(string key, string avatar, int type = 0);
-
-    /// <summary>
-    /// RegisterAsync
+    /// register
     /// </summary>
     /// <param name="registerModel"></param>
     /// <returns></returns>
-    Task<IUser> RegisterAsync(RegisterModel registerModel);
+    Task<IUser?> RegisterAsync(RegisterModel registerModel);
+
+    /// <summary>
+    /// login
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    Task<IUser?> LoginAsync(long userId, int type);
 
     /// <summary>
     /// 获取类型

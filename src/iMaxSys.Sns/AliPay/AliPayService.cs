@@ -48,7 +48,7 @@ public class AliPayService : IAliPayService
     /// <param name="key"></param>
     /// <param name="iv"></param>
     /// <returns></returns>
-    public SnsPhoneNumber? GetPhoneNumber(string data, string key, string iv)
+    public SnsPhoneNumber GetPhoneNumber(string data, string key, string iv)
     {
         return new SnsPhoneNumber();
         //string json = AES.Decrypt(data, key, iv);

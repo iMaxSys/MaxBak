@@ -11,6 +11,7 @@
 //日期：2021-10-20
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Sns.Common;
 using iMaxSys.Sns.WeChat;
 
@@ -44,7 +45,7 @@ public static class SnsExtensions
             return source switch
             {
                 SnsSource.WeChat => serviceProvider.GetRequiredService<IWeChatService>(),
-                _ => throw new KeyNotFoundException(),// or maybe return null, up to you
+                _ => throw new KeyNotFoundException(),
             };
         });
     }

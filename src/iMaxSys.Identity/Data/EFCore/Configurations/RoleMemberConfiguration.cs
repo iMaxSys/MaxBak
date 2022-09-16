@@ -34,9 +34,9 @@ public class RoleMemberConfiguration : TenantMasterEntityConfiguration<RoleMembe
         //Status
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //关系
-        builder.HasOne(x => x.Role).WithMany(x => x.RoleMembers).HasForeignKey(x => x.RoleId);
+        builder.HasOne(x => x.Role).WithMany(x => x.RoleMembers).HasForeignKey(x => x.RoleId).OnDelete(DeleteBehavior.Cascade);
         //关系
-        builder.HasOne(x => x.Member).WithMany(x => x.RoleMembers).HasForeignKey(x => x.MemberId);
+        builder.HasOne(x => x.Member).WithMany(x => x.RoleMembers).HasForeignKey(x => x.MemberId).OnDelete(DeleteBehavior.Cascade);
         //Index
         builder.HasIndex(x => new {x.TenantId, x.MemberId, x.RoleId, x.XppId });
         //ToTable

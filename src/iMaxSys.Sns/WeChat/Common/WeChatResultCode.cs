@@ -28,5 +28,11 @@ public enum WeChatResultCode
     /// 获取微信访问配置异常
     /// </summary>
     [Description("获取微信访问配置异常")]
-    GetAccessConfigFail = 103101
+    GetAccessConfigFail = 103101,
+
+    /// <summary>
+    /// 获取微信用户手机号码异常
+    /// </summary>
+    [Description("获取微信访问配置异常")]
+    GetWeChatPhoneNumberError = 103102
 }

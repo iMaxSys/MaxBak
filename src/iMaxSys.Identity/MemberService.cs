@@ -33,13 +33,9 @@ using iMaxSys.Sns.Api;
 using iMaxSys.Sns.Common.Auth;
 using iMaxSys.Sns.Common.Open;
 
-using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using AutoMapper.Execution;
-using System.Net;
-using System.Security.Cryptography;
 using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
-using System.Diagnostics.Metrics;
-using System.Reflection;
+using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using System.Net;
 
 namespace iMaxSys.Identity;
 
@@ -71,60 +67,10 @@ public class MemberService : IMemberService
 
     #endregion
 
-    #region GetAccessChainAsync
-
-    /// <summary>
-    /// GetAccessChainAsync
-    /// </summary>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    public async Task<IAccessChain?> GetAccessChainAsync(string token)
-    {
-        if (string.IsNullOrWhiteSpace(token))
-        {
-            return null;
-        }
-
-        IMemberRepository repository = _unitOfWork.GetCustomRepository<IMemberRepository>();
-
-        //先按Token获取uid
-        IAccessSession? access = await repository.GetAccessSessionAsync(token);
-
-        if (access == null)
-        {
-            return null;
-        }
-
-        //按memberId获取member
-        IMember? member = null;
-        IUser? user = null;
-
-        if (access.MemberId.HasValue)
-        {
-            //get member
-            member = await GetAsync(access.MemberId.Value);
-
-            if (access.MemberId is not null)
-            {
-                //get user
-                user = await _userProvider.GetAsync(access.MemberId.Value, access.Type);
-            }
-        }
-
-        return new AccessChain
-        {
-            AccessSession = access,
-            Member = member,
-            User = user
-        };
-    }
-
-    #endregion
-
     #region LoginAsync
 
     /// <summary>
-    /// 
+    /// login
     /// </summary>
     /// <param name="sid"></param>
     /// <param name="type"></param>
@@ -188,76 +134,108 @@ public class MemberService : IMemberService
             await CheckStatus(dbMember);
         }
 
-        /*
+        _user = await LoginUserAsync(dbMember.Id, dbMember.UserId, dbMember.Type);
 
-        AccessSession accessSession = new AccessSession
+        return await RefreshAccessChainAsync(xppSns, dbMember, accessConfig);
+    }
+
+    /// <summary>
+    /// login
+    /// </summary>
+    /// <param name="xppSnsId"></param>
+    /// <param name="userName"></param>
+    /// <param name="password"></param>
+    /// <param name="ip"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task<IAccessChain> LoginAsync(long xppSnsId, int type, string userName, string password, string ip)
+    {
+        //用户名空检查
+        if (string.IsNullOrWhiteSpace(userName))
         {
-            XppSnsId = xppSnsId,
-            AccountId = accessConfig.AccountId,
-            AppId = accessConfig.AppId,
-            Avatar = accessConfig.Avatar,
-            Name = accessConfig.NickName,
-            SessionKey = accessConfig.SessionKey,
-            OpenId = accessConfig.OpenId,
-            UnionId = accessConfig.UnionId,
-            TenantId = accessConfig.TenantId,
-            Token = token.Token,
-            Expires = token.Expires,
-            XppSource = xppSns.Xpp.Source,
-            AccountSource = xppSns.Source,
-            MemberId = dbMember.Id,
-            IsLogin = true,
-            Status = dbMember.Status,
-            IsOfficial = dbMember.IsOfficial
-        };
+            throw new MaxException(ResultCode.UserNameCantNull);
+        }
 
-        //生成AccessChain
-        IAccessChain accessChain = new AccessChain
+        //密码空检查
+        if (string.IsNullOrWhiteSpace(password))
         {
-            AccessSession = accessSession,
-            Member = _mapper.Map<IMember>(dbMember),
-            User = _user
-        };
+            throw new MaxException(ResultCode.PasswordCantNull);
+        }
 
-        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(accessChain);
-
-        */
-
-        MemberModel member = _mapper.Map<MemberModel>(dbMember);
-        IAccessChain accessChain = await RefreshAccessChainAsync(accessConfig, null, xppSns, member, _user);
-
-        MemberSession memberSession = new MemberSession
+        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == userName);
+        if (dbMember is null)
         {
-            Avatar = accessConfig.Avatar,
-            XppSnsId = xppSnsId,
-            Token = accessChain.AccessSession.Token,
-            Expires = accessChain.AccessSession.Expires,
-            OpenId = accessConfig.OpenId,
-            NickName = accessConfig.NickName,
-            SessionKey = accessConfig.SessionKey,
-            Status = Status.Enable,
-            MemberId = dbMember.Id,
-            UnionId = accessConfig.UnionId,
-            IsOfficial = isOfficial
-        };
+            throw new MaxException(ResultCode.MemberNotExists);
+        }
 
-        await _unitOfWork.GetRepository<MemberSession>().AddAsync(memberSession);
-        await _unitOfWork.SaveChangesAsync();
+        if (!(CheckPassword(dbMember.Password, password, dbMember.Salt)))
+        {
+            throw new MaxException(ResultCode.PasswordError);
+        }
 
-        return accessChain;
+        //获取xppSns
+        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == xppSnsId, null, x => x.Include(y => y.Xpp));
 
+        if (xppSns is null)
+        {
+            throw new MaxException(ResultCode.XppSnsIdNotExists);
+        }
+
+        _user = await LoginUserAsync(dbMember.Id, dbMember.UserId, dbMember.Type);
+
+        return await RefreshAccessChainAsync(xppSns, dbMember);
     }
 
     #endregion
 
+    #region LogoutAsync
+
+    /// <summary>
+    /// 登出
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public async Task LogoutAsync(string token)
+    {
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RemoveAccessSessionAsync(token);
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 获取社交平台绑定的电话号码
+    /// </summary>
+    /// <param name="sid"></param>
+    /// <param name="data"></param>
+    /// <param name="key"></param>
+    /// <param name="iv"></param>
+    /// <returns></returns>
+    public async Task<SnsPhoneNumber> GetSnsPhoneNumber(long xppSnsId, string data, string key, string iv)
+    {
+        XppSns? sns = await _unitOfWork.GetRepository<XppSns>().FindAsync(xppSnsId);
+
+        if (sns is null)
+        {
+            throw new MaxException(ResultCode.XppSnsIdNotExists);
+        }
+
+        return _snsFactory.GetService(sns.Source).GetPhoneNumber(data, key, iv);
+    }
+
     #region RegisterAsync
 
+    /// <summary>
+    /// register
+    /// </summary>
+    /// <param name="registerModel"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
     public async Task<IAccessChain> RegisterAsync(RegisterModel registerModel)
     {
         bool needCheckCode = true;
 
         //存在检查
-        var repository = _unitOfWork.GetRepository<DbMember>();
+        var repository = _unitOfWork.GetCustomRepository<IMemberRepository>();
         var dbMember = await repository.FirstOrDefaultAsync(x => x.Mobile == registerModel.Mobile || x.Email == registerModel.Email || x.UserName == registerModel.UserName, null, x => x.Include(y => y.MemberExts));
         if (dbMember is not null)
         {
@@ -329,8 +307,9 @@ public class MemberService : IMemberService
 
         //new member
         dbMember = new DbMember();
+
         //设置注册信息
-        SetNewMember(registerModel, _user, dbMember, xppSns.Xpp.Source, xppSns.Source, registerModel.TenantId, xppSns.XppId);
+        SetRegisterMember(registerModel, _user, dbMember, xppSns.Xpp.Source, xppSns.Source, registerModel.TenantId, xppSns.XppId);
 
         //持久化
         await repository.AddAsync(dbMember);
@@ -344,103 +323,51 @@ public class MemberService : IMemberService
             accessConfig = await GetAccessConfigAsync(xppSns, registerModel.Code);
         }
 
-        MemberModel member = _mapper.Map<MemberModel>(dbMember);
-        return await RefreshAccessChainAsync(accessConfig, null, xppSns, member, _user);
+        return await RefreshAccessChainAsync(xppSns, dbMember, accessConfig);
     }
 
     #endregion
 
-    #region RefreshAccessChainAsync
+    #region RegisterUserAsync
 
     /// <summary>
-    /// RefreshAccessChainAsync
+    /// 注册用户
     /// </summary>
-    /// <param name="accessConfig"></param>
-    /// <param name="accessToken"></param>
-    /// <param name="xppSns"></param>
-    /// <param name="member"></param>
-    /// <param name="user"></param>
+    /// <param name="id"></param>
+    /// <param name="type"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> RefreshAccessChainAsync(AccessConfig? accessConfig, IAccessToken? accessToken, XppSns xppSns, IMember member, IUser? user)
+    public async Task<IUser?> RegisterUserAsync(RegisterModel registerModel)
     {
-        var token = accessToken ?? MakeAccessToken();
-
-        MemberSession memberSession = new MemberSession
+        if (_userProvider is not null)
         {
-            XppSnsId = xppSns.Id,
-            Token = token.Token,
-            Expires = token.Expires,
-            Status = user?.Status ?? member.Status,
-            MemberId = member.Id,
-            IsOfficial = user?.IsOfficial ?? member.IsOfficial
-        };
+            _user = await _userProvider.RegisterAsync(registerModel);
+        }
 
-        accessConfig?.OpenId.IfNotNull(x => memberSession.OpenId = x);
-        accessConfig?.UnionId.IfNotNull(x => memberSession.UnionId = x);
-        accessConfig?.NickName.IfNotNull(x => memberSession.NickName = x);
-        accessConfig?.Avatar.IfNotNull(x => memberSession.Avatar = x);
-
-        //await _unitOfWork.GetRepository<MemberSession>().AddAsync(memberSession);
-        //await _unitOfWork.SaveChangesAsync();
-
-        AccessSession accessSession = new AccessSession
-        {
-            XppSnsId = xppSns.Id,
-            AccountId = accessConfig?.AccountId,
-            AppId = accessConfig?.AppId,
-            Avatar = accessConfig?.Avatar,
-            Name = accessConfig?.NickName,
-            SessionKey = accessConfig?.SessionKey,
-            OpenId = accessConfig?.OpenId,
-            UnionId = accessConfig?.UnionId,
-            TenantId = accessConfig?.TenantId ?? 0,
-            Token = token.Token,
-            Expires = token.Expires,
-            XppSource = xppSns.Xpp.Source,
-            AccountSource = xppSns.Source,
-            MemberId = member.Id,
-            IsLogin = true,
-            Status = member.Status,
-            IsOfficial = member.IsOfficial
-        };
-
-        //生成AccessChain
-        IAccessChain accessChain = new AccessChain
-        {
-            AccessSession = accessSession,
-            Member = member,
-            User = _user
-        };
-
-        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(accessChain);
-        return accessChain;
+        return _user;
     }
 
     #endregion
 
-    /*
-    #region RefreshAcceeChainAsync
+    #region LoginUserAsync
 
     /// <summary>
-    /// 刷新AcceeChain缓存
+    /// login user
     /// </summary>
-    /// <param name="oldToken"></param>
-    /// <param name="accessChain"></param>
+    /// <param name="memberId"></param>
+    /// <param name="userId"></param>
+    /// <param name="type"></param>
     /// <returns></returns>
-    public async Task RefreshAccessChainAsync(string oldToken, IAccessChain accessChain)
+    public async Task<IUser?> LoginUserAsync(long memberId, long userId, int type)
     {
-        if (accessChain.AccessSession is not null)
+        if (_userProvider is not null && userId > 0 && memberId != userId)
         {
-            await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(oldToken, accessChain.AccessSession, accessChain.Member, accessChain.User);
+            _user = await _userProvider.LoginAsync(userId, type);
         }
-        else
-        {
-            throw new MaxException(ResultCode.MemberNotExists);
-        }
+
+        return _user;
     }
 
     #endregion
-    */
 
     #region AddAsync
 
@@ -451,10 +378,11 @@ public class MemberService : IMemberService
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<IMember> AddAsync(MemberModel model, long xppId, long roleId)
+    public async Task<IMember> AddAsync(MemberModel model, long xppId, long[]? roleIds)
     {
         DbMember dbMember = new();
-        SetNewMember(model, xppId, dbMember);
+        SetNewMember(model, dbMember, xppId, roleIds);
+        SetRoles(dbMember, roleIds, model.TenantId, xppId);
         await _unitOfWork.GetCustomRepository<IMemberRepository>().AddAsync(dbMember);
         await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<MemberModel>(dbMember);
@@ -494,11 +422,14 @@ public class MemberService : IMemberService
     #region UpdateAsync
 
     /// <summary>
-    /// Get member
+    /// update
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="model"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleIds"></param>
     /// <returns></returns>
-    public async Task<IMember> UpdateAsync(MemberModel model)
+    /// <exception cref="MaxException"></exception>
+    public async Task<IMember> UpdateAsync(MemberModel model, long xppId, long[]? roleIds)
     {
         //成员id判空
         if (model.Id == 0)
@@ -513,7 +444,7 @@ public class MemberService : IMemberService
             throw new MaxException(ResultCode.MemberNotExists);
         }
 
-        SetMember(model, member);
+        SetMember(model, member, xppId, roleIds);
         respoitory.Update(member);
         await _unitOfWork.SaveChangesAsync();
 
@@ -524,6 +455,267 @@ public class MemberService : IMemberService
 
     #endregion
 
+    #region ChangePasswordAsync
+
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <param name="oldPassword"></param>
+    /// <param name="newPassword"></param>
+    /// <returns></returns>
+    public async Task ChangePasswordAsync(long memberId, string oldPassword, string newPassword)
+    {
+        IMemberRepository respoitory = _unitOfWork.GetCustomRepository<IMemberRepository>();
+        var member = await respoitory.FindAsync(memberId);
+        if (member == null)
+        {
+            throw new MaxException(ResultCode.MemberNotExists);
+        }
+        //验证旧密码
+        if (!CheckPassword(member.Password, oldPassword, member.Salt))
+        {
+            throw new MaxException(ResultCode.PasswordError);
+        }
+
+        member.Password = MakePassword(newPassword, member.Salt);
+
+        respoitory.Update(member);
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    #endregion
+
+
+    #region GetAccessChainAsync
+
+    /// <summary>
+    /// GetAccessChainAsync
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public async Task<IAccessChain?> GetAccessChainAsync(string token)
+    {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return null;
+        }
+
+        IMemberRepository repository = _unitOfWork.GetCustomRepository<IMemberRepository>();
+
+        //先按Token获取uid
+        IAccessSession? access = await repository.GetAccessSessionAsync(token);
+
+        if (access == null)
+        {
+            return null;
+        }
+
+        //按memberId获取member
+        IMember? member = null;
+        IUser? user = null;
+
+        if (access.MemberId.HasValue)
+        {
+            //get member
+            member = await GetAsync(access.MemberId.Value);
+
+            if (access.MemberId is not null)
+            {
+                //get user
+                user = await _userProvider.GetAsync(access.MemberId.Value, access.Type);
+            }
+        }
+
+        return new AccessChain
+        {
+            AccessSession = access,
+            Member = member,
+            User = user
+        };
+    }
+
+    #endregion
+
+    #region RefreshAccessChainAsync
+
+    /// <summary>
+    /// 刷新访问链
+    /// </summary>
+    /// <param name="xppSns"></param>
+    /// <param name="member"></param>
+    /// <param name="accessConfig"></param>
+    /// <param name="accessToken"></param>
+    /// <returns></returns>
+    public async Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
+    {
+        DbMember? member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.Id == memberId);
+
+        if (member == null)
+        {
+            throw new MaxException(ResultCode.MemberNotExists);
+        }
+
+        return await RefreshAccessChainAsync(xppSns, memberId, accessConfig, accessToken);
+    }
+
+    /// <summary>
+    /// 刷新访问链
+    /// </summary>
+    /// <param name="xppSns"></param>
+    /// <param name="member"></param>
+    /// <param name="accessConfig"></param>
+    /// <param name="accessToken"></param>
+    /// <returns></returns>
+    public async Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
+    {
+        var token = accessToken ?? MakeAccessToken();
+
+        _user = await GetUserAsync(member.Id);
+
+        MemberSession memberSession = new MemberSession
+        {
+            XppSnsId = xppSns.Id,
+            Token = token.Token,
+            Expires = token.Expires,
+            Status = _user?.Status ?? member.Status,
+            MemberId = member.Id,
+            IsOfficial = _user?.IsOfficial ?? member.IsOfficial
+        };
+
+        accessConfig?.OpenId.IfNotNull(x => memberSession.OpenId = x);
+        accessConfig?.UnionId.IfNotNull(x => memberSession.UnionId = x);
+        accessConfig?.NickName.IfNotNull(x => memberSession.NickName = x);
+        accessConfig?.Avatar.IfNotNull(x => memberSession.Avatar = x);
+
+        await _unitOfWork.GetRepository<MemberSession>().AddAsync(memberSession);
+        await _unitOfWork.SaveChangesAsync();
+
+        AccessSession accessSession = new AccessSession
+        {
+            XppSnsId = xppSns.Id,
+            AccountId = accessConfig?.AccountId,
+            AppId = accessConfig?.AppId,
+            Avatar = accessConfig?.Avatar,
+            Name = accessConfig?.NickName,
+            SessionKey = accessConfig?.SessionKey,
+            OpenId = accessConfig?.OpenId,
+            UnionId = accessConfig?.UnionId,
+            TenantId = accessConfig?.TenantId ?? 0,
+            Token = token.Token,
+            Expires = token.Expires,
+            XppSource = xppSns.Xpp.Source,
+            AccountSource = xppSns.Source,
+            MemberId = member.Id,
+            IsLogin = true,
+            Status = member.Status,
+            IsOfficial = member.IsOfficial
+        };
+
+        //生成AccessChain
+        IAccessChain accessChain = new AccessChain
+        {
+            AccessSession = accessSession,
+            Member = _mapper.Map<MemberModel>(member),
+            User = _user
+        };
+
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(accessChain);
+        return accessChain;
+    }
+
+    /*
+    /// <summary>
+    /// RefreshAccessChainAsync
+    /// </summary>
+    /// <param name="accessConfig"></param>
+    /// <param name="accessToken"></param>
+    /// <param name="xppSns"></param>
+    /// <param name="member"></param>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    public async Task<IAccessChain> RefreshAccessChainAsync(AccessConfig? accessConfig, IAccessToken? accessToken, XppSns xppSns, IMember member, IUser? user)
+    {
+        var token = accessToken ?? MakeAccessToken();
+
+        MemberSession memberSession = new MemberSession
+        {
+            XppSnsId = xppSns.Id,
+            Token = token.Token,
+            Expires = token.Expires,
+            Status = user?.Status ?? member.Status,
+            MemberId = member.Id,
+            IsOfficial = user?.IsOfficial ?? member.IsOfficial
+        };
+
+        accessConfig?.OpenId.IfNotNull(x => memberSession.OpenId = x);
+        accessConfig?.UnionId.IfNotNull(x => memberSession.UnionId = x);
+        accessConfig?.NickName.IfNotNull(x => memberSession.NickName = x);
+        accessConfig?.Avatar.IfNotNull(x => memberSession.Avatar = x);
+
+        await _unitOfWork.GetRepository<MemberSession>().AddAsync(memberSession);
+        await _unitOfWork.SaveChangesAsync();
+
+        AccessSession accessSession = new AccessSession
+        {
+            XppSnsId = xppSns.Id,
+            AccountId = accessConfig?.AccountId,
+            AppId = accessConfig?.AppId,
+            Avatar = accessConfig?.Avatar,
+            Name = accessConfig?.NickName,
+            SessionKey = accessConfig?.SessionKey,
+            OpenId = accessConfig?.OpenId,
+            UnionId = accessConfig?.UnionId,
+            TenantId = accessConfig?.TenantId ?? 0,
+            Token = token.Token,
+            Expires = token.Expires,
+            XppSource = xppSns.Xpp.Source,
+            AccountSource = xppSns.Source,
+            MemberId = member.Id,
+            IsLogin = true,
+            Status = member.Status,
+            IsOfficial = member.IsOfficial
+        };
+
+        //生成AccessChain
+        IAccessChain accessChain = new AccessChain
+        {
+            AccessSession = accessSession,
+            Member = member,
+            User = _user
+        };
+
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(accessChain);
+        return accessChain;
+    }
+    */
+
+    #endregion
+
+    #region RefreshAcceeChainAsync
+
+    /*
+    /// <summary>
+    /// 刷新AcceeChain缓存
+    /// </summary>
+    /// <param name="oldToken"></param>
+    /// <param name="accessChain"></param>
+    /// <returns></returns>
+    public async Task RefreshAccessChainAsync(IAccessChain accessChain, string oldToken)
+    {
+        if (accessChain.AccessSession is not null)
+        {
+            await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshAccessSessionAsync(accessChain, oldToken);
+        }
+        else
+        {
+            throw new MaxException(ResultCode.MemberNotExists);
+        }
+    }
+    */
+
+    #endregion
+
     #region RefreshAsync
 
     /// <summary>
@@ -531,13 +723,11 @@ public class MemberService : IMemberService
     /// </summary>
     /// <param name="memberId"></param>
     /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
     public async Task RefreshAsync(long memberId)
     {
-        IMember? member = await GetAsync(memberId);
-        if (member is not null)
-        {
-            await RefreshAsync(member);
-        }
+        IUser? user = await GetUserAsync(memberId);
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(memberId, user);
     }
 
     /// <summary>
@@ -553,6 +743,7 @@ public class MemberService : IMemberService
 
     #endregion
 
+
     #region SetMember
 
     /// <summary>
@@ -560,9 +751,37 @@ public class MemberService : IMemberService
     /// </summary>
     /// <param name="model"></param>
     /// <param name="dbMember"></param>
-    private static void SetMember(MemberModel model, DbMember dbMember)
+    /// <param name="xppId"></param>
+    /// <param name="roleIds"></param>
+    private static void SetNewMember(MemberModel model,  DbMember dbMember, long xppId, long[]? roleIds)
+    {
+        SetMember(model, dbMember, xppId, roleIds);
+
+        //注册or新增信息
+        dbMember.TenantId = model.TenantId;
+
+        //时间和IP
+        var now = DateTime.Now;
+        dbMember.JoinTime = now;
+        model.JoinIp?.IfNotNull(x => dbMember.JoinIP = x);
+        dbMember.LastLogin = now;
+        dbMember.LastIP = dbMember.JoinIP;
+
+        //salt
+        dbMember.Salt = Guid.NewGuid().ToString().Replace("-", "");
+    }
+
+    /// <summary>
+    /// 使用MemberModel设置DbMember
+    /// </summary>
+    /// <param name="model"></param>
+    /// <param name="dbMember"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleIds"></param>
+    private static void SetMember(MemberModel model, DbMember dbMember, long xppId, long[]? roleIds)
     {
         dbMember.UserId = model.UserId > 0 ? model.UserId : dbMember.Id;      //如无外接UserId,使用Member.Id
+        dbMember.Mobile = model.Mobile;
         model.Name?.IfNotNull(x => dbMember.Name = x);
         model.IdNumber?.IfNotNull(x => dbMember.IdNumber = x);
         model.QuickCode?.IfNotNull(x => dbMember.QuickCode = x);
@@ -575,7 +794,6 @@ public class MemberService : IMemberService
         model.UserName?.IfNotNull(x => dbMember.UserName = x, () => dbMember.UserName = dbMember.Mobile.ToString());
         model.NickName?.IfNotNull(x => dbMember.NickName = x);
         model.CountryCode?.IfNotNull(x => dbMember.CountryCode = x);
-        model.Mobile?.IfNotNull(x => dbMember.Mobile = x.ToLong());
         model.Phone?.IfNotNull(x => dbMember.Phone = x);
         model.Email?.IfNotNull(x => dbMember.Email = x);
         model.Avatar?.IfNotNull(x => dbMember.Avatar = x);
@@ -591,47 +809,8 @@ public class MemberService : IMemberService
         model.Start?.IfNotNull(x => dbMember.Start = x);
         model.End?.IfNotNull(x => dbMember.End = x);
         dbMember.Type = model.Type;
-    }
 
-    /// <summary>
-    /// 使用MemberModel设置DbMember
-    /// </summary>
-    /// <param name="model"></param>
-    /// <param name="xppId"></param>
-    /// <param name="roleId"></param>
-    /// <param name="dbMember"></param>
-    private static void SetNewMember(MemberModel model, long xppId, DbMember dbMember)
-    {
-        SetMember(model, dbMember);
-
-        //注册or新增信息
-        dbMember.TenantId = model.TenantId;
-
-        //时间和IP
-        var now = DateTime.Now;
-        dbMember.JoinTime = now;
-        model.JoinIp?.IfNotNull(x => dbMember.JoinIP = x);
-        dbMember.LastLogin = now;
-        dbMember.LastIP = dbMember.JoinIP;
-
-        //salt
-        dbMember.Salt = Guid.NewGuid().ToString().Replace("-", "");
-
-        /*
-        //角色信息(roleId为空,则指定为默认角色)
-        RoleMember roleMember = new()
-        {
-            XppId = xppId,
-            RoleId = model.RoleId ?? 0,
-            Status = Status.Enable,
-            TenantId = model.TenantId
-        };
-
-        dbMember.RoleMembers = new List<RoleMember>
-        {
-            roleMember
-        };
-        */
+        SetRoles(dbMember, roleIds, model.TenantId, xppId);
     }
 
     /// <summary>
@@ -644,7 +823,7 @@ public class MemberService : IMemberService
     /// <param name="snsSource"></param>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
-    private void SetNewMember(RegisterModel model, IUser? user, DbMember dbMember, XppSource xppSource, SnsSource snsSource, long tenantId = 0, long xppId = 0)
+    private static void SetRegisterMember(RegisterModel model, IUser? user, DbMember dbMember, XppSource xppSource, SnsSource snsSource, long tenantId = 0, long xppId = 0)
     {
         dbMember.TenantId = user?.TenantId ?? tenantId;
         dbMember.ReferrerId = model.ReferrerId;
@@ -679,7 +858,6 @@ public class MemberService : IMemberService
             ext.TenantId = model.TenantId;
             ext.OpenId = model.OpenId;
             ext.UnionId = model.UnionId ?? Guid.NewGuid().ToString().Replace("-", "");
-            ext.Expires = DateTime.Now.AddMinutes(_option.Identity.Expires);
             ext.Name = model.NickName;
             ext.Avatar = model.Avatar;
             ext.Status = Status.Enable;
@@ -692,28 +870,48 @@ public class MemberService : IMemberService
     /// <summary>
     /// 设置用户角色
     /// </summary>
+    /// <param name="memberId"></param>
+    /// <param name="roleIds"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    public async void SetRoles(long memberId, long[]? roleIds, long tenantId = 0, long xppId = 0)
+    {
+        var member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FindAsync(memberId);
+
+        if (member is null)
+        {
+            throw new MaxException(ResultCode.MemberNotExists);
+        }
+
+        SetRoles(member, roleIds, tenantId, xppId);
+    }
+
+    /// <summary>
+    /// 设置用户角色
+    /// </summary>
     /// <param name="dbMember"></param>
     /// <param name="roleIds"></param>
+    /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
-    private static void SetRoles(DbMember dbMember, long[]? roleIds, long tenantId = 0, long xppId = 0)
+    public static void SetRoles(DbMember dbMember, long[]? roleIds, long tenantId = 0, long xppId = 0)
     {
-        //修改则先清
-        if (roleIds is not null)
+        if (dbMember.Id > 0)
         {
-            //新真用户情况下的角色设定
-            if (dbMember.Id > 0)
-            {
-                dbMember.RoleMembers?.Remove(x => !roleIds.Contains(x.RoleId));
-            }
+            dbMember.RoleMembers?.Clear();
+        }
+        else
+        {
             dbMember.RoleMembers = new List<RoleMember>();
+        }
 
+        if (roleIds is not null && roleIds.Length > 0)
+        {
             foreach (var roleId in roleIds)
             {
-                dbMember.RoleMembers.Add(
+                dbMember.RoleMembers?.Add(
                     new RoleMember
                     {
                         RoleId = roleId,
-                        Status = Status.Enable,
                         TenantId = tenantId,
                         XppId = xppId
                     });
@@ -724,10 +922,74 @@ public class MemberService : IMemberService
     /// <summary>
     /// 获取真实会员信息
     /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    public async Task<IUser?> GetUserAsync(long memberId)
+    {
+        if (_user is not null)
+        {
+            return _user;
+        }
+        else
+        {
+            if (memberId > 0 && _userProvider is not null)
+            {
+                var member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FindAsync(memberId);
+                if (member is not null && member.Id != member.UserId)
+                {
+                    return await _userProvider.GetAsync(member.UserId, member.Type);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 获取真实会员信息
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    public async Task<IUser?> GetUserAsync(string mobile)
+    {
+        if (_user is not null)
+        {
+            return _user;
+        }
+        else
+        {
+            if (mobile.IsMobile() && _userProvider is not null)
+            {
+                var member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.Mobile == mobile.ToLong());
+                if (member is not null && member.Id != member.UserId)
+                {
+                    return await _userProvider.GetAsync(member.Mobile, member.Type);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 获取真实会员信息
+    /// </summary>
     /// <param name="id"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    private async Task<IUser?> GetUserAsync(long id, int type)
+    public async Task<IUser?> GetUserAsync(long id, int type)
     {
         if (_user is not null)
         {
@@ -752,7 +1014,7 @@ public class MemberService : IMemberService
     /// <param name="id"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    private async Task<IUser?> GetUserAsync(string mobile, int type)
+    public async Task<IUser?> GetUserAsync(string mobile, int type)
     {
         if (_user is not null)
         {
@@ -769,22 +1031,6 @@ public class MemberService : IMemberService
                 return null;
             }
         }
-    }
-
-    /// <summary>
-    /// 注册用户
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    private async Task<IUser?> RegisterUserAsync(RegisterModel registerModel)
-    {
-        if (_userProvider is not null)
-        {
-            _user = await _userProvider.RegisterAsync(registerModel);
-        }
-
-        return _user;
     }
 
     #endregion
