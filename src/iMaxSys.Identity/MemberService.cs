@@ -116,6 +116,7 @@ public class MemberService : IMemberService
                 MemberExts = new List<MemberExt>()
             };
 
+            //快速登录，自动注册扩展信息
             dbMember.MemberExts.Add(new MemberExt
             {
                 XppSnsId = xppSnsId,
@@ -197,10 +198,13 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task LogoutAsync(string token)
     {
+        //to-do: 记录登出
         await _unitOfWork.GetCustomRepository<IMemberRepository>().RemoveAccessSessionAsync(token);
     }
 
     #endregion
+
+    #region GetSnsPhoneNumber
 
     /// <summary>
     /// 获取社交平台绑定的电话号码
@@ -221,6 +225,8 @@ public class MemberService : IMemberService
 
         return _snsFactory.GetService(sns.Source).GetPhoneNumber(data, key, iv);
     }
+
+    #endregion
 
     #region RegisterAsync
 
