@@ -25,6 +25,15 @@ namespace iMaxSys.Identity;
 public interface IMemberService : IDependency
 {
     /// <summary>
+    /// 扫码登录
+    /// </summary>
+    /// <param name="xppSnsId"></param>
+    /// <param name="code"></param>
+    /// <param name="ip"></param>
+    /// <returns></returns>
+    //Task<IAccessChain> LoginAsync(long xppSnsId, string code, string ip);
+
+    /// <summary>
     /// 登录
     /// </summary>
     /// <param name="xppSnsId"></param>
@@ -66,6 +75,13 @@ public interface IMemberService : IDependency
     /// <param name="registerModel"></param>
     /// <returns></returns>
     Task<IUser?> RegisterUserAsync(RegisterModel registerModel);
+
+    /// <summary>
+    /// 登出
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task LogoutAsync(string token);
 
     /// <summary>
     /// Add member
@@ -139,13 +155,6 @@ public interface IMemberService : IDependency
     /// <param name="accessToken"></param>
     /// <returns></returns>
     Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
-
-    /// <summary>
-    /// 登出
-    /// </summary>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    Task LogoutAsync(string token);
 
     /// <summary>
     /// 修改密码

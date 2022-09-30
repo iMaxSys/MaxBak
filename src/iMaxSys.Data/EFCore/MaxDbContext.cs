@@ -49,10 +49,11 @@ public abstract class MaxDbContext : DbContext, IDbContextBase
     /// <param name="modelBuilder">ModelBuilder</param>
     private static void ApplyConfigurations(ModelBuilder modelBuilder)
     {
-        //throw new Exception(Assembly.GetExecutingAssembly().GetName().Name);
-        //var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains(AppDomain.CurrentDomain.FriendlyName[..AppDomain.CurrentDomain.FriendlyName.IndexOf('.')]));
+        string name = $"{Assembly.GetExecutingAssembly().GetName().Name}";
+        //throw new Exception(name);
+        var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains(name[..name.IndexOf('.')]));
 
-        var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Identity"));
+        //var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Identity"));
 
         foreach (var item in cls)
         {
@@ -60,7 +61,7 @@ public abstract class MaxDbContext : DbContext, IDbContextBase
             modelBuilder.ApplyConfigurationsFromAssembly(assembly);
         }
 
-        //映射Core模块配置
+        //映射Core模块配置AppDomain.CurrentDomain.FriendlyName
         //var c = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Identity")).FirstOrDefault();
 
         //var a = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(c.Name));

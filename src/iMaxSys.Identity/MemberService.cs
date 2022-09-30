@@ -35,7 +35,6 @@ using iMaxSys.Sns.Common.Open;
 
 using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using System.Net;
 
 namespace iMaxSys.Identity;
 
@@ -70,7 +69,7 @@ public class MemberService : IMemberService
     #region LoginAsync
 
     /// <summary>
-    /// login
+    /// login by code
     /// </summary>
     /// <param name="sid"></param>
     /// <param name="type"></param>
@@ -189,41 +188,23 @@ public class MemberService : IMemberService
 
     #endregion
 
-    #region LogoutAsync
+    #region LoginUserAsync
 
     /// <summary>
-    /// 登出
+    /// login user
     /// </summary>
-    /// <param name="token"></param>
+    /// <param name="memberId"></param>
+    /// <param name="userId"></param>
+    /// <param name="type"></param>
     /// <returns></returns>
-    public async Task LogoutAsync(string token)
+    public async Task<IUser?> LoginUserAsync(long memberId, long userId, int type)
     {
-        //to-do: 记录登出
-        await _unitOfWork.GetCustomRepository<IMemberRepository>().RemoveAccessSessionAsync(token);
-    }
-
-    #endregion
-
-    #region GetSnsPhoneNumber
-
-    /// <summary>
-    /// 获取社交平台绑定的电话号码
-    /// </summary>
-    /// <param name="sid"></param>
-    /// <param name="data"></param>
-    /// <param name="key"></param>
-    /// <param name="iv"></param>
-    /// <returns></returns>
-    public async Task<SnsPhoneNumber> GetSnsPhoneNumber(long xppSnsId, string data, string key, string iv)
-    {
-        XppSns? sns = await _unitOfWork.GetRepository<XppSns>().FindAsync(xppSnsId);
-
-        if (sns is null)
+        if (_userProvider is not null && userId > 0 && memberId != userId)
         {
-            throw new MaxException(ResultCode.XppSnsIdNotExists);
+            _user = await _userProvider.LoginAsync(userId, type);
         }
 
-        return _snsFactory.GetService(sns.Source).GetPhoneNumber(data, key, iv);
+        return _user;
     }
 
     #endregion
@@ -354,23 +335,17 @@ public class MemberService : IMemberService
 
     #endregion
 
-    #region LoginUserAsync
+    #region LogoutAsync
 
     /// <summary>
-    /// login user
+    /// 登出
     /// </summary>
-    /// <param name="memberId"></param>
-    /// <param name="userId"></param>
-    /// <param name="type"></param>
+    /// <param name="token"></param>
     /// <returns></returns>
-    public async Task<IUser?> LoginUserAsync(long memberId, long userId, int type)
+    public async Task LogoutAsync(string token)
     {
-        if (_userProvider is not null && userId > 0 && memberId != userId)
-        {
-            _user = await _userProvider.LoginAsync(userId, type);
-        }
-
-        return _user;
+        //to-do: 记录登出
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RemoveAccessSessionAsync(token);
     }
 
     #endregion
@@ -461,38 +436,6 @@ public class MemberService : IMemberService
 
     #endregion
 
-    #region ChangePasswordAsync
-
-    /// <summary>
-    /// 修改密码
-    /// </summary>
-    /// <param name="memberId"></param>
-    /// <param name="oldPassword"></param>
-    /// <param name="newPassword"></param>
-    /// <returns></returns>
-    public async Task ChangePasswordAsync(long memberId, string oldPassword, string newPassword)
-    {
-        IMemberRepository respoitory = _unitOfWork.GetCustomRepository<IMemberRepository>();
-        var member = await respoitory.FindAsync(memberId);
-        if (member == null)
-        {
-            throw new MaxException(ResultCode.MemberNotExists);
-        }
-        //验证旧密码
-        if (!CheckPassword(member.Password, oldPassword, member.Salt))
-        {
-            throw new MaxException(ResultCode.PasswordError);
-        }
-
-        member.Password = MakePassword(newPassword, member.Salt);
-
-        respoitory.Update(member);
-        await _unitOfWork.SaveChangesAsync();
-    }
-
-    #endregion
-
-
     #region GetAccessChainAsync
 
     /// <summary>
@@ -539,6 +482,33 @@ public class MemberService : IMemberService
             Member = member,
             User = user
         };
+    }
+
+    #endregion
+
+    #region RefreshAsync
+
+    /// <summary>
+    /// 刷新member缓存
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task RefreshAsync(long memberId)
+    {
+        IUser? user = await GetUserAsync(memberId);
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(memberId, user);
+    }
+
+    /// <summary>
+    /// 刷新member缓存
+    /// </summary>
+    /// <param name="member"></param>
+    /// <returns></returns>
+    public async Task RefreshAsync(IMember member)
+    {
+        IUser user = await _userProvider.GetAsync(member.Id, member.Type);
+        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(member, user);
     }
 
     #endregion
@@ -722,33 +692,60 @@ public class MemberService : IMemberService
 
     #endregion
 
-    #region RefreshAsync
+    #region ChangePasswordAsync
 
     /// <summary>
-    /// 刷新member缓存
+    /// 修改密码
     /// </summary>
     /// <param name="memberId"></param>
+    /// <param name="oldPassword"></param>
+    /// <param name="newPassword"></param>
     /// <returns></returns>
-    /// <exception cref="MaxException"></exception>
-    public async Task RefreshAsync(long memberId)
+    public async Task ChangePasswordAsync(long memberId, string oldPassword, string newPassword)
     {
-        IUser? user = await GetUserAsync(memberId);
-        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(memberId, user);
-    }
+        IMemberRepository respoitory = _unitOfWork.GetCustomRepository<IMemberRepository>();
+        var member = await respoitory.FindAsync(memberId);
+        if (member == null)
+        {
+            throw new MaxException(ResultCode.MemberNotExists);
+        }
+        //验证旧密码
+        if (!CheckPassword(member.Password, oldPassword, member.Salt))
+        {
+            throw new MaxException(ResultCode.PasswordError);
+        }
 
-    /// <summary>
-    /// 刷新member缓存
-    /// </summary>
-    /// <param name="member"></param>
-    /// <returns></returns>
-    public async Task RefreshAsync(IMember member)
-    {
-        IUser user = await _userProvider.GetAsync(member.Id, member.Type);
-        await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(member, user);
+        member.Password = MakePassword(newPassword, member.Salt);
+
+        respoitory.Update(member);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     #endregion
 
+    #region GetSnsPhoneNumber
+
+    /// <summary>
+    /// 获取社交平台绑定的电话号码
+    /// </summary>
+    /// <param name="sid"></param>
+    /// <param name="data"></param>
+    /// <param name="key"></param>
+    /// <param name="iv"></param>
+    /// <returns></returns>
+    public async Task<SnsPhoneNumber> GetSnsPhoneNumber(long xppSnsId, string data, string key, string iv)
+    {
+        XppSns? sns = await _unitOfWork.GetRepository<XppSns>().FindAsync(xppSnsId);
+
+        if (sns is null)
+        {
+            throw new MaxException(ResultCode.XppSnsIdNotExists);
+        }
+
+        return _snsFactory.GetService(sns.Source).GetPhoneNumber(data, key, iv);
+    }
+
+    #endregion
 
     #region SetMember
 

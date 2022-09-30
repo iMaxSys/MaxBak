@@ -12,6 +12,7 @@
 //----------------------------------------------------------------
 
 global using System;
+global using System.Net;
 global using System.Linq;
 global using System.Text.Json;
 global using System.Reflection;
