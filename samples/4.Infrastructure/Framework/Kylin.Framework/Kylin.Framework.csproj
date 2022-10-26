@@ -13,4 +13,7 @@
   <ItemGroup>
     <Folder Include="Options\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Max\iMaxSys.Max.csproj" />
+  </ItemGroup>
 </Project>
