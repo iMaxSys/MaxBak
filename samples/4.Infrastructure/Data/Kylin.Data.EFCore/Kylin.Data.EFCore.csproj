@@ -6,7 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\iMaxSys.Identity\iMaxSys.Identity.csproj" />
-  </ItemGroup>
 </Project>
