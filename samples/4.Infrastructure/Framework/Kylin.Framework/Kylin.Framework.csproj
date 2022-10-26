@@ -4,6 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>2015e101-7798-4cce-bea7-19f8278021dd</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Options\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Options\" />
+  </ItemGroup>
 </Project>

@@ -17,6 +17,7 @@ using iMaxSys.Max.Environment;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Environment.Access;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace iMaxSys.Max.Web.Mvc;
 
@@ -31,6 +32,16 @@ public abstract class MaxController : Controller
     /// 工作上下文
     /// </summary>
     private IWorkContext? _workContext;
+
+    /// <summary>
+    /// 日志工厂
+    /// </summary>
+    private ILoggerFactory? _loggerFactory;
+
+    /// <summary>
+    /// 日志
+    /// </summary>
+    private ILogger? _logger;
 
     /// <summary>
     /// Application
@@ -50,7 +61,20 @@ public abstract class MaxController : Controller
     /// <summary>
     /// WorkContext
     /// </summary>
-    public IWorkContext? WorkContext => _workContext ??= HttpContext.RequestServices.GetService<IWorkContext>();
+    protected IWorkContext? WorkContext => _workContext ??= HttpContext.RequestServices.GetService<IWorkContext>();
+
+    /// <summary>
+    /// 获取 <see cref="ILoggerFactory"/> 对象。
+    /// </summary>
+    protected ILoggerFactory? LoggerFactory
+    {
+        get { return _loggerFactory ?? (_loggerFactory = HttpContext.RequestServices.GetService<ILoggerFactory>()); }
+    }
+
+    /// <summary>
+    /// Logger
+    /// </summary>
+    protected ILogger? Logger { get => _logger ?? (_logger = HttpContext.RequestServices.GetService<ILogger>()); }
 
     /// <summary>
     /// Result
@@ -61,24 +85,6 @@ public abstract class MaxController : Controller
     {
         return result;
     }
-
-    /// <summary>
-    /// 结果
-    /// </summary>
-    /// <param name="resultCode"></param>
-    /// <param name="data"></param>
-    /// <returns></returns>
-    //protected Result Result(ResultEnum resultCode, object data)
-    //{
-    //    if (resultCode == ResultEnum.Success)
-    //    {
-    //        return Success(data);
-    //    }
-    //    else
-    //    {
-    //        return Fail(data);
-    //    }
-    //}
 
     /// <summary>
     /// 结果
@@ -157,7 +163,7 @@ public abstract class MaxController : Controller
     }
 
     /// <summary>
-    /// 获取请求Json
+    /// 获取请求text
     /// </summary>
     /// <returns></returns>
     protected async Task<string> GetRequestText()
@@ -181,10 +187,7 @@ public abstract class MaxController : Controller
     }
 
     /// <summary>
-    /// 获取member,便于本地调试用,可不用
+    /// Member
     /// </summary>
-    protected virtual IMember? GetMember()
-    {
-        return WorkContext?.AccessChain.Member;
-    }
+    protected IMember? Member { get => WorkContext?.AccessChain.Member; }
 }
