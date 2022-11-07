@@ -8,5 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\iMaxSys.Identity\iMaxSys.Identity.csproj" />
+    <ProjectReference Include="..\..\4.Infrastructure\Framework\Kylin.Framework\Kylin.Framework.csproj" />
   </ItemGroup>
 </Project>

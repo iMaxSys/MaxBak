@@ -54,12 +54,55 @@ public static class MaxExtensions
         services.AddEndpointsApiExplorer();
     }
 
-    public static IApplicationBuilder UseMax(this IApplicationBuilder builder)
+    public static IApplicationBuilder UseMax(this IApplicationBuilder builder, Action<CoreOption>? coreAction = null, Action<ExceptionHandlingOptions>? exAction = null)
     {
-        //IdWorker初始
         MaxOption option = builder.ApplicationServices.GetService<IOptions<MaxOption>>()!.Value;
+
+        //IdWorker初始
         IdWorker.Init(option.Network.ServerId, option.Network.DataCenterId);
-        //异常&身份中间件
-        return builder.UseMiddleware<ExceptionHandlingMiddleware>();
+
+        //core相关中间件
+        CoreOption coreOption;
+        if (coreAction is not null)
+        {
+            coreOption = new CoreOption();
+            coreAction(coreOption);
+        }
+        else
+        {
+            coreOption = option.Core;
+        }
+
+        if (coreOption.UseHttpsRedirection)
+        {
+            builder.UseHttpsRedirection();
+        }
+
+        if (coreOption.UseStaticFiles)
+        {
+            builder.UseStaticFiles();
+        }
+
+        if (coreOption.UseRouting)
+        {
+            builder.UseRouting();
+        }
+
+        if (coreOption.UseAuthorization)
+        {
+            builder.UseAuthorization();
+        }
+
+        //异常中间件
+        ExceptionHandlingOptions exOptions = new ExceptionHandlingOptions();
+
+        if (exAction is not null)
+        {
+            exAction(exOptions);
+        }
+
+        builder.UseMiddleware<ExceptionHandlingMiddleware>(exOptions);
+
+        return builder;
     }
 }

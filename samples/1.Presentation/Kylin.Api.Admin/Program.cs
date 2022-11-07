@@ -1,57 +1,61 @@
-﻿using iMaxSys.Max;
+﻿//----------------------------------------------------------------
+//Copyright (C) 2016-2026 iMaxSys Co.,Ltd.
+//All rights reserved.
+//
+//文件: program.cs
+//摘要: 系统入口
+//说明:
+//
+//当前：1.0
+//作者：陶剑扬
+//日期：2021-10-20
+//----------------------------------------------------------------
+
+using Microsoft.Extensions.Configuration;
+
+using iMaxSys.Max;
 using iMaxSys.Data;
 using iMaxSys.Identity;
 
-var builder = WebApplication.CreateBuilder(args);
+using Kylin.Framework.Options;
 
-// Add services to the container.
-ConfigureConfiguration(builder.Configuration);
+var builder = WebApplication.CreateBuilder(args);
 ConfigureServices(builder.Services, builder.Configuration);
 
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
+Configure(app, builder.Environment);
 
 app.Run();
 
-//================================start================================
-
-static void ConfigureConfiguration(ConfigurationManager configuration)
-{
-    //builder.Services.AddMax(builder.Configuration);
-}
+//register services
 static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
 {
     services.AddMax(configuration);
     services.AddMaxIdentity(configuration);
     services.AddSwaggerGen();
 }
-/*
-static void ConfigureMiddleware(IApplicationBuilder app, IServiceProvider services)
-{
 
-}
-static void ConfigureEndpoints(IEndpointRouteBuilder app, IServiceProvider services)
+//use middleware
+static void Configure(WebApplication app, IWebHostEnvironment env)
 {
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+    else
+    {
+        app.UseExceptionHandler("/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
 
+    app.UseMax();
+    app.UseMaxIdentity();
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.UseRouting();
+    app.UseAuthorization();
+    app.MapControllers();
 }
-*/

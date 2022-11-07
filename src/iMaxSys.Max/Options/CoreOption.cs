@@ -21,6 +21,26 @@ namespace iMaxSys.Max.Options;
 public class CoreOption
 {
     /// <summary>
+    /// UseHttpsRedirection
+    /// </summary>
+    public bool UseHttpsRedirection { get; set; } = true;
+
+    /// <summary>
+    /// UseStaticFiles
+    /// </summary>
+    public bool UseStaticFiles { get; set; } = true;
+
+    /// <summary>
+    /// UseRouting
+    /// </summary>
+    public bool UseRouting { get; set; } = true;
+
+    /// <summary>
+    /// UseAuthorization
+    /// </summary>
+    public bool UseAuthorization { get; set; } = true;
+
+    /// <summary>
     /// Databases
     /// </summary>
     public List<DatabaseOption> Databases { get; set; } = new();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using iMaxSys.Max.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Kylin.Api.Client.Controllers;
 

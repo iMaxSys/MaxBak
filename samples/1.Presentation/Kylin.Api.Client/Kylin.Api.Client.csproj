@@ -20,5 +20,11 @@
     <ProjectReference Include="..\..\..\src\iMaxSys.Identity\iMaxSys.Identity.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\3.Services\Kylin.Services.Auth\Kylin.Services.Auth.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\4.Infrastructure\Framework\Kylin.Framework\Kylin.Framework.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>

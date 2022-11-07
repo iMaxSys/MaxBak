@@ -35,9 +35,9 @@ public class ExceptionHandlingMiddleware
     private readonly RequestDelegate _next;
     private readonly ExceptionHandlingOptions _options;
 
-    static JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All) };
+    static readonly JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All) };
 
-    public ExceptionHandlingMiddleware(RequestDelegate next, ExceptionHandlingOptions options)
+    public ExceptionHandlingMiddleware(RequestDelegate next, ExceptionHandlingOptions? options = null)
     {
         _next = next;
         _options = options ?? new ExceptionHandlingOptions();
