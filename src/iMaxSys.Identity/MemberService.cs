@@ -35,6 +35,7 @@ using iMaxSys.Sns.Common.Open;
 
 using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using iMaxSys.Identity.Models.Request;
 
 namespace iMaxSys.Identity;
 
@@ -46,7 +47,7 @@ public class MemberService : IMemberService
     private readonly IMapper _mapper;
     private readonly MaxOption _option;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserProvider _userProvider;
+    private readonly IUserService _userProvider;
     private readonly ISnsFactory _snsFactory;
     private readonly ICheckCodeService _checkCodeService;
 
@@ -54,7 +55,7 @@ public class MemberService : IMemberService
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork unitOfWork, IUserProvider userProvider, ISnsFactory snsFactory, ICheckCodeService checkCodeService)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICheckCodeService checkCodeService)
     {
         _mapper = mapper;
         _option = option.Value;
@@ -76,12 +77,12 @@ public class MemberService : IMemberService
     /// <param name="code"></param>
     /// <param name="ip"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> LoginAsync(long xppSnsId, int type, string code, string ip)
+    public async Task<IAccessChain> LoginAsync(CodeLoginRequest request)
     {
         DbMember dbMember;
 
         //获取xppSns
-        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == xppSnsId, null, x => x.Include(y => y.Xpp));
+        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == request.Id, null, x => x.Include(y => y.Xpp));
 
         if (xppSns is null)
         {
@@ -93,23 +94,23 @@ public class MemberService : IMemberService
         //IAccessToken token = MakeAccessToken();
 
         //取访问配置
-        AccessConfig accessConfig = await GetAccessConfigAsync(xppSns, code);
-        var memberExt = await _unitOfWork.GetRepository<MemberExt>().FirstOrDefaultAsync(x => x.XppSnsId == xppSnsId && x.OpenId == accessConfig.OpenId, null, x => x.Include(y => y.Member));
+        AccessConfig accessConfig = await GetAccessConfigAsync(xppSns, request.Code);
+        var memberExt = await _unitOfWork.GetRepository<MemberExt>().FirstOrDefaultAsync(x => x.XppSnsId == request.Id && x.OpenId == accessConfig.OpenId, null, x => x.Include(y => y.Member));
 
         //有表示已是会员,无进行快速注册,注册完成为非正式
         if (memberExt == null)
         {
             dbMember = new DbMember
             {
-                Type = type,
+                Type = request.Type,
                 Start = now,
                 XppSource = xppSns.Xpp.Source,
                 AccountSource = xppSns.Source,
                 Salt = Guid.NewGuid().ToString().Replace("-", ""),
                 JoinTime = now,
-                JoinIP = ip,
+                JoinIP = request.IP,
                 LastLogin = now,
-                LastIP = ip,
+                LastIP = request.IP,
                 IsOfficial = isOfficial,
                 Status = Status.Enable,
                 MemberExts = new List<MemberExt>()
@@ -118,7 +119,7 @@ public class MemberService : IMemberService
             //快速登录，自动注册扩展信息
             dbMember.MemberExts.Add(new MemberExt
             {
-                XppSnsId = xppSnsId,
+                XppSnsId = request.Id,
                 OpenId = accessConfig.OpenId,
                 Status = Status.Enable
             });
@@ -129,7 +130,7 @@ public class MemberService : IMemberService
         else
         {
             dbMember = memberExt.Member;
-            dbMember.LastIP = ip;
+            dbMember.LastIP = request.IP;
             dbMember.LastLogin = now;
             await CheckStatus(dbMember);
         }

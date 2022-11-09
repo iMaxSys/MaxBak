@@ -49,7 +49,6 @@ public static class EnumExtensions
             Success = value.GetHashCode() == MaxCode.Success.GetHashCode(),
             Code = value.GetHashCode(),
             Message = GetDescription(value),
-            Data = null
         };
     }
 
@@ -65,7 +64,6 @@ public static class EnumExtensions
             Success = value.GetHashCode() == MaxCode.Success.GetHashCode(),
             Code = value.GetHashCode(),
             Message = GetDescription(value),
-            Data = data
         };
     }
 

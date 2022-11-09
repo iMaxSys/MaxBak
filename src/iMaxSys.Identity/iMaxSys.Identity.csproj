@@ -18,9 +18,11 @@
     <None Remove="Migrations\" />
     <None Remove="Mapper\" />
     <None Remove="Data\Mappers\" />
+    <None Remove="Models\Request\" />
+    <None Remove="Models\Response\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -30,6 +32,8 @@
     <Folder Include="Migrations\" />
     <Folder Include="Mappers\" />
     <Folder Include="Data\Mappers\" />
+    <Folder Include="Models\Request\" />
+    <Folder Include="Models\Response\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20220519064929_init.cs" />

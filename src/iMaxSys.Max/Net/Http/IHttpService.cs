@@ -194,4 +194,18 @@ public interface IHttpService : ISingleton
     /// <param name="xml"></param>
     /// <returns></returns>
     Task<string> PostXmlAsync(string url, string xml);
+
+    /// <summary>
+    /// 执行请求
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<string> ExecuteAsync(HttpRequest request);
+
+    /// <summary>
+    /// 执行请求
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<T?> ExecuteAsync<T>(HttpRequest request);
 }

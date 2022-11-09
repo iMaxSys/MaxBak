@@ -23,7 +23,17 @@ public abstract class WeChatRequest : SnsRequest
     /// <summary>
     /// BaseAPIUrl
     /// </summary>
-    protected const string BASEAPIURL = "https://api.weixin.qq.com";
+    public const string BASEAPIURL = "https://api.weixin.qq.com";
+
+    /// <summary>
+    /// Action
+    /// </summary>
+    public abstract string Action { get; }
+
+    /// <summary>
+    /// response's format is snake
+    /// </summary>
+    public override bool IsSnakeFormat { get; set; } = true;
 
     /// <summary>
     /// Url

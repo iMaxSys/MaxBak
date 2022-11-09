@@ -44,13 +44,13 @@ public class Result : ResultBase
     /// <summary>
     /// 数据
     /// </summary>
-    public virtual object? Data { get; set; }
+    //public virtual object? Data { get; set; }
 }
 
 /// <summary>
 /// System Result
 /// </summary>
-public class Result<T> : ResultBase
+public class Result<T> : Result
 { 
     /// <summary>
     /// 数据

@@ -11,34 +11,20 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
-using iMaxSys.Identity;
 using iMaxSys.Identity.Models.Request;
 using iMaxSys.Identity.Models.Response;
-using iMaxSys.Max.Identity.Domain;
-using iMaxSys.Max.Common.Enums;
 
 namespace Kylin.Services.Member;
 
-public class AuthService : IDependency
+public interface IAuthService : IDependency
 {
-    private readonly MemberService _memberService;
-
-    public AuthService(MemberService memberService)
-    {
-        _memberService = memberService;
-    }
-
     /// <summary>
     /// 代码登录
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<LoginResponse> LoginAsync(CodeLoginRequest request)
-    {
-        IAccessChain accessChain = await _memberService.LoginAsync(request);
-
-        LoginResponse response = new();
-        response.Code = MaxCode.Success.GetHashCode();
-    }
+    Task<LoginResponse> LoginAsync(CodeLoginRequest request);
 }
+

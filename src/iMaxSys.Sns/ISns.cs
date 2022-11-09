@@ -23,11 +23,11 @@ namespace iMaxSys.Sns;
 public interface ISns
 {
     /// <summary>
-    /// 获取访问配额
+    /// 登录获取访问配置
     /// </summary>
     /// <param name="snsAuth"></param>
     /// <returns></returns>
-    Task<AccessConfig> GetAccessConfigAsync(SnsAuth snsAuth);
+    Task<AccessConfig> LoginAsync(SnsAuth snsAuth);
 
     /// <summary>
     /// 获取电话号码

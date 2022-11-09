@@ -61,9 +61,9 @@ public static class CollectionExtensions
     /// <typeparam name="T"></typeparam>
     /// <param name="items">The items.</param>
     /// <param name="action">The action.</param>
-    public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+    public static void ForEach<T>(this IEnumerable<T>? items, Action<T> action)
     {
-        if (items == null)
+        if (items is null)
         {
             return;
         }
@@ -81,9 +81,9 @@ public static class CollectionExtensions
     /// <returns>
     ///     <c>true</c> if [is null or empty] [the specified this]; otherwise, <c>false</c>.
     /// </returns>
-    public static bool IsNullOrEmpty(this IEnumerable @this)
+    public static bool IsNullOrEmpty(this IEnumerable? @this)
     {
-        if (@this != null)
+        if (@this is not null)
         {
             return !@this.GetEnumerator().MoveNext();
         }

@@ -19,6 +19,6 @@ namespace Kylin.Services.Auth;
 /// <summary>
 /// 用户服务接口
 /// </summary>
-public interface IMemberService : IDependency, IUserProvider
+public interface IMemberService : IDependency, IUserService
 {
 }

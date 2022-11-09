@@ -13,6 +13,8 @@
 
 using iMaxSys.Sns.WeChat.Common;
 using iMaxSys.Sns.WeChat.Api.Request;
+using iMaxSys.Sns.WeChat.Api.Response;
+using iMaxSys.Sns.Common;
 
 namespace iMaxSys.Sns.WeChat.Api;
 
@@ -35,7 +37,7 @@ public class WeChatClient : IWeChatClient
     /// <param name="request"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<T?> ExecuteAsync<T>(WeChatRequest request)
+    public async Task<T> ExecuteAsync<T>(WeChatRequest request) where T : WeChatResponse
     {
         return await ExecuteAsync<T>(request, WeChatResultCode.AccessWeChatFail);
     }
@@ -48,18 +50,23 @@ public class WeChatClient : IWeChatClient
     /// <param name="code"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<T?> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode code)
+    public async Task<T> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode code) where T : WeChatResponse
     {
         try
         {
-            if (request.Method == "POST")
+            T? response = await _httpService.ExecuteAsync<T>(request);
+
+            if (response is null)
             {
-                return await _httpService.PostAsync<T>(request.Url);
+                throw new MaxException(ResultCode.WechatResponseIsNull);
             }
-            else
+
+            if (response.ErrCode != 0)
             {
-                return await _httpService.GetAsync<T>(request.Url);
+                throw new MaxException(ResultCode.WechatResponseIsError, $"{response.ErrCode}:{response.ErrMsg}");
             }
+
+            return response;
         }
         catch (Exception ex)
         {

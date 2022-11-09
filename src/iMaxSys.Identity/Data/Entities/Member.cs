@@ -223,6 +223,16 @@ public class Member : TenantMasterEntity
     public string LastIP { get; set; } = Const.DEFAULT_IP;
 
     /// <summary>
+    /// 错误次数
+    /// </summary>
+    public int ErrorCount { get; set; }
+
+    /// <summary>
+    /// 是否锁定
+    /// </summary>
+    public bool IsLocked { get; set; } = false;
+
+    /// <summary>
     /// 是否正式
     /// </summary>
     public bool IsOfficial { get; set; }

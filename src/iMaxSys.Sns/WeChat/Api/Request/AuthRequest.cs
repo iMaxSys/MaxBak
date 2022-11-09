@@ -34,6 +34,12 @@ public class AuthRequest : WeChatRequest
     public string Code { get; set; } = String.Empty;
 
     /// <summary>
+    /// 请求方法(GET or POST)
+    /// </summary>
+    public override HttpMethod Method { get; set; } = HttpMethod.Get;
+
+
+    /// <summary>
     /// Action
     /// https://api.weixin.qq.com/sns/jscode2session?appid=<AppId>&secret=<AppSecret>&js_code=<code>&grant_type=authorization_code
     /// </summary>

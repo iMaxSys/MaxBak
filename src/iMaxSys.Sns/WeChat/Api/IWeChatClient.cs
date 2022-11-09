@@ -13,6 +13,7 @@
 
 using iMaxSys.Sns.WeChat.Common;
 using iMaxSys.Sns.WeChat.Api.Request;
+using iMaxSys.Sns.WeChat.Api.Response;
 
 namespace iMaxSys.Sns.WeChat.Api;
 
@@ -28,7 +29,7 @@ public interface IWeChatClient : IDependency
     /// <param name="request"></param>
     /// <param name="code"></param>
     /// <returns></returns>
-    Task<T?> ExecuteAsync<T>(WeChatRequest request);
+    Task<T> ExecuteAsync<T>(WeChatRequest request) where T : WeChatResponse;
 
     /// <summary>
     /// ExecuteAsync
@@ -37,5 +38,5 @@ public interface IWeChatClient : IDependency
     /// <param name="request"></param>
     /// <param name="weChatResultCode"></param>
     /// <returns></returns>
-    Task<T?> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode weChatResultCode);
+    Task<T> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode weChatResultCode) where T : WeChatResponse;
 }

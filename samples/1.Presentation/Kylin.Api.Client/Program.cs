@@ -30,6 +30,7 @@ app.Run();
 //register services
 static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
 {
+    services.Configure<KylinOption>(configuration.GetSection("Kylin"));
     services.AddMax(configuration);
     services.AddMaxIdentity(configuration);
     services.AddSwaggerGen();

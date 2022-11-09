@@ -26,6 +26,7 @@ namespace iMaxSys.Max.Web.Mvc;
 /// </summary>
 [ApiController]
 [Produces("application/json")]
+[Route("/[controller]/[action]")]
 public abstract class MaxController : Controller
 {
     /// <summary>

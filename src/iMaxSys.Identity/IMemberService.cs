@@ -19,6 +19,7 @@ using iMaxSys.Data.Entities.App;
 using iMaxSys.Sns.Api;
 
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using iMaxSys.Identity.Models.Request;
 
 namespace iMaxSys.Identity;
 
@@ -41,7 +42,7 @@ public interface IMemberService : IDependency
     /// <param name="code"></param>
     /// <param name="ip"></param>
     /// <returns></returns>
-    Task<IAccessChain> LoginAsync(long xppSnsId, int type, string code, string ip);
+    Task<IAccessChain> LoginAsync(CodeLoginRequest request);
 
     /// <summary>
     /// login

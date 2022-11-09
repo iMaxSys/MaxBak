@@ -19,14 +19,9 @@ namespace Kylin.Framework.Options;
 public class KylinOption
 {
     /// <summary>
-    /// 启用
-    /// </summary>
-    public bool Enable { get; set; }
-
-    /// <summary>
     /// 版本
     /// </summary>
-    public string Version { get; set; } = "0.0.0";
+    public string Notice { get; set; } = "hello world.";
 
     /// <summary>
     /// 数据库配置集

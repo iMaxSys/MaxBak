@@ -11,6 +11,10 @@
 //日期：2020-05-01
 //----------------------------------------------------------------
 
+using System.Reflection.PortableExecutable;
+
+using Microsoft.Net.Http.Headers;
+
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Json.NamingPolicy;
 
@@ -175,7 +179,7 @@ public class HttpService : IHttpService
         }
 
         StringContent content = data != null ? new(string.Join("&", data.Select(x => $"{x.Key}={x.Value}"))) : new StringContent("");
-        content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
         var response = await httpClient.PostAsync(url, content);
 
@@ -344,5 +348,51 @@ public class HttpService : IHttpService
 
         return result;
     }
-}
 
+    /// <summary>
+    /// 执行请求
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public async Task<string> ExecuteAsync(HttpRequest request)
+    {
+        HttpRequestMessage httpRequestMessage = new(request.Method, request.Url)
+        {
+            Headers = {
+                { HeaderNames.UserAgent, "max" }
+            }
+        };
+
+        //header
+        request.Header.ForEach(item => httpRequestMessage.Headers.Add(item.Key, item.Value));
+
+        //content: data优先,其次为body
+        StringContent content = request.Data is not null ? new(request.Data, Encoding.UTF8) : (request.Body is not null ? new(string.Join("&", request.Body.Select(x => $"{x.Key}={x.Value}")), Encoding.UTF8) : new(string.Empty, Encoding.UTF8));
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(request.ContentType);
+
+        var httpClient = _httpClientFactory.CreateClient();
+        var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+        if (httpResponseMessage.IsSuccessStatusCode)
+        {
+            return await httpResponseMessage.Content.ReadAsStringAsync();
+        }
+        else
+        {
+            throw new MaxException(httpResponseMessage.StatusCode, "http请求异常");
+        }
+    }
+
+    /// <summary>
+    /// 执行请求
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<T?> ExecuteAsync<T>(HttpRequest request)
+    {
+        string result = await ExecuteAsync(request);
+        return JsonSerializer.Deserialize<T>(result, request.IsSnakeFormat ? _snakeJsonSerializerOptions : _jsonSerializerOptions);
+    }
+}

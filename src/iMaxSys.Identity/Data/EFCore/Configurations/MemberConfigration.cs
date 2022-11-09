@@ -105,6 +105,10 @@ public class MemberConfiguration : TenantMasterEntityConfiguration<Member>
         builder.Property(x => x.LastLogin).HasColumnName("last_login").IsRequired().HasComment("最后登录时间");
         //最后登录IP
         builder.Property(x => x.LastIP).HasColumnName("last_ip").HasMaxLength(50).IsRequired().HasComment("最后登录IP");
+        //错误次数
+        builder.Property(x => x.ErrorCount).HasColumnName("error_count").IsRequired().HasComment("错误次数");
+        //是否锁定
+        builder.Property(x => x.IsLocked).HasColumnName("is_locked").IsRequired().HasComment("是否锁定");
         //是否正式会员
         builder.Property(x => x.IsOfficial).HasColumnName("is_official").HasComment("是否正式成员");
         //状态

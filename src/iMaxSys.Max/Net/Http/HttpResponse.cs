@@ -11,15 +11,21 @@
 //日期：2021-10-12
 //----------------------------------------------------------------
 
-namespace iMaxSys.Max.Web.Mvc;
+using iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Web.Mvc;
 
-public interface IRequestBase
+namespace iMaxSys.Max.Net.Http;
+
+/// <summary>
+/// 响应类
+/// </summary>
+public class Response : Result
 {
 }
 
 /// <summary>
-/// 请求抽象类
+/// 响应范型类
 /// </summary>
-public abstract class Request : IRequestBase
+public class Response<T> : Result<T>
 {
 }

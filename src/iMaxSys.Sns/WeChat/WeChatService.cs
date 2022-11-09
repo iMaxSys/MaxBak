@@ -44,19 +44,18 @@ public class WeChatService : IWeChatService
     /// </summary>
     /// <param name="requst"></param>
     /// <returns></returns>
-    public async Task<AccessConfig> GetAccessConfigAsync(SnsAuth snsAuth)
+    public async Task<AccessConfig> LoginAsync(SnsAuth snsAuth)
     {
         AuthRequest authRequest = new()
         {
             AppId = snsAuth.AppId,
             AppSecret = snsAuth.AppSecret,
             Code = snsAuth.Code,
-            Method = "GET"
         };
 
         AuthResponse? response = await _weChatClient.ExecuteAsync<AuthResponse>(authRequest, WeChatResultCode.GetAccessConfigFail);
 
-        if (response != null)
+        if (response is not null)
         {
             return new AccessConfig
             {

@@ -16,20 +16,14 @@ namespace iMaxSys.Sns.Common;
 public enum ResultCode
 {
     /// <summary>
-    /// 用户名不可为空
+    /// 微信返回为空
     /// </summary>
-    [Description("用户名不可为空")]
-    UserNameCantNull = 107000,
+    [Description("微信返回为空")]
+    WechatResponseIsNull = 200000,
 
     /// <summary>
-    /// 密码强度弱
+    /// 微信返回错误结果
     /// </summary>
-    [Description("密码强度弱")]
-    PasswordIsWeak = 107001,
-
-    /// <summary>
-    /// 无效的手机号码
-    /// </summary>
-    [Description("无效的手机号码")]
-    MobileIsInvalid = 107002,
+    [Description("微信返回错误结果")]
+    WechatResponseIsError = 200001,
 }
