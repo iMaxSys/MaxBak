@@ -20,7 +20,7 @@ namespace iMaxSys.Identity;
 /// <summary>
 /// 成员信息提供者接口
 /// </summary>
-public interface IUserProvider : IDependency
+public interface IUserService : IDependency
 {
     /// <summary>
     /// 获取成员
