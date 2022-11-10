@@ -35,7 +35,7 @@ public class AliPayService : IAliPayService
     /// </summary>
     /// <param name="requst"></param>
     /// <returns></returns>
-    public async Task<AccessConfig> GetAccessConfigAsync(SnsAuth snsAuth)
+    public async Task<AccessConfig> LoginAsync(SnsAuth snsAuth)
     {
         await Task.Delay(1000);
         throw new Exception();

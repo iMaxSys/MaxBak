@@ -31,9 +31,14 @@ public abstract class WeChatRequest : SnsRequest
     public abstract string Action { get; }
 
     /// <summary>
+    /// ContentType
+    /// </summary>
+    public override string? ContentType { get; set; } = "application/json";
+
+    /// <summary>
     /// response's format is snake
     /// </summary>
-    public override bool IsSnakeFormat { get; set; } = true;
+    public override bool IsSnakeFormat { get; set; } = false;
 
     /// <summary>
     /// Url

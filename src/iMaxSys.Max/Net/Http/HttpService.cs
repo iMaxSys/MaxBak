@@ -354,21 +354,19 @@ public class HttpService : IHttpService
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<string> ExecuteAsync(HttpRequest request)
+    public async Task<string> ExecuteAsync(HttpRequest httpRequest)
     {
+        HttpRequest request = httpRequest.Build();
         HttpRequestMessage httpRequestMessage = new(request.Method, request.Url)
         {
-            Headers = {
-                { HeaderNames.UserAgent, "max" }
-            }
+            Headers = { { HeaderNames.UserAgent, "max" } }
         };
 
         //header
         request.Header.ForEach(item => httpRequestMessage.Headers.Add(item.Key, item.Value));
 
         //content: data优先,其次为body
-        StringContent content = request.Data is not null ? new(request.Data, Encoding.UTF8) : (request.Body is not null ? new(string.Join("&", request.Body.Select(x => $"{x.Key}={x.Value}")), Encoding.UTF8) : new(string.Empty, Encoding.UTF8));
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(request.ContentType);
+        httpRequestMessage.Content = request.Data is not null ? new StringContent(request.Data, Encoding.UTF8, request.ContentType) : (request.Body is not null ? new StringContent(string.Join("&", request.Body.Select(x => $"{x.Key}={x.Value}")), Encoding.UTF8, request.ContentType) : new StringContent(string.Empty, Encoding.UTF8, request.ContentType));
 
         var httpClient = _httpClientFactory.CreateClient();
         var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);

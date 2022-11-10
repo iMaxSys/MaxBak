@@ -41,7 +41,7 @@ public class HttpRequest
     /// <summary>
     /// ContentType
     /// </summary>
-    public virtual string ContentType { get; set; } = string.Empty;
+    public virtual string? ContentType { get; set; }
 
     /// <summary>
     /// 编码格式
@@ -69,7 +69,7 @@ public class HttpRequest
     public Dictionary<string, string>? Body { get; set; }
 
     /// <summary>
-    /// Data
+    /// Data(json,xml)
     /// </summary>
     public string? Data { get; set; }
 

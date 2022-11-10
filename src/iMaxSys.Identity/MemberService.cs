@@ -1074,7 +1074,7 @@ public class MemberService : IMemberService
             Code = code
         };
         //to-do: max的赋值
-        AccessConfig accessConfig = await _snsFactory.GetService(sns.Source).GetAccessConfigAsync(snsAuth);
+        AccessConfig accessConfig = await _snsFactory.GetService(sns.Source).LoginAsync(snsAuth);
         accessConfig.AccountId = sns.AccountId;
         accessConfig.SnsSource = (SnsSource)sns.Source;
         accessConfig.Status = sns.Status;

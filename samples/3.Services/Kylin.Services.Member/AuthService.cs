@@ -34,11 +34,11 @@ public class AuthService : IDependency
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<LoginResponse> LoginAsync(CodeLoginRequest request)
-    {
-        IAccessChain accessChain = await _memberService.LoginAsync(request);
+    //public async Task<LoginResponse> LoginAsync(CodeLoginRequest request)
+    //{
+    //    IAccessChain accessChain = await _memberService.LoginAsync(request);
 
-        LoginResponse response = new();
-        response.Code = MaxCode.Success.GetHashCode();
-    }
+    //    LoginResponse response = new();
+    //    response.Code = MaxCode.Success.GetHashCode();
+    //}
 }

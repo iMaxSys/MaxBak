@@ -59,10 +59,10 @@ public class AuthController : MaxController
         //return "hello world";
     }
 
-    [HttpGet]
-    public async Task<LoginResponse> WeChatLiteLogin()
-    {
-        var result = await _userService.LoginAsync();
-    }
+    //[HttpGet]
+    //public async Task<LoginResponse> WeChatLiteLogin()
+    //{
+    //    var result = await _userService.LoginAsync();
+    //}
 }
 

@@ -46,13 +46,7 @@ public class WeChatService : IWeChatService
     /// <returns></returns>
     public async Task<AccessConfig> LoginAsync(SnsAuth snsAuth)
     {
-        AuthRequest authRequest = new()
-        {
-            AppId = snsAuth.AppId,
-            AppSecret = snsAuth.AppSecret,
-            Code = snsAuth.Code,
-        };
-
+        AuthRequest authRequest = new(snsAuth.AppId, snsAuth.AppSecret, snsAuth.Code);
         AuthResponse? response = await _weChatClient.ExecuteAsync<AuthResponse>(authRequest, WeChatResultCode.GetAccessConfigFail);
 
         if (response is not null)
