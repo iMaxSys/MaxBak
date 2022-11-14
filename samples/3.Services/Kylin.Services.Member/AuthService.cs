@@ -17,6 +17,8 @@ using iMaxSys.Identity.Models.Request;
 using iMaxSys.Identity.Models.Response;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Common.Enums;
+using System.Net.Sockets;
+using System.Xml.Linq;
 
 namespace Kylin.Services.Member;
 
