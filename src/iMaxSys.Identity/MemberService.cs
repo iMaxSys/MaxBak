@@ -54,7 +54,7 @@ public class MemberService : IMemberService
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICheckCodeService checkCodeService)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICheckCodeService checkCodeService)
     {
         _mapper = mapper;
         _option = option.Value;
@@ -103,6 +103,7 @@ public class MemberService : IMemberService
             {
                 Type = request.Type,
                 Start = now,
+                End = now.AddYears(64),
                 XppSource = xppSns.Xpp.Source,
                 AccountSource = xppSns.Source,
                 Salt = Guid.NewGuid().ToString().Replace("-", ""),
@@ -507,7 +508,7 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task RefreshAsync(IMember member)
     {
-        IUser user = await _userProvider.GetAsync(member.Id, member.Type);
+        IUser? user = await _userProvider.GetAsync(member.Id, member.Type);
         await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(member, user);
     }
 

@@ -17,6 +17,7 @@ using iMaxSys.Max;
 using iMaxSys.Data;
 using iMaxSys.Identity;
 
+using Kylin.Data.EFCore;
 using Kylin.Framework.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,7 @@ static void ConfigureServices(IServiceCollection services, ConfigurationManager 
     services.AddMax(configuration);
     services.AddMaxIdentity(configuration);
     services.AddSwaggerGen();
+    services.AddKylinDataAccess(configuration);
 }
 
 //use middleware

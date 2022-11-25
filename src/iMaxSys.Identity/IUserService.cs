@@ -28,7 +28,7 @@ public interface IUserService : IDependency
     /// <param name="id">标识</param>
     /// <param name="type">类型</param>
     /// <returns></returns>
-    Task<IUser> GetAsync(long id, int type = 0);
+    Task<IUser?> GetAsync(long id, int type = 0);
 
     /// <summary>
     /// 获取成员
@@ -36,7 +36,7 @@ public interface IUserService : IDependency
     /// <param name="key">关键值,例如手机号码</param>
     /// <param name="type">类型</param>
     /// <returns></returns>
-    Task<IUser> GetAsync(string key, int type = 0);
+    Task<IUser?> GetAsync(string key, int type = 0);
 
     /// <summary>
     /// 校验成员关键数据

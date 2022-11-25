@@ -11,11 +11,18 @@
 //日期：2022-06-15
 //----------------------------------------------------------------
 
+using AutoMapper;
+
+using iMaxSys.Data;
 using iMaxSys.Identity;
 using iMaxSys.Identity.Models;
 using iMaxSys.Max.Identity.Domain;
+using Kylin.Data.Models;
+using Kylin.Data.EFCore.Contexts;
 using Kylin.Services.Auth.Common;
 using Kylin.Services.Auth.Models;
+
+using DbCustomer = Kylin.Data.Models.Auth.Customer;
 
 namespace Kylin.Services.Auth;
 
@@ -24,6 +31,15 @@ namespace Kylin.Services.Auth;
 /// </summary>
 public class MemberService : IMemberService
 {
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public MemberService(IMapper mapper, IUnitOfWork unitOfWork)
+    {
+        _mapper = mapper;
+        _unitOfWork = unitOfWork;
+    }
+
     /// <summary>
     /// 检查
     /// </summary>
@@ -43,8 +59,18 @@ public class MemberService : IMemberService
     /// <param name="type"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<IUser> GetAsync(long id, int type = 0)
+    public async Task<IUser?> GetAsync(long id, int type = 0)
     {
+        IUser? user = null;
+        switch ((UserType)type)
+        {
+            case UserType.Customer:
+                DbCustomer? dbCustomer = await _unitOfWork.GetReadOnlyRepository<DbCustomer>().FirstOrDefaultAsync(x => x.Id == id);
+                user = _mapper.Map<Customer>(dbCustomer);
+                return user;
+            default:
+                break;
+        }
         throw new NotImplementedException();
     }
 
@@ -55,7 +81,7 @@ public class MemberService : IMemberService
     /// <param name="type"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<IUser> GetAsync(string key, int type = 0)
+    public Task<IUser?> GetAsync(string key, int type = 0)
     {
         throw new NotImplementedException();
     }
@@ -78,12 +104,15 @@ public class MemberService : IMemberService
     /// <param name="type"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<IUser?> LoginAsync(long userId, int type)
+    public async Task<IUser?> LoginAsync(long userId, int type)
     {
+        IUser? user = null;
         switch ((UserType)type)
         {
             case UserType.Customer:
-                //return new Task<IUser>(new Customer());
+                DbCustomer? dbCustomer = await _unitOfWork.GetReadOnlyRepository<DbCustomer>().FirstOrDefaultAsync(x=>x.Id == userId);
+                user = _mapper.Map<Customer>(dbCustomer);
+                return user;
             default:
                 break;
         }
