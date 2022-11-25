@@ -615,7 +615,7 @@ public static class UtilityExtensions
     {
         string appName = AppDomain.CurrentDomain.FriendlyName.Left(".");
         string fxName = Assembly.GetExecutingAssembly().FullName!.Left(".");
-        return DependencyContext.Default.CompileLibraries.Where(c => c.Name.StartsWith(appName, StringComparison.CurrentCultureIgnoreCase) || c.Name.StartsWith(fxName, StringComparison.CurrentCultureIgnoreCase)).Select(x => AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(x.Name)));
+        return DependencyContext.Default!.CompileLibraries.Where(c => c.Name.StartsWith(appName, StringComparison.CurrentCultureIgnoreCase) || c.Name.StartsWith(fxName, StringComparison.CurrentCultureIgnoreCase)).Select(x => AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(x.Name)));
     }
 
     /// <summary>

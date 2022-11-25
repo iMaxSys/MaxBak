@@ -1,23 +1,26 @@
-﻿//----------------------------------------------------------------
+﻿// ----------------------------------------------------------------
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: Result.cs
-//摘要: Result
-//说明:
+//文件: IAuthService.cs
+//摘要: 权限接口
+//说明: 
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2017-11-15
+//日期：2022-10-15
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Identity.Domain;
+using System;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Identity.Models.Request;
 using iMaxSys.Identity.Models.Response;
 
-namespace Kylin.Services.Member;
+namespace Kylin.Services.Auth;
 
+/// <summary>
+/// 权限接口
+/// </summary>
 public interface IAuthService : IDependency
 {
     /// <summary>

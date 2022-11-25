@@ -1,0 +1,173 @@
+﻿<#@ template language="C#" hostspecific="true" #>
+<#@ assembly name="System.IO" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+//----------------------------------------------------------------
+//Copyright (C) 2016-2048 Co.,Ltd.
+//All rights reserved.
+//
+//文件: Configuration.cs
+//摘要: 配置
+//说明:
+//
+//当前：1.0
+//作者：陶剑扬
+//日期：2022-11-16
+//----------------------------------------------------------------
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using Kylin.Data.EFCore.EntityConfigurations;
+using Kylin.Data.EFCore.EntityConfigurations.Entities;
+<#
+	//源文件相对路径
+	string sourceFile = @"/Users/taojy/temp/max/samples/4.Infrastructure/Data/Kylin.Data.Models/Auth/Customer.cs"; 
+	//模板路径
+	
+	string currentPath = Path.GetDirectoryName(Host.TemplateFile);
+	//解决方案路径
+	string solutionPath = currentPath.Substring(0, currentPath.LastIndexOf("/"));
+	//源文件绝对路径
+	string sourcePath = $"{sourceFile}";
+
+	//读取源代码
+	string source = File.ReadAllText(sourcePath);
+	string compact = Trim(source);
+
+	//获取类名称
+	string className = GetClassName(compact);
+
+	//获取类说明
+	string classSummary = GetClassSummary(compact);
+
+	//获取表名称
+	string tableName = GetTableName(className);
+
+	string items = GetItems(source, compact.Replace($"<summary>{classSummary}</summary>", ""));
+#>
+
+namespace Kylin.Data.EFCore.EntityConfigurations.Auth;
+
+/// <summary>
+/// <#= classSummary #>映射配置
+/// </summary>
+public class <#= className #>Configuration : KylinMasterEntityConfiguration<<#= className #>>
+{
+	protected override void Configures(EntityTypeBuilder<<#= className #>> builder)
+	{
+		//基类配置
+		base.Configures(builder);
+
+<#= items #>
+		//ToTable<#= classSummary #>
+		builder.ToTable("<#= tableName #>");
+	}
+}
+
+<#+
+	//获取中间字符串
+	protected string GetString(string source, string s, string e)
+	{
+		Regex rg = new Regex("(?<=(" + s + "))[.\\s\\S]*?(?=(" + e + "))", RegexOptions.Multiline | RegexOptions.Singleline);
+		return rg.Match(source).Value;
+	}
+
+	//去除空白字符
+	protected string Trim(string source)
+	{
+		return Regex.Replace(source, @"\s", "").Replace(@"///", "");
+	}
+
+	//大驼峰命名转下划线命名
+	protected string GetUnderscoreNaming(string source)
+	{
+		return Regex.Replace(source, @"((?<=.)[A-Z][a-z]*)", @"_$1").ToLower();
+	}
+
+	//获取类名
+	protected string GetClassName(string source)
+	{
+		return GetString(source, "class", ":");
+	}
+
+	//获取类说明
+	protected string GetClassSummary(string source)
+	{
+		return GetString(source, "<summary>", "</summary>publicclass");
+	}
+
+	//获取表名
+	protected string GetTableName(string source)
+	{
+		return GetUnderscoreNaming(source);
+	}
+
+	//获取属性定义:public long Id { get; set; }
+	protected Item GetItem(string source, string compact)
+	{
+		Item item = new();
+		string[] s = source.Split(" ");
+
+		item.Type = s[0];
+		item.Name = s[1];
+		item.Field = GetUnderscoreNaming(item.Name);
+		item.Summary = GetString(compact, "<summary>", $"</summary>public{item.Type}{item.Name}");
+		//item.Comment = string.IsNullOrEmpty(item.Summary) ? string.Empty : $".HasComment(\"{item.Summary}\")";
+		//item.Summary = $"<summary>public{item.Type}{item.Name}";
+		//item.Comment = source;
+		switch (item.Type)
+		{
+			case "string":
+				item.Ext = ".HasMaxLength(50)";
+				break;
+			case "decimal":
+				item.Ext = ".HasColumnType(\"decimal(10, 2)\")";
+				break;
+			default:
+				break;
+		}
+
+		return item;
+	}
+
+	//获取全部属性定义
+	protected string GetItems(string source, string compact)
+	{
+		string className = GetClassName(compact);
+		string s = source.Replace($"public class {className} :", "");
+		string c = Regex.Replace(compact, "(?<=({))[.\\s\\S]*?(?=(:))", "");
+		MatchCollection mcs = Regex.Matches(s, "(?<=(public ))[.\\s\\S]*?(?=( { get; set; ))");
+		MatchCollection mct = Regex.Matches(c, "(?<=(<summary>))[.\\s\\S]*?(?=(</summary>))");
+		int i = 0;
+		StringBuilder builder = new StringBuilder();
+		mcs.ToList().ForEach(x => {
+			Item item = GetItem(x.Value, c);
+			item.Summary = mct.Skip(i++).Take(1).FirstOrDefault()?.Value;
+			item.Comment = string.IsNullOrEmpty(item.Summary) ? string.Empty : $".HasComment(\"{item.Summary}\")";
+			builder.Append($"\t\t//{item.Summary}{Environment.NewLine}");
+			builder.Append($"\t\tbuilder.Property(x => x.{item.Name}).HasColumnName(\"{item.Field}\"){item.Ext}{item.Comment};{Environment.NewLine}");
+		});
+		return builder.ToString();
+	}
+
+	public class Item
+	{
+		public string Name { get; set; }
+
+		public string Type { get; set; }
+
+		public string Field { get; set; }
+
+		public string Ext { get; set; }
+
+		public string Summary { get; set; }
+
+		public string Comment { get; set; }
+	}
+#>

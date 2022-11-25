@@ -20,12 +20,12 @@ public class SnowflakeIdGenerationService : IIdGenerationService
 {
     private readonly SnowflakeWorker _worker;
 
-    public SnowflakeIdGenerationService()
+    public SnowflakeIdGenerationService(IOptions<MaxOption> option)
     {
-        _worker = new SnowflakeWorker(0, 0);
+        _worker = new SnowflakeWorker(option.Value.Network.DataCenterId, option.Value.Network.DataCenterId);
     }
 
-    public long GenerateId()
+    public long NextId()
     {
         return _worker.NextId();
     }

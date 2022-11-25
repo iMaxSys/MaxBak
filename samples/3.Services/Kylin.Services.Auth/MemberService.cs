@@ -14,6 +14,8 @@
 using iMaxSys.Identity;
 using iMaxSys.Identity.Models;
 using iMaxSys.Max.Identity.Domain;
+using Kylin.Services.Auth.Common;
+using Kylin.Services.Auth.Models;
 
 namespace Kylin.Services.Auth;
 
@@ -78,6 +80,13 @@ public class MemberService : IMemberService
     /// <exception cref="NotImplementedException"></exception>
     public Task<IUser?> LoginAsync(long userId, int type)
     {
+        switch ((UserType)type)
+        {
+            case UserType.Customer:
+                //return new Task<IUser>(new Customer());
+            default:
+                break;
+        }
         throw new NotImplementedException();
     }
 

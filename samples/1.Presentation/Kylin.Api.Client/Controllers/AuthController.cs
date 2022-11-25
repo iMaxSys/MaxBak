@@ -23,9 +23,11 @@ using iMaxSys.Max.Options;
 using iMaxSys.Max.Web.Mvc;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Identity;
+using iMaxSys.Identity.Models.Request;
 using iMaxSys.Identity.Models.Response;
 
 using Kylin.Framework.Options;
+using Kylin.Services.Auth;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 namespace Kylin.Api.Client.Controllers;
@@ -34,13 +36,13 @@ public class AuthController : MaxController
 {
     private readonly MaxOption _maxOption;
     private readonly KylinOption _kylinOption;
-    private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-    public AuthController(IOptions<MaxOption> option, IOptions<KylinOption> kylinOption, IUserService userService)
+    public AuthController(IOptions<MaxOption> option, IOptions<KylinOption> kylinOption, IAuthService authService)
     {
         _maxOption = option.Value;
         _kylinOption = kylinOption.Value;
-        _userService = userService;
+        _authService = authService;
     }
 
     [HttpGet]
@@ -59,10 +61,12 @@ public class AuthController : MaxController
         //return "hello world";
     }
 
-    //[HttpGet]
-    //public async Task<LoginResponse> WeChatLiteLogin()
-    //{
-    //    var result = await _userService.LoginAsync();
-    //}
+    [HttpPost]
+    public async Task<LoginResponse> WeChatLiteLogin(CodeLoginRequest reqeust)
+    {
+        reqeust.IP = WorkContext.IP;
+        LoginResponse result = await _authService.LoginAsync(reqeust);
+        return result;
+    }
 }
 

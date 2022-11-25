@@ -23,7 +23,7 @@ public class IdWorker
     public static readonly DateTime Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
     //基准时间
-    public const long Twepoch = 1474992000000L;
+    public const long Twepoch = 1430409600000L;
     //机器标识位数
     const int WorkerIdBits = 5;
     //数据标志位数

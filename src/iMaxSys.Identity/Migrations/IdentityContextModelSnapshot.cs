@@ -16,7 +16,7 @@ namespace iMaxSys.Identity.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "7.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("iMaxSys.Data.Entities.App.Tenant", b =>
@@ -250,11 +250,11 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("app_id");
 
-                    b.Property<string>("AppSecret")
+                    b.Property<string>("AppKey")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("app_secret");
+                        .HasColumnName("app_key");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
@@ -614,7 +614,6 @@ namespace iMaxSys.Identity.Migrations
                         .HasComment("区域代码from国家统计局");
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("avatar")
@@ -694,6 +693,11 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("end")
                         .HasComment("停用时间");
 
+                    b.Property<int>("ErrorCount")
+                        .HasColumnType("int")
+                        .HasColumnName("error_count")
+                        .HasComment("错误次数");
+
                     b.Property<int>("FailedCount")
                         .HasColumnType("int")
                         .HasColumnName("failed_count")
@@ -714,6 +718,11 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_deleted");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_locked")
+                        .HasComment("是否锁定");
 
                     b.Property<bool>("IsOfficial")
                         .HasColumnType("tinyint(1)")
@@ -895,11 +904,11 @@ namespace iMaxSys.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
+                    b.HasIndex("UserId");
+
                     b.HasIndex("UserName");
 
                     b.ToTable("member", (string)null);
-
-                    b.HasComment("成员");
                 });
 
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.MemberExt", b =>
@@ -926,6 +935,10 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<long>("CreatorId")
                         .HasColumnType("bigint")
                         .HasColumnName("creator_id");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("expires");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)")
@@ -968,6 +981,11 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<long>("TenantId")
                         .HasColumnType("bigint")
                         .HasColumnName("tenant_id");
+
+                    b.Property<string>("Token")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("token");
 
                     b.Property<string>("UnionId")
                         .IsRequired()

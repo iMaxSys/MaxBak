@@ -43,7 +43,7 @@ namespace iMaxSys.Max.Options
         /// <summary>
         /// 开放API,默认全开放
         /// </summary>
-        public string OpenRouters { get; set; } = "*";
+        public string[]? OpenRouters { get; set; }
 
         /// <summary>
         /// Databases

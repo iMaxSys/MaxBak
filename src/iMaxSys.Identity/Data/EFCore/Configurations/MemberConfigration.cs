@@ -64,7 +64,7 @@ public class MemberConfiguration : TenantMasterEntityConfiguration<Member>
         //电子邮箱
         builder.Property(x => x.Email).HasColumnName("email").HasMaxLength(50).IsRequired().HasComment("电子邮箱");
         //头像
-        builder.Property(x => x.Avatar).HasColumnName("avatar").HasMaxLength(255).IsRequired().HasComment("头像");
+        builder.Property(x => x.Avatar).HasColumnName("avatar").HasMaxLength(255).HasComment("头像");
         //国家
         builder.Property(x => x.Country).HasColumnName("country").HasMaxLength(50).IsRequired().HasComment("国家");
         //省
@@ -116,11 +116,12 @@ public class MemberConfiguration : TenantMasterEntityConfiguration<Member>
         //部门关系
         builder.HasOne(x => x.Department).WithMany(x => x.Members).HasForeignKey(f => f.DepartmentId);
         //索引
+        builder.HasIndex(x => new { x.UserId });
         builder.HasIndex(x => new { x.IdNumber });
         builder.HasIndex(x => new { x.Name });
         builder.HasIndex(x => new { x.UserName });
         builder.HasIndex(x => new { x.Mobile });
         //ToTable
-        builder.ToTable("member").HasComment("成员");
+        builder.ToTable("member");
     }
 }

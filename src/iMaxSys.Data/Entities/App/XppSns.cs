@@ -56,9 +56,9 @@ public class XppSns : MasterEntity
     public string AppId { get; set; } = String.Empty;
 
     /// <summary>
-    /// AppSecret
+    /// AppKey
     /// </summary>
-    public string AppSecret { get; set; } = String.Empty;
+    public string AppKey { get; set; } = String.Empty;
 
     /// <summary>
     /// 状态

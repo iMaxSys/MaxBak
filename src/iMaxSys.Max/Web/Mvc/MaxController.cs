@@ -32,7 +32,7 @@ public abstract class MaxController : Controller
     /// <summary>
     /// 工作上下文
     /// </summary>
-    private IWorkContext? _workContext;
+    //private IWorkContext? _workContext;
 
     /// <summary>
     /// 日志工厂
@@ -62,7 +62,7 @@ public abstract class MaxController : Controller
     /// <summary>
     /// WorkContext
     /// </summary>
-    protected IWorkContext? WorkContext => _workContext ??= HttpContext.RequestServices.GetService<IWorkContext>();
+    protected IWorkContext WorkContext =>  HttpContext.RequestServices.GetRequiredService<IWorkContext>();
 
     /// <summary>
     /// 获取 <see cref="ILoggerFactory"/> 对象。

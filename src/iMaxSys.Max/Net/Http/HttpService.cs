@@ -366,7 +366,7 @@ public class HttpService : IHttpService
         request.Header.ForEach(item => httpRequestMessage.Headers.Add(item.Key, item.Value));
 
         //content: data优先,其次为body
-        httpRequestMessage.Content = request.Data is not null ? new StringContent(request.Data, Encoding.UTF8, request.ContentType) : (request.Body is not null ? new StringContent(string.Join("&", request.Body.Select(x => $"{x.Key}={x.Value}")), Encoding.UTF8, request.ContentType) : new StringContent(string.Empty, Encoding.UTF8, request.ContentType));
+        httpRequestMessage.Content = request.Data is not null ? new StringContent(request.Data, Encoding.UTF8, request.ContentType ?? string.Empty) : (request.Body is not null ? new StringContent(string.Join("&", request.Body.Select(x => $"{x.Key}={x.Value}")), Encoding.UTF8, request.ContentType ?? string.Empty) : new StringContent(string.Empty, Encoding.UTF8, request.ContentType ?? string.Empty));
 
         var httpClient = _httpClientFactory.CreateClient();
         var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);

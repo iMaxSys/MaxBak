@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Options;
 using iMaxSys.Data.DbContexts;
+using System.Reflection;
 
 namespace iMaxSys.Data.EFCore;
 
@@ -21,6 +22,8 @@ namespace iMaxSys.Data.EFCore;
 /// </summary>
 public abstract class MaxDbContext : DbContext, IDbContextBase
 {
+    //protected virtual string TopAssemblyName { get => $"{this.GetType().Namespace?.ToString()}"; }
+
     /// <summary>
     /// 数据库配置列表
     /// </summary>
@@ -47,19 +50,38 @@ public abstract class MaxDbContext : DbContext, IDbContextBase
     /// 注册映射配置
     /// </summary>
     /// <param name="modelBuilder">ModelBuilder</param>
-    private static void ApplyConfigurations(ModelBuilder modelBuilder)
+    private void ApplyConfigurations(ModelBuilder modelBuilder)
     {
-        string name = $"{Assembly.GetExecutingAssembly().GetName().Name}";
-        //throw new Exception(name);
-        var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains(name[..name.IndexOf('.')]));
+        //当前程序集名称
+        string name = $"{this.GetType().Assembly.GetName().Name}";
 
+        //iMaxSys.Data程序集名称
+        string dataName = $"{Assembly.GetExecutingAssembly().GetName().Name}";
+        //顶级名iMaxSys
+        string topName = dataName[..dataName.IndexOf('.')];
+
+        //throw new Exception(dataName);
+        //var cls = DependencyContext.Default!.CompileLibraries.Where(c => c.Name.Contains(name[..name.IndexOf('.')]));
         //var cls = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Identity"));
+        //throw new Exception($"{Assembly.GetExecutingAssembly().GetName().Name}");
+
+        if (name.Contains(topName))
+        {
+            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(dataName));
+            modelBuilder.ApplyConfigurationsFromAssembly(assembly);
+        }
+
+        var cls = DependencyContext.Default!.CompileLibraries.Where(c => c.Name.Contains(name));
+        //string x = string.Join("|", cls.Select(x=>x.Name));
+        //throw new Exception($"count: {cls.Count()}; detail: {x}");
 
         foreach (var item in cls)
         {
             var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(item.Name));
             modelBuilder.ApplyConfigurationsFromAssembly(assembly);
         }
+
+        
 
         //映射Core模块配置AppDomain.CurrentDomain.FriendlyName
         //var c = DependencyContext.Default.CompileLibraries.Where(c => c.Name.Contains("iMaxSys.Identity")).FirstOrDefault();
@@ -99,18 +121,5 @@ public abstract class MaxDbContext : DbContext, IDbContextBase
                 optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.LatestSupportedServerVersion);
                 break;
         }
-
-        //switch (database.Type)
-        //{
-        //    case 0:
-        //        optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.AutoDetect(database.Connection));
-        //        break;
-        //    case 1:
-        //        optionsBuilder.UseSqlServer(database.Connection);
-        //        break;
-        //    default:
-        //        optionsBuilder.UseMySql(database.Connection, MariaDbServerVersion.AutoDetect(database.Connection));
-        //        break;
-        //}
     }
 }

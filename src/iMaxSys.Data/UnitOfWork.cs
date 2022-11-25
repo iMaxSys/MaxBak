@@ -123,17 +123,17 @@ public class UnitOfWork<T, K> : IUnitOfWork<T, K> where T : DbContext where K : 
     /// <returns></returns>
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var a = _context.Database.GetDbConnection();
-            return await _context.SaveChangesAsync(cancellationToken);
+        //try
+        //{
+        //    var a = _context.Database.GetDbConnection();
+        //    return await _context.SaveChangesAsync(cancellationToken);
 
-        }
-        catch (Exception ex)
-        {
-            var x = ex;
-            return 1;
-        }
+        //}
+        //catch (Exception ex)
+        //{
+        //    return 0;
+        //}
+        return await _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <summary>

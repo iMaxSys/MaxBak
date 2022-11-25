@@ -52,26 +52,29 @@ public class WeChatClient : IWeChatClient
     /// <exception cref="MaxException"></exception>
     public async Task<T> ExecuteAsync<T>(WeChatRequest request, WeChatResultCode code) where T : WeChatResponse
     {
+        T? response = null;
+
         try
         {
-            T? response = await _httpService.ExecuteAsync<T>(request);
+            response = await _httpService.ExecuteAsync<T>(request);
 
-            if (response is null)
-            {
-                throw new MaxException(ResultCode.WechatResponseIsNull);
-            }
-
-            if (response.ErrCode != 0)
-            {
-                throw new MaxException(ResultCode.WechatResponseIsError, $"{response.ErrCode}:{response.ErrMsg}");
-            }
-
-            return response;
         }
         catch (Exception ex)
         {
             throw new MaxException(ex, code);
         }
+
+        if (response is null)
+        {
+            throw new MaxException(ResultCode.WechatResponseIsNull);
+        }
+
+        if (response.ErrCode != 0)
+        {
+            throw new MaxException(ResultCode.WechatResponseIsError, $"{response.ErrCode}:{response.ErrMsg}");
+        }
+
+        return response;
 
 
         //包含errcode表示失败/异常

@@ -38,8 +38,8 @@ public class XppSnsConfiguration : MasterEntityConfiguration<XppSns>
         builder.Property(x => x.AccountId).HasColumnName("account_id").HasMaxLength(50).IsRequired();
         //AppId
         builder.Property(x => x.AppId).HasColumnName("app_id").HasMaxLength(50);
-        //AppSecret
-        builder.Property(x => x.AppSecret).HasColumnName("app_secret").HasMaxLength(50);
+        //AppKey
+        builder.Property(x => x.AppKey).HasColumnName("app_key").HasMaxLength(50);
         //状态
         builder.Property(x => x.Status).HasColumnName("status").IsRequired();
         //index

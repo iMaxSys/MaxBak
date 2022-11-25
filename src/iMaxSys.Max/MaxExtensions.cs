@@ -59,7 +59,7 @@ public static class MaxExtensions
         MaxOption option = builder.ApplicationServices.GetService<IOptions<MaxOption>>()!.Value;
 
         //IdWorker初始
-        IdWorker.Init(option.Network.ServerId, option.Network.DataCenterId);
+        //IdWorker.Init(option.Network.ServerId, option.Network.DataCenterId);
 
         //core相关中间件
         CoreOption coreOption;
@@ -73,10 +73,10 @@ public static class MaxExtensions
             coreOption = option.Core;
         }
 
-        if (coreOption.UseHttpsRedirection)
-        {
-            builder.UseHttpsRedirection();
-        }
+        //if (coreOption.UseHttpsRedirection)
+        //{
+        //    builder.UseHttpsRedirection();
+        //}
 
         if (coreOption.UseStaticFiles)
         {

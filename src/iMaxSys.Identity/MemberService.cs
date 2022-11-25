@@ -19,15 +19,15 @@ using iMaxSys.Max.Algorithm;
 using iMaxSys.Max.Identity;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Security.Cryptography;
-
 using iMaxSys.Data;
 using iMaxSys.Data.Entities.App;
 using iMaxSys.Data.Repositories;
 using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Models;
+using iMaxSys.Identity.Models.Request;
 using iMaxSys.Identity.Data.EFCore;
-using iMaxSys.Identity.Data.Repositories;
 using iMaxSys.Identity.Data.Entities;
+using iMaxSys.Identity.Data.Repositories;
 using iMaxSys.Sns;
 using iMaxSys.Sns.Api;
 using iMaxSys.Sns.Common.Auth;
@@ -35,7 +35,6 @@ using iMaxSys.Sns.Common.Open;
 
 using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using iMaxSys.Identity.Models.Request;
 
 namespace iMaxSys.Identity;
 
@@ -1070,7 +1069,7 @@ public class MemberService : IMemberService
         SnsAuth snsAuth = new SnsAuth
         {
             AppId = sns.AppId,
-            AppSecret = sns.AppSecret,
+            AppSecret = sns.AppKey,
             Code = code
         };
         //to-do: max的赋值

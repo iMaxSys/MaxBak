@@ -24,5 +24,5 @@ public interface IIdGenerationService : ISingleton
     /// 获取唯一Id
     /// </summary>
     /// <returns></returns>
-    long GenerateId();
+    long NextId();
 }

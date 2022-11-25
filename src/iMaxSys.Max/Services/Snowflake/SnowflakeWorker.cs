@@ -19,7 +19,7 @@ namespace iMaxSys.Max.Services.Snowflake;
 public class SnowflakeWorker
 {
     public static readonly DateTime Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-    public const long Twepoch = 1475020800000L;
+    public const long Twepoch = 1268096000000L;
 
     const int WorkerIdBits = 5;
     const int DatacenterIdBits = 5;
