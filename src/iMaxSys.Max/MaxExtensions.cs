@@ -48,6 +48,7 @@ public static class MaxExtensions
         //var assemblies = DependencyContext.Default.CompileLibraries.Where(c => c.Name.StartsWith(appName, StringComparison.CurrentCultureIgnoreCase) || c.Name.StartsWith(fxName, StringComparison.CurrentCultureIgnoreCase)).Select(x => AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(x.Name)));
         services.AddHttpClient();
         services.AddHttpContextAccessor();
+        var ass = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddDependencyInjection();
         services.AddOptions();

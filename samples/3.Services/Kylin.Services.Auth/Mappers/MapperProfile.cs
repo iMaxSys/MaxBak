@@ -12,14 +12,15 @@
 //----------------------------------------------------------------
 
 using AutoMapper;
+
 using Kylin.Services.Auth.Models;
 using DbCustomer = Kylin.Data.Models.Auth.Customer;
 
 namespace Kylin.Services.Auth.Mappers;
 
-public class AuthMapperProfile : Profile
+public class MapperProfile : Profile
 {
-	public AuthMapperProfile()
+	public MapperProfile()
 	{
         CreateMap<DbCustomer, Customer>();
     }

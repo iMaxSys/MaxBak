@@ -17,7 +17,6 @@ using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data;
-using iMaxSys.Data.Entities.App;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.EFCore;

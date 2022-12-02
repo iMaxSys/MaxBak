@@ -23,11 +23,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Kylin.Data.EFCore.EntityConfigurations;
-using Kylin.Data.EFCore.EntityConfigurations.Entities;
+using Kylin.Data.EFCore.Configurations;
 <#
 	//源文件相对路径
-	string sourceFile = @"/Users/taojy/temp/max/samples/4.Infrastructure/Data/Kylin.Data.Models/Auth/Customer.cs"; 
+	//string sourceFile = @"/Users/taojy/temp/max/samples/4.Infrastructure/Data/Kylin.Data.Models/Auth/Customer.cs";
+	string sourceFile = @"/Users/taojy/temp/max/src/iMaxSys.Core/Data/Entities/DictDetail.cs";
+
 	//模板路径
 	
 	string currentPath = Path.GetDirectoryName(Host.TemplateFile);
@@ -52,7 +53,7 @@ using Kylin.Data.EFCore.EntityConfigurations.Entities;
 	string items = GetItems(source, compact.Replace($"<summary>{classSummary}</summary>", ""));
 #>
 
-namespace Kylin.Data.EFCore.EntityConfigurations.Auth;
+namespace Kylin.Data.EFCore.Configurations.Auth;
 
 /// <summary>
 /// <#= classSummary #>映射配置

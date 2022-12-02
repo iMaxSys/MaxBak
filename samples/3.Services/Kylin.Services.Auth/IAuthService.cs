@@ -11,10 +11,8 @@
 //日期：2022-10-15
 //----------------------------------------------------------------
 
-using System;
 using iMaxSys.Max.DependencyInjection;
-using iMaxSys.Identity.Models.Request;
-using iMaxSys.Identity.Models.Response;
+using iMaxSys.Identity.Models;
 
 namespace Kylin.Services.Auth;
 
@@ -28,6 +26,6 @@ public interface IAuthService : IDependency
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    Task<LoginResponse> LoginAsync(CodeLoginRequest request);
+    Task<LoginResult> LoginAsync(CodeLoginModel request);
 }
 

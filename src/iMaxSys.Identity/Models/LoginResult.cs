@@ -1,10 +1,10 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
+//Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: LoginResponse.cs
-//摘要: 代码登录应答
-//说明: 
+//文件: LoginResult.cs
+//摘要: 登录结果
+//说明:
 //
 //当前：1.0
 //作者：陶剑扬
@@ -13,17 +13,17 @@
 
 using iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Identity.Models.Response;
+namespace iMaxSys.Identity.Models;
 
 /// <summary>
-/// 登录应答
+/// 登录结果
 /// </summary>
-public class LoginResponse : iMaxSys.Max.Web.Mvc.Response
+public class LoginResult
 {
     /// <summary>
     /// 令牌
     /// </summary>
-    public string Token { get; set; } = string.Empty;
+    public string? Token { get; set; }
 
     /// <summary>
     /// 过期时间
@@ -35,3 +35,4 @@ public class LoginResponse : iMaxSys.Max.Web.Mvc.Response
     /// </summary>
     public IMember? Member { get; set; }
 }
+

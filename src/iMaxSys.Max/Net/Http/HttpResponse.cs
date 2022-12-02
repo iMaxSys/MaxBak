@@ -19,13 +19,13 @@ namespace iMaxSys.Max.Net.Http;
 /// <summary>
 /// 响应类
 /// </summary>
-public class Response : Result
+public class HttpResponse : Result
 {
 }
 
 /// <summary>
 /// 响应范型类
 /// </summary>
-public class Response<T> : Result<T>
+public class HttpResponse<T> : Result<T>
 {
 }

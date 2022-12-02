@@ -11,13 +11,14 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
+using iMaxSys.Data.Entities;
 using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Data.Entities.App;
+namespace iMaxSys.Core.Data.Entities;
 
-    /// <summary>
-    /// Tenant
-    /// </summary>
+/// <summary>
+/// Tenant
+/// </summary>
 public class Tenant : MasterEntity
 {
     /// <summary>
@@ -44,6 +45,11 @@ public class Tenant : MasterEntity
     /// 描述
     /// </summary>
     public string? Description { get; set; }
+
+    /// <summary>
+    /// 等级
+    /// </summary>
+    public int Level { get; set; }
 
     /// <summary>
     /// Logo

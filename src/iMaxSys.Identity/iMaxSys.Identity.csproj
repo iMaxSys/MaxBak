@@ -7,19 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\iMaxSys.Max\iMaxSys.Max.csproj" />
     <ProjectReference Include="..\iMaxSys.Data\iMaxSys.Data.csproj" />
     <ProjectReference Include="..\iMaxSys.Caching\iMaxSys.Caching.csproj" />
     <ProjectReference Include="..\iMaxSys.Sns\iMaxSys.Sns.csproj" />
+    <ProjectReference Include="..\iMaxSys.Core\iMaxSys.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Common\" />
     <None Remove="Migrations\" />
     <None Remove="Mapper\" />
-    <None Remove="Data\Mappers\" />
-    <None Remove="Models\Request\" />
-    <None Remove="Models\Response\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
@@ -31,9 +28,6 @@
     <Folder Include="Common\" />
     <Folder Include="Migrations\" />
     <Folder Include="Mappers\" />
-    <Folder Include="Data\Mappers\" />
-    <Folder Include="Models\Request\" />
-    <Folder Include="Models\Response\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20220519064929_init.cs" />

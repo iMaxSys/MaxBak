@@ -8,11 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iMaxSys.Max\iMaxSys.Max.csproj" />
+    <ProjectReference Include="..\iMaxSys.Caching\iMaxSys.Caching.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
     <None Remove="Entities\" />
-    <None Remove="Entities\App\" />
     <None Remove="Dapper" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Repositories\" />
@@ -25,6 +25,7 @@
     <None Remove="Dapper\Repositories\" />
     <None Remove="EFCore\Configurations\" />
     <None Remove="Services\" />
+    <None Remove="Models\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-alpha.1" />
@@ -37,7 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
-    <Folder Include="Entities\App\" />
     <Folder Include="Repositories\" />
     <Folder Include="Common\" />
     <Folder Include="EFCore\" />
@@ -47,5 +47,6 @@
     <Folder Include="Dapper\Repositories\" />
     <Folder Include="EFCore\Configurations\" />
     <Folder Include="Services\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

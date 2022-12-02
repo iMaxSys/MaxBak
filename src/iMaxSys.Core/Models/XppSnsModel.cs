@@ -1,25 +1,33 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2025 Care Co.,Ltd.
+//Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: XappSns.cs
-//摘要: 应用x社交账号 
+//文件: XppSnsModel.cs
+//摘要: XppSnsModel 
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2018-03-07
+//日期：2022-06-29
 //----------------------------------------------------------------
 
+using iMaxSys.Core.Data.Entities;
 using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Data.Entities.App;
+namespace iMaxSys.Core.Models;
 
-/// <summary>
-/// 应用x社交网络
-/// </summary>
-public class XppSns : MasterEntity
+public class XppSnsModel
 {
+    /// <summary>
+    /// Id
+    /// </summary>
+    public long Id { get; set; }
+
+    /// <summary>
+    /// 应用Id
+    /// </summary>
+    public long XppId { get; set; }
+
     /// <summary>
     /// 名称
     /// </summary>
@@ -36,11 +44,6 @@ public class XppSns : MasterEntity
     public string? Description { get; set; }
 
     /// <summary>
-    /// 应用Id
-    /// </summary>
-    public long XppId { get; set; }
-
-    /// <summary>
     /// 社交平台账号来源
     /// </summary>
     public SnsSource Source { get; set; }
@@ -48,17 +51,17 @@ public class XppSns : MasterEntity
     /// <summary>
     /// 第三方平台原始Id
     /// </summary>
-    public string AccountId { get; set; } = String.Empty;
+    public string AccountId { get; set; } = string.Empty;
 
     /// <summary>
     /// AppId
     /// </summary>
-    public string AppId { get; set; } = String.Empty;
+    public string AppId { get; set; } = string.Empty;
 
     /// <summary>
     /// AppKey
     /// </summary>
-    public string AppKey { get; set; } = String.Empty;
+    public string AppKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态
@@ -66,7 +69,8 @@ public class XppSns : MasterEntity
     public Status Status { get; set; }
 
     /// <summary>
-    /// App
+    /// Xpp
     /// </summary>
-    public virtual Xpp Xpp { get; set; } = new();
+    public XppModel Xpp { get; set; } = new();
 }
+

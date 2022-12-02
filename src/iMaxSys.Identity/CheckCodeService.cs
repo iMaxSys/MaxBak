@@ -12,14 +12,14 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Options;
+using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data;
-using iMaxSys.Data.Entities.App;
+using iMaxSys.Core.Services;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Common;
-using iMaxSys.Max.Extentions;
 
 namespace iMaxSys.Identity;
 
@@ -30,6 +30,7 @@ public class CheckCodeService : ICheckCodeService
 {
     private readonly MaxOption _option;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICoreService _coreService;
 
     /// <summary>
     /// 验证码生成处理
@@ -41,10 +42,11 @@ public class CheckCodeService : ICheckCodeService
     /// </summary>
     /// <param name="option"></param>
     /// <param name="unitOfWork"></param>
-    public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork unitOfWork)
+    public CheckCodeService(IOptions<MaxOption> option, IUnitOfWork unitOfWork, ICoreService coreService)
     {
         _option = option.Value;
         _unitOfWork = unitOfWork;
+        _coreService = coreService;
     }
 
     /// <summary>
@@ -68,7 +70,7 @@ public class CheckCodeService : ICheckCodeService
             throw new MaxException(ResultCode.CheckCodeCantNull);
         }
 
-        var xppSns = await _unitOfWork.GetRepository<XppSns>().FindAsync(sid);
+        var xppSns = await _coreService.GetXppSnsAsync(sid);
 
         //此处有意去除应用+租户+业务条件过滤
         var checkCode = await _unitOfWork.GetRepository<CheckCode>().FirstOrDefaultAsync(x => x.XppId == xppSns!.XppId && x.BizId == bizId && x.To == to && x.Status == Status.Enable && x.Expires > DateTime.Now, null, null, false, true);
@@ -117,7 +119,7 @@ public class CheckCodeService : ICheckCodeService
             throw new MaxException(ResultCode.CheckCodeTimeLimit);
         }
 
-        var xppSns = await _unitOfWork.GetRepository<XppSns>().FindAsync(sid);
+        var xppSns = await _coreService.GetXppSnsAsync(sid);
 
         //生成验证码发送信息
         string code = Max.Algorithm.CheckCode.Next();

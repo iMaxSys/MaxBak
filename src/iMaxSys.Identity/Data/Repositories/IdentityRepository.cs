@@ -11,14 +11,14 @@
 //日期：2022-11-16
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Caching;
+using iMaxSys.Max.Options;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Repositories;
-using iMaxSys.Identity.Data.Repositories;
 using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Data.Entities;
 using iMaxSys.Identity.Data.EFCore;
-using iMaxSys.Max.Caching;
-using iMaxSys.Max.Options;
+using iMaxSys.Identity.Data.Repositories;
 
 namespace iMaxSys.Identity.Data.Repositories;
 

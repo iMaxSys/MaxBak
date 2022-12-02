@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 Care Co.,Ltd.
 //All rights reserved.
 //
-//文件: Xapp.cs
-//摘要: 应用信息 
+//文件: XappSns.cs
+//摘要: 应用x社交账号 
 //说明:
 //
 //当前：1.0
@@ -11,18 +11,23 @@
 //日期：2018-03-07
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data.Entities;
+using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Data.Entities.App;
+namespace iMaxSys.Core.Data.Entities;
 
 /// <summary>
-/// 应用
+/// 应用x社交网络
 /// </summary>
-public class Xpp : MasterEntity
+public class XppSns : MasterEntity
 {
     /// <summary>
-    /// Name
+    /// 应用Id
+    /// </summary>
+    public long XppId { get; set; }
+
+    /// <summary>
+    /// 名称
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
@@ -37,42 +42,32 @@ public class Xpp : MasterEntity
     public string? Description { get; set; }
 
     /// <summary>
-    /// 新用户注册是否需要手机号
+    /// 社交平台账号来源
     /// </summary>
-    public bool NeedMobile { get; set; } = true;
+    public SnsSource Source { get; set; }
 
     /// <summary>
-    /// XppSource
+    /// 第三方平台原始Id
     /// </summary>
-    public XppSource Source { get; set; }
-
-    /// <summary>
-    /// 第三方平台原始Id(暂不使用)
-    /// </summary>
-    public string? AccountId { get; set; }
+    public string AccountId { get; set; } = string.Empty;
 
     /// <summary>
     /// AppId
     /// </summary>
-    public string? AppId { get; set; }
+    public string AppId { get; set; } = string.Empty;
 
     /// <summary>
     /// AppKey
     /// </summary>
-    public string? AppKey { get; set; }
-
-    /// <summary>
-    /// Host
-    /// </summary>
-    public string? Host { get; set; }
+    public string AppKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态
     /// </summary>
-    public Status Status { get; set; } = Status.Enable;
+    public Status Status { get; set; }
 
     /// <summary>
-    /// 应用社交
+    /// App
     /// </summary>
-    public virtual List<XppSns>? XppSns { get; set; }
+    public virtual Xpp Xpp { get; set; } = new();
 }

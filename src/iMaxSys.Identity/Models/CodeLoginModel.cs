@@ -13,12 +13,12 @@
 
 using iMaxSys.Max.Common;
 
-namespace iMaxSys.Identity.Models.Request;
+namespace iMaxSys.Identity.Models;
 
 /// <summary>
 /// 代码登录请求
 /// </summary>
-public class CodeLoginRequest : iMaxSys.Max.Web.Mvc.Request
+public class CodeLoginModel
 {
     /// <summary>
     /// sid

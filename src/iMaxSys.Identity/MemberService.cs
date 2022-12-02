@@ -20,11 +20,11 @@ using iMaxSys.Max.Identity;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Security.Cryptography;
 using iMaxSys.Data;
-using iMaxSys.Data.Entities.App;
 using iMaxSys.Data.Repositories;
+using iMaxSys.Core.Models;
+using iMaxSys.Core.Services;
 using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Models;
-using iMaxSys.Identity.Models.Request;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Data.Repositories;
@@ -46,21 +46,23 @@ public class MemberService : IMemberService
     private readonly IMapper _mapper;
     private readonly MaxOption _option;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserService _userProvider;
+    private readonly IUserService _userService;
     private readonly ISnsFactory _snsFactory;
+    private readonly ICoreService _coreService;
     private readonly ICheckCodeService _checkCodeService;
 
     private IUser? _user;
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICheckCodeService checkCodeService)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICoreService coreService, ICheckCodeService checkCodeService)
     {
         _mapper = mapper;
         _option = option.Value;
         _unitOfWork = unitOfWork;
-        _userProvider = userProvider;
+        _userService = userProvider;
         _snsFactory = snsFactory;
+        _coreService = coreService;
         _checkCodeService = checkCodeService;
     }
 
@@ -76,12 +78,12 @@ public class MemberService : IMemberService
     /// <param name="code"></param>
     /// <param name="ip"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> LoginAsync(CodeLoginRequest request)
+    public async Task<IAccessChain> LoginAsync(CodeLoginModel codeLoginModel)
     {
         DbMember dbMember;
 
         //获取xppSns
-        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == request.Id, null, x => x.Include(y => y.Xpp));
+        var xppSns = await _coreService.GetXppSnsAsync(codeLoginModel.Id);
 
         if (xppSns is null)
         {
@@ -93,24 +95,24 @@ public class MemberService : IMemberService
         //IAccessToken token = MakeAccessToken();
 
         //取访问配置
-        AccessConfig accessConfig = await GetAccessConfigAsync(xppSns, request.Code);
-        var memberExt = await _unitOfWork.GetRepository<MemberExt>().FirstOrDefaultAsync(x => x.XppSnsId == request.Id && x.OpenId == accessConfig.OpenId, null, x => x.Include(y => y.Member));
+        AccessConfig accessConfig = await GetAccessConfigAsync(xppSns, codeLoginModel.Code);
+        var memberExt = await _unitOfWork.GetRepository<MemberExt>().FirstOrDefaultAsync(x => x.XppSnsId == codeLoginModel.Id && x.OpenId == accessConfig.OpenId, null, x => x.Include(y => y.Member));
 
         //有表示已是会员,无进行快速注册,注册完成为非正式
         if (memberExt == null)
         {
             dbMember = new DbMember
             {
-                Type = request.Type,
+                Type = codeLoginModel.Type,
                 Start = now,
                 End = now.AddYears(64),
                 XppSource = xppSns.Xpp.Source,
                 AccountSource = xppSns.Source,
                 Salt = Guid.NewGuid().ToString().Replace("-", ""),
                 JoinTime = now,
-                JoinIP = request.IP,
+                JoinIP = codeLoginModel.IP,
                 LastLogin = now,
-                LastIP = request.IP,
+                LastIP = codeLoginModel.IP,
                 IsOfficial = isOfficial,
                 Status = Status.Enable,
                 MemberExts = new List<MemberExt>()
@@ -119,7 +121,7 @@ public class MemberService : IMemberService
             //快速登录，自动注册扩展信息
             dbMember.MemberExts.Add(new MemberExt
             {
-                XppSnsId = request.Id,
+                XppSnsId = codeLoginModel.Id,
                 OpenId = accessConfig.OpenId,
                 Status = Status.Enable
             });
@@ -130,7 +132,7 @@ public class MemberService : IMemberService
         else
         {
             dbMember = memberExt.Member;
-            dbMember.LastIP = request.IP;
+            dbMember.LastIP = codeLoginModel.IP;
             dbMember.LastLogin = now;
             await CheckStatus(dbMember);
         }
@@ -175,7 +177,7 @@ public class MemberService : IMemberService
         }
 
         //获取xppSns
-        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == xppSnsId, null, x => x.Include(y => y.Xpp));
+        var xppSns = await _coreService.GetXppSnsAsync(xppSnsId);
 
         if (xppSns is null)
         {
@@ -200,9 +202,9 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task<IUser?> LoginUserAsync(long memberId, long userId, int type)
     {
-        if (_userProvider is not null && userId > 0 && memberId != userId)
+        if (_userService is not null && userId > 0 && memberId != userId)
         {
-            _user = await _userProvider.LoginAsync(userId, type);
+            _user = await _userService.LoginAsync(userId, type);
         }
 
         return _user;
@@ -231,7 +233,7 @@ public class MemberService : IMemberService
         }
 
         //获取xppSns
-        var xppSns = await _unitOfWork.GetRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == registerModel.XppSnsId, null, x => x.Include(y => y.Xpp));
+        var xppSns = await _coreService.GetXppSnsAsync(registerModel.XppSnsId);
 
         if (xppSns is null)
         {
@@ -326,9 +328,9 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task<IUser?> RegisterUserAsync(RegisterModel registerModel)
     {
-        if (_userProvider is not null)
+        if (_userService is not null)
         {
-            _user = await _userProvider.RegisterAsync(registerModel);
+            _user = await _userService.RegisterAsync(registerModel);
         }
 
         return _user;
@@ -473,7 +475,7 @@ public class MemberService : IMemberService
             if (access.MemberId is not null)
             {
                 //get user
-                user = await _userProvider.GetAsync(access.MemberId.Value, access.Type);
+                user = await _userService.GetAsync(access.MemberId.Value, access.Type);
             }
         }
 
@@ -508,7 +510,7 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task RefreshAsync(IMember member)
     {
-        IUser? user = await _userProvider.GetAsync(member.Id, member.Type);
+        IUser? user = await _userService.GetAsync(member.Id, member.Type);
         await _unitOfWork.GetCustomRepository<IMemberRepository>().RefreshMemberAsync(member, user);
     }
 
@@ -524,7 +526,7 @@ public class MemberService : IMemberService
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
+    public async Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
     {
         DbMember? member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.Id == memberId);
 
@@ -544,7 +546,7 @@ public class MemberService : IMemberService
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
+    public async Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
     {
         var token = accessToken ?? MakeAccessToken();
 
@@ -736,7 +738,7 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task<SnsPhoneNumber> GetSnsPhoneNumber(long xppSnsId, string data, string key, string iv)
     {
-        XppSns? sns = await _unitOfWork.GetRepository<XppSns>().FindAsync(xppSnsId);
+        var sns = await _coreService.GetXppSnsAsync(xppSnsId);
 
         if (sns is null)
         {
@@ -936,12 +938,12 @@ public class MemberService : IMemberService
         }
         else
         {
-            if (memberId > 0 && _userProvider is not null)
+            if (memberId > 0 && _userService is not null)
             {
                 var member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FindAsync(memberId);
                 if (member is not null && member.Id != member.UserId)
                 {
-                    return await _userProvider.GetAsync(member.UserId, member.Type);
+                    return await _userService.GetAsync(member.UserId, member.Type);
                 }
                 else
                 {
@@ -968,12 +970,12 @@ public class MemberService : IMemberService
         }
         else
         {
-            if (mobile.IsMobile() && _userProvider is not null)
+            if (mobile.IsMobile() && _userService is not null)
             {
                 var member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.Mobile == mobile.ToLong());
                 if (member is not null && member.Id != member.UserId)
                 {
-                    return await _userProvider.GetAsync(member.Mobile, member.Type);
+                    return await _userService.GetAsync(member.Mobile, member.Type);
                 }
                 else
                 {
@@ -1001,9 +1003,9 @@ public class MemberService : IMemberService
         }
         else
         {
-            if (id > 0 && _userProvider is not null)
+            if (id > 0 && _userService is not null)
             {
-                return await _userProvider.GetAsync(id, type);
+                return await _userService.GetAsync(id, type);
             }
             else
             {
@@ -1026,9 +1028,9 @@ public class MemberService : IMemberService
         }
         else
         {
-            if (!mobile.IsNullOrWhiteSpace() && _userProvider is not null)
+            if (!mobile.IsNullOrWhiteSpace() && _userService is not null)
             {
-                return await _userProvider.GetAsync(mobile, type);
+                return await _userService.GetAsync(mobile, type);
             }
             else
             {
@@ -1045,7 +1047,7 @@ public class MemberService : IMemberService
     /// <param name="sns"></param>
     /// <param name="code"></param>
     /// <returns></returns>
-    private async Task<AccessConfig> CheckSnsAccountAsync(XppSns sns, string code)
+    private async Task<AccessConfig> CheckSnsAccountAsync(XppSnsModel sns, string code)
     {
         var ac = await GetAccessConfigAsync(sns, code);
 
@@ -1065,7 +1067,7 @@ public class MemberService : IMemberService
     /// <param name="sns"></param>
     /// <param name="code"></param>
     /// <returns></returns>
-    private async Task<AccessConfig> GetAccessConfigAsync(XppSns sns, string code)
+    private async Task<AccessConfig> GetAccessConfigAsync(XppSnsModel sns, string code)
     {
         SnsAuth snsAuth = new SnsAuth
         {

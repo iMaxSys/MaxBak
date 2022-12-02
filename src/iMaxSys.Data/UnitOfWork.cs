@@ -22,11 +22,11 @@ namespace iMaxSys.Data;
 /// UnitOfWork
 /// </summary>
 /// <typeparam name="T">读写</typeparam>
-/// <typeparam name="K">只读</typeparam>
-public class UnitOfWork<T, K> : IUnitOfWork<T, K> where T : DbContext where K : DbContext
+/// <typeparam name="R">只读</typeparam>
+public class UnitOfWork<T, R> : IUnitOfWork<T, R> where T : DbContext where R : DbContext
 {
     protected readonly T _context;
-    protected readonly K _readOnlyContext;
+    protected readonly R _readOnlyContext;
     protected readonly IServiceProvider _serviceProvider;
 
     /// <summary>
@@ -39,7 +39,7 @@ public class UnitOfWork<T, K> : IUnitOfWork<T, K> where T : DbContext where K : 
     /// Gets the read only db context.
     /// </summary>
     /// <returns>The instance of type <typeparamref name="TContext"/>.</returns>
-    public K ReadOnlyDbContext => _readOnlyContext;
+    public R ReadOnlyDbContext => _readOnlyContext;
 
     /// <summary>
     /// 构造
@@ -48,7 +48,7 @@ public class UnitOfWork<T, K> : IUnitOfWork<T, K> where T : DbContext where K : 
     /// <param name="onlyContext"></param>
     /// <param name="serviceProvider"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public UnitOfWork(T context, K onlyContext, IServiceProvider serviceProvider)
+    public UnitOfWork(T context, R onlyContext, IServiceProvider serviceProvider)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _readOnlyContext = onlyContext ?? throw new ArgumentNullException(nameof(onlyContext));

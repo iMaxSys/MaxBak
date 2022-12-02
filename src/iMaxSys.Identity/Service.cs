@@ -22,7 +22,6 @@ using iMaxSys.Identity.Data.Repositories;
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using DbTenant = iMaxSys.Data.Entities.App.Tenant;
 
 namespace iMaxSys.Identity;
 

@@ -4,10 +4,10 @@ using iMaxSys.Data;
 using iMaxSys.Data.Entities;
 using iMaxSys.Max.DependencyInjection;
 
-using iMaxSys.Data.Entities.App;
 using iMaxSys.Data.Repositories;
 using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Identity.Data.EFCore;
+using iMaxSys.Identity.Data.Entities;
 
 namespace iMaxSys.Identity.Services
 {
@@ -24,11 +24,11 @@ namespace iMaxSys.Identity.Services
 
     //=========================================================================================================
 
-    public interface ISampleRepository : IRepository<XppSns>
+    public interface ISampleRepository : IRepository<Member>
     {
     }
 
-    public class SampleRepository : EfRepository<XppSns>, ISampleRepository
+    public class SampleRepository : EfRepository<Member>, ISampleRepository
     {
         public SampleRepository(IdentityContext context) : base(context)
         {

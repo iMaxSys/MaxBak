@@ -46,15 +46,15 @@ public static class Extensions
     /// AddUnitOfWork
     /// </summary>
     /// <typeparam name="T">读写DbContext类型</typeparam>
-    /// <typeparam name="K">只读DbContext类型</typeparam>
+    /// <typeparam name="R">只读DbContext类型</typeparam>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddUnitOfWork<T, K>(this IServiceCollection services) where T : DbContext where K : DbContext
+    public static IServiceCollection AddUnitOfWork<T, R>(this IServiceCollection services) where T : DbContext where R : DbContext
     {
         services.AddUnitOfWork<T>();
-        services.AddUnitOfWork<K>();
-        services.AddScoped<IUnitOfWork<T, K>, UnitOfWork<T, K>>();
-        services.AddScoped<IUnitOfWork, UnitOfWork<T, K>>();
+        services.AddUnitOfWork<R>();
+        services.AddScoped<IUnitOfWork<T, R>, UnitOfWork<T, R>>();
+        services.AddScoped<IUnitOfWork, UnitOfWork<T, R>>();
         return services;
     }
 

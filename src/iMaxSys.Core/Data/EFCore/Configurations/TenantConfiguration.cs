@@ -11,9 +11,13 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Data.Entities.App;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace iMaxSys.Data.EFCore.Configurations.App;
+using iMaxSys.Core.Data.Entities;
+using iMaxSys.Data.EFCore.Configurations;
+
+namespace iMaxSys.Core.Data.EFCore.Configurations;
 
 /// <summary>
 /// Tenant映射配置
@@ -34,6 +38,8 @@ public class TenantConfiguration : MasterEntityConfiguration<Tenant>
         builder.Property(x => x.QuickCode).HasColumnName("quick_code").HasMaxLength(50).IsRequired();
         //Description
         builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255);
+        //Level
+        builder.Property(x => x.Level).HasColumnName("level").IsRequired();
         //Logo
         builder.Property(x => x.Logo).HasColumnName("logo").HasMaxLength(255);
         //Contact

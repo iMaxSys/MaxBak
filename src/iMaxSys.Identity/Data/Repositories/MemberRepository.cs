@@ -16,7 +16,6 @@ using iMaxSys.Max.Caching;
 using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
-using iMaxSys.Data.Entities.App;
 using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Common;

@@ -13,14 +13,13 @@
 
 using iMaxSys.Max.Options;
 
-namespace iMaxSys.Identity.Data.EFCore;
+namespace iMaxSys.Core.Data.EFCore;
 
-
-public class DesignTimeMaxIdentityContextFactory : IDesignTimeDbContextFactory<IdentityContext>
+public class DesignTimeCoreContextFactory : IDesignTimeDbContextFactory<CoreContext>
 {
-    public IdentityContext CreateDbContext(string[] args)
+    public CoreContext CreateDbContext(string[] args)
     {
-        return new IdentityContext(new DesignTimeMaxOptions());
+        return new CoreContext(new DesignTimeMaxOptions());
     }
 }
 
@@ -32,8 +31,7 @@ public class DesignTimeMaxOptions : IOptions<MaxOption>
         {
             Databases = new List<DatabaseOption>
             {
-                new DatabaseOption { Type = 0, Connection = "server=127.0.0.1;port=3306;database=identity;uid=root;pwd=123456;Charset=utf8mb4;" }
-                //new DatabaseOption { Type = 1, Connection = "Server=127.0.0.1;Database=max;User Id=sa;Password=iam@Apassword" }
+                new DatabaseOption { Type = 0, Connection = "server=127.0.0.1;port=3306;database=core;uid=root;pwd=123456;Charset=utf8mb4;" }
             }
         }
     };

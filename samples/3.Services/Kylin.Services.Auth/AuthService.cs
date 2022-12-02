@@ -11,10 +11,9 @@
 //日期：2022-10-15
 //----------------------------------------------------------------
 
-using iMaxSys.Identity.Models.Request;
-using iMaxSys.Identity.Models.Response;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Identity.Models;
 
 namespace Kylin.Services.Auth;
 
@@ -35,14 +34,16 @@ public class AuthService : IAuthService
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<LoginResponse> LoginAsync(CodeLoginRequest request)
+    public async Task<LoginResult> LoginAsync(CodeLoginModel request)
     {
         IAccessChain accessChain = await _memberService.LoginAsync(request);
 
-        LoginResponse response = new();
-        response.Code = MaxCode.Success.GetHashCode();
-
-        return response;
+        return new LoginResult
+        {
+            Token = accessChain.AccessSession.Token,
+            Expires = accessChain.AccessSession.Expires,
+            Member = accessChain.Member
+        };
     }
 }
 

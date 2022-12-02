@@ -13,13 +13,12 @@
 
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Core.Models;
 using iMaxSys.Identity.Models;
 using iMaxSys.Sns.Common.Open;
-using iMaxSys.Data.Entities.App;
 using iMaxSys.Sns.Api;
 
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using iMaxSys.Identity.Models.Request;
 
 namespace iMaxSys.Identity;
 
@@ -42,7 +41,7 @@ public interface IMemberService : IDependency
     /// <param name="code"></param>
     /// <param name="ip"></param>
     /// <returns></returns>
-    Task<IAccessChain> LoginAsync(CodeLoginRequest request);
+    Task<IAccessChain> LoginAsync(CodeLoginModel codeLoginModel);
 
     /// <summary>
     /// login
@@ -145,7 +144,7 @@ public interface IMemberService : IDependency
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
+    Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
 
     /// <summary>
     /// 刷新AcceeChain缓存
@@ -155,7 +154,7 @@ public interface IMemberService : IDependency
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
+    Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
 
     /// <summary>
     /// 修改密码
