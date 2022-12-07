@@ -11,6 +11,8 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Extentions;
+
 namespace iMaxSys.Caching.Redis;
 
 /// <summary>
@@ -74,7 +76,7 @@ public class RedisService : IRedisService
     public T? Get<T>(string key, bool global = false)
     {
         var value = _database.StringGet(GetKey(key, global));
-        return value.IsNull ? default : JsonSerializer.Deserialize<T>(value.ToString());
+        return value.IsNull ? default : value.ToString().ToObject<T>();
     }
 
     /// <summary>
@@ -87,7 +89,7 @@ public class RedisService : IRedisService
     public async Task<T?> GetAsync<T>(string key, bool global = false)
     {
         var value = await _database.StringGetAsync(GetKey(key, global));
-        return value.IsNull ? default : JsonSerializer.Deserialize<T>(value.ToString());
+        return value.IsNull ? default : value.ToString().ToObject<T>();
     }
 
     /// <summary>
@@ -98,7 +100,7 @@ public class RedisService : IRedisService
     /// <param name="global"></param>
     public void Set(string key, object value, bool global = false)
     {
-        _database.StringSet(GetKey(key, global), JsonSerializer.Serialize(value));
+        _database.StringSet(GetKey(key, global), value.ToJson());
     }
 
     /// <summary>
@@ -110,7 +112,7 @@ public class RedisService : IRedisService
     /// <returns></returns>
     public async Task SetAsync(string key, object value, bool global = false)
     {
-        await _database.StringSetAsync(GetKey(key, global), JsonSerializer.Serialize(value));
+        await _database.StringSetAsync(GetKey(key, global), value.ToJson());
     }
 
     /// <summary>
@@ -122,7 +124,7 @@ public class RedisService : IRedisService
     /// <param name="global"></param>
     public void Set(string key, object value, DateTime? expire, bool global = false)
     {
-        _database.StringSet(GetKey(key, global), JsonSerializer.Serialize(value), expire - DateTime.Now);
+        _database.StringSet(GetKey(key, global), value.ToJson(), expire - DateTime.Now);
     }
 
     // <summary>
@@ -134,7 +136,7 @@ public class RedisService : IRedisService
     /// <param name="global"></param>
     public void Set(string key, object value, TimeSpan? timeSpan, bool global = false)
     {
-        _database.StringSet(GetKey(key, global), JsonSerializer.Serialize(value), timeSpan);
+        _database.StringSet(GetKey(key, global), value.ToJson(), timeSpan);
     }
 
     /// <summary>
@@ -147,7 +149,7 @@ public class RedisService : IRedisService
     /// <returns></returns>
     public async Task SetAsync(string key, object value, DateTime? expire, bool global = false)
     {
-        await _database.StringSetAsync(GetKey(key, global), JsonSerializer.Serialize(value), expire - DateTime.Now);
+        await _database.StringSetAsync(GetKey(key, global), value.ToJson(), expire - DateTime.Now);
     }
 
     /// <summary>
@@ -160,7 +162,7 @@ public class RedisService : IRedisService
     /// <returns></returns>
     public async Task SetAsync(string key, object value, TimeSpan? timeSpan, bool global = false)
     {
-        await _database.StringSetAsync(GetKey(key, global), JsonSerializer.Serialize(value), timeSpan);
+        await _database.StringSetAsync(GetKey(key, global), value.ToJson(), timeSpan);
     }
 
     /// <summary>

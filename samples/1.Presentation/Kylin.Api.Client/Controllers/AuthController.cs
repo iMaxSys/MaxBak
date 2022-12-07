@@ -61,7 +61,7 @@ public class AuthController : MaxController
     {
         reqeust.IP = WorkContext.IP;
         LoginResult result = await _authService.LoginAsync(reqeust);
-        LoginResponse loginResponse = _mapper.Map<LoginResponse>(result);
+        var loginResponse = _mapper.Map<LoginResponse>(result);
         return Success(loginResponse);
     }
 }

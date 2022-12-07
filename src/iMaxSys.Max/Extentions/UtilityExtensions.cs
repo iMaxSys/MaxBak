@@ -578,6 +578,16 @@ public static class UtilityExtensions
     }
 
     /// <summary>
+    /// 字符串转换为对象
+    /// </summary>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static T?ToObject<T>(this string? source)
+    {
+        return string.IsNullOrWhiteSpace(source) ? default : JsonSerializer.Deserialize<T>(source);
+    }
+
+    /// <summary>
     /// 序列化为Json字符串
     /// </summary>
     /// <param name="value"></param>
