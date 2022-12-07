@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kylin.Data.EFCore.Migrations
 {
     [DbContext(typeof(KylinContext))]
-    [Migration("20221125020048_v000")]
+    [Migration("20221202073106_v000")]
     partial class v000
     {
         /// <inheritdoc />

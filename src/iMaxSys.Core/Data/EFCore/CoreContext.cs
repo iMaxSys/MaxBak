@@ -27,7 +27,7 @@ public class CoreContext : EfDbContext
     //public static readonly LoggerFactory LoggerFactory =
     //new LoggerFactory(new[] { new DebugLoggerProvider() });
 
-    public CoreContext(IOptions<MaxOption> options) : base(options.Value.Identity.Databases ?? options.Value.Core.Databases)
+    public CoreContext(IOptions<MaxOption> options) : base(options.Value.Core.Databases)
     {
         //_maxOption = options.Value;
     }
@@ -39,7 +39,7 @@ public class CoreReadOnlyContext : EfReadOnlyDbContext
     //public static readonly LoggerFactory LoggerFactory =
     //new LoggerFactory(new[] { new DebugLoggerProvider() });
 
-    public CoreReadOnlyContext(IOptions<MaxOption> options) : base(options.Value.Identity.Databases ?? options.Value.Core.Databases)
+    public CoreReadOnlyContext(IOptions<MaxOption> options) : base(options.Value.Core.Databases)
     {
         //_maxOption = options.Value;
     }

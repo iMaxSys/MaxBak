@@ -134,6 +134,7 @@ public class MemberService : IMemberService
             dbMember = memberExt.Member;
             dbMember.LastIP = codeLoginModel.IP;
             dbMember.LastLogin = now;
+            await _unitOfWork.SaveChangesAsync();
             await CheckStatus(dbMember);
         }
 

@@ -12,6 +12,7 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Data.Entities;
+using iMaxSys.Max.Collection;
 using Microsoft.EntityFrameworkCore;
 
 namespace iMaxSys.Data.Repositories;
@@ -26,6 +27,260 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> where TEnti
     /// AutoCommit
     /// </summary>
     bool AutoCommit { get; set; }
+
+    /// <summary>
+	/// Gets the <see cref="IPagedList{TEntity}"/> based on a predicate, orderby delegate and page information. This method default no-tracking query.
+	/// </summary>
+	/// <param name="predicate">A function to test each element for a condition.</param>
+	/// <param name="orderBy">A function to order elements.</param>
+	/// <param name="include">A function to include navigation properties</param>
+	/// <param name="pageIndex">The index of page.</param>
+	/// <param name="pageSize">The size of the page.</param>
+	/// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+	/// <param name="ignoreQueryFilters">Ignore query filters</param>
+	/// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+	/// <remarks>This method default no-tracking query.</remarks>
+	IPagedList<TEntity> GetPagedList(Expression<Func<TEntity, bool>>? predicate = null,
+                                     Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+                                     Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+                                     int pageIndex = 0,
+                                     int pageSize = 50,
+                                     bool disableTracking = false,
+                                     bool ignoreQueryFilters = false);
+
+    /// <summary>
+    /// Gets the <see cref="IPagedList{TEntity}"/> based on a predicate, orderby delegate and page information. This method default no-tracking query.
+    /// </summary>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="pageIndex">The index of page.</param>
+    /// <param name="pageSize">The size of the page.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="cancellationToken">
+    ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+    /// </param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>This method default no-tracking query.</remarks>
+    Task<IPagedList<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>>? predicate = null,
+                                                Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+                                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+                                                int pageIndex = 0,
+                                                int pageSize = 50,
+                                                bool disableTracking = false,
+                                                bool ignoreQueryFilters = false,
+                                                CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the <see cref="IPagedList{TResult}"/> based on a predicate, orderby delegate and page information. This method default no-tracking query.
+    /// </summary>
+    /// <param name="selector">The selector for projection.</param>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="pageIndex">The index of page.</param>
+    /// <param name="pageSize">The size of the page.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <returns>An <see cref="IPagedList{TResult}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>This method default no-tracking query.</remarks>
+    IPagedList<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
+                                              Expression<Func<TEntity, bool>>? predicate = null,
+                                              Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+                                              int pageIndex = 0,
+                                              int pageSize = 50,
+                                              bool disableTracking = false,
+                                              bool ignoreQueryFilters = false) where TResult : class;
+
+    /// <summary>
+    /// Gets the <see cref="IPagedList{TEntity}"/> based on a predicate, orderby delegate and page information. This method default no-tracking query.
+    /// </summary>
+    /// <param name="selector">The selector for projection.</param>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="pageIndex">The index of page.</param>
+    /// <param name="pageSize">The size of the page.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="cancellationToken">
+    ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+    /// </param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>This method default no-tracking query.</remarks>
+    Task<IPagedList<TResult>> GetPagedListAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+                                                         Expression<Func<TEntity, bool>>? predicate = null,
+                                                         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+                                                         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+                                                         int pageIndex = 0,
+                                                         int pageSize = 50,
+                                                         bool disableTracking = false,
+                                                         bool ignoreQueryFilters = false,
+                                                         CancellationToken cancellationToken = default) where TResult : class;
+
+    /// <summary>
+    /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method defaults to a read-only, no-tracking query.
+    /// </summary>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>This method defaults to a read-only, no-tracking query.</remarks>
+    TEntity? FirstOrDefault(Expression<Func<TEntity, bool>>? predicate = null,
+                              Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+                              bool disableTracking = false,
+                              bool ignoreQueryFilters = false);
+
+    /// <summary>
+    /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method defaults to a read-only, no-tracking query.
+    /// </summary>
+    /// <param name="selector">The selector for projection.</param>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>This method defaults to a read-only, no-tracking query.</remarks>
+    TResult? FirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
+                                       Expression<Func<TEntity, bool>>? predicate = null,
+                                       Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+                                       Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+                                       bool disableTracking = false,
+                                       bool ignoreQueryFilters = false) where TResult : class;
+
+    /// <summary>
+    /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method defaults to a read-only, no-tracking query.
+    /// </summary>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <param name="cancellationToken">
+    ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+    /// </param>
+    /// <returns>An <see cref="Task{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>Ex: This method defaults to a read-only, no-tracking query. </remarks>
+    Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+        bool disableTracking = false,
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method defaults to a read-only, no-tracking query.
+    /// </summary>
+    /// <param name="selector">The selector for projection.</param>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <param name="cancellationToken">
+    ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+    /// </param>
+    /// <returns>An <see cref="Task{TResult}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
+    Task<TResult?> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+        bool disableTracking = false,
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default) where TResult : class;
+
+    /// <summary>
+    /// Gets all entities. This method is not recommended
+    /// </summary>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
+    IQueryable<TEntity> All(Expression<Func<TEntity, bool>>? predicate = null,
+                                              Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+                                              bool disableTracking = false,
+                                              bool ignoreQueryFilters = false);
+
+    /// <summary>
+    /// Gets all entities. This method is not recommended
+    /// </summary>
+    /// <param name="selector">The selector for projection.</param>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
+    IQueryable<TResult> All<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+        bool disableTracking = false,
+        bool ignoreQueryFilters = false) where TResult : class;
+
+    /// <summary>
+    /// Gets all entities. This method is not recommended
+    /// </summary>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="cancellationToken">
+    ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+    /// </param>
+    /// <returns>The <see cref="IQueryable{TEntity}"/>.</returns>
+    Task<IList<TEntity>> AllAsync(bool disableTracking = false, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all entities. This method is not recommended
+    /// </summary>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <param name="cancellationToken">
+    ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+    /// </param>
+    /// <returns>An <see cref="IList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
+    Task<IList<TEntity>> AllAsync(Expression<Func<TEntity, bool>>? predicate = null,
+                                              Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+                                              Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+                                              bool disableTracking = false,
+                                              bool ignoreQueryFilters = false,
+                                              CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all entities. This method is not recommended
+    /// </summary>
+    /// <param name="selector">The selector for projection.</param>
+    /// <param name="predicate">A function to test each element for a condition.</param>
+    /// <param name="orderBy">A function to order elements.</param>
+    /// <param name="include">A function to include navigation properties</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>false</c>.</param>
+    /// <param name="ignoreQueryFilters">Ignore query filters</param>
+    /// <param name="cancellationToken">
+    ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
+    /// </param>
+    /// <returns>An <see cref="IList{TResult}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+    /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
+    Task<IList<TResult>> AllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
+        bool disableTracking = false,
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default) where TResult : class;
 
     /// <summary>
     /// Add a new entity synchronously.

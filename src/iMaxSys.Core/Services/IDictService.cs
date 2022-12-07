@@ -19,7 +19,7 @@ namespace iMaxSys.Core.Services;
 /// <summary>
 /// IDictService
 /// </summary>
-public interface IDictService : ISingleton
+public interface IDictService : IDependency
 {
 	/// <summary>
 	/// 获取字典
