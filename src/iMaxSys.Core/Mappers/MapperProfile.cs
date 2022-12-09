@@ -26,5 +26,7 @@ public class MapperProfile : Profile
         CreateMap<XppSns, XppSnsModel>();
         CreateMap<Dict, DictModel>();
         CreateMap<DictItem, DictItemModel>();
+        CreateMap<DictModel, Dict>();
+        CreateMap<DictItemModel, DictItem>();
     }
 }

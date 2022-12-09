@@ -58,7 +58,7 @@ public class DictCatalogConfiguration : TenantMasterEntityConfiguration<Dict>
         //状态
         builder.Property(x => x.Status).HasColumnName("status").HasComment("状态");
         //index
-        builder.HasIndex(x => new { x.Name, x.QuickCode });
+        builder.HasIndex(x => new { x.Name, x.QuickCode, x.Code });
 
         //ToTable
         builder.ToTable("dict");

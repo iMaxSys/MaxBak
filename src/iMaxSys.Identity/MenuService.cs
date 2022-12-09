@@ -17,7 +17,7 @@ using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Collection.Trees;
 
 using iMaxSys.Data;
-using iMaxSys.Data.Services;
+using iMaxSys.Core.Services;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.Repositories;

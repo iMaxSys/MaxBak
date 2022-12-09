@@ -19,41 +19,41 @@ public enum ResultCode
     /// 数据库连接串为空
     /// </summary>
     [Description("数据库连接串为空")]
-    ConnectionIsNull = 102000,
+    ConnectionIsNull = 2000,
 
     /// <summary>
     /// 无法获取范型仓储
     /// </summary>
     [Description("无法获取范型仓储")]
-    CantGetRepository = 102001,
+    CantGetRepository = 2001,
 
     /// <summary>
     /// 无法定制范型仓储
     /// </summary>
     [Description("无法获取定制仓储")]
-    CantGetCustomRepository = 102002,
+    CantGetCustomRepository = 2002,
 
     /// <summary>
     /// 无效的父节点
     /// </summary>
     [Description("无效的父节点")]
-    ParentIsInvalid = 102030,
+    ParentIsInvalid = 2030,
 
     /// <summary>
     /// 无效的目标节点
     /// </summary>
     [Description("无效的目标节点")]
-    TargetIsInvalid = 102031,
+    TargetIsInvalid = 2031,
 
     /// <summary>
     /// 无效的当前节点
     /// </summary>
     [Description("无效的当前节点")]
-    CurrentIsInvalid = 102032,
+    CurrentIsInvalid = 2032,
 
     /// <summary>
     /// 存在子节点
     /// </summary>
     [Description("存在子节点")]
-    HasChildren = 102033,
+    HasChildren = 2033,
 }

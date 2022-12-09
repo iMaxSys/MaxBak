@@ -4,7 +4,7 @@
 //
 //文件: RedisService.cs
 //摘要: RedisService
-//说明: newton
+//说明: 
 //
 //当前：1.0
 //作者：陶剑扬

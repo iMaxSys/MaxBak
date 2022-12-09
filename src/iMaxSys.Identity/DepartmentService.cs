@@ -12,7 +12,7 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Data;
-using iMaxSys.Data.Services;
+using iMaxSys.Core.Services;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
 

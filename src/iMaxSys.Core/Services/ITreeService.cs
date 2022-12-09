@@ -15,7 +15,7 @@ using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Data.Entities;
 
-namespace iMaxSys.Data.Services;
+namespace iMaxSys.Core.Services;
 
 /// <summary>
 /// ITreeService

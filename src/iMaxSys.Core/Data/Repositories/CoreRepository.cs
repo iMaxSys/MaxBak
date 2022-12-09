@@ -31,7 +31,7 @@ public class CoreRepository<T> : EfRepository<T>, ICoreRepository<T> where T : E
     //全局缓存标志
     protected const bool _global = true;
 
-    protected const string TAG = "i";
+    protected const string TAG = "d";
     protected const string TAG_ACCESS = "a";
     protected const string TAG_MEMBER = "m";
     protected const string TAG_USER = "u";

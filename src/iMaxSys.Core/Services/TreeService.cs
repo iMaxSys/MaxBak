@@ -13,20 +13,19 @@
 
 using AutoMapper;
 
-using iMaxSys.Max.Collection.Trees;
+using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Common.Enums;
-
+using iMaxSys.Max.Collection.Trees;
+using iMaxSys.Data;
 using iMaxSys.Data.Common;
 using iMaxSys.Data.Entities;
 using iMaxSys.Data.Repositories;
-using iMaxSys.Max.Extentions;
 
-namespace iMaxSys.Data.Services;
-
+namespace iMaxSys.Core.Services;
 
 /// <summary>
-/// 
+/// TreeService
 /// </summary>
 /// <typeparam name="T">实体类型</typeparam>
 /// <typeparam name="M">返回类型</typeparam>

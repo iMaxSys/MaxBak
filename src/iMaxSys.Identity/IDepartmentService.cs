@@ -13,8 +13,8 @@
 
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Core.Services;
 using iMaxSys.Identity.Models;
-using iMaxSys.Data.Services;
 using iMaxSys.Identity.Data.Entities;
 
 namespace iMaxSys.Identity;

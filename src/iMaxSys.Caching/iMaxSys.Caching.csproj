@@ -11,8 +11,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Common\" />
+    <None Remove="Max\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
+    <Folder Include="Max\" />
   </ItemGroup>
 </Project>

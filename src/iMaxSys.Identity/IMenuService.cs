@@ -14,7 +14,7 @@
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Collection.Trees;
 using iMaxSys.Max.DependencyInjection;
-using iMaxSys.Data.Services;
+using iMaxSys.Core.Services;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
 

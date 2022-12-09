@@ -64,11 +64,13 @@ namespace iMaxSys.Max.Common.Enums
         /// </summary>
         [Description("id为空不可设置Session")]
         CantSetSession = 1010,
+
         /// <summary>
         /// 请求数据为空
         /// </summary>
         [Description("请求数据为空")]
         RequestIsEmpty = 1020,
+
         ///// <summary>
         ///// 用户未登录或登录已失效
         ///// </summary>
