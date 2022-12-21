@@ -57,22 +57,16 @@ public interface IDictService : IDependency
     /// </summary>
     /// <param name="dictModel"></param>
     /// <returns></returns>
-    Task<DictModel> UpdateDictAsync(long tenantId, DictModel dictModel);
+    Task UpdateDictAsync(long tenantId, DictModel dictModel);
 
     /// <summary>
     /// 获取字典项
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-	Task<DictItemModel> GetItemAsync(long tenantId, long id);
-
-    /// <summary>
-    /// 获取字典项列表
-    /// </summary>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
-    Task<List<DictItemModel>> GetItemsAsync(long tenantId);
+	Task<DictItemModel> GetItemAsync(long tenantId, long dictId, long id);
 
     /// <summary>
     /// 获取字典项列表
@@ -80,23 +74,25 @@ public interface IDictService : IDependency
     /// <param name="tenantId"></param>
     /// <param name="dictId"></param>
     /// <returns></returns>
-    Task<List<DictItemModel>> GetItemsAsync(long tenantId, long dictId);
+    Task<List<DictItemModel>?> GetItemsAsync(long tenantId, long dictId);
 
     /// <summary>
     /// 新增字典项
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
     /// <param name="dictItemModel"></param>
     /// <returns></returns>
-    Task<DictItemModel> AddItemAsync(long tenantId, DictItemModel dictItemModel);
+    Task<DictItemModel> AddItemAsync(long tenantId, long dictId, DictItemModel dictItemModel);
 
     /// <summary>
     /// 移除字典项
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task RemoveItemAsysnc(long tenantId, long id);
+    Task RemoveItemAsysnc(long tenantId, long dictId, long id);
 
     /// <summary>
     /// 修改字典
@@ -104,13 +100,7 @@ public interface IDictService : IDependency
     /// <param name="tenantId"></param>
     /// <param name="dictItemModel"></param>
     /// <returns></returns>
-    Task<DictModel> UpdateItemAsync(long tenantId, DictItemModel dictItemModel);
-
-    /// <summary>
-    /// 刷新字典
-    /// </summary>
-    /// <returns></returns>
-    Task RefreshAsync();
+    Task UpdateItemAsync(long tenantId, DictItemModel dictItemModel);
 
     /// <summary>
     /// 刷新租户字典

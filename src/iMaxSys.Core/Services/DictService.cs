@@ -11,14 +11,15 @@
 //日期：2022-06-29
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Caching;
+using iMaxSys.Max.Options;
+using iMaxSys.Max.Exceptions;
 using iMaxSys.Data;
 using iMaxSys.Core.Models;
 using iMaxSys.Core.Common;
 using iMaxSys.Core.Data.EFCore;
 using iMaxSys.Core.Data.Entities;
-using iMaxSys.Max.Caching;
-using iMaxSys.Max.Options;
-using iMaxSys.Max.Exceptions;
+using iMaxSys.Core.Data.Repositories;
 
 namespace iMaxSys.Core.Services;
 
@@ -56,17 +57,10 @@ public class DictService : IDictService
     /// <exception cref="NotImplementedException"></exception>
     public async Task<DictModel> AddDictAsync(long tenantId, DictModel dictModel)
     {
-        var repository = _unitOfWork.GetRepository<Dict>();
-        //存在/重名判断
-        bool hasName = await repository.AnyAsync(x=>x.TenantId == tenantId && x.Name == dictModel.Name);
-        if (hasName)
-        {
-            throw new MaxException(ResultCode.DictExists);
-        }
+        var repository = _unitOfWork.GetCustomRepository<IDictRepository>();
 
-        Dict dict = _mapper.Map<Dict>(dictModel);
-        dict.TenantId = tenantId;
-        await repository.AddAsync(dict);
+        var dict = await repository.AddAsync(tenantId, dictModel);
+        await _unitOfWork.SaveChangesAsync();
         dictModel.Id = dict.Id;
 
         return dictModel;
@@ -79,21 +73,14 @@ public class DictService : IDictService
     /// <param name="dictItemModel"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<DictItemModel> AddItemAsync(long tenantId, DictItemModel dictItemModel)
+    public async Task<DictItemModel> AddItemAsync(long tenantId, long dictId, DictItemModel dictItemModel)
     {
-        var repository = _unitOfWork.GetRepository<DictItem>();
-        //存在/重名判断
-        bool hasName = await repository.AnyAsync(x => x.TenantId == tenantId && x.DictId == dictItemModel.DictId && x.Name == dictItemModel.Name);
-        if (hasName)
-        {
-            throw new MaxException(ResultCode.DictItemExists);
-        }
+        var repository = _unitOfWork.GetCustomRepository<IDictRepository>();
 
-        DictItem dictItem = _mapper.Map<DictItem>(dictItemModel);
-        dictItem.TenantId = tenantId;
-        await repository.AddAsync(dictItem);
+        var dictItem = await repository.AddItemAsync(tenantId, dictId, dictItemModel);
+        await _unitOfWork.SaveChangesAsync();
         dictItemModel.Id = dictItem.Id;
-        
+
         return dictItemModel;
     }
 
@@ -104,59 +91,50 @@ public class DictService : IDictService
     /// <param name="id"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<DictModel> GetDictAsync(long tenantId, long id)
+    public async Task<DictModel> GetDictAsync(long tenantId, long id)
     {
-        throw new NotImplementedException();
+       return await _unitOfWork.GetCustomRepository<IDictRepository>().GetAsync(tenantId, id);
     }
 
-    public Task<List<DictModel>> GetDictsAsync(long tenantId)
+    public async Task<List<DictModel>> GetDictsAsync(long tenantId)
     {
-        throw new NotImplementedException();
+        var list = await _unitOfWork.GetCustomRepository<IDictRepository>().AllAsync(tenantId);
+        return _mapper.Map<List<DictModel>>(list);
     }
 
-    public Task<DictItemModel> GetItemAsync(long tenantId, long id)
+    public async Task<DictItemModel> GetItemAsync(long tenantId, long dictId, long id)
     {
-        throw new NotImplementedException();
+        return await _unitOfWork.GetCustomRepository<IDictRepository>().GetItemAsync(tenantId, dictId, id);
     }
 
-    public Task<List<DictItemModel>> GetItemsAsync(long tenantId)
+    public async Task<List<DictItemModel>?> GetItemsAsync(long tenantId, long dictId)
     {
-        throw new NotImplementedException();
+        return await _unitOfWork.GetCustomRepository<IDictRepository>().GetItemsAsync(tenantId, dictId);
     }
 
-    public Task<List<DictItemModel>> GetItemsAsync(long tenantId, long dictId)
+    public async Task RefreshAysnc(long tenantId)
     {
-        throw new NotImplementedException();
+        await _unitOfWork.GetCustomRepository<IDictRepository>().RefreshAsync(tenantId);
     }
 
-    public Task RefreshAsync()
+    public async Task RemoveDictAsysnc(long tenantId, long id)
     {
-        throw new NotImplementedException();
+        await _unitOfWork.GetCustomRepository<IDictRepository>().RemoveAsync(tenantId, id);
     }
 
-    public Task RefreshAysnc(long tenantId)
+    public async Task RemoveItemAsysnc(long tenantId, long dictId, long id)
     {
-        throw new NotImplementedException();
+        await _unitOfWork.GetCustomRepository<IDictRepository>().RemoveItemAsync(tenantId, dictId, id);
     }
 
-    public Task RemoveDictAsysnc(long tenantId, long id)
+    public async Task UpdateDictAsync(long tenantId, DictModel dictModel)
     {
-        throw new NotImplementedException();
+        await _unitOfWork.GetCustomRepository<IDictRepository>().UpdateAsync(tenantId, dictModel);
     }
 
-    public Task RemoveItemAsysnc(long tenantId, long id)
+    public async Task UpdateItemAsync(long tenantId, DictItemModel dictItemModel)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<DictModel> UpdateDictAsync(long tenantId, DictModel dictModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<DictModel> UpdateItemAsync(long tenantId, DictItemModel dictItemModel)
-    {
-        throw new NotImplementedException();
+        await _unitOfWork.GetCustomRepository<IDictRepository>().UpdateItemAsync(tenantId, dictItemModel);
     }
 }
 

@@ -11,6 +11,9 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
+using System.Data;
+
+using StackExchange.Redis;
 
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Options;
@@ -22,8 +25,6 @@ using iMaxSys.Core.Models;
 using iMaxSys.Core.Common;
 using iMaxSys.Core.Data.EFCore;
 using iMaxSys.Core.Data.Entities;
-using StackExchange.Redis;
-using System.Data;
 
 namespace iMaxSys.Core.Data.Repositories;
 
