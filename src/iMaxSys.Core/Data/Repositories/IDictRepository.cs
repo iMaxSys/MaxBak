@@ -29,7 +29,7 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// </summary>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<List<Dict>> AllAsync(long tenantId);
+    Task<IList<Dict>> AllAsync(long tenantId);
 
     /// <summary>
     /// 获取租户字典列表
@@ -37,7 +37,7 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="tenantId"></param>
     /// <param name="text"></param>
     /// <returns></returns>
-    Task<List<Dict>> AllAsync(long tenantId, string text);
+    Task<IList<Dict>> AllAsync(long tenantId, string text);
 
     /// <summary>
     /// 获取租户字典
@@ -45,15 +45,16 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="tenantId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<Dict> GetAsync(long tenantId, long id);
+    Task<DictModel> GetAsync(long tenantId, long id);
 
     /// <summary>
     /// 获取租户字典项
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<DictItem> GetItemAsync(long tenantId, long id);
+    Task<DictItemModel> GetItemAsync(long tenantId, long dictId, long id);
 
     /// <summary>
     /// 获取租户字典项列表
@@ -61,7 +62,7 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="tenantId"></param>
     /// <param name="dictId"></param>
     /// <returns></returns>
-    Task<List<DictItem>?> GetItemsAsync(long tenantId, long dictId);
+    Task<List<DictItemModel>?> GetItemsAsync(long tenantId, long dictId);
 
     /// <summary>
     /// 获取租户字典项列表
@@ -70,7 +71,7 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="dictId"></param>
     /// <param name="text"></param>
     /// <returns></returns>
-    Task<List<DictItem>?> GetItemsAsync(long tenantId, long dictId, string text);
+    Task<List<DictItemModel>?> GetItemsAsync(long tenantId, long dictId, string text);
 
     /// <summary>
     /// 新增字典
@@ -78,15 +79,16 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="tenantId"></param>
     /// <param name="dictModel"></param>
     /// <returns></returns>
-    Task<DictModel> AddAsync(long tenantId, DictModel dictModel);
+    Task<Dict> AddAsync(long tenantId, DictModel dictModel);
 
     /// <summary>
     /// 新增字典项
     /// </summary>
     /// <param name="tenantId"></param>
-    /// <param name="dictModel"></param>
+    /// <param name="dictId"></param>
+    /// <param name="dictItemModel"></param>
     /// <returns></returns>
-    Task<DictItemModel> AddItemAsync(long tenantId, DictModel dictModel);
+    Task<DictItem> AddItemAsync(long tenantId, long dictId, DictItemModel dictItemModel);
 
     /// <summary>
     /// 移除字典
@@ -100,9 +102,10 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// 移除字典项
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task RemoveItemAsync(long tenantId, long id);
+    Task RemoveItemAsync(long tenantId, long dictId, long id);
 
     /// <summary>
     /// 更新字典
@@ -110,7 +113,7 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="tenantId"></param>
     /// <param name="dictModel"></param>
     /// <returns></returns>
-    Task<DictModel> UpdateAsync(long tenantId, DictModel dictModel);
+    Task UpdateAsync(long tenantId, DictModel dictModel);
 
     /// <summary>
     /// 更新字典项
@@ -118,14 +121,14 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="tenantId"></param>
     /// <param name="dictItemModel"></param>
     /// <returns></returns>
-    Task<DictItemModel> UpdateItemAsync(long tenantId, DictItemModel dictItemModel);
+    Task UpdateItemAsync(long tenantId, DictItemModel dictItemModel);
 
     /// <summary>
     /// refresh
     /// </summary>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<Dict> RefreshAsync(long tenantId);
+    Task RefreshAsync(long tenantId);
 
     /// <summary>
     /// refresh
@@ -133,5 +136,5 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="tenantId"></param>
     /// <param name="dictId"></param>
     /// <returns></returns>
-    Task<Dict> RefreshAsync(long tenantId, long dictId);
+    Task<DictModel> RefreshAsync(long tenantId, long dictId);
 }

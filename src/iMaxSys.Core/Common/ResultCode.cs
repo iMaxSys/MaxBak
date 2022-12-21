@@ -71,4 +71,16 @@ public enum ResultCode
     /// </summary>
     [Description("字典项不可修改")]
     DictItemCantUpdate = 103106,
+
+    /// <summary>
+    /// 无效的字典Id
+    /// </summary>
+    [Description("无效的字典Id")]
+    DictIdIsInvalid = 103107,
+
+    /// <summary>
+    /// 无效的字典项Id
+    /// </summary>
+    [Description("无效的字典项Id")]
+    DictItemIdIsInvalid = 103108,
 }

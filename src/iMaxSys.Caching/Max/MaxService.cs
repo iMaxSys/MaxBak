@@ -16,11 +16,23 @@ using iMaxSys.Max.Extentions;
 namespace iMaxSys.Caching.Max;
 
 /// <summary>
-/// MaxService
+/// Max cache Service
 /// </summary>
 public class MaxService : IMaxService
 {
-    public string Separator => throw new NotImplementedException();
+    public string Separator => ":";
+
+    private static Hashtable _store = _store ?? new Hashtable();
+
+    /// <summary>
+    /// 存储
+    /// </summary>
+    protected static Hashtable Store { get => _store; }
+
+    public MaxService()
+    {
+        _store = new Hashtable();
+    }
 
     public bool Delete(string key, bool global = false)
     {

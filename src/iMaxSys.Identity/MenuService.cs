@@ -39,7 +39,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// </summary>
     /// <param name="mapper"></param>
     /// <param name="unitOfWork"></param>
-    /// <param name="identityCache"></param>
+
     public MenuService(IMapper mapper, IUnitOfWork unitOfWork, IIdentityCache identityCache, IRoleService roleService) : base(mapper, unitOfWork)
     {
         _roleService = roleService;

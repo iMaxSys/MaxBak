@@ -11,14 +11,19 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
+
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Options;
+using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Entities;
 using iMaxSys.Data.Repositories;
 using iMaxSys.Core.Models;
-using iMaxSys.Core.Data.Entities;
+using iMaxSys.Core.Common;
 using iMaxSys.Core.Data.EFCore;
+using iMaxSys.Core.Data.Entities;
+using StackExchange.Redis;
+using System.Data;
 
 namespace iMaxSys.Core.Data.Repositories;
 
@@ -38,73 +43,318 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
     {
     }
 
-    public Task<DictModel> AddAsync(long tenantId, DictModel dictModel)
+    /// <summary>
+    /// 新增字典
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dictModel"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task<Dict> AddAsync(long tenantId, DictModel dictModel)
     {
-        throw new NotImplementedException();
+        //重名判断
+        bool hasName = await AnyAsync(x => x.TenantId == tenantId && x.Name == dictModel.Name);
+        if (hasName)
+        {
+            throw new MaxException(ResultCode.DictExists);
+        }
+
+        Dict dict = Mapper.Map<Dict>(dictModel);
+        dict.TenantId = tenantId;
+        await AddAsync(dict);
+
+        return dict;
     }
 
-    public Task<DictItemModel> AddItemAsync(long tenantId, DictModel dictModel)
+    public async Task<DictItem> AddItemAsync(long tenantId, long dictId, DictItemModel dictItemModel)
     {
-        throw new NotImplementedException();
+        //字典判断
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId, null, x => x.Include(y => y.DictItems));
+        if (dict is null)
+        {
+            throw new MaxException(ResultCode.DictIdIsInvalid);
+        }
+
+        if (dict.DictItems is null)
+        {
+            dict.DictItems = new List<DictItem>();
+        }
+
+        //重名判断
+        if (dict.DictItems.Any(x => x.Name == dictItemModel.Name))
+        {
+            throw new MaxException(ResultCode.DictItemExists);
+        }
+
+        DictItem dictItem = Mapper.Map<DictItem>(dictItemModel);
+        dictItem.TenantId = tenantId;
+        dict.DictItems.Add(dictItem);
+
+
+        //重名判断
+        bool hasName = await AnyAsync(x => x.TenantId == tenantId && x.Name == dictItemModel.Name);
+        if (hasName)
+        {
+            throw new MaxException(ResultCode.DictExists);
+        }
+
+        //Update(dict);
+
+        return dictItem;
     }
 
-    public Task<List<Dict>> AllAsync(long tenantId)
+    /// <summary>
+    /// AllAsync
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
+    public async Task<IList<Dict>> AllAsync(long tenantId)
     {
-        throw new NotImplementedException();
+        return await AllAsync(x => x.TenantId == tenantId, null, x => x.Include(y => y.DictItems));
     }
 
-    public Task<List<Dict>> AllAsync(long tenantId, string text)
+    /// <summary>
+    /// AllAsync
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public async Task<IList<Dict>> AllAsync(long tenantId, string text)
     {
-        throw new NotImplementedException();
+        return await AllAsync(x => x.TenantId == tenantId && x.Name.Contains(text), null, x => x.Include(y => y.DictItems));
     }
 
-    public Task<Dict> GetAsync(long tenantId, long id)
+    /// <summary>
+    /// 获取字典
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<DictModel> GetAsync(long tenantId, long id)
     {
-        throw new NotImplementedException();
+        //取缓存
+        DictModel? dictModel = await Cache.GetAsync<DictModel>(GetDictKey(tenantId, id), _global);
+
+        //为空则刷新
+        if (dictModel == null)
+        {
+            dictModel = await RefreshAsync(tenantId, id);
+        }
+
+        return dictModel;
     }
 
-    public Task<DictItem> GetItemAsync(long tenantId, long id)
+    /// <summary>
+    /// 获取字典项
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task<DictItemModel> GetItemAsync(long tenantId, long dictId, long id)
     {
-        throw new NotImplementedException();
+        //取缓存
+        DictModel dictModel = await GetAsync(tenantId, dictId);
+        DictItemModel? dictItemModel = dictModel.DictItems?.FirstOrDefault(x => x.Id == id);
+
+        if (dictItemModel is null)
+        {
+            throw new MaxException(ResultCode.DictItemIdIsInvalid);
+        }
+
+        return dictItemModel;
     }
 
-    public Task<List<DictItem>?> GetItemsAsync(long tenantId, long dictId)
+    /// <summary>
+    /// 获取字典项
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<List<DictItemModel>?> GetItemsAsync(long tenantId, long dictId)
     {
-        throw new NotImplementedException();
+        //取缓存
+        DictModel dictModel = await GetAsync(tenantId, dictId);
+        return dictModel.DictItems;
     }
 
-    public Task<List<DictItem>?> GetItemsAsync(long tenantId, long dictId, string text)
+    /// <summary>
+    /// 获取字典项
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public async Task<List<DictItemModel>?> GetItemsAsync(long tenantId, long dictId, string text)
     {
-        throw new NotImplementedException();
+        var items = await GetItemsAsync(tenantId, dictId);
+        return items?.Where(x => x.Name.Contains(text)).ToList();
     }
 
-    public Task<Dict> RefreshAsync(long tenantId)
+    /// <summary>
+    /// 刷新租户所有字典
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
+    public async Task RefreshAsync(long tenantId)
     {
-        throw new NotImplementedException();
+        var dicts = await AllAsync(x => x.TenantId == tenantId);
+        foreach (var dict in dicts)
+        {
+            await RefreshAsync(tenantId, dict);
+        }
     }
 
-    public Task<Dict> RefreshAsync(long tenantId, long dictId)
+    /// <summary>
+    /// 刷新字典到缓存
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
+    /// <returns></returns>
+    public async Task<DictModel> RefreshAsync(long tenantId, long dictId)
     {
-        throw new NotImplementedException();
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId);
+        if (dict is null)
+        {
+            throw new MaxException(ResultCode.DictIdIsInvalid);
+        }
+        return await RefreshAsync(tenantId, dict);
     }
 
-    public Task RemoveAsync(long tenantId, long id)
+    /// <summary>
+    /// 刷新字典
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dictModel"></param>
+    /// <returns></returns>
+    private async Task<DictModel> RefreshAsync(long tenantId, Dict dict)
     {
-        throw new NotImplementedException();
+        DictModel dictModel = Mapper.Map<DictModel>(dict);
+        await Cache.SetAsync(GetDictKey(tenantId, dictModel.Id), dictModel, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+        return dictModel;
     }
 
-    public Task RemoveItemAsync(long tenantId, long id)
+    /// <summary>
+    /// 移除
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task RemoveAsync(long tenantId, long id)
     {
-        throw new NotImplementedException();
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id);
+        if (dict is null)
+        {
+            throw new MaxException(ResultCode.DictIdIsInvalid);
+        }
+
+        if (!dict.Editable)
+        {
+            throw new MaxException(ResultCode.DictItemCantRemove);
+        }
+
+        Remove(id);
+
+        await Cache.DeleteAsync(GetDictKey(tenantId, id), _global);
     }
 
-    public Task<DictModel> UpdateAsync(long tenantId, DictModel dictModel)
+    /// <summary>
+    /// 移除字典项
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    public async Task RemoveItemAsync(long tenantId, long dictId, long id)
     {
-        throw new NotImplementedException();
+        //字典判断
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId, null, x => x.Include(y => y.DictItems));
+        if (dict is null)
+        {
+            throw new MaxException(ResultCode.DictIdIsInvalid);
+        }
+
+        DictItem? dictItem = dict.DictItems?.FirstOrDefault(x=>x.Id == id);
+
+        if (dictItem is null)
+        {
+            throw new MaxException(ResultCode.DictItemIdIsInvalid);
+        }
+
+        if (!dictItem.Editable)
+        {
+            throw new MaxException(ResultCode.DictItemCantRemove);
+        }
+
+        dict.DictItems?.Remove(dictItem);
+
+        await RefreshAsync(tenantId, dict);
     }
 
-    public Task<DictItemModel> UpdateItemAsync(long tenantId, DictItemModel dictItemModel)
+    public async Task UpdateAsync(long tenantId, DictModel dictModel)
     {
-        throw new NotImplementedException();
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictModel.Id);
+        if (dict is null)
+        {
+            throw new MaxException(ResultCode.DictIdIsInvalid);
+        }
+
+        if (!dict.Editable)
+        {
+            throw new MaxException(ResultCode.DictItemCantRemove);
+        }
+
+        Mapper.Map(dictModel, dict);
+
+        Update(dict);
+
+        await RefreshAsync(tenantId, dict);
     }
+
+    public async Task UpdateItemAsync(long tenantId, DictItemModel dictItemModel)
+    {
+        //字典判断
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictItemModel.DictId, null, x => x.Include(y => y.DictItems));
+        if (dict is null)
+        {
+            throw new MaxException(ResultCode.DictIdIsInvalid);
+        }
+
+        DictItem? dictItem = dict.DictItems?.FirstOrDefault(x => x.Id == dictItemModel.Id);
+
+        if (dictItem is null)
+        {
+            throw new MaxException(ResultCode.DictItemIdIsInvalid);
+        }
+
+        if (!dictItem.Editable)
+        {
+            throw new MaxException(ResultCode.DictItemCantRemove);
+        }
+
+        Mapper.Map(dictItemModel, dictItem);
+
+        Update(dict);
+
+        await RefreshAsync(tenantId, dict);
+    }
+
+    /// <summary>
+    /// 获取字典key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dictId"></param>
+    /// <returns></returns>
+    private string GetDictKey(long tenantId, long dictId) => $"{GetTenantKey(tenantId)}{Cache.Separator}{dictId}";
+
+    /// <summary>
+    /// 获取租户key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
+    private string GetTenantKey(long tenantId) => $"{_tagDict}{Cache.Separator}{tenantId}";
 }

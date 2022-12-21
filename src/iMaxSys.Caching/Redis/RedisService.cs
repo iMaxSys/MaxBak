@@ -52,6 +52,12 @@ public class RedisService : IRedisService
     /// </summary>
     public string Separator => ":";
 
+    /// <summary>
+    /// getKey
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
     private string GetKey(string key, bool global = false)
     {
         return (global ? key : $"{_appId}:{key}");
