@@ -137,4 +137,12 @@ public interface IDictRepository : ICoreRepository<Dict>
     /// <param name="dictId"></param>
     /// <returns></returns>
     Task<DictModel> RefreshAsync(long tenantId, long dictId);
+
+    /// <summary>
+    /// refresh
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="dict"></param>
+    /// <returns></returns>
+    Task<DictModel> RefreshAsync(long tenantId, Dict dict);
 }

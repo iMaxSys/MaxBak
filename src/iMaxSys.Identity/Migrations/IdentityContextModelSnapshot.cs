@@ -16,7 +16,7 @@ namespace iMaxSys.Identity.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("iMaxSys.Identity.Data.Entities.CheckCode", b =>
@@ -832,17 +832,17 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    b.Property<string>("Action")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("action")
-                        .HasComment("Action");
-
                     b.Property<string>("Alias")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("alias")
                         .HasComment("是否叶节点");
+
+                    b.Property<string>("ClientRouter")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("client_router")
+                        .HasComment("ClientRouter");
 
                     b.Property<string>("Code")
                         .HasMaxLength(50)
@@ -965,6 +965,12 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnName("selected_style")
                         .HasComment("SelectedStyle");
 
+                    b.Property<string>("ServerRouter")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("server_router")
+                        .HasComment("ServerRouter");
+
                     b.Property<int>("Status")
                         .HasColumnType("int")
                         .HasColumnName("status");
@@ -1011,17 +1017,17 @@ namespace iMaxSys.Identity.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("action");
-
                     b.Property<string>("Alias")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("alias");
+
+                    b.Property<string>("ClientRouter")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("client_router")
+                        .HasComment("ClientRouter");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -1091,6 +1097,12 @@ namespace iMaxSys.Identity.Migrations
                     b.Property<long>("ReviserId")
                         .HasColumnType("bigint")
                         .HasColumnName("reviser_id");
+
+                    b.Property<string>("ServerRouter")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("server_router")
+                        .HasComment("ServerRouter");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")

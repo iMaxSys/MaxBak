@@ -53,6 +53,20 @@ public static class MaxExtensions
         services.AddDependencyInjection();
         services.AddOptions();
         services.AddEndpointsApiExplorer();
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: "cors", builder =>
+            {
+                //for when you're running on localhost
+                builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                .AllowAnyHeader().AllowAnyMethod();
+
+
+                //builder.WithOrigins("url from where you're trying to do the requests")
+            });
+        });
+
     }
 
     public static IApplicationBuilder UseMax(this IApplicationBuilder builder, Action<CoreOption>? coreAction = null, Action<ExceptionHandlingOptions>? exAction = null)
@@ -94,6 +108,8 @@ public static class MaxExtensions
             builder.UseAuthorization();
         }
 
+        builder.UseCors("cors");
+
         //异常中间件
         ExceptionHandlingOptions exOptions = new ExceptionHandlingOptions();
 
@@ -101,6 +117,7 @@ public static class MaxExtensions
         {
             exAction(exOptions);
         }
+
 
         builder.UseMiddleware<ExceptionHandlingMiddleware>(exOptions);
 

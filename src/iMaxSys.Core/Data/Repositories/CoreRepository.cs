@@ -46,7 +46,7 @@ public class CoreRepository<T> : EfRepository<T>, ICoreRepository<T> where T : E
         Option = option.Value;
         Cache = cacheFactory.GetService();
 
-        _tagDict = $"{TAG}{Cache.Separator}";
+        _tagDict = $"{TAG}";
     }
 }
 

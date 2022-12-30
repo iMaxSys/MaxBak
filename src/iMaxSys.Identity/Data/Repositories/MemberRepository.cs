@@ -97,6 +97,17 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     }
 
     /// <summary>
+    /// 获取访问Chain
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public Task<IAccessChain?> GetAccessChainAsync(string token)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
     /// 获取访问Session
     /// </summary>
     /// <param name="token">令牌</param>

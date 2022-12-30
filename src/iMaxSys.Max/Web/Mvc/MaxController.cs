@@ -11,10 +11,11 @@
 //日期：2021-10-12
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Common;
+using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Environment;
-using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Environment.Access;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -26,7 +27,7 @@ namespace iMaxSys.Max.Web.Mvc;
 /// </summary>
 [ApiController]
 [Produces("application/json")]
-[Route("/[controller]/[action]")]
+[Route("/api/[controller]/[action]")]
 public abstract class MaxController : Controller
 {
     /// <summary>

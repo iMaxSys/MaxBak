@@ -11,7 +11,7 @@ using iMaxSys.Core.Data.EFCore;
 namespace iMaxSys.Core.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    [Migration("20221202065509_v000")]
+    [Migration("20221227085317_v000")]
     partial class v000
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace iMaxSys.Core.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("iMaxSys.Core.Data.Entities.Dict", b =>
@@ -153,7 +153,7 @@ namespace iMaxSys.Core.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.HasIndex("Name", "QuickCode");
+                    b.HasIndex("Name", "QuickCode", "Code");
 
                     b.ToTable("dict", (string)null);
                 });
@@ -199,7 +199,9 @@ namespace iMaxSys.Core.Migrations
                         .HasComment("描述");
 
                     b.Property<long>("DictId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("dict_id")
+                        .HasComment("字典id");
 
                     b.Property<bool>("Editable")
                         .HasColumnType("tinyint(1)")

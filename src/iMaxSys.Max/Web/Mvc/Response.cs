@@ -11,24 +11,47 @@
 //日期：2021-10-12
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Common;
 
 namespace iMaxSys.Max.Web.Mvc;
+
+public interface IResponse
+{
+}
 
 public interface IResponseBase
 {
 }
 
+
 /// <summary>
 /// 响应类
 /// </summary>
-public class Response : Result, IResponseBase
+public class Response : IResponse
 {
 }
 
 /// <summary>
 /// 响应范型类
 /// </summary>
-public class Response<T> : Result<T>, IResponseBase
+public class Response<T> : Response
 {
+    /// <summary>
+    /// 数据
+    /// </summary>
+    public T? Data { get; set; }
 }
+
+/// <summary>
+/// 响应类
+/// </summary>
+//public class Response : Result, IResponseBase
+//{
+//}
+
+/// <summary>
+/// 响应范型类
+/// </summary>
+//public class Response<T> : Result<T>, IResponseBase
+//{
+//}

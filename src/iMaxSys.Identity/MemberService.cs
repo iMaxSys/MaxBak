@@ -49,13 +49,14 @@ public class MemberService : IMemberService
     private readonly IUserService _userService;
     private readonly ISnsFactory _snsFactory;
     private readonly ICoreService _coreService;
+    private readonly IMenuService _menuService;
     private readonly ICheckCodeService _checkCodeService;
 
     private IUser? _user;
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICoreService coreService, ICheckCodeService checkCodeService)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICoreService coreService, ICheckCodeService checkCodeService, IMenuService menuService)
     {
         _mapper = mapper;
         _option = option.Value;
@@ -64,6 +65,7 @@ public class MemberService : IMemberService
         _snsFactory = snsFactory;
         _coreService = coreService;
         _checkCodeService = checkCodeService;
+        _menuService = menuService;
     }
 
     #endregion
@@ -91,6 +93,8 @@ public class MemberService : IMemberService
         }
 
         DateTime now = DateTime.Now;
+        DateTime end = now.AddYears(100);
+
         bool isOfficial = true;
         //IAccessToken token = MakeAccessToken();
 
@@ -101,14 +105,16 @@ public class MemberService : IMemberService
         //有表示已是会员,无进行快速注册,注册完成为非正式
         if (memberExt == null)
         {
+            string salt = Guid.NewGuid().ToString().Replace("-", "");
             dbMember = new DbMember
             {
                 Type = codeLoginModel.Type,
                 Start = now,
-                End = now.AddYears(64),
+                End = end,
                 XppSource = xppSns.Xpp.Source,
                 AccountSource = xppSns.Source,
-                Salt = Guid.NewGuid().ToString().Replace("-", ""),
+                Salt = salt,
+                Password = MakePassword(MaxRandom.Next().ToString().Right(6), salt),
                 JoinTime = now,
                 JoinIP = codeLoginModel.IP,
                 LastLogin = now,
@@ -123,6 +129,8 @@ public class MemberService : IMemberService
             {
                 XppSnsId = codeLoginModel.Id,
                 OpenId = accessConfig.OpenId,
+                UnionId = accessConfig.UnionId.IfNullOrEmpty(accessConfig.OpenId),
+                Expires = end,
                 Status = Status.Enable
             });
 
@@ -447,11 +455,11 @@ public class MemberService : IMemberService
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    public async Task<IAccessChain?> GetAccessChainAsync(string token)
+    public async Task<IAccessChain> GetAccessChainAsync(string token)
     {
         if (string.IsNullOrWhiteSpace(token))
         {
-            return null;
+            throw new MaxException(ResultCode.TokenCantNull);
         }
 
         IMemberRepository repository = _unitOfWork.GetCustomRepository<IMemberRepository>();
@@ -459,9 +467,9 @@ public class MemberService : IMemberService
         //先按Token获取uid
         IAccessSession? access = await repository.GetAccessSessionAsync(token);
 
-        if (access == null)
+        if (access is null)
         {
-            return null;
+            throw new MaxException(ResultCode.AccessSessionIsNull);
         }
 
         //按memberId获取member
@@ -760,7 +768,7 @@ public class MemberService : IMemberService
     /// <param name="dbMember"></param>
     /// <param name="xppId"></param>
     /// <param name="roleIds"></param>
-    private static void SetNewMember(MemberModel model,  DbMember dbMember, long xppId, long[]? roleIds)
+    private static string SetNewMember(MemberModel model, DbMember dbMember, long xppId, long[]? roleIds)
     {
         SetMember(model, dbMember, xppId, roleIds);
 
@@ -776,6 +784,9 @@ public class MemberService : IMemberService
 
         //salt
         dbMember.Salt = Guid.NewGuid().ToString().Replace("-", "");
+        string password = MaxRandom.Next().ToString().Right(6);
+        dbMember.Password = MakePassword(password, dbMember.Salt);
+        return password;
     }
 
     /// <summary>
@@ -830,8 +841,10 @@ public class MemberService : IMemberService
     /// <param name="snsSource"></param>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
-    private static void SetRegisterMember(RegisterModel model, IUser? user, DbMember dbMember, XppSource xppSource, SnsSource snsSource, long tenantId = 0, long xppId = 0)
+    private static string SetRegisterMember(RegisterModel model, IUser? user, DbMember dbMember, XppSource xppSource, SnsSource snsSource, long tenantId = 0, long xppId = 0)
     {
+        string password = model.Password ?? MaxRandom.Next().ToString().Right(6);
+        DateTime end = DateTime.Now.AddYears(100);
         dbMember.TenantId = user?.TenantId ?? tenantId;
         dbMember.ReferrerId = model.ReferrerId;
         dbMember.Name = ((((user?.Name ?? user?.NickName) ?? model.Name) ?? model.UserName) ?? model.NickName) ?? model.Mobile.ToString();
@@ -855,7 +868,8 @@ public class MemberService : IMemberService
         dbMember.XppSource = xppSource;
         model.Birthday?.IfNotNull(x => dbMember.Birthday = x);
         //密码为空生产6位随机数字密码
-        dbMember.Password = MakePassword(model.Password ?? MaxRandom.Next().ToString().Left(6), dbMember.Salt);
+        dbMember.Password = MakePassword(password, dbMember.Salt);
+        dbMember.End = end;
 
         //openId不为空, 则新增扩展成员信息
         model.OpenId?.IfNotNull(x =>
@@ -868,10 +882,13 @@ public class MemberService : IMemberService
             ext.Name = model.NickName;
             ext.Avatar = model.Avatar;
             ext.Status = Status.Enable;
+            ext.Expires = end;
 
             dbMember.MemberExts ??= new List<MemberExt>();
             dbMember.MemberExts.Add(ext);
         });
+
+        return password;
     }
 
     /// <summary>
@@ -1116,7 +1133,7 @@ public class MemberService : IMemberService
     /// <param name="source"></param>
     /// <param name="salt"></param>
     /// <returns></returns>
-    private bool CheckPassword(string password, string source, string salt)
+    private static bool CheckPassword(string password, string source, string salt)
     {
         return MakePassword(source, salt) == password;
     }
@@ -1142,4 +1159,132 @@ public class MemberService : IMemberService
             throw new MaxException(ResultCode.UserIsExpired);
         }
     }
+
+    /// <summary>
+    /// API权限检查
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    public async Task<IAccessChain> CheckAsync(string token, string router)
+    {
+        var ac = await GetAccessChainAsync(token);
+        await CheckAsync(ac, router);
+        return ac;
+    }
+
+    /// <summary>
+    /// API权限检查
+    /// </summary>
+    /// <param name="accessChain"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    private async Task CheckAsync(IAccessChain accessChain, string router)
+    {
+
+        //停用检查
+        if (accessChain.Member?.Status == Status.Disable)
+        {
+            throw new MaxException(ResultCode.UserIsDisable);
+        }
+
+        //全开放
+        if (_option.Identity.OpenRouters.Contains("*"))
+        {
+            return;
+        }
+        else
+        {
+            //简单模式
+            if (0 == _option.Identity.CheckMode)
+            {
+                //已登录或者在放行api,则通行
+                if (_option.Identity.OpenRouters.Contains(router))
+                {
+                    return;
+                }
+
+                if (accessChain is null || !accessChain.AccessSession.IsLogin)
+                {
+                    throw new MaxException(ResultCode.UnLogin, router);
+                }
+            }
+            else //严格模式
+            {
+                //在开放api中,则通行
+                if (_option.Identity.OpenRouters.Contains(router))
+                {
+                    return;
+                }
+
+                if (!accessChain.AccessSession.IsLogin)
+                {
+                    throw new MaxException(ResultCode.UnLogin, router);
+                }
+
+                bool allow = await _menuService.AllowAccessAsync(accessChain.Member?.TenantId ?? 0, _option.XppId, accessChain.Member?.RoleId ?? 0, router);
+
+                if (allow)
+                {
+                    return;
+                }
+                else
+                {
+                    throw new MaxException(ResultCode.Forbidden, router);
+                }
+
+            }
+        }
+    }
+
+    /// <summary>
+    /// 验证路由是否在权限菜单内
+    /// </summary>
+    /// <param name="menu"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    //protected static bool ExistsRouter(IMenu? menu, string router)
+    //{
+    //    if (menu is null)
+    //    {
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        //本级匹配
+    //        if (menu.Router == router || menu.Operations.Select(x => x.Router).Any(x => x == router))
+    //        {
+    //            return true;
+    //        }
+
+    //        //子级匹配
+    //        return ExistsRouter(menu.Menus, router);
+    //    }
+    //}
+
+    /// <summary>
+    /// 验证路由是否在权限菜单内
+    /// </summary>
+    /// <param name="menus"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    //private bool ExistsRouter(List<IMenu>? menus, string router)
+    //{
+    //    if (menus?.Count > 0)
+    //    {
+    //        //本级匹配
+    //        if (menus.Any(x => x.Router == router) || menus.Where(x => x.Operations != null).SelectMany(x => x.Operations).Any(x => x.Router == router))
+    //        {
+    //            return true;
+    //        }
+    //        else//子级匹配
+    //        {
+    //            return ExistsRouter(menus.Where(x => x.Menus != null).SelectMany(x => x.Menus)?.ToList(), router);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
 }

@@ -11,6 +11,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Common;
 using iMaxSys.Max.Common.Enums;
 
 namespace iMaxSys.Max.Extentions;

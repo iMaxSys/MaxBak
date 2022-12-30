@@ -27,7 +27,7 @@ public class DesignTimeMaxOptions : IOptions<MaxOption>
 {
     public MaxOption Value => new()
     {
-        Identity = new IdentityOption
+        Core = new CoreOption
         {
             Databases = new List<DatabaseOption>
             {

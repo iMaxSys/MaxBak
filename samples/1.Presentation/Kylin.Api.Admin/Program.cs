@@ -15,8 +15,10 @@ using Microsoft.Extensions.Configuration;
 
 using iMaxSys.Max;
 using iMaxSys.Data;
+using iMaxSys.Core;
 using iMaxSys.Identity;
 
+using Kylin.Data.EFCore;
 using Kylin.Framework.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,9 +32,12 @@ app.Run();
 //register services
 static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
 {
+    services.Configure<KylinOption>(configuration.GetSection("Kylin"));
     services.AddMax(configuration);
+    services.AddMaxCore(configuration);
     services.AddMaxIdentity(configuration);
     services.AddSwaggerGen();
+    services.AddKylinDataAccess(configuration);
 }
 
 //use middleware
@@ -46,16 +51,12 @@ static void Configure(WebApplication app, IWebHostEnvironment env)
     }
     else
     {
-        app.UseExceptionHandler("/Error");
+        //app.UseExceptionHandler("/Error");
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
 
     app.UseMax();
     app.UseMaxIdentity();
-    app.UseHttpsRedirection();
-    app.UseStaticFiles();
-    app.UseRouting();
-    app.UseAuthorization();
     app.MapControllers();
 }

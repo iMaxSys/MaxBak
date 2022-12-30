@@ -22,7 +22,7 @@ using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
-using StackExchange.Redis;
+using iMaxSys.Core.Data.Entities;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -126,8 +126,17 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role)
     {
         var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && role.MenuIds.Contains(x.Id));
+
         var menu = MakeMenu(list, role.MenuIds, role.OperationIds);
         await Cache.SetAsync(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+
+        var actions = MakeActionArray(list);
+        await Cache.DeleteAsync(GetRoleRoutersKey(tenantId, xppId, role.Id), _global);
+        if (actions is not null && actions.Length > 0)
+        {
+            await Cache.SetAddAsync(GetRoleRoutersKey(tenantId, xppId, role.Id), actions, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+        }
+
         return menu;
     }
 
@@ -171,6 +180,56 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     }
 
     /// <summary>
+    /// 生成action数组
+    /// </summary>
+    /// <param name="menus"></param>
+    /// <returns></returns>
+    private static string[]? MakeActionArray(IList<DbMenu>? menus)
+    {
+        if (menus is null || menus.Count == 0)
+        {
+            return null;
+        }
+
+        var mRouters = menus.Where(x => string.IsNullOrWhiteSpace(x.ServerRouter));
+        var oRouters = menus.Where(x => x.Operations is not null).SelectMany(x => x.Operations!).Where(x => string.IsNullOrWhiteSpace(x.ServerRouter));
+        int count = mRouters.Count() + oRouters.Count();
+
+        if (count == 0)
+        {
+            return null;
+        }
+
+        int index = 0;
+        string[] actions = new string[count];
+
+        foreach (var item in mRouters)
+        {
+            actions[index] = item.ServerRouter!;
+            index++;
+        }
+        foreach (var item in oRouters)
+        {
+            actions[index] = item.ServerRouter!;
+            index++;
+        }
+        return actions;
+    }
+
+    /// <summary>
+    /// 是否允许访问路由
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    public async Task<bool> AllowAccessAsync(long tenantId, long xppId, long roleId, string router)
+    {
+        return await Cache.SetContainsAsync(GetRoleRoutersKey(tenantId, xppId, roleId), router);
+    }
+
+    /// <summary>
     /// 获取应用菜单key
     /// </summary>
     /// <param name="tenantId"></param>
@@ -185,5 +244,14 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    private string GetRoleMenuKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}";
+    private string GetRoleMenuKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}{Cache.Separator}m";
+
+    /// <summary>
+    /// 获取角色路由key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    private string GetRoleRoutersKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}{Cache.Separator}r";
 }

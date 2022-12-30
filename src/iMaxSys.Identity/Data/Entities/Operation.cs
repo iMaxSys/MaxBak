@@ -78,9 +78,14 @@ public class Operation : TenantMasterEntity
     public int Type { get; set; }
 
     /// <summary>
-    /// Router
+    /// 服务器端路由
     /// </summary>
-    public string Action { get; set; } = string.Empty;
+    public string? ServerRouter { get; set; }
+
+    /// <summary>
+    /// 客户端路由
+    /// </summary>
+    public string? ClientRouter { get; set; }
 
     /// <summary>
     /// 是否可见

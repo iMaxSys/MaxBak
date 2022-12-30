@@ -120,7 +120,7 @@ public interface IMemberService : IDependency
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    Task<IAccessChain?> GetAccessChainAsync(string token);
+    Task<IAccessChain> GetAccessChainAsync(string token);
 
     /// <summary>
     /// 刷新成员缓存

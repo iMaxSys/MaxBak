@@ -89,10 +89,9 @@ public interface IDictService : IDependency
     /// 移除字典项
     /// </summary>
     /// <param name="tenantId"></param>
-    /// <param name="dictId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task RemoveItemAsysnc(long tenantId, long dictId, long id);
+    Task RemoveItemAsysnc(long tenantId, long id);
 
     /// <summary>
     /// 修改字典

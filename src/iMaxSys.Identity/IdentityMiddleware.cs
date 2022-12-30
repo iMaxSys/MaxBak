@@ -58,7 +58,7 @@ public class IdentityMiddleware
         }
 
         //判断是否需要token
-        if (_option.Identity.OpenRouters is not null && !_option.Identity.OpenRouters.Contains(router.ToLower()) && !context.Request.Headers.ContainsKey(FLAG_TOKEN))
+        if (!_option.Identity.OpenRouters.Contains(router.ToLower()) && !context.Request.Headers.ContainsKey(FLAG_TOKEN))
         {
             //Headers中无token
             throw new MaxException(ResultCode.NeedToken, router);

@@ -65,6 +65,7 @@ public enum ResultCode
     /// </summary>
     [Description("用户被禁用")]
     UserIsDisable = 106007,
+
     /// <summary>
     /// 用户已经过期
     /// </summary>
@@ -72,52 +73,64 @@ public enum ResultCode
     UserIsExpired = 106008,
 
     /// <summary>
+    /// 用户未登录
+    /// </summary>
+    [Description("未登录")]
+    UnLogin = 106009,
+
+    /// <summary>
     /// 无效的XppSnsId
     /// </summary>
     [Description("无效的应用社交Id")]
-    XppSnsIdNotExists = 106009,
+    XppSnsIdNotExists = 106010,
 
     /// <summary>
     /// 用户名不可为空
     /// </summary>
     [Description("用户名不可为空")]
-    UserNameCantNull = 106010,
+    UserNameCantNull = 106011,
 
     /// <summary>
     /// 密码不可为空
     /// </summary>
     [Description("密码不可为空")]
-    PasswordCantNull = 106011,
+    PasswordCantNull = 106012,
 
     /// <summary>
     /// 密码强度弱
     /// </summary>
     [Description("密码强度弱")]
-    PasswordIsWeak = 106012,
+    PasswordIsWeak = 106013,
 
     /// <summary>
     /// 密码错误
     /// </summary>
     [Description("密码错误")]
-    PasswordError = 106013,
+    PasswordError = 106014,
 
     /// <summary>
     /// 无效的手机号码
     /// </summary>
     [Description("无效的手机号码")]
-    MobileIsInvalid = 1060134,
+    MobileIsInvalid = 106015,
 
     /// <summary>
     /// 代码和OpenId不可同时为空
     /// </summary>
     [Description("Code和OpenId不可同时为空")]
-    CodeOpenIdCantNull = 106015,
+    CodeOpenIdCantNull = 106016,
 
     /// <summary>
     /// 获取手机号码失败
     /// </summary>
     [Description("获取手机号码失败")]
-    GetMobileFail = 106016,
+    GetMobileFail = 106017,
+
+    /// <summary>
+    /// 禁止访问
+    /// </summary>
+    [Description("禁止访问")]
+    Forbidden = 106018,
 
     /// <summary>
     /// 角色id不可为空
@@ -136,6 +149,7 @@ public enum ResultCode
     /// </summary>
     [Description("角色不存在")]
     RoleNotExists = 106105,
+
     /// <summary>
     /// 验证码请求过快
     /// </summary>

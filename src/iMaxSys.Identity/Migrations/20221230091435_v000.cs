@@ -184,7 +184,9 @@ namespace iMaxSys.Identity.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     selectedicon = table.Column<string>(name: "selected_icon", type: "varchar(50)", maxLength: 50, nullable: true, comment: "SelectedIcon")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    action = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, comment: "Action")
+                    serverrouter = table.Column<string>(name: "server_router", type: "varchar(50)", maxLength: 50, nullable: true, comment: "ServerRouter")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    clientrouter = table.Column<string>(name: "client_router", type: "varchar(50)", maxLength: 50, nullable: true, comment: "ClientRouter")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ext = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, comment: "Ext")
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -373,7 +375,9 @@ namespace iMaxSys.Identity.Migrations
                     style = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     type = table.Column<int>(type: "int", nullable: false),
-                    action = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    serverrouter = table.Column<string>(name: "server_router", type: "varchar(50)", maxLength: 50, nullable: true, comment: "ServerRouter")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    clientrouter = table.Column<string>(name: "client_router", type: "varchar(50)", maxLength: 50, nullable: true, comment: "ClientRouter")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     isshow = table.Column<bool>(name: "is_show", type: "tinyint(1)", nullable: false),
                     status = table.Column<int>(type: "int", nullable: false),

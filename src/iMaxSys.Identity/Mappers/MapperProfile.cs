@@ -53,7 +53,8 @@ namespace iMaxSys.Identity.Mappers
             CreateMap<DbOperation, IOperation>().As<OperationModel>();
 
             CreateMap<ITree<DbMenu>, IMenu>()
-               .ForMember(t => t.Action, opt => opt.MapFrom(s => s.Data.Action))
+               .ForMember(t => t.ServerRouter, opt => opt.MapFrom(s => s.Data.ServerRouter))
+               .ForMember(t => t.ClientRouter, opt => opt.MapFrom(s => s.Data.ClientRouter))
                .ForMember(t => t.Alias, opt => opt.MapFrom(s => s.Data.Alias))
                .ForMember(t => t.Code, opt => opt.MapFrom(s => s.Data.Code))
                .ForMember(t => t.Description, opt => opt.MapFrom(s => s.Data.Description))
@@ -80,7 +81,8 @@ namespace iMaxSys.Identity.Mappers
                .ForMember(t => t.Children, opt => opt.MapFrom(s => s.Children)).As<MenuModel>();
 
             CreateMap<ITree<DbMenu>, MenuModel>()
-               .ForMember(t => t.Action, opt => opt.MapFrom(s => s.Data.Action))
+               .ForMember(t => t.ServerRouter, opt => opt.MapFrom(s => s.Data.ServerRouter))
+               .ForMember(t => t.ClientRouter, opt => opt.MapFrom(s => s.Data.ClientRouter))
                .ForMember(t => t.Alias, opt => opt.MapFrom(s => s.Data.Alias))
                .ForMember(t => t.Code, opt => opt.MapFrom(s => s.Data.Code))
                .ForMember(t => t.Description, opt => opt.MapFrom(s => s.Data.Description))

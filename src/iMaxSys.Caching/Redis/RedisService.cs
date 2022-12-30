@@ -22,18 +22,18 @@ public class RedisService : IRedisService
 {
     private readonly ConnectionMultiplexer _connection;
     private readonly IDatabase _database;
-    private readonly long _appId;
+    private readonly long _xppId;
 
     /// <summary>
     /// 构造
     /// </summary>
     /// <param name="connection"></param>
-    /// <param name="appId"></param>
-    public RedisService(string connection, long appId)
+    /// <param name="xppId"></param>
+    public RedisService(string connection, long xppId)
     {
         _connection = ConnectionMultiplexer.Connect(connection);
         _database = _connection.GetDatabase();
-        _appId = appId;
+        _xppId = xppId;
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public class RedisService : IRedisService
     {
         _connection = ConnectionMultiplexer.Connect(option.Value.Caching.Connection);
         _database = _connection.GetDatabase();
-        _appId = option.Value.XppId;
+        _xppId = option.Value.XppId;
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public class RedisService : IRedisService
     /// <returns></returns>
     private string GetKey(string key, bool global = false)
     {
-        return (global ? key : $"{_appId}:{key}");
+        return (global ? key : $"{_xppId}:{key}");
     }
 
     /// <summary>
@@ -264,5 +264,46 @@ public class RedisService : IRedisService
     public async Task HashDeleteAsync(string key, string field, bool global = false)
     {
         await _database.HashDeleteAsync(GetKey(key, global), field);
+    }
+
+    /// <summary>
+    /// 新增到集合
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public async Task SetAddAsync(string key, string value, TimeSpan? timeSpan, bool global = false)
+    {
+        await _database.KeyExpireAsync(GetKey(key, global), timeSpan);
+        await _database.SetAddAsync(GetKey(key, global), value);
+    }
+
+    /// <summary>
+    /// 新增到集合
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    public async Task SetAddAsync(string key, string[] values, TimeSpan? timeSpan, bool global = false)
+    {
+        RedisValue[] vs = new RedisValue[values.Length];
+        for (int i = 0; i < values.Length; i++)
+        {
+            vs[i] = values[i];
+        }
+
+        await _database.KeyExpireAsync(GetKey(key, global), timeSpan);
+        await _database.SetAddAsync(GetKey(key, global), vs);
+    }
+
+    /// <summary>
+    /// 集合是否包含
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public async Task<bool> SetContainsAsync(string key, string value, bool global = false)
+    {
+        return await _database.SetContainsAsync(GetKey(key, global), value);
     }
 }

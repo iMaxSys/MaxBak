@@ -24,7 +24,17 @@ public interface IMenu : ITreeNode
     /// <summary>
     /// Action
     /// </summary>
-    public string? Action { get; set; }
+    //public string? Action { get; set; }
+
+    /// <summary>
+    /// 服务器端路由
+    /// </summary>
+    public string? ServerRouter { get; set; }
+
+    /// <summary>
+    /// 客户端路由
+    /// </summary>
+    public string? ClientRouter { get; set; }
 
     /// <summary>
     /// Menus

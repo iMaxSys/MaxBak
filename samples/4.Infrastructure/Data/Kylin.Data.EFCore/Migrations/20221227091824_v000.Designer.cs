@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kylin.Data.EFCore.Migrations
 {
     [DbContext(typeof(KylinContext))]
-    [Migration("20221202073106_v000")]
+    [Migration("20221227091824_v000")]
     partial class v000
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace Kylin.Data.EFCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Kylin.Data.Models.Auth.Customer", b =>

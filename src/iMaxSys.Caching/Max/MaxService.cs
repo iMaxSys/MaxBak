@@ -113,4 +113,36 @@ public class MaxService : IMaxService
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// 新增到集合
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public Task SetAddAsync(string key, string value, TimeSpan? timeSpan, bool global = false)
+    {
+        throw new NotImplementedException();
+    }
+    /// <summary>
+    /// 新增到集合
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    public Task SetAddAsync(string key, string[] values, TimeSpan? timeSpan, bool global = false)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 集合是否包含
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public Task<bool> SetContainsAsync(string key, string value, bool global = false)
+    {
+        throw new NotImplementedException();
+    }
 }

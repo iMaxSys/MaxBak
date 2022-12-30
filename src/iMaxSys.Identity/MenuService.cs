@@ -92,4 +92,17 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
         RoleModel role = await _roleService.GetAsync(tenantId, xppId, roleId);
         return await _unitOfWork.GetCustomRepository<IMenuRepository>().RefreshAsync(tenantId, xppId, role);
     }
+
+    /// <summary>
+    /// 是否允许访问路由
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    public async Task<bool> AllowAccessAsync(long tenantId, long xppId, long roleId, string router)
+    {
+        return await _unitOfWork.GetCustomRepository<IMenuRepository>().AllowAccessAsync(tenantId, xppId, roleId, router);
+    }
 }

@@ -11,6 +11,7 @@
 //日期：2021-10-12
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Common;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Web.Mvc;
 

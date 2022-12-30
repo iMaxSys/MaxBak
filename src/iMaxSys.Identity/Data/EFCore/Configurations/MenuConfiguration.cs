@@ -64,7 +64,11 @@ public class MenuConfiguration : TenantMasterEntityConfiguration<Menu>
         //SelectedIcon
         builder.Property(x => x.SelectedIcon).HasColumnName("selected_icon").HasMaxLength(50).HasComment("SelectedIcon");
         //Action
-        builder.Property(x => x.Action).HasColumnName("action").HasMaxLength(50).HasComment("Action");
+        //builder.Property(x => x.Action).HasColumnName("action").HasMaxLength(50).HasComment("Action");
+        //ServerRouter
+        builder.Property(x => x.ServerRouter).HasColumnName("server_router").HasMaxLength(50).HasComment("ServerRouter");
+        //ClientRouter
+        builder.Property(x => x.ClientRouter).HasColumnName("client_router").HasMaxLength(50).HasComment("ClientRouter");
         //Ext
         builder.Property(x => x.Ext).HasColumnName("ext").HasMaxLength(255).HasComment("Ext");
         //是否可见

@@ -11,12 +11,14 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-namespace iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Common.Enums;
+
+namespace iMaxSys.Max.Common;
 
 /// <summary>
 /// System Result
 /// </summary>
-public class ResultBase
+public abstract class ResultBase
 {
     /// <summary>
     /// 成功标志

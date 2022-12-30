@@ -52,6 +52,13 @@ public interface IMemberRepository : IRepository<DbMember>
     Task RemoveAccessSessionAsync(string token);
 
     /// <summary>
+    /// 获取访问Chain
+    /// </summary>
+    /// <param name="token">令牌</param>
+    /// <returns></returns>
+    Task<IAccessChain?> GetAccessChainAsync(string token);
+
+    /// <summary>
     /// 获取访问Session
     /// </summary>
     /// <param name="token">令牌</param>

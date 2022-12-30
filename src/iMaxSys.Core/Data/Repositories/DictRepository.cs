@@ -70,7 +70,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
     public async Task<DictItem> AddItemAsync(long tenantId, long dictId, DictItemModel dictItemModel)
     {
         //字典判断
-        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId, null, x => x.Include(y => y.DictItems));
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId, null, x => x.Include(y => y.DictItems), false);
         if (dict is null)
         {
             throw new MaxException(ResultCode.DictIdIsInvalid);
@@ -91,15 +91,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
         dictItem.TenantId = tenantId;
         dict.DictItems.Add(dictItem);
 
-
-        //重名判断
-        bool hasName = await AnyAsync(x => x.TenantId == tenantId && x.Name == dictItemModel.Name);
-        if (hasName)
-        {
-            throw new MaxException(ResultCode.DictExists);
-        }
-
-        //Update(dict);
+        Update(dict);
 
         return dictItem;
     }
@@ -201,7 +193,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
     /// <returns></returns>
     public async Task RefreshAsync(long tenantId)
     {
-        var dicts = await AllAsync(x => x.TenantId == tenantId);
+        var dicts = await AllAsync(x => x.TenantId == tenantId, null, x => x.Include(y => y.DictItems));
         foreach (var dict in dicts)
         {
             await RefreshAsync(tenantId, dict);
@@ -216,7 +208,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
     /// <returns></returns>
     public async Task<DictModel> RefreshAsync(long tenantId, long dictId)
     {
-        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId);
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId, null, x => x.Include(y => y.DictItems));
         if (dict is null)
         {
             throw new MaxException(ResultCode.DictIdIsInvalid);
@@ -230,7 +222,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
     /// <param name="tenantId"></param>
     /// <param name="dictModel"></param>
     /// <returns></returns>
-    private async Task<DictModel> RefreshAsync(long tenantId, Dict dict)
+    public async Task<DictModel> RefreshAsync(long tenantId, Dict dict)
     {
         DictModel dictModel = Mapper.Map<DictModel>(dict);
         await Cache.SetAsync(GetDictKey(tenantId, dictModel.Id), dictModel, new TimeSpan(0, Option.Identity.Expires, 0), _global);
@@ -273,7 +265,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
     public async Task RemoveItemAsync(long tenantId, long dictId, long id)
     {
         //字典判断
-        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId, null, x => x.Include(y => y.DictItems));
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictId, null, x => x.Include(y => y.DictItems), disableTracking: false);
         if (dict is null)
         {
             throw new MaxException(ResultCode.DictIdIsInvalid);
@@ -293,7 +285,9 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
 
         dict.DictItems?.Remove(dictItem);
 
-        await RefreshAsync(tenantId, dict);
+        //Update(dict);
+
+        //await RefreshAsync(tenantId, dict);
     }
 
     public async Task UpdateAsync(long tenantId, DictModel dictModel)
@@ -306,20 +300,20 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
 
         if (!dict.Editable)
         {
-            throw new MaxException(ResultCode.DictItemCantRemove);
+            throw new MaxException(ResultCode.DictItemCantUpdate);
         }
 
         Mapper.Map(dictModel, dict);
 
         Update(dict);
 
-        await RefreshAsync(tenantId, dict);
+        await RefreshAsync(tenantId, dictModel.Id);
     }
 
     public async Task UpdateItemAsync(long tenantId, DictItemModel dictItemModel)
     {
         //字典判断
-        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictItemModel.DictId, null, x => x.Include(y => y.DictItems));
+        Dict? dict = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == dictItemModel.DictId, null, x => x.Include(y => y.DictItems), disableTracking: false);
         if (dict is null)
         {
             throw new MaxException(ResultCode.DictIdIsInvalid);
@@ -334,7 +328,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
 
         if (!dictItem.Editable)
         {
-            throw new MaxException(ResultCode.DictItemCantRemove);
+            throw new MaxException(ResultCode.DictItemCantUpdate);
         }
 
         Mapper.Map(dictItemModel, dictItem);

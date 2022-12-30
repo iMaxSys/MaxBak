@@ -26,7 +26,7 @@ public class MapperProfile : Profile
         CreateMap<XppSns, XppSnsModel>();
         CreateMap<Dict, DictModel>();
         CreateMap<DictItem, DictItemModel>();
-        CreateMap<DictModel, Dict>();
-        CreateMap<DictItemModel, DictItem>();
+        CreateMap<DictModel, Dict>().ForMember(x => x.Editable, y => y.Ignore());
+        CreateMap<DictItemModel, DictItem>().ForMember(x => x.Editable, y => y.Ignore());
     }
 }

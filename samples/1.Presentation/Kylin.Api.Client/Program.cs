@@ -15,11 +15,11 @@ using Microsoft.Extensions.Configuration;
 
 using iMaxSys.Max;
 using iMaxSys.Data;
+using iMaxSys.Core;
 using iMaxSys.Identity;
 
 using Kylin.Data.EFCore;
 using Kylin.Framework.Options;
-using iMaxSys.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServices(builder.Services, builder.Configuration);

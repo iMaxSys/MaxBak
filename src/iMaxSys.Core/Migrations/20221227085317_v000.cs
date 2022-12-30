@@ -147,7 +147,7 @@ namespace iMaxSys.Core.Migrations
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
-                    DictId = table.Column<long>(type: "bigint", nullable: false),
+                    dictid = table.Column<long>(name: "dict_id", type: "bigint", nullable: false, comment: "字典id"),
                     name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "名称")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     alias = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, comment: "别名")
@@ -184,8 +184,8 @@ namespace iMaxSys.Core.Migrations
                 {
                     table.PrimaryKey("PK_dict_item", x => x.id);
                     table.ForeignKey(
-                        name: "FK_dict_item_dict_DictId",
-                        column: x => x.DictId,
+                        name: "FK_dict_item_dict_dict_id",
+                        column: x => x.dictid,
                         principalTable: "dict",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -235,9 +235,9 @@ namespace iMaxSys.Core.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_dict_name_quick_code",
+                name: "IX_dict_name_quick_code_code",
                 table: "dict",
-                columns: new[] { "name", "quick_code" });
+                columns: new[] { "name", "quick_code", "code" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_dict_tenant_id",
@@ -245,9 +245,9 @@ namespace iMaxSys.Core.Migrations
                 column: "tenant_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_dict_item_DictId",
+                name: "IX_dict_item_dict_id",
                 table: "dict_item",
-                column: "DictId");
+                column: "dict_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_dict_item_tenant_id",

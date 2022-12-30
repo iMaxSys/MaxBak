@@ -164,4 +164,28 @@ public interface ICache
     /// <param name="global"></param>
     /// <returns></returns>
     Task HashDeleteAsync(string key, string field, bool global = false);
+
+    /// <summary>
+    /// 新增到集合
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    Task SetAddAsync(string key, string value, TimeSpan? timeSpan, bool global = false);
+
+    /// <summary>
+    /// 新增到集合
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    Task SetAddAsync(string key, string[] values, TimeSpan? timeSpan, bool global = false);
+
+    /// <summary>
+    /// 集合是否包含
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    Task<bool> SetContainsAsync(string key, string value, bool global = false);
 }

@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using iMaxSys.Core.Data.Entities;
-using iMaxSys.Data.EFCore.Configurations;
+using iMaxSys.Data.EFCore.Configurations;                            
 
 namespace iMaxSys.Core.Data.EFCore.Configurations;
 
@@ -29,6 +29,8 @@ public class DictDetailConfiguration : TenantMasterEntityConfiguration<DictItem>
         //基类配置
         base.Configures(builder);
 
+        //名称
+        builder.Property(x => x.DictId).HasColumnName("dict_id").HasComment("字典id");
         //名称
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).HasComment("名称");
         //别名
