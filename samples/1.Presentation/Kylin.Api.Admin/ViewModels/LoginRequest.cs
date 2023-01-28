@@ -11,6 +11,7 @@
 //日期：2022-04-26
 //----------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
 using iMaxSys.Max.Web.Mvc;
 
 namespace Kylin.Api.Admin.ViewModels;
@@ -23,11 +24,15 @@ public class LoginRequest : Request
     /// <summary>
     /// 用户名
     /// </summary>
+    [Display(Name = "用户名")]
+    [Required(ErrorMessage = "{0}必须填写")]
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 密码
     /// </summary>
+    [Display(Name = "密码")]
+    [Required(ErrorMessage = "{0}必须填写")]
     public string Password { get; set; } = string.Empty;
 }
 

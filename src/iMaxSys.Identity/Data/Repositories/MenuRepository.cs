@@ -61,7 +61,7 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
         return menu;
     }
 
-    public async Task<MenuModel?> GetAsync(long xppId, long tenantId, IRole role)
+    public async Task<MenuModel?> GetAsync(long tenantId, long xppId, IRole role)
     {
         //取缓存
         MenuModel? menu = await Cache.GetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, role.Id), _global);
@@ -125,13 +125,13 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// <returns></returns>
     public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role)
     {
-        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && role.MenuIds.Contains(x.Id));
+        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && role.MenuIds.Contains(x.Id), null, x => x.Include(y => y.Operations));
 
-        var menu = MakeMenu(list, role.MenuIds, role.OperationIds);
-        await Cache.SetAsync(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+        MenuModel menu = MakeMenu(list.ToList(), role.MenuIds, role.OperationIds);
+        await Cache.SetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
 
         var actions = MakeActionArray(list);
-        await Cache.DeleteAsync(GetRoleRoutersKey(tenantId, xppId, role.Id), _global);
+        //await Cache.DeleteAsync(GetRoleRoutersKey(tenantId, xppId, role.Id), _global);
         if (actions is not null && actions.Length > 0)
         {
             await Cache.SetAddAsync(GetRoleRoutersKey(tenantId, xppId, role.Id), actions, new TimeSpan(0, Option.Identity.Expires, 0), _global);
@@ -148,31 +148,17 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     private MenuModel MakeMenu(IList<DbMenu> list)
     {
         var tree = list.ToTree((parent, child) => child.ParentId == parent.Id);
-        var menu = Mapper.Map<MenuModel>(tree);
+        MenuModel menu = Mapper.Map<MenuModel>(tree);
         return menu;
     }
 
-    private MenuModel MakeMenu(IList<DbMenu> list, long[] ids, long[] operationIds)
+    private MenuModel MakeMenu(List<DbMenu> list, long[] ids, long[] operationIds)
     {
-        foreach (var item in list)
+        list.RemoveAll(x => !ids.Contains(x.Id));
+        list.ForEach(x =>
         {
-            if (ids.Contains(item.Id))
-            {
-                //清除无权限操作
-                item.Operations?.ForEach(x =>
-                {
-                    if (operationIds.Contains(x.Id))
-                    {
-                        item.Operations?.Remove(x);
-                    }
-                });
-            }
-            else
-            {
-                //清除无权限菜单
-                list.Remove(item);
-            }
-        }
+            x.Operations?.RemoveAll(y => !operationIds.Contains(y.Id));
+        });
 
         var tree = list.ToTree((parent, child) => child.ParentId == parent.Id);
         var menu = Mapper.Map<MenuModel>(tree);
@@ -191,8 +177,8 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
             return null;
         }
 
-        var mRouters = menus.Where(x => string.IsNullOrWhiteSpace(x.ServerRouter));
-        var oRouters = menus.Where(x => x.Operations is not null).SelectMany(x => x.Operations!).Where(x => string.IsNullOrWhiteSpace(x.ServerRouter));
+        var mRouters = menus.Where(x => !string.IsNullOrWhiteSpace(x.ServerRouter));
+        var oRouters = menus.Where(x => x.Operations is not null).SelectMany(x => x.Operations!).Where(x => !string.IsNullOrWhiteSpace(x.ServerRouter));
         int count = mRouters.Count() + oRouters.Count();
 
         if (count == 0)

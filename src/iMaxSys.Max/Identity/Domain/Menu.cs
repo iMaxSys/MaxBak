@@ -23,11 +23,6 @@ namespace iMaxSys.Max.Identity.Domain;
 public class Menu : TreeNode, IMenu
 {
     /// <summary>
-    /// Ext
-    /// </summary>
-    //public string? Action { get; set; }
-
-    /// <summary>
     /// 服务器端路由
     /// </summary>
     public string? ServerRouter { get; set; }

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iMaxSys.Data\iMaxSys.Data.csproj" />
+    <ProjectReference Include="..\iMaxSys.Caching\iMaxSys.Caching.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Data\" />
@@ -35,7 +36,7 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

@@ -13,6 +13,7 @@
 
 using System.Linq;
 using iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Json;
 
 namespace iMaxSys.Max.Extentions;
 
@@ -582,9 +583,9 @@ public static class UtilityExtensions
     /// </summary>
     /// <param name="source"></param>
     /// <returns></returns>
-    public static T?ToObject<T>(this string? source)
+    public static T? ToObject<T>(this string? source)
     {
-        return string.IsNullOrWhiteSpace(source) ? default : JsonSerializer.Deserialize<T>(source);
+        return string.IsNullOrWhiteSpace(source) ? default : JsonSerializer.Deserialize<T>(source, MaxJsonOptions.JsonSerializerOptions);
     }
 
     /// <summary>
@@ -593,21 +594,20 @@ public static class UtilityExtensions
     /// <param name="value"></param>
     /// <param name="camelCase">是否为小驼峰格式</param>
     /// <returns></returns>
-    public static string ToJson(this object value, bool camelCase = true)
+    public static string ToJson(this object value)
     {
-        var serializeOptions = new JsonSerializerOptions();
+        return JsonSerializer.Serialize(value, MaxJsonOptions.JsonSerializerOptions);
+    }
 
-        if (camelCase)
-        {
-            serializeOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        };
-        serializeOptions.Converters.Add(new Json.Converters.DateTimeConverter());
-        serializeOptions.Converters.Add(new Json.Converters.DateTimeNullableConverter());
-        serializeOptions.Converters.Add(new Json.Converters.LongConverter());
-        serializeOptions.Converters.Add(new Json.Converters.LongNullableConverter());
-        serializeOptions.PropertyNameCaseInsensitive = true;
-        serializeOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All);
-        return JsonSerializer.Serialize(value, serializeOptions);
+    // <summary>
+    /// 序列化为Json字符串
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="camelCase">是否为小驼峰格式</param>
+    /// <returns></returns>
+    public static string ToJson<T>(this object value)
+    {
+        return JsonSerializer.Serialize(value, typeof(T), MaxJsonOptions.JsonSerializerOptions);
     }
 
     /// <summary>

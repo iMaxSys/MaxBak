@@ -160,33 +160,33 @@ public class MemberService : IMemberService
     /// <param name="ip"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<IAccessChain> LoginAsync(long xppSnsId, int type, string userName, string password, string ip)
+    public async Task<IAccessChain> LoginAsync(PasswordLoginModel model)
     {
         //用户名空检查
-        if (string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(model.UserName))
         {
             throw new MaxException(ResultCode.UserNameCantNull);
         }
 
         //密码空检查
-        if (string.IsNullOrWhiteSpace(password))
+        if (string.IsNullOrWhiteSpace(model.Password))
         {
             throw new MaxException(ResultCode.PasswordCantNull);
         }
 
-        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == userName);
+        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == model.UserName);
         if (dbMember is null)
         {
             throw new MaxException(ResultCode.MemberNotExists);
         }
 
-        if (!(CheckPassword(dbMember.Password, password, dbMember.Salt)))
+        if (!(CheckPassword(dbMember.Password, model.Password, dbMember.Salt)))
         {
             throw new MaxException(ResultCode.PasswordError);
         }
 
         //获取xppSns
-        var xppSns = await _coreService.GetXppSnsAsync(xppSnsId);
+        var xppSns = await _coreService.GetXppSnsAsync(model.XppSnsId);
 
         if (xppSns is null)
         {

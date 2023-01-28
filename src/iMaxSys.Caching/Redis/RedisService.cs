@@ -172,6 +172,19 @@ public class RedisService : IRedisService
     }
 
     /// <summary>
+    /// SetAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="timeSpan"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
+    public async Task SetAsync<T>(string key, object value, TimeSpan? timeSpan, bool global = false)
+    {
+        await _database.StringSetAsync(GetKey(key, global), value.ToJson(), timeSpan);
+    }
+
+    /// <summary>
     /// Delete
     /// </summary>
     /// <param name="key"></param>

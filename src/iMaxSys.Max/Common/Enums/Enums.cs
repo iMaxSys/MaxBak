@@ -229,3 +229,39 @@ public enum MaritalStatus
     [Description("丧偶")]
     Widowed = 3
 }
+
+/// <summary>
+/// 角色类型枚举
+/// </summary>
+public enum RoleType
+{
+    /// <summary>
+    /// 普通用户
+    /// </summary>
+    [Description("普通用户")]
+    Member = 0,
+
+    /// <summary>
+    /// 租户用户
+    /// </summary>
+    [Description("租户用户")]
+    User = 1,
+
+    /// <summary>
+    /// 租户管理员
+    /// </summary>
+    [Description("租户管理员")]
+    Admin = 2,
+
+    /// <summary>
+    /// 系统用户
+    /// </summary>
+    [Description("系统用户")]
+    SuperUser = 8,
+
+    /// <summary>
+    /// 系统管理员
+    /// </summary>
+    [Description("系统管理员")]
+    Super = 9,
+}

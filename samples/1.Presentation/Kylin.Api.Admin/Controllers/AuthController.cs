@@ -33,20 +33,23 @@ public class AuthController : MaxController
     private readonly KylinOption _kylinOption;
     private readonly IAuthService _authService;
     private readonly IDictService _dictService;
+    private readonly IMenuService _menuService;
 
-    public AuthController(IMapper mapper, IOptions<MaxOption> option, IOptions<KylinOption> kylinOption, IAuthService authService, IDictService dictService)
+    public AuthController(IMapper mapper, IOptions<MaxOption> option, IOptions<KylinOption> kylinOption, IAuthService authService, IDictService dictService, IMenuService menuService)
     {
         _mapper = mapper;
         _maxOption = option.Value;
         _kylinOption = kylinOption.Value;
         _authService = authService;
         _dictService = dictService;
+        _menuService = menuService;
     }
 
     [HttpPost]
     public Result<LoginResponse> Login(LoginRequest loginRequest)
     {
         LoginResponse loginResponse = new();
+        //_authService.LoginAsync
         loginResponse.Token = "1345677";
         return Success(loginResponse);
     }
@@ -58,5 +61,12 @@ public class AuthController : MaxController
         response.Name = "孙悟空";
         response.Mobile = "18666666666";
         return Success(response);
+    }
+
+    [HttpPost]
+    public async Task<Result<MenuModel?>> GetMenu()
+    {
+        var menu = await _menuService.GetRoleMenuAsync(1, 2000, 0);
+        return Success(menu);
     }
 }

@@ -82,6 +82,11 @@ public interface IRole
     DateTime? End { get; set; }
 
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    RoleType Type { get; set; }
+
+    /// <summary>
     /// Status
     /// </summary>
     Status Status { get; set; }

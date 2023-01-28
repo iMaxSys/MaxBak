@@ -11,10 +11,6 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using System.Data;
-
-using StackExchange.Redis;
-
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
@@ -33,6 +29,10 @@ namespace iMaxSys.Core.Data.Repositories;
 /// </summary>
 public class DictRepository : CoreRepository<Dict>, IDictRepository
 {
+    protected const string TAG = "d";
+
+    protected readonly string _tagDict = string.Empty;
+
     /// <summary>
     /// 构造
     /// </summary>
@@ -42,6 +42,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
     /// <param name="cacheFactory"></param>
     public DictRepository(CoreContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context, mapper, option, cacheFactory)
     {
+        _tagDict = $"{TAG}";
     }
 
     /// <summary>
@@ -129,7 +130,7 @@ public class DictRepository : CoreRepository<Dict>, IDictRepository
         DictModel? dictModel = await Cache.GetAsync<DictModel>(GetDictKey(tenantId, id), _global);
 
         //为空则刷新
-        if (dictModel == null)
+        if (dictModel is null)
         {
             dictModel = await RefreshAsync(tenantId, id);
         }

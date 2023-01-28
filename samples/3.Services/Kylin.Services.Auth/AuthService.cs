@@ -45,5 +45,22 @@ public class AuthService : IAuthService
             Member = accessChain.Member
         };
     }
+
+    /// <summary>
+    /// 密码登录
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public async Task<LoginResult> LoginAsync(PasswordLoginModel request)
+    {
+        IAccessChain accessChain = await _memberService.LoginAsync(request);
+
+        return new LoginResult
+        {
+            Token = accessChain.AccessSession.Token,
+            Expires = accessChain.AccessSession.Expires,
+            Member = accessChain.Member
+        };
+    }
 }
 

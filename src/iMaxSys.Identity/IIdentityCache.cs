@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity;
 
@@ -59,7 +60,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<IMenu?> GetXppMenuAsync(long tenantId, long xppId);
+    Task<MenuModel?> GetXppMenuAsync(long tenantId, long xppId);
 
     /// <summary>
     /// 设置租户应用菜单
@@ -86,7 +87,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<IMenu?> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
+    Task<MenuModel?> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// 设置租户角色菜单

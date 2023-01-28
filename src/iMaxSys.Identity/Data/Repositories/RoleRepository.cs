@@ -134,7 +134,7 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
     public async Task<RoleModel> RefreshAsync(long tenantId, long xppId, DbRole dbRole)
     {
         RoleModel roleModel = Mapper.Map<RoleModel>(dbRole);
-        await Cache.SetAsync(GetRoleKey(tenantId, dbRole.Id), dbRole, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+        await Cache.SetAsync(GetRoleKey(tenantId, dbRole.Id), roleModel, new TimeSpan(0, Option.Identity.Expires, 0), _global);
         return roleModel;
     }
 
@@ -149,7 +149,7 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    private string GetRoleBaseKey(long tenantId, long roleId) => $"{_tagRole}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}";
+    private string GetRoleBaseKey(long tenantId, long roleId) => $"{_tagRole}{tenantId}{Cache.Separator}{roleId}";
 
     /// <summary>
     /// 获取角色key

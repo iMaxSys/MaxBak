@@ -82,6 +82,11 @@ public class Role : IRole
     public DateTime? End { get; set; }
 
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    public RoleType Type { get; set; }
+
+    /// <summary>
     /// Status
     /// </summary>
     public Status Status { get; set; }

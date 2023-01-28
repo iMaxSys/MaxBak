@@ -50,6 +50,8 @@ public class RoleConfiguration : TenantMasterEntityConfiguration<Role>
         builder.Property(x => x.Start).HasColumnName("start");
         //End
         builder.Property(x => x.End).HasColumnName("end");
+        //Type
+        builder.Property(x => x.Type).HasColumnName("type");
         //Status
         builder.Property(x => x.Status).HasColumnName("status");
         //Index

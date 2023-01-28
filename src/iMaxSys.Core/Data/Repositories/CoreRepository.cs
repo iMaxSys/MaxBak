@@ -31,9 +31,6 @@ public class CoreRepository<T> : EfRepository<T>, ICoreRepository<T> where T : E
     //全局缓存标志
     protected const bool _global = true;
 
-    protected const string TAG = "d";
-
-    protected readonly string _tagDict = string.Empty;
 
 
     protected readonly IMapper Mapper;
@@ -45,8 +42,6 @@ public class CoreRepository<T> : EfRepository<T>, ICoreRepository<T> where T : E
         Mapper = mapper;
         Option = option.Value;
         Cache = cacheFactory.GetService();
-
-        _tagDict = $"{TAG}";
     }
 }
 

@@ -105,6 +105,16 @@ public interface ICache
     Task SetAsync(string key, object value, TimeSpan? timeSpan, bool global = false);
 
     /// <summary>
+    /// 设置
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="timeSpan"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
+    Task SetAsync<T>(string key, object value, TimeSpan? timeSpan, bool global = false);
+
+    /// <summary>
     /// 删除
     /// </summary>
     /// <param name="key"></param>

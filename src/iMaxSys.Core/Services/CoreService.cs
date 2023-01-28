@@ -72,4 +72,13 @@ public class CoreService : ICoreService
 
         return _mapper.Map<XppSnsModel>(xppSns);
     }
+
+    /// <summary>
+    /// 刷新缓存
+    /// </summary>
+    /// <returns></returns>
+    public async Task RefreshAsync()
+    {
+
+    }
 }

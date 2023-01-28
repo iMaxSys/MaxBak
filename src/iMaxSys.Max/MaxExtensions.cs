@@ -11,6 +11,7 @@
 //日期：2021-10-20
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Json;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.DependencyInjection;
@@ -27,28 +28,25 @@ public static class MaxExtensions
     public static void AddMax(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<MaxOption>(configuration.GetSection(FXN));
+
         //entity from body
         //services.Configure<MvcOptions>(options =>
         //{
         //    options.Conventions.Add(new ActionModelConventionOnlyFromBody());
         //});
         //
-        services.AddControllers().AddJsonOptions(options =>
+
+        services.AddControllers();
+
+        services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
         {
-            //options.JsonSerializerOptions.Converters.Add(new Json.Converters.IntConverter());
-            //options.JsonSerializerOptions.Converters.Add(new Json.Converters.IntNullableConverter());
-            //options.JsonSerializerOptions.Converters.Add(new Json.Converters.LongConverter());
-            //options.JsonSerializerOptions.Converters.Add(new Json.Converters.LongNullableConverter());
-            options.JsonSerializerOptions.Converters.Add(new Json.Converters.DateTimeConverter());
-            options.JsonSerializerOptions.Converters.Add(new Json.Converters.DateTimeNullableConverter());
-            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-            options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All);
+            MaxJsonOptions.Configure(options.JsonSerializerOptions);
         });
+
         //var assemblies = DependencyContext.Default.CompileLibraries.Where(c => c.Name.StartsWith(appName, StringComparison.CurrentCultureIgnoreCase) || c.Name.StartsWith(fxName, StringComparison.CurrentCultureIgnoreCase)).Select(x => AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(x.Name)));
         services.AddHttpClient();
         services.AddHttpContextAccessor();
-        var ass = AppDomain.CurrentDomain.GetAssemblies();
+        //var ass = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddDependencyInjection();
         services.AddOptions();

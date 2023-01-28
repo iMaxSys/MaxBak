@@ -34,5 +34,11 @@ public interface ICoreService : IDependency
     /// <param name="id"></param>
     /// <returns></returns>
     Task<XppSnsModel> GetXppSnsAsync(long id);
+
+    /// <summary>
+    /// 刷新缓存
+    /// </summary>
+    /// <returns></returns>
+    Task RefreshAsync();
 }
 

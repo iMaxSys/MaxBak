@@ -143,7 +143,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="predicate">A function to test each element for a condition.</param>
     /// <param name="orderBy">A function to order elements.</param>
     /// <param name="include">A function to include navigation properties</param>
-    /// <param name="disableTracking"><c>true</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="ignoreQueryFilters">Ignore query filters</param>
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
@@ -153,7 +153,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     public async Task<IList<TEntity>> AllAsync(Expression<Func<TEntity, bool>>? predicate = null,
                                               Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
                                               Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
-                                              bool disableTracking = true,
+                                              bool disableTracking = false,
                                               bool ignoreQueryFilters = false,
                                               CancellationToken cancellationToken = default)
     {
@@ -167,7 +167,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="predicate">A function to test each element for a condition.</param>
     /// <param name="orderBy">A function to order elements.</param>
     /// <param name="include">A function to include navigation properties</param>
-    /// <param name="disableTracking"><c>true</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="ignoreQueryFilters">Ignore query filters</param>
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
@@ -178,7 +178,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
-        bool disableTracking = true,
+        bool disableTracking = false,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default) where TResult : class
     {
@@ -226,7 +226,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="include">A function to include navigation properties</param>
     /// <param name="pageIndex">The index of page.</param>
     /// <param name="pageSize">The size of the page.</param>
-    /// <param name="disableTracking"><c>True</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="ignoreQueryFilters">Ignore query filters</param>
     /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
     /// <remarks>This method default no-tracking query.</remarks>
@@ -235,7 +235,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
                                      Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                      int pageIndex = 0,
                                      int pageSize = 50,
-                                     bool disableTracking = true,
+                                     bool disableTracking = false,
                                      bool ignoreQueryFilters = false)
     {
         return GetPagedList(x => x, predicate, orderBy, include, pageSize, pageSize, disableTracking, ignoreQueryFilters);
@@ -250,7 +250,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="include">A function to include navigation properties</param>
     /// <param name="pageIndex">The index of page.</param>
     /// <param name="pageSize">The size of the page.</param>
-    /// <param name="disableTracking"><c>True</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="ignoreQueryFilters">Ignore query filters</param>
     /// <returns>An <see cref="IPagedList{TResult}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
     /// <remarks>This method default no-tracking query.</remarks>
@@ -260,7 +260,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
                                               Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                               int pageIndex = 0,
                                               int pageSize = 50,
-                                              bool disableTracking = true,
+                                              bool disableTracking = false,
                                               bool ignoreQueryFilters = false) where TResult : class
     {
         IQueryable<TEntity> query = _dbSet;
@@ -307,7 +307,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="include">A function to include navigation properties</param>
     /// <param name="pageIndex">The index of page.</param>
     /// <param name="pageSize">The size of the page.</param>
-    /// <param name="disableTracking"><c>True</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
     /// </param>
@@ -319,7 +319,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
                                                 Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                                 int pageIndex = 0,
                                                 int pageSize = 50,
-                                                bool disableTracking = true,
+                                                bool disableTracking = false,
                                                 bool ignoreQueryFilters = false,
                                                 CancellationToken cancellationToken = default)
     {
@@ -335,7 +335,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="include">A function to include navigation properties</param>
     /// <param name="pageIndex">The index of page.</param>
     /// <param name="pageSize">The size of the page.</param>
-    /// <param name="disableTracking"><c>True</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
     /// </param>
@@ -348,7 +348,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
                                                          Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
                                                          int pageIndex = 0,
                                                          int pageSize = 50,
-                                                         bool disableTracking = true,
+                                                         bool disableTracking = false,
                                                          bool ignoreQueryFilters = false,
                                                          CancellationToken cancellationToken = default) where TResult : class
     {
@@ -394,14 +394,14 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="predicate">A function to test each element for a condition.</param>
     /// <param name="orderBy">A function to order elements.</param>
     /// <param name="include">A function to include navigation properties</param>
-    /// <param name="disableTracking"><c>true</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="ignoreQueryFilters">Ignore query filters</param>
     /// <returns>An <see cref="TEntity"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
     /// <remarks>This method defaults to a read-only, no-tracking query.</remarks>
     public TEntity? FirstOrDefault(Expression<Func<TEntity, bool>>? predicate = null,
                               Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
                               Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
-                              bool disableTracking = true,
+                              bool disableTracking = false,
                               bool ignoreQueryFilters = false)
     {
         return FirstOrDefault<TEntity>(x => x, predicate, orderBy, include, disableTracking, ignoreQueryFilters);
@@ -414,7 +414,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="predicate">A function to test each element for a condition.</param>
     /// <param name="orderBy">A function to order elements.</param>
     /// <param name="include">A function to include navigation properties</param>
-    /// <param name="disableTracking"><c>true</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="ignoreQueryFilters">Ignore query filters</param>
     /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
     /// <remarks>This method defaults to a read-only, no-tracking query.</remarks>
@@ -422,7 +422,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
                                        Expression<Func<TEntity, bool>>? predicate = null,
                                        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
                                        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
-                                       bool disableTracking = true,
+                                       bool disableTracking = false,
                                        bool ignoreQueryFilters = false) where TResult : class
     {
         IQueryable<TEntity> query = _dbSet;
@@ -467,7 +467,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="predicate">A function to test each element for a condition.</param>
     /// <param name="orderBy">A function to order elements.</param>
     /// <param name="include">A function to include navigation properties</param>
-    /// <param name="disableTracking"><c>true</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="ignoreQueryFilters">Ignore query filters</param>
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
@@ -477,7 +477,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
-        bool disableTracking = true,
+        bool disableTracking = false,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default)
     {
@@ -491,7 +491,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="predicate">A function to test each element for a condition.</param>
     /// <param name="orderBy">A function to order elements.</param>
     /// <param name="include">A function to include navigation properties</param>
-    /// <param name="disableTracking"><c>true</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+    /// <param name="disableTracking"><c>false</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
     /// <param name="ignoreQueryFilters">Ignore query filters</param>
     /// <param name="cancellationToken">
     ///     A <see cref="CancellationToken" /> to observe while waiting for the task to complete.
@@ -502,7 +502,7 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>>? include = null,
-        bool disableTracking = true,
+        bool disableTracking = false,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default) where TResult : class
     {

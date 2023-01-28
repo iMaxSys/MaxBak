@@ -145,4 +145,9 @@ public class MaxService : IMaxService
     {
         throw new NotImplementedException();
     }
+
+    public Task SetAsync<T>(string key, object value, TimeSpan? timeSpan, bool global = false)
+    {
+        throw new NotImplementedException();
+    }
 }
