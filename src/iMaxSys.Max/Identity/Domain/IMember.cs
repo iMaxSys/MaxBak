@@ -167,11 +167,6 @@ public interface IMember
     int FailedCount { get; set; }
 
     /// <summary>
-    /// RoleId
-    /// </summary>
-    long RoleId { get; set; }
-
-    /// <summary>
     /// DepartmentId
     /// </summary>
     long DepartmentId { get; set; }

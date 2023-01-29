@@ -174,7 +174,7 @@ public class MemberService : IMemberService
             throw new MaxException(ResultCode.PasswordCantNull);
         }
 
-        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == model.UserName);
+        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == model.UserName, null, x => x.Include(y => y.RoleMembers!).ThenInclude(z => z.Role), false);
         if (dbMember is null)
         {
             throw new MaxException(ResultCode.MemberNotExists);
@@ -1222,7 +1222,8 @@ public class MemberService : IMemberService
                     throw new MaxException(ResultCode.UnLogin, router);
                 }
 
-                bool allow = await _menuService.AllowAccessAsync(accessChain.Member?.TenantId ?? 0, _option.XppId, accessChain.Member?.RoleId ?? 0, router);
+                long roleId = accessChain.Member?.Roles?.FirstOrDefault(x => x.XppId == _option.XppId)?.Id ?? 0;
+                bool allow = await _menuService.AllowAccessAsync(accessChain.Member?.TenantId ?? 0, _option.XppId, roleId, router);
 
                 if (allow)
                 {

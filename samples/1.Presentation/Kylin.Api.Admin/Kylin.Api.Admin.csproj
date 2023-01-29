@@ -38,8 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ViewModels\" />
+    <None Remove="Mappers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\" />
+    <Folder Include="Mappers\" />
   </ItemGroup>
 </Project>

@@ -47,6 +47,7 @@ public interface IRole
     public string QuickCode { get; set; }
 
     /// <summary>
+    /// 
     /// Descripton
     /// </summary>
     string? Descripton { get; set; }
@@ -80,6 +81,11 @@ public interface IRole
     /// End
     /// </summary>
     DateTime? End { get; set; }
+
+    /// <summary>
+    /// XppId
+    /// </summary>
+    long XppId { get; set; }
 
     /// <summary>
     /// 角色类型

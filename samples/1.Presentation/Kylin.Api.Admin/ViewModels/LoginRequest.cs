@@ -19,7 +19,7 @@ namespace Kylin.Api.Admin.ViewModels;
 /// <summary>
 /// 登录请求
 /// </summary>
-public class LoginRequest : Request
+public class PasswordLoginRequest : Request
 {
     /// <summary>
     /// 用户名
@@ -34,5 +34,19 @@ public class LoginRequest : Request
     [Display(Name = "密码")]
     [Required(ErrorMessage = "{0}必须填写")]
     public string Password { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 类型
+    /// </summary>
+    [Display(Name = "类型")]
+    [Required(ErrorMessage = "{0}必须填写")]
+    public int Type { get; set; }
+
+    /// <summary>
+    /// SID
+    /// </summary>
+    [Display(Name = "SID")]
+    [Required(ErrorMessage = "{0}必须填写")]
+    public int SID { get; set; }
 }
 

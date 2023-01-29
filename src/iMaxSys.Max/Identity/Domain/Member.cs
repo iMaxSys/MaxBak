@@ -165,11 +165,6 @@ public class Member : IMember
     public int FailedCount { get; set; }
 
     /// <summary>
-    /// RoleId
-    /// </summary>
-    public long RoleId { get; set; }
-
-    /// <summary>
     /// DepartmentId
     /// </summary>
     public long DepartmentId { get; set; }

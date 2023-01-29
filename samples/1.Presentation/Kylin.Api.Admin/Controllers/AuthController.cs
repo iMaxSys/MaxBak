@@ -46,12 +46,17 @@ public class AuthController : MaxController
     }
 
     [HttpPost]
-    public Result<LoginResponse> Login(LoginRequest loginRequest)
+    public async Task<Result<LoginResponse>> Login(PasswordLoginRequest request)
     {
-        LoginResponse loginResponse = new();
-        //_authService.LoginAsync
-        loginResponse.Token = "1345677";
-        return Success(loginResponse);
+        PasswordLoginModel model = new();
+        model.UserName = request.UserName;
+        model.Password = request.Password;
+        model.IP = this.WorkContext.IP;
+        model.Type = request.Type;
+        model.XppSnsId = request.SID;
+        var result = await _authService.LoginAsync(model);
+        var response = _mapper.Map<LoginResponse>(result);
+        return Success(response);
     }
 
     [HttpPost]

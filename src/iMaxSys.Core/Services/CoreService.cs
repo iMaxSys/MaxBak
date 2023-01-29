@@ -20,6 +20,7 @@ using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Core.Common;
+using iMaxSys.Core.Data.Repositories;
 
 namespace iMaxSys.Core.Services;
 
@@ -30,13 +31,13 @@ public class CoreService : ICoreService
 {
     private readonly IMapper _mapper;
     private readonly MaxOption _option;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IXppRepository _xppRepository;
 
-    public CoreService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<CoreContext, CoreReadOnlyContext> unitOfWork)
+    public CoreService(IMapper mapper, IOptions<MaxOption> option, IXppRepository xppRepository)
     {
         _mapper = mapper;
         _option = option.Value;
-        _unitOfWork = unitOfWork;
+        _xppRepository = xppRepository;
     }
 
     /// <summary>
@@ -46,14 +47,7 @@ public class CoreService : ICoreService
     /// <returns></returns>
     public async Task<XppModel> GetXppAsync(long id)
     {
-        Xpp? xpp = await _unitOfWork.GetReadOnlyRepository<Xpp>().FindAsync(id);
-
-        if (xpp is null)
-        {
-            throw new MaxException(ResultCode.XppIsInvalid);
-        }
-
-        return _mapper.Map<XppModel>(xpp);
+        return await _xppRepository.GetXppAsync(id);
     }
 
     /// <summary>
@@ -63,14 +57,7 @@ public class CoreService : ICoreService
     /// <returns></returns>
     public async Task<XppSnsModel> GetXppSnsAsync(long id)
     {
-        XppSns? xppSns = await _unitOfWork.GetReadOnlyRepository<XppSns>().FirstOrDefaultAsync(x => x.Id == id, null, x => x.Include(y => y.Xpp));
-
-        if (xppSns is null)
-        {
-            throw new MaxException(ResultCode.XppSnsIsInvalid);
-        }
-
-        return _mapper.Map<XppSnsModel>(xppSns);
+        return await _xppRepository.GetSnsAsync(id);
     }
 
     /// <summary>
@@ -79,6 +66,6 @@ public class CoreService : ICoreService
     /// <returns></returns>
     public async Task RefreshAsync()
     {
-
+        await _xppRepository.RefreshAsync();
     }
 }

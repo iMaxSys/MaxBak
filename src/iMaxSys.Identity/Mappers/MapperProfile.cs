@@ -31,7 +31,8 @@ namespace iMaxSys.Identity.Mappers
     {
         public MapperProfile()
         {
-            CreateMap<DbMember, MemberModel>();
+            CreateMap<DbMember, MemberModel>()
+                .ForMember(t => t.Roles, opt => opt.MapFrom(s => s.RoleMembers!.Select(x => x.Role)));
             CreateMap<MemberModel, DbMember>();
 
             CreateMap<DbRole, RoleModel>()
@@ -42,6 +43,7 @@ namespace iMaxSys.Identity.Mappers
                 .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds[0] == 0 ? "0" : string.Join(",", s.MenuIds))))
                 .ForMember(t => t.OperationIds, opt => opt.MapFrom(s => s.OperationIds == null ? null : (s.OperationIds[0] == 0 ? "0" : string.Join(",", s.OperationIds))));
 
+            CreateMap<DbRole, IRole>().As<RoleModel>();
             CreateMap<DbDepartment, Department>();
             CreateMap<DbDepartment, IDepartment>().As<Department>();
             CreateMap<DepartmentModel, Department>();

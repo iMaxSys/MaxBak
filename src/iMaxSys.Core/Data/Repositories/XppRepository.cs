@@ -25,7 +25,7 @@ namespace iMaxSys.Core.Data.Repositories;
 /// <summary>
 /// 应用仓储
 /// </summary>
-public class XppRepository : CoreRepository<Xpp>, IXppRepository
+public class XppRepository : CoreReadOnlyRepository<Xpp>, IXppRepository
 {
     private const string TAG = "x";
     private const string TAG_XPP = "x";
@@ -38,7 +38,7 @@ public class XppRepository : CoreRepository<Xpp>, IXppRepository
     /// <param name="mapper"></param>
     /// <param name="option"></param>
     /// <param name="cacheFactory"></param>
-    public XppRepository(CoreContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context, mapper, option, cacheFactory)
+    public XppRepository(CoreReadOnlyContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context, mapper, option, cacheFactory)
     {
     }
 
@@ -82,7 +82,7 @@ public class XppRepository : CoreRepository<Xpp>, IXppRepository
     /// <returns></returns>
     public async Task RefreshAsync()
     {
-        var xpps = await AllAsync(include: x => x.Include(y => y.XppSnses), disableTracking: true);
+        var xpps = await AllAsync(include: x => x.Include(y => y.XppSnses));
         foreach (var item in xpps)
         {
             await RefreshXppAsync(item);

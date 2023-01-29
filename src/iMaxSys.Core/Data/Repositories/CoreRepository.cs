@@ -31,8 +31,6 @@ public class CoreRepository<T> : EfRepository<T>, ICoreRepository<T> where T : E
     //全局缓存标志
     protected const bool _global = true;
 
-
-
     protected readonly IMapper Mapper;
     protected readonly ICache Cache;
     protected readonly MaxOption Option;
@@ -47,7 +45,17 @@ public class CoreRepository<T> : EfRepository<T>, ICoreRepository<T> where T : E
 
 public class CoreReadOnlyRepository<T> : EfReadOnlyRepository<T>, ICoreReadOnlyRepository<T> where T : Entity
 {
-    public CoreReadOnlyRepository(CoreReadOnlyContext context) : base(context)
+    //全局缓存标志
+    protected const bool _global = true;
+
+    protected readonly IMapper Mapper;
+    protected readonly ICache Cache;
+    protected readonly MaxOption Option;
+
+    public CoreReadOnlyRepository(CoreReadOnlyContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context)
     {
+        Mapper = mapper;
+        Option = option.Value;
+        Cache = cacheFactory.GetService();
     }
 }

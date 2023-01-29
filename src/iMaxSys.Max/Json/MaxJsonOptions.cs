@@ -46,5 +46,7 @@ public static class MaxJsonOptions
         options.PropertyNameCaseInsensitive = true;                                     //不区分大小写
         options.NumberHandling = JsonNumberHandling.AllowReadingFromString;
         options.Encoder = JavaScriptEncoder.Create(allowedRanges: UnicodeRanges.All);   //序列化语言字符集
+        //options.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     }
 }

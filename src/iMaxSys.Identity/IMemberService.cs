@@ -25,33 +25,18 @@ namespace iMaxSys.Identity;
 public interface IMemberService : IDependency
 {
     /// <summary>
-    /// 扫码登录
+    /// 代码登录
     /// </summary>
-    /// <param name="xppSnsId"></param>
-    /// <param name="code"></param>
-    /// <param name="ip"></param>
+    /// <param name="model"></param>
     /// <returns></returns>
-    //Task<IAccessChain> LoginAsync(long xppSnsId, string code, string ip);
+    Task<IAccessChain> LoginAsync(CodeLoginModel model);
 
     /// <summary>
-    /// 登录
+    /// 密码登录
     /// </summary>
-    /// <param name="xppSnsId"></param>
-    /// <param name="type"></param>
-    /// <param name="code"></param>
-    /// <param name="ip"></param>
+    /// <param name="model"></param>
     /// <returns></returns>
-    Task<IAccessChain> LoginAsync(CodeLoginModel codeLoginModel);
-
-    /// <summary>
-    /// login
-    /// </summary>
-    /// <param name="xppSnsId"></param>
-    /// <param name="userName"></param>
-    /// <param name="password"></param>
-    /// <param name="ip"></param>
-    /// <returns></returns>
-    Task<IAccessChain> LoginAsync(long xppSnsId, int type, string userName, string password, string ip);
+    Task<IAccessChain> LoginAsync(PasswordLoginModel model);
 
     /// <summary>
     /// login user

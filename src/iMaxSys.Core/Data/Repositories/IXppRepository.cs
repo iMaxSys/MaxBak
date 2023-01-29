@@ -22,14 +22,13 @@ namespace iMaxSys.Core.Data.Repositories;
 /// <summary>
 /// 应用仓储接口
 /// </summary>
-public interface IXppRepository : ICoreRepository<Xpp>
+public interface IXppRepository : ICoreReadOnlyRepository<Xpp>
 {
     /// <summary>
     /// 获取应用信息
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     Task<XppModel> GetXppAsync(long id);
 
     /// <summary>
