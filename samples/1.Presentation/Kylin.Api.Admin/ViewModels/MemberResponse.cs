@@ -1,5 +1,4 @@
-﻿
-//----------------------------------------------------------------
+﻿//----------------------------------------------------------------
 //Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
@@ -86,5 +85,10 @@ public class MemberResponse : Response
     /// 是否正式
     /// </summary>
     public bool IsOfficial { get; set; }
+
+    /// <summary>
+    /// 角色
+    /// </summary>
+    public RoleResponse Role { get; set; } = new();
 }
 
