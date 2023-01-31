@@ -35,6 +35,7 @@ using iMaxSys.Sns.Common.Open;
 
 using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using AutoMapper.Execution;
 
 namespace iMaxSys.Identity;
 
@@ -50,13 +51,14 @@ public class MemberService : IMemberService
     private readonly ISnsFactory _snsFactory;
     private readonly ICoreService _coreService;
     private readonly IMenuService _menuService;
+    private readonly IRoleService _roleService;
     private readonly ICheckCodeService _checkCodeService;
 
     private IUser? _user;
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICoreService coreService, ICheckCodeService checkCodeService, IMenuService menuService)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICoreService coreService, ICheckCodeService checkCodeService, IMenuService menuService, IRoleService roleService)
     {
         _mapper = mapper;
         _option = option.Value;
@@ -66,6 +68,7 @@ public class MemberService : IMemberService
         _coreService = coreService;
         _checkCodeService = checkCodeService;
         _menuService = menuService;
+        _roleService = roleService;
     }
 
     #endregion
@@ -148,7 +151,8 @@ public class MemberService : IMemberService
 
         _user = await LoginUserAsync(dbMember.Id, dbMember.UserId, dbMember.Type);
 
-        return await RefreshAccessChainAsync(xppSns, dbMember, accessConfig);
+        var member = _mapper.Map<MemberModel>(dbMember);
+        return await RefreshAccessChainAsync(xppSns, member, accessConfig);
     }
 
     /// <summary>
@@ -174,7 +178,7 @@ public class MemberService : IMemberService
             throw new MaxException(ResultCode.PasswordCantNull);
         }
 
-        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == model.UserName, null, x => x.Include(y => y.RoleMembers!).ThenInclude(z => z.Role), false);
+        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == model.UserName, null, x => x.Include(y => y.RoleMembers), false);
         if (dbMember is null)
         {
             throw new MaxException(ResultCode.MemberNotExists);
@@ -195,7 +199,19 @@ public class MemberService : IMemberService
 
         _user = await LoginUserAsync(dbMember.Id, dbMember.UserId, dbMember.Type);
 
-        return await RefreshAccessChainAsync(xppSns, dbMember);
+        var member = _mapper.Map<MemberModel>(dbMember);
+
+        //获取角色
+        if (dbMember.RoleMembers?.Count > 0)
+        {
+            member.Roles = new List<IRole>();
+            var role = await _roleService.GetAsync(dbMember.TenantId, model.XppSnsId, dbMember.RoleMembers.First().RoleId);
+            if (role is not null)
+            {
+                member.Roles.Add(role);
+            }
+        }
+        return await RefreshAccessChainAsync(xppSns, member);
     }
 
     #endregion
@@ -322,7 +338,8 @@ public class MemberService : IMemberService
             accessConfig = await GetAccessConfigAsync(xppSns, registerModel.Code);
         }
 
-        return await RefreshAccessChainAsync(xppSns, dbMember, accessConfig);
+        var member = _mapper.Map<MemberModel>(dbMember);
+        return await RefreshAccessChainAsync(xppSns, member, accessConfig);
     }
 
     #endregion
@@ -555,7 +572,7 @@ public class MemberService : IMemberService
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
+    public async Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, MemberModel member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
     {
         var token = accessToken ?? MakeAccessToken();
 
@@ -604,7 +621,7 @@ public class MemberService : IMemberService
         IAccessChain accessChain = new AccessChain
         {
             AccessSession = accessSession,
-            Member = _mapper.Map<MemberModel>(member),
+            Member = member,
             User = _user
         };
 

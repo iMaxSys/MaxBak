@@ -29,7 +29,7 @@ public class RoleResponse : Response
     /// <summary>
     /// 头像
     /// </summary>
-    public string? Avatar { get; set; }
+    public string? Icon { get; set; }
 
     /// <summary>
     /// 名称

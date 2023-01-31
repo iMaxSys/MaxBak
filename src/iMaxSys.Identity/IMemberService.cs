@@ -139,7 +139,7 @@ public interface IMemberService : IDependency
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, DbMember member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
+    Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, MemberModel member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
 
     /// <summary>
     /// 修改密码
