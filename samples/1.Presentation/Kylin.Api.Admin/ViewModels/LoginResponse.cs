@@ -28,7 +28,7 @@ public class LoginResponse : Response
     /// <summary>
     /// 过期时间
     /// </summary>
-    public string? Expires { get; set; }
+    public string Expires { get; set; } = string.Empty;
 
     /// <summary>
     /// 信息

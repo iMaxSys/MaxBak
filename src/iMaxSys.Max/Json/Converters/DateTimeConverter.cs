@@ -30,7 +30,7 @@ namespace iMaxSys.Max.Json.Converters
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString("yyyy-MM-dd HH:mm:ss"));
+            writer.WriteStringValue(value.ToNormalString());
         }
     }
 
@@ -46,7 +46,7 @@ namespace iMaxSys.Max.Json.Converters
 
         public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value?.ToString("yyyy-MM-dd HH:mm:ss"));
+            writer.WriteStringValue(value?.ToNormalString());
         }
     }
 }

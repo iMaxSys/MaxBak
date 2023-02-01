@@ -42,6 +42,16 @@ public class RoleResponse : Response
     public string? Alias { get; set; }
 
     /// <summary>
+    /// MenuIds
+    /// </summary>
+    public string[]? MenuIds { get; set; }
+
+    /// <summary>
+    /// OperationIds
+    /// </summary>
+    public string[]? OperationIds { get; set; }
+
+    /// <summary>
     /// 类型
     /// </summary>
     public int Type { get; set; }
