@@ -35,7 +35,6 @@ using iMaxSys.Sns.Common.Open;
 
 using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
-using AutoMapper.Execution;
 
 namespace iMaxSys.Identity;
 

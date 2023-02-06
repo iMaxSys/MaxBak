@@ -20,6 +20,7 @@ using iMaxSys.Identity;
 
 using Kylin.Data.EFCore;
 using Kylin.Framework.Options;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServices(builder.Services, builder.Configuration);
@@ -36,7 +37,30 @@ static void ConfigureServices(IServiceCollection services, ConfigurationManager 
     services.AddMax(configuration);
     services.AddMaxCore(configuration);
     services.AddMaxIdentity(configuration);
-    services.AddSwaggerGen();
+
+    services.AddSwaggerGen(option =>
+    {
+        // Add security definitions
+        option.AddSecurityDefinition("Token", new OpenApiSecurityScheme()
+        {
+            Description = "Please enter 'Token' in the text box.",
+            Name = "Token",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+        });
+        option.AddSecurityRequirement(new OpenApiSecurityRequirement
+         {
+             { new OpenApiSecurityScheme
+                 {
+                  Reference = new OpenApiReference()
+                  {
+                      Id = "Token",
+                      Type = ReferenceType.SecurityScheme
+                  }
+             }, Array.Empty<string>() }
+         });
+    });
+
     services.AddKylinDataAccess(configuration);
 }
 
