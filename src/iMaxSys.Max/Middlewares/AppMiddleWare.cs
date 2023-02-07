@@ -33,13 +33,13 @@ public class AppMiddleWare
 
     public async Task InvokeAsync(HttpContext context)
     {
-        SetAppInfo(context);
+        SetXppInfo(context);
         await _next(context);
     }
 
-    private void SetAppInfo(HttpContext context)
+    private void SetXppInfo(HttpContext context)
     {
-        //_workContext.AppInfo = new AppInfo();
+        //_workContext.Xpp = new XppInfo();
     }
 }
 

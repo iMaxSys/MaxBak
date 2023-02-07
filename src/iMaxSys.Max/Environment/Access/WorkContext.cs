@@ -11,105 +11,111 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
-using System;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-
 using iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Max.Environment.Access
+namespace iMaxSys.Max.Environment.Access;
+
+/// <summary>
+/// WorkContext
+/// </summary>
+public class WorkContext : IWorkContext
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IApplication _application;
+    private readonly ISession _session;
+
+    private IAccessChain? _accessChain;
+
     /// <summary>
-    /// WorkContext
+    /// 访问链
     /// </summary>
-    public class WorkContext : IWorkContext
+    public IAccessChain? AccessChain
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IApplication _application;
-        private readonly ISession _session;
-
-        private IAccessChain? _accessChain;
-
-        /// <summary>
-        /// 访问链
-        /// </summary>
-        public IAccessChain? AccessChain
+        get
         {
-            get
-            {
-                return _accessChain;
-            }
-            set
-            {
-                _accessChain = value;
-            }
+            return _accessChain;
+        }
+        set
+        {
+            _accessChain = value;
+        }
+    }
+
+    /// <summary>
+    /// Application
+    /// </summary>
+    public IApplication Application { get => _application; }
+
+    /// <summary>
+    /// 会话
+    /// </summary>
+    public ISession Session { get => _session; }
+
+    /// <summary>
+    /// AppInfo
+    /// </summary>
+    public XppInfo Xpp { get; }
+
+    /// <summary>
+    /// IP
+    /// </summary>
+    public string? IP { get; set; }
+
+    /// <summary>
+    /// 构造
+    /// </summary>
+    /// <param name="httpContextAccessor"></param>
+    /// <param name="application"></param>
+    /// <param name="session"></param>
+    public WorkContext(IHttpContextAccessor httpContextAccessor, IApplication application, ISession session, IOptions<MaxOption> option)
+    {
+        _httpContextAccessor = httpContextAccessor;
+        _application = application;
+        _session = session;
+        Xpp = GetXpp(option.Value.XppId);
+        IP = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+    }
+
+    /// <summary>
+    /// Get service of type
+    /// </summary>
+    /// <typeparam name="T">The type of service object to get.</typeparam>
+    /// <returns></returns>
+    public T? GetService<T>()
+    {
+        var provider = _httpContextAccessor?.HttpContext?.RequestServices;
+        if (provider == null)
+        {
+            throw new ArgumentNullException(nameof(provider));
         }
 
-        /// <summary>
-        /// Application
-        /// </summary>
-        public IApplication Application { get => _application; }
+        return provider.GetService<T>();
+    }
 
-        /// <summary>
-        /// 会话
-        /// </summary>
-        public ISession Session { get => _session; }
-
-        /// <summary>
-        /// AppInfo
-        /// </summary>
-        //AppInfo? AppInfo { get => null; }
-
-        /// <summary>
-        /// IP
-        /// </summary>
-        public string? IP { get; set; }
-
-        /// <summary>
-        /// 构造
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="application"></param>
-        /// <param name="session"></param>
-        public WorkContext(IHttpContextAccessor httpContextAccessor, IApplication application, ISession session)
+    /// <summary>
+    /// Get service of type
+    /// </summary>
+    /// <typeparam name="T">The type of service object to get.</typeparam>
+    /// <returns></returns>
+    public T GetRequiredService<T>()
+    {
+        var provider = _httpContextAccessor?.HttpContext?.RequestServices;
+        if (provider == null)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _application = application;
-            _session = session;
-            IP = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+            throw new ArgumentNullException(nameof(provider));
         }
 
-        /// <summary>
-        /// Get service of type
-        /// </summary>
-        /// <typeparam name="T">The type of service object to get.</typeparam>
-        /// <returns></returns>
-        public T? GetService<T>()
-        {
-            var provider = _httpContextAccessor?.HttpContext?.RequestServices;
-            if (provider == null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
+        return (T)provider.GetRequiredService(typeof(T));
+    }
 
-            return provider.GetService<T>();
-        }
-
-        /// <summary>
-        /// Get service of type
-        /// </summary>
-        /// <typeparam name="T">The type of service object to get.</typeparam>
-        /// <returns></returns>
-        public T GetRequiredService<T>()
-        {
-            var provider = _httpContextAccessor?.HttpContext?.RequestServices;
-            if (provider == null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
-
-            return (T)provider.GetRequiredService(typeof(T));
-        }
+    /// <summary>
+    /// GetXpp
+    /// </summary>
+    /// <param name="id">XppId</param>
+    /// <returns></returns>
+    private static XppInfo GetXpp(long id)
+    {
+        //var xppServcie = GetRequiredService<IDictService>().GetAsync(id);
+        return new XppInfo();
     }
 }

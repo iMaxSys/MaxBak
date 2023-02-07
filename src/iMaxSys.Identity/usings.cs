@@ -25,6 +25,7 @@ global using System.Text.Json.Serialization;
 
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Cors.Infrastructure;
 global using Microsoft.Extensions.Options;
 global using Microsoft.Extensions.Primitives;
 global using Microsoft.Extensions.Configuration;

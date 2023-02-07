@@ -16,7 +16,7 @@ namespace iMaxSys.Max
     /// <summary>
     /// 应用信息
     /// </summary>
-    public class AppInfo
+    public class XppInfo
     {
         /// <summary>
         /// 综合标识
@@ -52,26 +52,6 @@ namespace iMaxSys.Max
         /// 业务名称
         /// </summary>
         public string BizName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// 成员Id
-        /// </summary>
-        public long MemberId { get; set; }
-
-        /// <summary>
-        /// 成员名称
-        /// </summary>
-        public string MemberName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// 用户Id
-        /// </summary>
-        public long UserId { get; set; }
-
-        /// <summary>
-        /// 成员名称
-        /// </summary>
-        public string UserName { get; set; } = string.Empty;
 
         /// <summary>
         /// 发生时间

@@ -63,15 +63,16 @@ public class AuthController : MaxController
     public Result<MemberResponse> Info()
     {
         MemberResponse response = new();
-        response.Name = "孙悟空";
+        response.Name = "熏悟空";
         response.Mobile = "18666666666";
         return Success(response);
     }
 
-    [HttpPost]
-    public async Task<Result<MenuModel?>> GetMenu()
-    {
-        var menu = await _menuService.GetRoleMenuAsync(1, 2000, 0);
-        return Success(menu);
-    }
+    //[HttpPost]
+    ////public async Task<Result<MenuModel?>> GetMenu()
+    //{
+    //    //this.
+    //    //var menu = await _menuService.GetRoleMenuAsync(AccessChain.Member.TenantId, 2000, 0);
+    //    return Success(menu);
+    //}
 }

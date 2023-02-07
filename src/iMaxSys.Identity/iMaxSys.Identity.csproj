@@ -11,6 +11,8 @@
     <ProjectReference Include="..\iMaxSys.Caching\iMaxSys.Caching.csproj" />
     <ProjectReference Include="..\iMaxSys.Sns\iMaxSys.Sns.csproj" />
     <ProjectReference Include="..\iMaxSys.Core\iMaxSys.Core.csproj" />
+    <ProjectReference Include="..\iMaxSys.Max\iMaxSys.Max.csproj" />
+    <ProjectReference Include="..\iMaxSys.Core\iMaxSys.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Microsoft.EntityFrameworkCore.Design" />

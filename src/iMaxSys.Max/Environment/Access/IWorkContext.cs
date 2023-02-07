@@ -26,6 +26,8 @@ namespace iMaxSys.Max.Environment.Access
         /// </summary>
         IAccessChain AccessChain { get; set; }
 
+        //Xpp Xpp { get; set; }
+
         /// <summary>
         /// Application
         /// </summary>
@@ -37,9 +39,9 @@ namespace iMaxSys.Max.Environment.Access
         ISession Session { get; }
 
         /// <summary>
-        /// AppInfo
+        /// XppInfo
         /// </summary>
-        //AppInfo? AppInfo { get; }
+        XppInfo Xpp { get; }
 
         /// <summary>
         /// IP
