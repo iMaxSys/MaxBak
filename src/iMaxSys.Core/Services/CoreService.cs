@@ -11,14 +11,13 @@
 //日期：2022-06-29
 //----------------------------------------------------------------
 
-using iMaxSys.Data;
-using iMaxSys.Core.Models;
-using iMaxSys.Core.Data.EFCore;
-using iMaxSys.Core.Data.Entities;
-
+using iMaxSys.Max;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.DependencyInjection;
+using iMaxSys.Data;
+using iMaxSys.Core.Models;
+using iMaxSys.Core.Data.EFCore;
 using iMaxSys.Core.Common;
 using iMaxSys.Core.Data.Repositories;
 
@@ -45,7 +44,7 @@ public class CoreService : ICoreService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<XppModel> GetXppAsync(long id)
+    public async Task<Xpp> GetXppAsync(long id)
     {
         return await _xppRepository.GetXppAsync(id);
     }
@@ -55,7 +54,7 @@ public class CoreService : ICoreService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<XppSnsModel> GetXppSnsAsync(long id)
+    public async Task<XppSns> GetXppSnsAsync(long id)
     {
         return await _xppRepository.GetSnsAsync(id);
     }

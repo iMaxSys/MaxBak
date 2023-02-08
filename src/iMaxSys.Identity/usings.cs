@@ -42,4 +42,7 @@ global using Microsoft.Extensions.Logging.Debug;
 
 global using AutoMapper;
 
+global using iMaxSys.Max;
+global using iMaxSys.Core;
+global using iMaxSys.Data;
 global using iMaxSys.Caching;

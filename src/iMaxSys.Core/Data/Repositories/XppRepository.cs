@@ -11,21 +11,23 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Core.Common;
-using iMaxSys.Core.Data.EFCore;
-using iMaxSys.Core.Data.Entities;
-using iMaxSys.Core.Models;
+using iMaxSys.Max;
 using iMaxSys.Max.Caching;
+using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Identity.Domain;
-using iMaxSys.Max.Options;
+using iMaxSys.Core.Common;
+using iMaxSys.Core.Models;
+using iMaxSys.Core.Data.EFCore;
+using DbXpp = iMaxSys.Core.Data.Entities.Xpp;
+using DbXppSns = iMaxSys.Core.Data.Entities.XppSns;
 
 namespace iMaxSys.Core.Data.Repositories;
 
 /// <summary>
 /// 应用仓储
 /// </summary>
-public class XppRepository : CoreReadOnlyRepository<Xpp>, IXppRepository
+public class XppRepository : CoreReadOnlyRepository<DbXpp>, IXppRepository
 {
     private const string TAG = "x";
     private const string TAG_XPP = "x";
@@ -48,32 +50,32 @@ public class XppRepository : CoreReadOnlyRepository<Xpp>, IXppRepository
     /// <param name="id"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<XppModel> GetXppAsync(long id)
+    public async Task<Xpp> GetXppAsync(long id)
     {
         //取缓存
-        XppModel? model = await Cache.GetAsync<XppModel>(GetXppKey(id), _global);
+        Xpp? xpp = await Cache.GetAsync<Xpp>(GetXppKey(id), _global);
 
         //为空则刷新
-        if (model is null)
+        if (xpp is null)
         {
-            model = await RefreshXppAsync(id);
+            xpp = await RefreshXppAsync(id);
         }
 
-        return model;
+        return xpp;
     }
 
-    public async Task<XppSnsModel> GetSnsAsync(long id)
+    public async Task<XppSns> GetSnsAsync(long id)
     {
         //取缓存
-        XppSnsModel? model = await Cache.GetAsync<XppSnsModel>(GetSnsKey(id), _global);
+        XppSns? xppSns = await Cache.GetAsync<XppSns>(GetSnsKey(id), _global);
 
         //为空则刷新
-        if (model is null)
+        if (xppSns is null)
         {
-            model = await RefreshSnsAsync(id);
+            xppSns = await RefreshSnsAsync(id);
         }
 
-        return model;
+        return xppSns;
     }
 
     /// <summary>
@@ -95,7 +97,7 @@ public class XppRepository : CoreReadOnlyRepository<Xpp>, IXppRepository
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<XppModel> RefreshXppAsync(long id)
+    public async Task<Xpp> RefreshXppAsync(long id)
     {
         var xpp = await FirstOrDefaultAsync(x => x.Id == id);
         return await RefreshXppAsync(xpp);
@@ -106,16 +108,16 @@ public class XppRepository : CoreReadOnlyRepository<Xpp>, IXppRepository
     /// </summary>
     /// <param name="xpp"></param>
     /// <returns></returns>
-    public async Task<XppModel> RefreshXppAsync(Xpp? xpp)
+    public async Task<Xpp> RefreshXppAsync(DbXpp? dbXpp)
     {
-        if (xpp is null)
+        if (dbXpp is null)
         {
             throw new MaxException(ResultCode.XppIsInvalid);
         }
-        var model = Mapper.Map<XppModel>(xpp);
-        await Cache.SetAsync(GetXppKey(xpp.Id), model, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+        var xpp = Mapper.Map<Xpp>(dbXpp);
+        await Cache.SetAsync(GetXppKey(xpp.Id), xpp, new TimeSpan(0, Option.Identity.Expires, 0), _global);
 
-        return model;
+        return xpp;
     }
 
     /// <summary>
@@ -123,18 +125,18 @@ public class XppRepository : CoreReadOnlyRepository<Xpp>, IXppRepository
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<XppSnsModel> RefreshSnsAsync(long id)
+    public async Task<XppSns> RefreshSnsAsync(long id)
     {
-        var xpp = await FirstOrDefaultAsync(x => x.XppSnses != null && x.XppSnses.Any(y => y.Id == id), null, x => x.Include(y => y.XppSnses));
+        var dbXpp = await FirstOrDefaultAsync(x => x.XppSnses != null && x.XppSnses.Any(y => y.Id == id), null, x => x.Include(y => y.XppSnses));
 
-        if (xpp is null)
+        if (dbXpp is null)
         {
             throw new MaxException(ResultCode.XppSnsIsInvalid);
         }
 
-        var xppSns = xpp?.XppSnses?.FirstOrDefault(x => x.Id == id);
+        var dbXppSns = dbXpp?.XppSnses?.FirstOrDefault(x => x.Id == id);
 
-        return await RefreshSnsAsync(xppSns);
+        return await RefreshSnsAsync(dbXppSns);
     }
 
     /// <summary>
@@ -142,16 +144,16 @@ public class XppRepository : CoreReadOnlyRepository<Xpp>, IXppRepository
     /// </summary>
     /// <param name="xppSnses"></param>
     /// <returns></returns>
-    public async Task<XppSnsModel> RefreshSnsAsync(XppSns? xppSns)
+    public async Task<XppSns> RefreshSnsAsync(DbXppSns? dbXppSns)
     {
-        if (xppSns is null)
+        if (dbXppSns is null)
         {
             throw new MaxException(ResultCode.XppSnsIsInvalid);
         }
 
-        var model = Mapper.Map<XppSnsModel>(xppSns);
-        await Cache.SetAsync(GetSnsKey(xppSns.Id), model, new TimeSpan(0, Option.Identity.Expires, 0), _global);
-        return model;
+        var xppSns = Mapper.Map<XppSns>(dbXppSns);
+        await Cache.SetAsync(GetSnsKey(xppSns.Id), xppSns, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+        return xppSns;
     }
 
     /// <summary>
@@ -159,13 +161,13 @@ public class XppRepository : CoreReadOnlyRepository<Xpp>, IXppRepository
     /// </summary>
     /// <param name="xppSnses"></param>
     /// <returns></returns>
-    public async Task RefreshSnsesAsync(ICollection<XppSns>? xppSnses)
+    public async Task RefreshSnsesAsync(ICollection<DbXppSns>? dbXppSnses)
     {
-        if (xppSnses is not null)
+        if (dbXppSnses is not null)
         {
-            foreach (var xppSns in xppSnses)
+            foreach (var dbXppSns in dbXppSnses)
             {
-                await RefreshSnsAsync(xppSns);
+                await RefreshSnsAsync(dbXppSns);
             }
         }
     }

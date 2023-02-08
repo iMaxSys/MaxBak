@@ -1,22 +1,21 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
+//Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: XppSnsModel.cs
-//摘要: XppSnsModel 
+//文件: BizConfig.cs
+//摘要: 业务配置
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2022-06-29
+//日期：2017-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Core.Data.Entities;
 using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Core.Models;
+namespace iMaxSys.Max;
 
-public class XppSnsModel
+public class XppSns
 {
     /// <summary>
     /// Id
@@ -71,6 +70,6 @@ public class XppSnsModel
     /// <summary>
     /// Xpp
     /// </summary>
-    public XppModel Xpp { get; set; } = new();
+    public Xpp Xpp { get; set; } = new();
 }
 

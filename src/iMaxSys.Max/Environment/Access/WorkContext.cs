@@ -10,7 +10,7 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
-
+ 
 using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Max.Environment.Access;
@@ -52,9 +52,9 @@ public class WorkContext : IWorkContext
     public ISession Session { get => _session; }
 
     /// <summary>
-    /// AppInfo
+    /// XppInfo
     /// </summary>
-    public XppInfo Xpp { get; }
+    public Xpp Xpp { get; set; } = new();
 
     /// <summary>
     /// IP
@@ -72,7 +72,6 @@ public class WorkContext : IWorkContext
         _httpContextAccessor = httpContextAccessor;
         _application = application;
         _session = session;
-        Xpp = GetXpp(option.Value.XppId);
         IP = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
     }
 
@@ -106,16 +105,5 @@ public class WorkContext : IWorkContext
         }
 
         return (T)provider.GetRequiredService(typeof(T));
-    }
-
-    /// <summary>
-    /// GetXpp
-    /// </summary>
-    /// <param name="id">XppId</param>
-    /// <returns></returns>
-    private static XppInfo GetXpp(long id)
-    {
-        //var xppServcie = GetRequiredService<IDictService>().GetAsync(id);
-        return new XppInfo();
     }
 }

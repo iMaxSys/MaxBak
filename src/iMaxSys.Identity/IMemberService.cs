@@ -129,7 +129,7 @@ public interface IMemberService : IDependency
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
+    Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
 
     /// <summary>
     /// 刷新AcceeChain缓存
@@ -139,7 +139,7 @@ public interface IMemberService : IDependency
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, MemberModel member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
+    Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, MemberModel member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
 
     /// <summary>
     /// 修改密码

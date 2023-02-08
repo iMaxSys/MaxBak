@@ -11,7 +11,7 @@
 //日期：2022-06-29
 //----------------------------------------------------------------
 
-using iMaxSys.Core.Models;
+using iMaxSys.Max;
 using iMaxSys.Max.DependencyInjection;
 
 namespace iMaxSys.Core.Services;
@@ -26,14 +26,14 @@ public interface ICoreService : IDependency
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<XppModel> GetXppAsync(long id);
+    Task<Xpp> GetXppAsync(long id);
 
     /// <summary>
     /// 获取xppSns
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<XppSnsModel> GetXppSnsAsync(long id);
+    Task<XppSns> GetXppSnsAsync(long id);
 
     /// <summary>
     /// 刷新缓存

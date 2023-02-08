@@ -16,6 +16,7 @@ using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Environment.Access;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Identity.Common;
+using iMaxSys.Core.Services;
 
 namespace iMaxSys.Identity;
 
@@ -57,6 +58,9 @@ public class IdentityMiddleware
             return;
         }
 
+        IWorkContext workContext = context.RequestServices.GetRequiredService<IWorkContext>();
+        workContext.Xpp = await context.RequestServices.GetRequiredService<ICoreService>().GetXppAsync(_option.XppId);
+
         //判断是否需要token
         if (!_option.Identity.OpenRouters.Contains(router.ToLower()) && !context.Request.Headers.ContainsKey(FLAG_TOKEN))
         {
@@ -66,7 +70,6 @@ public class IdentityMiddleware
 
         if (context.Request.Headers.TryGetValue(FLAG_TOKEN, out StringValues values))
         {
-            IWorkContext workContext = context.RequestServices.GetRequiredService<IWorkContext>();
             IIdentityService identityService = context.RequestServices.GetRequiredService<IIdentityService>();
             workContext.AccessChain = await identityService.CheckAsync($"{values[0]}", router);
         }

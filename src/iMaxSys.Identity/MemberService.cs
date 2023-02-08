@@ -551,7 +551,7 @@ public class MemberService : IMemberService
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
+    public async Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, long memberId, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
     {
         DbMember? member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.Id == memberId);
 
@@ -571,7 +571,7 @@ public class MemberService : IMemberService
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> RefreshAccessChainAsync(XppSnsModel xppSns, MemberModel member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
+    public async Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, MemberModel member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
     {
         var token = accessToken ?? MakeAccessToken();
 
@@ -1081,7 +1081,7 @@ public class MemberService : IMemberService
     /// <param name="sns"></param>
     /// <param name="code"></param>
     /// <returns></returns>
-    private async Task<AccessConfig> CheckSnsAccountAsync(XppSnsModel sns, string code)
+    private async Task<AccessConfig> CheckSnsAccountAsync(XppSns sns, string code)
     {
         var ac = await GetAccessConfigAsync(sns, code);
 
@@ -1101,7 +1101,7 @@ public class MemberService : IMemberService
     /// <param name="sns"></param>
     /// <param name="code"></param>
     /// <returns></returns>
-    private async Task<AccessConfig> GetAccessConfigAsync(XppSnsModel sns, string code)
+    private async Task<AccessConfig> GetAccessConfigAsync(XppSns sns, string code)
     {
         SnsAuth snsAuth = new SnsAuth
         {

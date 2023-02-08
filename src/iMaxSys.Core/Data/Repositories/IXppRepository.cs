@@ -11,32 +11,33 @@
 //日期：2017-11-16
 //----------------------------------------------------------------
 
-using Azure;
-using iMaxSys.Core.Data.Entities;
-using iMaxSys.Core.Data.Repositories;
-using iMaxSys.Core.Models;
+using iMaxSys.Max;
 using iMaxSys.Max.Exceptions;
+using iMaxSys.Core.Models;
+using iMaxSys.Core.Data.Repositories;
+using DbXpp = iMaxSys.Core.Data.Entities.Xpp;
+using DbXppSns = iMaxSys.Core.Data.Entities.XppSns;
 
 namespace iMaxSys.Core.Data.Repositories;
 
 /// <summary>
 /// 应用仓储接口
 /// </summary>
-public interface IXppRepository : ICoreReadOnlyRepository<Xpp>
+public interface IXppRepository : ICoreReadOnlyRepository<DbXpp>
 {
     /// <summary>
     /// 获取应用信息
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<XppModel> GetXppAsync(long id);
+    Task<Xpp> GetXppAsync(long id);
 
     /// <summary>
     /// 获取社交信息
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<XppSnsModel> GetSnsAsync(long id);
+    Task<XppSns> GetSnsAsync(long id);
 
     /// <summary>
     /// 刷新全部应用信息
@@ -49,33 +50,33 @@ public interface IXppRepository : ICoreReadOnlyRepository<Xpp>
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<XppModel> RefreshXppAsync(long id);
+    Task<Xpp> RefreshXppAsync(long id);
 
     /// <summary>
     /// 刷新应用信息
     /// </summary>
     /// <param name="xpp"></param>
     /// <returns></returns>
-    Task<XppModel> RefreshXppAsync(Xpp? xpp);
+    Task<Xpp> RefreshXppAsync(DbXpp? xpp);
 
     /// <summary>
     /// 刷新应用社交信息
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<XppSnsModel> RefreshSnsAsync(long id);
+    Task<XppSns> RefreshSnsAsync(long id);
 
     /// <summary>
     /// 刷新应用社交信息
     /// </summary>
     /// <param name="xppSnses"></param>
     /// <returns></returns>
-    Task<XppSnsModel> RefreshSnsAsync(XppSns? xppSns);
+    Task<XppSns> RefreshSnsAsync(DbXppSns? xppSns);
 
     /// <summary>
     /// 刷新应用社交信息
     /// </summary>
     /// <param name="xppSnses"></param>
     /// <returns></returns>
-    Task RefreshSnsesAsync(ICollection<XppSns>? xppSnses);
+    Task RefreshSnsesAsync(ICollection<DbXppSns>? xppSnses);
 }

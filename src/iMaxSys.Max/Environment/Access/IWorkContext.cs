@@ -41,7 +41,7 @@ namespace iMaxSys.Max.Environment.Access
         /// <summary>
         /// XppInfo
         /// </summary>
-        XppInfo Xpp { get; }
+        Xpp Xpp { get; set; }
 
         /// <summary>
         /// IP
