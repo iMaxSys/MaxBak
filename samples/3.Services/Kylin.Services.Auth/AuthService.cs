@@ -62,5 +62,15 @@ public class AuthService : IAuthService
             Member = accessChain.Member
         };
     }
+
+    /// <summary>
+    /// 登出
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public async Task LogoutAsync(string token)
+    {
+        await _memberService.LogoutAsync(token);
+    }
 }
 

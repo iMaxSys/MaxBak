@@ -45,6 +45,11 @@ public class AuthController : MaxController
         _menuService = menuService;
     }
 
+    /// <summary>
+    /// 登录
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<Result<LoginResponse>> Login(PasswordLoginRequest request)
     {
@@ -57,6 +62,17 @@ public class AuthController : MaxController
         var result = await _authService.LoginAsync(model);
         var response = _mapper.Map<LoginResponse>(result);
         return Success(response);
+    }
+
+    /// <summary>
+    /// 登出
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<Result> Logout()
+    {
+        await _authService.LogoutAsync(WorkContext.AccessChain.AccessSession.Token);
+        return Success();
     }
 
     [HttpPost]

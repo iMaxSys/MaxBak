@@ -229,17 +229,17 @@ public interface IMember
     /// <summary>
     /// 角色
     /// </summary>
-    IList<IRole>? Roles { get; set; }
+    List<Role>? Roles { get; set; }
 
     /// <summary>
     /// 部门
     /// </summary>
-    IDepartment? Department { get; set; }
+    Department? Department { get; set; }
 
     /// <summary>
     /// 租户
     /// </summary>
-    ITenant Tenant { get; set; }
+    Tenant Tenant { get; set; }
 }
 
 /// <summary>

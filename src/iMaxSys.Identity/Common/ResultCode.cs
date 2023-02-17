@@ -69,7 +69,7 @@ public enum ResultCode
     /// <summary>
     /// 用户已经过期
     /// </summary>
-    [Description("用户已经过期")]
+    [Description("用户已经过期或无效的凭证")]
     UserIsExpired = 106008,
 
     /// <summary>

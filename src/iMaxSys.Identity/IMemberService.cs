@@ -92,6 +92,13 @@ public interface IMemberService : IDependency
     Task<IMember?> GetAsync(long id);
 
     /// <summary>
+    /// Get member
+    /// </summary>
+    /// <param name="mobile"></param>
+    /// <returns></returns>
+    Task<IMember?> GetAsync(string mobile);
+
+    /// <summary>
     /// 更新用户信息
     /// </summary>
     /// <param name="model"></param>
@@ -159,4 +166,12 @@ public interface IMemberService : IDependency
     /// <param name="iv"></param>
     /// <returns></returns>
     Task<SnsPhoneNumber> GetSnsPhoneNumber(long sid, string data, string key, string iv);
+
+    /// <summary>
+    /// 检查访问权限
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    Task<IAccessChain> CheckAsync(string token, string router);
 }

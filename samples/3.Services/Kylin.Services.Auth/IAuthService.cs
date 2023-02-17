@@ -34,5 +34,11 @@ public interface IAuthService : IDependency
     /// <param name="request"></param>
     /// <returns></returns>
     Task<LoginResult> LoginAsync(PasswordLoginModel request);
-}
 
+    /// <summary>
+    /// 登出
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task LogoutAsync(string token);
+}

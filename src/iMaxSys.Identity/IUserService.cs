@@ -23,7 +23,7 @@ namespace iMaxSys.Identity;
 public interface IUserService : IDependency
 {
     /// <summary>
-    /// 获取成员
+    /// 获取用户
     /// </summary>
     /// <param name="id">标识</param>
     /// <param name="type">类型</param>
@@ -31,7 +31,7 @@ public interface IUserService : IDependency
     Task<IUser?> GetAsync(long id, int type = 0);
 
     /// <summary>
-    /// 获取成员
+    /// 获取用户
     /// </summary>
     /// <param name="key">关键值,例如手机号码</param>
     /// <param name="type">类型</param>

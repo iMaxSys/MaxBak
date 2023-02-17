@@ -50,6 +50,15 @@ public interface ICache
     Task<T?> GetAsync<T>(string key, bool global = false);
 
     /// <summary>
+    /// 获取
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="type"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
+    Task<object?> GetAsync(string key, Type type, bool global = false);
+
+    /// <summary>
     /// 设置
     /// </summary>
     /// <param name="key"></param>

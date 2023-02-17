@@ -25,7 +25,7 @@ namespace iMaxSys.Max.Json.Converters
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return reader.GetDateTime();
+            return DateTime.Parse(reader.GetString() ?? "");
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)

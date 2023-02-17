@@ -34,6 +34,7 @@ using iMaxSys.Sns.Common.Auth;
 using iMaxSys.Sns.Common.Open;
 
 using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
+using DbRole = iMaxSys.Identity.Data.Entities.Role;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
 
 namespace iMaxSys.Identity;
@@ -177,7 +178,7 @@ public class MemberService : IMemberService
             throw new MaxException(ResultCode.PasswordCantNull);
         }
 
-        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == model.UserName, null, x => x.Include(y => y.RoleMembers), false);
+        DbMember? dbMember = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.UserName == model.UserName, null, x => x.Include(y => y.RoleMembers).Include(y => y.Department), false);
         if (dbMember is null)
         {
             throw new MaxException(ResultCode.MemberNotExists);
@@ -203,7 +204,7 @@ public class MemberService : IMemberService
         //获取角色
         if (dbMember.RoleMembers?.Count > 0)
         {
-            member.Roles = new List<IRole>();
+            member.Roles = new List<iMaxSys.Max.Identity.Domain.Role>();
             var role = await _roleService.GetAsync(dbMember.TenantId, model.XppSnsId, dbMember.RoleMembers.First().RoleId);
             if (role is not null)
             {
@@ -424,6 +425,16 @@ public class MemberService : IMemberService
     public async Task<IMember?> GetAsync(long id)
     {
         return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetAsync(id);
+    }
+
+    /// <summary>
+    /// Get member
+    /// </summary>
+    /// <param name="mobile"></param>
+    /// <returns></returns>
+    public async Task<IMember?> GetAsync(string mobile)
+    {
+        return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetAsync(mobile);
     }
 
     #endregion
@@ -966,29 +977,7 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task<IUser?> GetUserAsync(long memberId)
     {
-        if (_user is not null)
-        {
-            return _user;
-        }
-        else
-        {
-            if (memberId > 0 && _userService is not null)
-            {
-                var member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FindAsync(memberId);
-                if (member is not null && member.Id != member.UserId)
-                {
-                    return await _userService.GetAsync(member.UserId, member.Type);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
+        return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetUserAsync(memberId);
     }
 
     /// <summary>
@@ -998,29 +987,7 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task<IUser?> GetUserAsync(string mobile)
     {
-        if (_user is not null)
-        {
-            return _user;
-        }
-        else
-        {
-            if (mobile.IsMobile() && _userService is not null)
-            {
-                var member = await _unitOfWork.GetCustomRepository<IMemberRepository>().FirstOrDefaultAsync(x => x.Mobile == mobile.ToLong());
-                if (member is not null && member.Id != member.UserId)
-                {
-                    return await _userService.GetAsync(member.Mobile, member.Type);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
+        return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetUserAsync(mobile);
     }
 
     /// <summary>
@@ -1031,21 +998,7 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task<IUser?> GetUserAsync(long id, int type)
     {
-        if (_user is not null)
-        {
-            return _user;
-        }
-        else
-        {
-            if (id > 0 && _userService is not null)
-            {
-                return await _userService.GetAsync(id, type);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetUserAsync(id, type);
     }
 
     /// <summary>
@@ -1056,21 +1009,7 @@ public class MemberService : IMemberService
     /// <returns></returns>
     public async Task<IUser?> GetUserAsync(string mobile, int type)
     {
-        if (_user is not null)
-        {
-            return _user;
-        }
-        else
-        {
-            if (!mobile.IsNullOrWhiteSpace() && _userService is not null)
-            {
-                return await _userService.GetAsync(mobile, type);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetUserAsync(mobile, type);
     }
 
     #endregion

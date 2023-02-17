@@ -13,10 +13,13 @@
 
 using iMaxSys.Max.Caching;
 using iMaxSys.Max.Options;
+using iMaxSys.Max.Exceptions;
+using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Repositories;
 using iMaxSys.Data.EFCore.Repositories;
 using iMaxSys.Data.Entities;
+using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Repositories;
 
@@ -65,6 +68,10 @@ public class IdentityRepository<T> : EfRepository<T>, IIdentityRepository<T> whe
     }
 }
 
+/// <summary>
+/// 身份只读仓储
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class IdentityReadOnlyRepository<T> : EfReadOnlyRepository<T>, IIdentityReadOnlyRepository<T> where T : Entity
 {
     public IdentityReadOnlyRepository(IdentityReadOnlyContext context) : base(context)

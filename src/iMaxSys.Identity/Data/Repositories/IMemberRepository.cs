@@ -38,6 +38,44 @@ public interface IMemberRepository : IRepository<DbMember>
     Task<IMember?> GetAsync(long memberId);
 
     /// <summary>
+    /// 获取成员
+    /// </summary>
+    /// <param name="mobile">成员mobile</param>
+    /// <returns></returns>
+    Task<IMember?> GetAsync(string mobile);
+
+
+    /// <summary>
+    /// 获取用户
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    Task<IUser?> GetUserAsync(long memberId);
+
+    /// <summary>
+    /// 获取用户
+    /// </summary>
+    /// <param name="mobile"></param>
+    /// <returns></returns>
+    Task<IUser?> GetUserAsync(string mobile);
+
+    /// <summary>
+    /// 获取用户
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    Task<IUser?> GetUserAsync(long userId, int type);
+
+    /// <summary>
+    /// 获取用户
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    Task<IUser?> GetUserAsync(string key, int type);
+
+    /// <summary>
     /// RemoveAsync
     /// </summary>
     /// <param name="memberId"></param>

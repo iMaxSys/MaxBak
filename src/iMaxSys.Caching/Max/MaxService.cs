@@ -54,6 +54,11 @@ public class MaxService : IMaxService
         throw new NotImplementedException();
     }
 
+    public Task<object?> GetAsync(string key, Type type, bool global = false)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task HashDeleteAsync(string key, string field, bool global = false)
     {
         throw new NotImplementedException();

@@ -99,6 +99,19 @@ public class RedisService : IRedisService
     }
 
     /// <summary>
+    /// GetAsync
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="key"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
+    public async Task<object?> GetAsync(string key, Type type, bool global = false)
+    {
+        var value = await _database.StringGetAsync(GetKey(key, global));
+        return value.IsNull ? default : value.ToString().ToObject(type);
+    }
+
+    /// <summary>
     /// Set
     /// </summary>
     /// <param name="key"></param>

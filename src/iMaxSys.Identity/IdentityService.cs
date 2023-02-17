@@ -13,13 +13,14 @@
 
 
 using iMaxSys.Data;
+using iMaxSys.Max.Caching;
 using iMaxSys.Max.Options;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Max.Extentions;
 using iMaxSys.Max.Identity;
+using iMaxSys.Identity.Common;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.Common.Enums;
-
 using iMaxSys.Sns;
 using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.EFCore;
@@ -29,6 +30,142 @@ using iMaxSys.Max.Security.Cryptography;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
 
 namespace iMaxSys.Identity;
+
+/*
+/// <summary>
+/// 成员服务
+/// </summary>
+public class IdentityService : IIdentityService
+{
+    /// <summary>
+    /// 获取访问串
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public async Task<IAccessChain> GetAsync(string token)
+    {
+        //token空检测
+        if (token.IsNull())
+        {
+            throw new MaxException(ResultCode.TokenCantNull);
+        }
+
+        //先按Token获取uid
+        IAccessSession access = await _cache.GetAsync<AccessSession>($"{TAG}{TAG_ACCESS}{token}", true);
+        if (access == null)
+        {
+            return null;
+        }
+        else
+        {
+            //按mid获取member
+            IMember member = null;
+            if (access.MemberId > 0)
+            {
+                member = await _cache.GetAsync<Max.Identity.Domain.Member>($"{TAG}{TAG_MEMBER}{access.MemberId}", true);
+                var type = _userProvider.GetType(member.Type);
+                if (type != null)
+                {
+                    member.User = member.GetUser(type);
+                }
+            }
+
+            return new AccessChain
+            {
+                AccessSession = access,
+                Member = member
+            };
+        }
+    }
+
+    /// <summary>
+    /// API权限检查
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    public async Task<IAccessChain> CheckAsync(string token, string router)
+    {
+        var ac = await GetAsync(token);
+        await CheckAsync(ac, router);
+        return ac;
+    }
+
+    /// <summary>
+    /// API权限检查
+    /// </summary>
+    /// <param name="accessChain"></param>
+    /// <param name="router"></param>
+    /// <returns></returns>
+    private async Task CheckAsync(IAccessChain accessChain, string router)
+    {
+
+        //停用检查
+        if (accessChain?.Member?.Status == Status.Disable)
+        {
+            throw new MaxException(ResultCode.UserIsDisable);
+        }
+
+        //全开放
+        if ("*" == _option.Identity.OpenRouters)
+        {
+            return;
+        }
+        else
+        {
+            //简单模式
+            if (0 == _option.Identity.CheckMode)
+            {
+                //已登录或者在放行api,则通行
+                if (_option.Identity.OpenRouters.Contains(router))
+                {
+                    return;
+                }
+
+                if (accessChain == null)
+                {
+                    throw new MaxException(ResultCode.UnLogin);
+                }
+
+                if (!accessChain.AccessSession.IsLogin)
+                {
+                    throw new MaxException(ResultCode.Forbidden, router);
+                }
+            }
+            else //严格模式
+            {
+                //在开放api中,则通行
+                if (_option.Identity.OpenRouters.Contains(router))
+                {
+                    return;
+                }
+
+                if (accessChain == null)
+                {
+                    throw new MaxException(ResultCode.UnLogin);
+                }
+
+                if (!accessChain.AccessSession.IsLogin)
+                {
+                    throw new MaxException(ResultCode.Forbidden, router);
+                }
+
+                var role = await _roleService.GetRoleAsync(accessChain.Member.RoleId);
+
+                if (accessChain.AccessSession.IsLogin && ExistsRouter(role.Menu, router))
+                {
+                    return;
+                }
+                else
+                {
+                    throw new MaxException(ResultCode.Forbidden, router);
+                }
+
+            }
+        }
+    }
+}
+*/
 
 /*
 /// <summary>

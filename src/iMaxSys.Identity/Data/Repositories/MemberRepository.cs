@@ -29,6 +29,7 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// </summary>
 public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
 {
+    private readonly IUserService _userService;
 
     /// <summary>
     /// 构造
@@ -37,8 +38,9 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     /// <param name="mapper"></param>
     /// <param name="option"></param>
     /// <param name="cacheFactory"></param>
-    public MemberRepository(IdentityContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context, mapper, option, cacheFactory)
+    public MemberRepository(IdentityContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory, IUserService userService) : base(context, mapper, option, cacheFactory)
     {
+        _userService = userService;
     }
 
     /// <summary>
@@ -49,15 +51,15 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     /// <exception cref="MaxException"></exception>
     public async Task<DbMember> FindAsync(long memberId)
     {
-        var dbMenu = await FirstOrDefaultAsync(x => x.Id == memberId);
+        var member = await FirstOrDefaultAsync(x => x.Id == memberId);
 
-        if (dbMenu is null)
+        if (member is null)
         {
             throw new MaxException(ResultCode.MemberNotExists);
         }
         else
         {
-            return dbMenu;
+            return member;
         }
     }
 
@@ -70,6 +72,98 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     {
         var member = await Cache.GetAsync<MemberModel>(GetMemberKey(memberId), true);
         return member ?? await RefreshMemberAsync(memberId);
+    }
+
+    /// <summary>
+    /// 获取成员
+    /// </summary>
+    /// <param name="mobile">成员mobile</param>
+    /// <returns></returns>
+    public async Task<IMember?> GetAsync(string mobile)
+    {
+        MemberModel? member = null;
+        var dbMember = await FirstOrDefaultAsync(x => x.Mobile == mobile.ToLong());
+        if (dbMember is not null)
+        {
+            member = Mapper.Map<MemberModel>(dbMember);
+            await RefreshMemberAsync(member);
+        }
+        return member;
+    }
+
+    /// <summary>
+    /// 获取用户
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    public async Task<IUser?> GetUserAsync(long memberId)
+    {
+        IUser? user = null;
+        var member = await GetAsync(memberId);
+        if (member is not null && member.UserId > 0)
+        {
+            user = await GetUserAsync(member.UserId, member.Type);
+        }
+
+        return user;
+    }
+
+    /// <summary>
+    /// 获取用户
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    public async Task<IUser?> GetUserAsync(string mobile)
+    {
+        IUser? user = null;
+        var member = await GetAsync(mobile);
+        if (member is not null && member.UserId > 0)
+        {
+            user = await GetUserAsync(member.UserId, member.Type);
+        }
+
+        return user;
+    }
+
+    /// <summary>
+    /// 获取用户
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public async Task<IUser?> GetUserAsync(long userId, int type)
+    {
+        Type t = _userService.GetType(type);
+        object? user = await Cache.GetAsync(GetUserKey(userId), t, true);
+
+        if (user is null)
+        {
+            user = await _userService.GetAsync(userId, type);
+            if (user is not null)
+            {
+                await RefreshUserAsync((IUser)user);
+            }
+        }
+
+        return user as IUser;
+    }
+
+    /// <summary>
+    /// 获取用户
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public async Task<IUser?> GetUserAsync(string key, int type)
+    {
+        IUser? user = await _userService.GetAsync(key, type);
+
+        if (user is not null)
+        {
+            await RefreshUserAsync(user);
+        }
+
+        return user;
     }
 
     /// <summary>
@@ -102,9 +196,43 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     /// <param name="token"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<IAccessChain?> GetAccessChainAsync(string token)
+    public async Task<IAccessChain?> GetAccessChainAsync(string token)
     {
-        throw new NotImplementedException();
+        //token空检测
+        if (token.IsNull())
+        {
+            throw new MaxException(ResultCode.TokenCantNull);
+        }
+
+        //先按Token获取uid
+        IAccessSession? access = await Cache.GetAsync<AccessSession>($"{_tagAccess}{token}", true);
+        if (access == null)
+        {
+            return null;
+        }
+        else
+        {
+            //按mid获取member
+            IMember? member = null;
+            if (access.MemberId > 0)
+            {
+                member = await Cache.GetAsync<Max.Identity.Domain.Member>($"{_tagMember}{access.MemberId}", true);
+                var type = _userService.GetType(member?.Type ?? 0);
+            }
+
+            IUser? user = null;
+            if (member is not null && member.UserId > 0)
+            {
+                user = await GetUserAsync(member.UserId, member.Type) as IUser;
+            }
+
+            return new AccessChain
+            {
+                AccessSession = access,
+                Member = member,
+                User = user
+            };
+        }
     }
 
     /// <summary>
