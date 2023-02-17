@@ -71,7 +71,7 @@ public class IdentityMiddleware
         if (context.Request.Headers.TryGetValue(FLAG_TOKEN, out StringValues values))
         {
             IMemberService memberService = context.RequestServices.GetRequiredService<IMemberService>();
-            workContext.AccessChain = await memberService.CheckAsync($"{values[0]}", router);
+            workContext.AccessChain = await memberService.CheckAsync($"{values[0]}", router.ToLower());
         }
     }
 }

@@ -1148,48 +1148,46 @@ public class MemberService : IMemberService
         {
             return;
         }
-        else
+
+        //简单模式
+        if (0 == _option.Identity.CheckMode)
         {
-            //简单模式
-            if (0 == _option.Identity.CheckMode)
+            //已登录或者在放行api,则通行
+            if (_option.Identity.OpenRouters.Contains(router))
             {
-                //已登录或者在放行api,则通行
-                if (_option.Identity.OpenRouters.Contains(router))
-                {
-                    return;
-                }
-
-                if (accessChain is null || !accessChain.AccessSession.IsLogin)
-                {
-                    throw new MaxException(ResultCode.UnLogin, router);
-                }
+                return;
             }
-            else //严格模式
+
+            if (accessChain is null || !accessChain.AccessSession.IsLogin)
             {
-                //在开放api中,则通行
-                if (_option.Identity.OpenRouters.Contains(router))
-                {
-                    return;
-                }
-
-                if (!accessChain.AccessSession.IsLogin)
-                {
-                    throw new MaxException(ResultCode.UnLogin, router);
-                }
-
-                long roleId = accessChain.Member?.Roles?.FirstOrDefault(x => x.XppId == _option.XppId)?.Id ?? 0;
-                bool allow = await _menuService.AllowAccessAsync(accessChain.Member?.TenantId ?? 0, _option.XppId, roleId, router);
-
-                if (allow)
-                {
-                    return;
-                }
-                else
-                {
-                    throw new MaxException(ResultCode.Forbidden, router);
-                }
-
+                throw new MaxException(ResultCode.UnLogin, router);
             }
+        }
+        else //严格模式
+        {
+            //在开放api中,则通行
+            if (_option.Identity.OpenRouters.Contains(router))
+            {
+                return;
+            }
+
+            if (!accessChain.AccessSession.IsLogin)
+            {
+                throw new MaxException(ResultCode.UnLogin, router);
+            }
+
+            long roleId = accessChain.Member?.Roles?.FirstOrDefault(x => x.XppId == _option.XppId)?.Id ?? 0;
+            bool allow = await _menuService.AllowAccessAsync(accessChain.Member?.TenantId ?? 0, _option.XppId, roleId, router);
+
+            if (allow)
+            {
+                return;
+            }
+            else
+            {
+                throw new MaxException(ResultCode.Forbidden, router);
+            }
+
         }
     }
 

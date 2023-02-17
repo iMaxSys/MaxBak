@@ -19,6 +19,11 @@ namespace iMaxSys.Max.Options
     public class IdentityOption
     {
         /// <summary>
+        /// 全局标志
+        /// </summary>
+        public bool Global { get; set; } = false;
+
+        /// <summary>
         /// 过期分钟数,默认4320(3天)
         /// </summary>
         public int Expires { get; set; } = 4320;
@@ -38,12 +43,12 @@ namespace iMaxSys.Max.Options
         /// 0:简单模式(除OpenRouters,仅需要登录验证)
         /// 1:严格验证(除OpenRouters,还需要进行角色权限验证)
         /// </summary>
-        public int CheckMode = 0;
+        public int CheckMode { get; set; } = 0;
 
         /// <summary>
         /// 开放API,默认全开放
         /// </summary>
-        public string[] OpenRouters { get; set; } = new string[] { "*" };
+        public string[] OpenRouters { get; set; } = Array.Empty<string>();
 
         /// <summary>
         /// Databases
