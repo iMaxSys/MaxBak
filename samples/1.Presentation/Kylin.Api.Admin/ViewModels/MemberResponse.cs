@@ -90,5 +90,10 @@ public class MemberResponse : Response
     /// 角色
     /// </summary>
     public RoleResponse Role { get; set; } = new();
+
+    /// <summary>
+    /// 部门
+    /// </summary>
+    public DepartmentResponse Department { get; set; } = new();
 }
 

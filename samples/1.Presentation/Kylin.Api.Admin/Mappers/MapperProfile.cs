@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Extentions;
 using iMaxSys.Identity.Models;
+using iMaxSys.Max.Identity.Domain;
 
 using Kylin.Api.Admin.ViewModels;
 
@@ -25,5 +26,6 @@ public class MapperProfile : Profile
         CreateMap<LoginResult, LoginResponse>().ForMember(t => t.Expires, opt => opt.MapFrom(s => s.Expires.ToNormalString()));
         CreateMap<RoleModel, RoleResponse>();
         CreateMap<MemberModel, MemberResponse>().ForMember(t => t.Role, opt => opt.MapFrom(s => s.Roles!.FirstOrDefault()));
+        CreateMap<Department, DepartmentResponse>();
     }
 }
