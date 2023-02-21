@@ -90,11 +90,23 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, long roleId)
     {
         RoleModel role = await _roleService.GetAsync(tenantId, xppId, roleId);
+        return await RefreshAsync(tenantId, xppId, role);
+    }
+
+    /// <summary>
+    /// 刷新应用角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role)
+    {
         return await _unitOfWork.GetCustomRepository<IMenuRepository>().RefreshAsync(tenantId, xppId, role);
     }
 
     /// <summary>
-    /// 是否允许访问路由
+    /// 是否允许访问路由 
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
@@ -103,6 +115,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<bool> AllowAccessAsync(long tenantId, long xppId, long roleId, string router)
     {
-        return await _unitOfWork.GetCustomRepository<IMenuRepository>().AllowAccessAsync(tenantId, xppId, roleId, router);
+        var role = await _roleService.GetAsync(tenantId, xppId, roleId);
+        return await _unitOfWork.GetCustomRepository<IMenuRepository>().AllowAccessAsync(tenantId, xppId, role, router);
     }
 }

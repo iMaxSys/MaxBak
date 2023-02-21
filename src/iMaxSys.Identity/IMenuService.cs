@@ -63,6 +63,15 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     Task<MenuModel?> RefreshAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
+    /// 刷新应用角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role);
+
+    /// <summary>
     /// 是否允许访问路由
     /// </summary>
     /// <param name="tenantId"></param>

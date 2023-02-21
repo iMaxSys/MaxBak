@@ -23,6 +23,7 @@ using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Data.Repositories;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
+using System;
 
 namespace iMaxSys.Identity;
 
@@ -229,6 +230,17 @@ public class RoleService : IRoleService
         {
             throw new MaxException(ResultCode.RoleIsExists);
         }
+    }
+
+    /// <summary>
+    /// all
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
+    public async Task<List<RoleModel>> All(long tenantId)
+    {
+        var roles = await _unitOfWork.GetRepository<DbRole>().AllAsync(x=>x.TenantId == tenantId);
+        return _mapper.Map<List<RoleModel>>(roles);
     }
 
     #endregion

@@ -141,6 +141,21 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     }
 
     /// <summary>
+    /// 刷新应用角色s菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roles"></param>
+    /// <returns></returns>
+    public async Task RefreshAsync(long tenantId, long xppId, List<IRole> roles)
+    {
+        foreach (var item in roles)
+        {
+            await RefreshAsync(tenantId, xppId, item);
+        }
+    }
+
+    /// <summary>
     /// 生成树
     /// </summary>
     /// <param name="list"></param>
@@ -207,12 +222,21 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
-    /// <param name="roleId"></param>
+    /// <param name="role"></param>
     /// <param name="router"></param>
     /// <returns></returns>
-    public async Task<bool> AllowAccessAsync(long tenantId, long xppId, long roleId, string router)
+    public async Task<bool> AllowAccessAsync(long tenantId, long xppId, IRole role, string router)
     {
-        return await Cache.SetContainsAsync(GetRoleRoutersKey(tenantId, xppId, roleId), router);
+        string key = GetRoleRoutersKey(tenantId, xppId, role.Id);
+        bool exists = await Cache.KeyExistsAsync(key, true);
+
+        if (!exists)
+        {
+            await GetAsync(tenantId, xppId);
+            await GetAsync(tenantId, xppId, role);
+        }
+
+        return await Cache.SetContainsAsync(key, router, true);
     }
 
     /// <summary>

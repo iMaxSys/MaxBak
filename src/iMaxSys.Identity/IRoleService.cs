@@ -67,4 +67,11 @@ public interface IRoleService : IDependency
     /// <param name="roleId"></param>
     /// <returns></returns>
     Task RemoveAsync(long tenantId, long xppId, long roleId);
+
+    /// <summary>
+    /// 获取所有角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
+    Task<List<RoleModel>> All(long tenantId);
 }

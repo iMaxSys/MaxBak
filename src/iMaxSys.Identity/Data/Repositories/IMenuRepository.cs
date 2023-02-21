@@ -59,12 +59,21 @@ public interface IMenuRepository : IIdentityRepository<DbMenu>
     Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role);
 
     /// <summary>
+    /// refresh
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roles"></param>
+    /// <returns></returns>
+    Task RefreshAsync(long tenantId, long xppId, List<IRole> roles);
+
+    /// <summary>
     /// 是否允许访问路由
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
-    /// <param name="roleId"></param>
+    /// <param name="role"></param>
     /// <param name="router"></param>
     /// <returns></returns>
-    Task<bool> AllowAccessAsync(long tenantId, long xppId, long roleId, string router);
+    Task<bool> AllowAccessAsync(long tenantId, long xppId, IRole role, string router);
 }

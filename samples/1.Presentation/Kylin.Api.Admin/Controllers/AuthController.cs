@@ -76,7 +76,7 @@ public class AuthController : MaxController
     }
 
     [HttpPost]
-    public Result<MemberResponse> Info()
+    public Result<MemberResponse> GetInfo()
     {
         MemberResponse response = new();
         response.Name = "熏悟空";
@@ -84,11 +84,10 @@ public class AuthController : MaxController
         return Success(response);
     }
 
-    //[HttpPost]
-    ////public async Task<Result<MenuModel?>> GetMenu()
-    //{
-    //    //this.
-    //    //var menu = await _menuService.GetRoleMenuAsync(AccessChain.Member.TenantId, 2000, 0);
-    //    return Success(menu);
-    //}
+    [HttpPost]
+    public async Task<Result<MenuModel?>> GetMenu()
+    {
+        var menu = await _menuService.GetRoleMenuAsync(AccessChain.Member?.TenantId ?? 0, 0, 0);
+        return Success(menu);
+    }
 }
