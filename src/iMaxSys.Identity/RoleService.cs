@@ -61,6 +61,22 @@ public class RoleService : IRoleService
         return await _unitOfWork.GetCustomRepository<IRoleRepository>().GetAsync(tenantId, xppId, roleId);
     }
 
+    /// <summary>
+    /// get
+    /// </summary>
+    /// <param name="accessChain"></param>
+    /// <returns></returns>
+    public async Task<RoleModel> GetAsync(IAccessChain accessChain)
+    {
+        if (accessChain.Member is null)
+        {
+            throw new MaxException(ResultCode.UnLogin);
+        }
+
+        return await GetAsync(accessChain.Member.TenantId, accessChain.AccessSession.XppId, accessChain.Member.GetCurrentRole(accessChain.AccessSession.XppId).Id);
+    }
+
+
     #endregion
 
     #region RefreshAsync

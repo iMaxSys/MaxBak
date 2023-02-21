@@ -100,5 +100,5 @@ public interface IRole
     /// <summary>
     /// Menu
     /// </summary>
-    IMenu? Menu { get; set; }
+    Menu? Menu { get; set; }
 }

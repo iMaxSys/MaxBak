@@ -18,5 +18,8 @@ namespace iMaxSys.Max.Identity.Domain;
 
 public class Department : TreeNode, IDepartment
 {
-    public List<IDepartment>? Children { get; set; }
+	/// <summary>
+	/// childen
+	/// </summary>
+    public List<Department>? Children { get; set; }
 }

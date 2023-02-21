@@ -70,6 +70,23 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     }
 
     /// <summary>
+    /// 获取角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public async Task<MenuModel?> GetRoleMenuAsync(IAccessChain accessChain)
+    {
+        if (accessChain.Member is null)
+        {
+            throw new MaxException(ResultCode.UnLogin);
+        }
+
+        return await GetRoleMenuAsync(accessChain.Member.TenantId, accessChain.AccessSession.XppId, accessChain.Member.GetCurrentRole(accessChain.AccessSession.XppId).Id);
+    }
+
+    /// <summary>
     /// 刷新应用菜单
     /// </summary>
     /// <param name="tenantId"></param>

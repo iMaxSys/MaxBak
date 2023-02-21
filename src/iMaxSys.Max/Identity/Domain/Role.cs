@@ -24,7 +24,7 @@ public class Role : IRole
     /// <summary>
     /// Id
     /// </summary>
-    public long Id { get; set; }
+    public long Id { get; set; } = -1;
 
     /// <summary>
     /// Name
@@ -89,7 +89,7 @@ public class Role : IRole
     /// <summary>
     /// 角色类型
     /// </summary>
-    public RoleType Type { get; set; }
+    public RoleType Type { get; set; } = RoleType.Member;
 
     /// <summary>
     /// Status
@@ -99,5 +99,5 @@ public class Role : IRole
     /// <summary>
     /// Menu
     /// </summary>
-    public IMenu? Menu { get; set; }
+    public Menu? Menu { get; set; }
 }

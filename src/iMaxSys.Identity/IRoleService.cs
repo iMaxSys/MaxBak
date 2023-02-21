@@ -33,6 +33,13 @@ public interface IRoleService : IDependency
     Task<RoleModel> GetAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
+    /// get
+    /// </summary>
+    /// <param name="accessChain"></param>
+    /// <returns></returns>
+    Task<RoleModel> GetAsync(IAccessChain accessChain);
+
+    /// <summary>
     /// refresh
     /// </summary>
     /// <param name="tenantId"></param>

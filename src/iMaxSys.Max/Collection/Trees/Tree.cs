@@ -210,7 +210,7 @@ public class TreeNode : ITreeNode
 	/// <summary>
 	/// Name
 	/// </summary>
-	public string Name { get; set; } = string.Empty;
+	public virtual string Name { get; set; } = "default";
 
 	/// <summary>
 	/// 左值

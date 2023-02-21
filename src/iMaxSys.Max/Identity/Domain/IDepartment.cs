@@ -22,5 +22,5 @@ namespace iMaxSys.Max.Identity.Domain;
 public interface IDepartment : ITreeNode
 {
     //子部门
-    public List<IDepartment>? Children { get; set; }
+    public List<Department>? Children { get; set; }
 }

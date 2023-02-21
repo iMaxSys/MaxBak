@@ -608,6 +608,7 @@ public class MemberService : IMemberService
 
         AccessSession accessSession = new AccessSession
         {
+            XppId = xppSns.XppId,
             XppSnsId = xppSns.Id,
             AccountId = accessConfig?.AccountId,
             AppId = accessConfig?.AppId,
@@ -832,7 +833,6 @@ public class MemberService : IMemberService
         model.QuickCode?.IfNotNull(x => dbMember.QuickCode = x);
         model.Birthday?.IfNotNull(x => dbMember.Birthday = x);
         model.MaritalStatus?.IfNotNull(x => dbMember.MaritalStatus = x);
-        model.Gender?.IfNotNull(x => dbMember.Gender = x);
         model.Nation?.IfNotNull(x => dbMember.Nation = x);
         model.Education?.IfNotNull(x => dbMember.Education = x);
         model.Party?.IfNotNull(x => dbMember.Party = x);
@@ -853,6 +853,7 @@ public class MemberService : IMemberService
         model.Zipcode?.IfNotNull(x => dbMember.Zipcode = x);
         model.Start?.IfNotNull(x => dbMember.Start = x);
         model.End?.IfNotNull(x => dbMember.End = x);
+        dbMember.Gender = model.Gender;
         dbMember.Type = model.Type;
 
         SetRoles(dbMember, roleIds, model.TenantId, xppId);

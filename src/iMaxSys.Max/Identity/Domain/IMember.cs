@@ -34,12 +34,12 @@ public interface IMember
     /// <summary>
     /// 姓名
     /// </summary>
-    string? Name { get; set; }
+    string Name { get; set; }
 
     /// <summary>
     /// 性别(0男,1女,2未知)
     /// </summary>
-    Gender? Gender { get; set; }
+    Gender Gender { get; set; }
 
     /// <summary>
     /// 生日
@@ -229,17 +229,24 @@ public interface IMember
     /// <summary>
     /// 角色
     /// </summary>
-    List<Role>? Roles { get; set; }
+    List<Role> Roles { get; set; }
 
     /// <summary>
     /// 部门
     /// </summary>
-    Department? Department { get; set; }
+    Department Department { get; set; }
 
     /// <summary>
     /// 租户
     /// </summary>
     Tenant Tenant { get; set; }
+
+    /// <summary>
+    /// 获取当前角色
+    /// </summary>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    Role GetCurrentRole(long xppId);
 }
 
 /// <summary>

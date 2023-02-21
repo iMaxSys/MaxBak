@@ -32,12 +32,12 @@ public class Member : IMember
     /// <summary>
     /// 姓名
     /// </summary>
-    public string? Name { get; set; }
+    public string Name { get; set; } = "";
 
     /// <summary>
     /// 性别(0男,1女,2未知)
     /// </summary>
-    public Gender? Gender { get; set; }
+    public Gender Gender { get; set; } = Gender.Unknown;
 
     /// <summary>
     /// 生日
@@ -227,17 +227,24 @@ public class Member : IMember
     /// <summary>
     /// 角色
     /// </summary>
-    public List<Role>? Roles { get; set; }
+    public List<Role> Roles { get; set; } = new();
 
     /// <summary>
     /// 部门
     /// </summary>
-    public Department? Department { get; set; }
+    public Department Department { get; set; } = new();
 
     /// <summary>
     /// 租户
     /// </summary>
-    public Tenant Tenant { get; set; } = new Tenant();
+    public Tenant Tenant { get; set; } = new();
+
+    /// <summary>
+    /// 获取当前角色
+    /// </summary>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    public Role GetCurrentRole(long xppId) => Roles.FirstOrDefault(x => x.XppId == xppId) ?? new();
 }
 
 public class Member<T> : Member, IMember<T>

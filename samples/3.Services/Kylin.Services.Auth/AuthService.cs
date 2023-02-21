@@ -13,6 +13,7 @@
 
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Identity;
 using iMaxSys.Identity.Models;
 
 namespace Kylin.Services.Auth;
@@ -22,10 +23,14 @@ namespace Kylin.Services.Auth;
 /// </summary>
 public class AuthService : IAuthService
 {
+    private readonly iMaxSys.Identity.IRoleService _roleService;
+    private readonly iMaxSys.Identity.IMenuService _menuService;
     private readonly iMaxSys.Identity.IMemberService _memberService;
 
-    public AuthService(iMaxSys.Identity.IMemberService memberService)
+    public AuthService(IRoleService roleService, IMenuService menuService, iMaxSys.Identity.IMemberService memberService)
     {
+        _roleService = roleService;
+        _menuService = menuService;
         _memberService = memberService;
     }
 
@@ -71,6 +76,38 @@ public class AuthService : IAuthService
     public async Task LogoutAsync(string token)
     {
         await _memberService.LogoutAsync(token);
+    }
+
+    /// <summary>
+    /// 获取角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public async Task<RoleModel> GetRoleAsync(long tenantId, long xppId, long roleId)
+    {
+        return await _roleService.GetAsync(tenantId, xppId, roleId);
+    }
+
+    /// <summary>
+    /// 获取角色
+    /// </summary>
+    /// <param name="accessChain"></param>
+    /// <returns></returns>
+    public async Task<RoleModel> GetRoleAsync(IAccessChain accessChain)
+    {
+        return await _roleService.GetAsync(accessChain);
+    }
+
+    /// <summary>
+    /// 获取角色
+    /// </summary>
+    /// <param name="accessChain"></param>
+    /// <returns></returns>
+    public async Task<MenuModel?> GetRoleMenuAsync(IAccessChain accessChain)
+    {
+        return await _menuService.GetRoleMenuAsync(accessChain);
     }
 }
 

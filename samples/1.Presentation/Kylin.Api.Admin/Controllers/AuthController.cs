@@ -32,16 +32,14 @@ public class AuthController : MaxController
     private readonly MaxOption _maxOption;
     private readonly KylinOption _kylinOption;
     private readonly IAuthService _authService;
-    private readonly IDictService _dictService;
     private readonly IMenuService _menuService;
 
-    public AuthController(IMapper mapper, IOptions<MaxOption> option, IOptions<KylinOption> kylinOption, IAuthService authService, IDictService dictService, IMenuService menuService)
+    public AuthController(IMapper mapper, IOptions<MaxOption> option, IOptions<KylinOption> kylinOption, IAuthService authService, IMenuService menuService)
     {
         _mapper = mapper;
         _maxOption = option.Value;
         _kylinOption = kylinOption.Value;
         _authService = authService;
-        _dictService = dictService;
         _menuService = menuService;
     }
 
@@ -87,7 +85,15 @@ public class AuthController : MaxController
     [HttpPost]
     public async Task<Result<MenuModel?>> GetMenu()
     {
-        var menu = await _menuService.GetRoleMenuAsync(AccessChain.Member?.TenantId ?? 0, 0, 0);
+        var menu = await _authService.GetRoleMenuAsync(AccessChain);
         return Success(menu);
+    }
+
+    [HttpPost]
+    public async Task<Result<RoleResponse>> GetRole()
+    {
+        long xppId = AccessChain.AccessSession.XppId;
+        var role = await _authService.GetRoleAsync(AccessChain);
+        return Success(_mapper.Map<RoleResponse>(role));
     }
 }

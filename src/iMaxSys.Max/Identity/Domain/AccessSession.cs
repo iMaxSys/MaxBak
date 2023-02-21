@@ -21,6 +21,11 @@ namespace iMaxSys.Max.Identity.Domain;
 public class AccessSession : IAccessSession
 {
     /// <summary>
+    /// XppId
+    /// </summary>
+    public long XppId { get; set; }
+
+    /// <summary>
     /// XappSnsId
     /// </summary>
     public long XppSnsId { get; set; }

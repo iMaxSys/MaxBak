@@ -46,6 +46,16 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     Task<MenuModel?> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
+    /// 获取角色菜单
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    Task<MenuModel?> GetRoleMenuAsync(IAccessChain accessChain);
+
+
+    /// <summary>
     /// 刷新应用菜单
     /// </summary>
     /// <param name="tenantId"></param>
