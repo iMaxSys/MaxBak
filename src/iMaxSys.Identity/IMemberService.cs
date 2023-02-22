@@ -89,14 +89,14 @@ public interface IMemberService : IDependency
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<IMember?> GetAsync(long id);
+    Task<IMember> GetAsync(long id);
 
     /// <summary>
     /// Get member
     /// </summary>
     /// <param name="mobile"></param>
     /// <returns></returns>
-    Task<IMember?> GetAsync(string mobile);
+    Task<IMember> GetAsync(string mobile);
 
     /// <summary>
     /// 更新用户信息

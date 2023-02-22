@@ -23,7 +23,7 @@ public class Member : IMember
     /// <summary>
     /// Id
     /// </summary>
-    public long Id { get; set; }
+    public long Id { get; set; } = -1;
 
     /// <summary>
     /// TenantId

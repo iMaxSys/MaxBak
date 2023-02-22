@@ -35,6 +35,16 @@ public class AuthService : IAuthService
     }
 
     /// <summary>
+    /// 获取成员信息
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    public async Task<IMember> GetMemberAsync(long memberId)
+    {
+       return await _memberService.GetAsync(memberId);
+    }
+
+    /// <summary>
     /// 代码登录
     /// </summary>
     /// <param name="request"></param>
@@ -76,6 +86,18 @@ public class AuthService : IAuthService
     public async Task LogoutAsync(string token)
     {
         await _memberService.LogoutAsync(token);
+    }
+
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <param name="oldPassword"></param>
+    /// <param name="newPassword"></param>
+    /// <returns></returns>
+    public async Task ChangePasswordAsync(long memberId, string oldPassword, string newPassword)
+    {
+        await _memberService.ChangePasswordAsync(memberId, oldPassword, newPassword);
     }
 
     /// <summary>

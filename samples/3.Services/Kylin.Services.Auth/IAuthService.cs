@@ -23,6 +23,13 @@ namespace Kylin.Services.Auth;
 public interface IAuthService : IDependency
 {
     /// <summary>
+    /// 获取成员
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <returns></returns>
+    Task<IMember> GetMemberAsync(long memberId);
+
+    /// <summary>
     /// 代码登录
     /// </summary>
     /// <param name="request"></param>
@@ -42,6 +49,15 @@ public interface IAuthService : IDependency
     /// <param name="token"></param>
     /// <returns></returns>
     Task LogoutAsync(string token);
+
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="memberId"></param>
+    /// <param name="oldPassword"></param>
+    /// <param name="newPassword"></param>
+    /// <returns></returns>
+    Task ChangePasswordAsync(long memberId, string oldPassword, string newPassword);
 
     /// <summary>
     /// 获取角色

@@ -35,14 +35,14 @@ public interface IMemberRepository : IRepository<DbMember>
     /// </summary>
     /// <param name="memberId">成员id</param>
     /// <returns></returns>
-    Task<IMember?> GetAsync(long memberId);
+    Task<IMember> GetAsync(long memberId);
 
     /// <summary>
     /// 获取成员
     /// </summary>
     /// <param name="mobile">成员mobile</param>
     /// <returns></returns>
-    Task<IMember?> GetAsync(string mobile);
+    Task<IMember> GetAsync(string mobile);
 
 
     /// <summary>

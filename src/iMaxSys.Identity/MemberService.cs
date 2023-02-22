@@ -422,7 +422,7 @@ public class MemberService : IMemberService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<IMember?> GetAsync(long id)
+    public async Task<IMember> GetAsync(long id)
     {
         return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetAsync(id);
     }
@@ -432,7 +432,7 @@ public class MemberService : IMemberService
     /// </summary>
     /// <param name="mobile"></param>
     /// <returns></returns>
-    public async Task<IMember?> GetAsync(string mobile)
+    public async Task<IMember> GetAsync(string mobile)
     {
         return await _unitOfWork.GetCustomRepository<IMemberRepository>().GetAsync(mobile);
     }
@@ -503,15 +503,15 @@ public class MemberService : IMemberService
         IMember? member = null;
         IUser? user = null;
 
-        if (access.MemberId.HasValue)
+        if (access.MemberId > -1)
         {
             //get member
-            member = await GetAsync(access.MemberId.Value);
+            member = await GetAsync(access.MemberId);
 
-            if (access.MemberId is not null)
+            if (access.UserId > -1)
             {
                 //get user
-                user = await _userService.GetAsync(access.MemberId.Value, access.Type);
+                user = await _userService.GetAsync(access.UserId, access.Type);
             }
         }
 
@@ -745,7 +745,7 @@ public class MemberService : IMemberService
     {
         IMemberRepository respoitory = _unitOfWork.GetCustomRepository<IMemberRepository>();
         var member = await respoitory.FindAsync(memberId);
-        if (member == null)
+        if (member is null)
         {
             throw new MaxException(ResultCode.MemberNotExists);
         }
@@ -1188,7 +1188,6 @@ public class MemberService : IMemberService
             {
                 throw new MaxException(ResultCode.Forbidden, router);
             }
-
         }
     }
 

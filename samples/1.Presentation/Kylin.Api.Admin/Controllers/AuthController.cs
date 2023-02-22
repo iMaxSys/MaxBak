@@ -74,11 +74,17 @@ public class AuthController : MaxController
     }
 
     [HttpPost]
-    public Result<MemberResponse> GetInfo()
+    public async Task<Result> ChangePassword(ChangePasswordRequest request)
     {
-        MemberResponse response = new();
-        response.Name = "熏悟空";
-        response.Mobile = "18666666666";
+        await _authService.ChangePasswordAsync(AccessChain.Member!.Id, request.OldPassword, request.NewPassword);
+        return Success();
+    }
+
+    [HttpPost]
+    public async Task<Result<MemberResponse>> GetMember()
+    {
+        var member = await _authService.GetMemberAsync(AccessChain.AccessSession.MemberId);
+        MemberResponse response = _mapper.Map<MemberResponse>(member);
         return Success(response);
     }
 

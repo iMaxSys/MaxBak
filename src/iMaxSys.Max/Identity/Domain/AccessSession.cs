@@ -46,9 +46,14 @@ public class AccessSession : IAccessSession
     public long? TenantId { get; set; }
 
     /// <summary>
-    /// 用户Id
+    /// 成员Id
     /// </summary>
-    public long? MemberId { get; set; }
+    public long MemberId { get; set; } = -1;
+
+    /// <summary>
+    /// 用户id
+    /// </summary>
+    public long UserId { get; set; } = -1;
 
     /// <summary>
     /// 类型

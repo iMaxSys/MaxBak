@@ -68,7 +68,7 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     /// </summary>
     /// <param name="memberId">成员id</param>
     /// <returns></returns>
-    public async Task<IMember?> GetAsync(long memberId)
+    public async Task<IMember> GetAsync(long memberId)
     {
         var member = await Cache.GetAsync<MemberModel>(GetMemberKey(memberId), true);
         return member ?? await RefreshMemberAsync(memberId);
@@ -79,16 +79,17 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
     /// </summary>
     /// <param name="mobile">成员mobile</param>
     /// <returns></returns>
-    public async Task<IMember?> GetAsync(string mobile)
+    public async Task<IMember> GetAsync(string mobile)
     {
-        MemberModel? member = null;
         var dbMember = await FirstOrDefaultAsync(x => x.Mobile == mobile.ToLong());
-        if (dbMember is not null)
+
+        if (dbMember is null)
         {
-            member = Mapper.Map<MemberModel>(dbMember);
-            await RefreshMemberAsync(member);
+            throw new MaxException(ResultCode.MobileIsInvalid);
         }
-        return member;
+
+        var member = Mapper.Map<MemberModel>(dbMember);
+        return await RefreshMemberAsync(member);
     }
 
     /// <summary>

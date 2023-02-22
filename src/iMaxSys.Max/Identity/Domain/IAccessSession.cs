@@ -46,9 +46,14 @@ public interface IAccessSession
     long? TenantId { get; set; }
 
     /// <summary>
-    /// 用户Id
+    /// 成员id
     /// </summary>
-    long? MemberId { get; set; }
+    long MemberId { get; set; }
+
+    /// <summary>
+    /// 用户id
+    /// </summary>
+    long UserId { get; set; }
 
     /// <summary>
     /// 类型
