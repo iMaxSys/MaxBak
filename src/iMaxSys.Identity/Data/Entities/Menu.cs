@@ -161,4 +161,9 @@ public class Menu : TenantMasterEntity, ITreeNode
     /// Operations
     /// </summary>
     public virtual List<Operation>? Operations { get; set; }
+
+    /// <summary>
+    /// TenantMenus
+    /// </summary>
+    public virtual List<TenantMenu>? TenantMenus { get; set; }
 }
