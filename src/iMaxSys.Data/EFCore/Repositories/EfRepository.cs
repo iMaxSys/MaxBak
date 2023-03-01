@@ -14,6 +14,7 @@
 using iMaxSys.Max.Collection;
 using iMaxSys.Data.Entities;
 using iMaxSys.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace iMaxSys.Data.EFCore.Repositories;
 
@@ -599,6 +600,20 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// <param name="entities">The entities.</param>
     public virtual void Update(IEnumerable<TEntity> entities) => _dbSet.UpdateRange(entities);
 
+    /// <summary>
+    /// Update
+    /// </summary>
+    /// <param name="predicate">predicate</param>
+    /// <param name="setPropertyCalls">set property calls</param>
+    public virtual void Update(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls) => _dbSet.Where(predicate).ExecuteUpdate(setPropertyCalls);
+
+    /// <summary>
+    /// Update
+    /// </summary>
+    /// <param name="predicate">predicate</param>
+    /// <param name="setPropertyCalls">set property calls</param>
+    public virtual async Task UpdateAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls) => await _dbSet.Where(predicate).ExecuteUpdateAsync(setPropertyCalls);
+
     #endregion
 
     #region Delete
@@ -635,7 +650,13 @@ public abstract class EfRepository<TEntity> : EfReadOnlyRepository<TEntity>, IRe
     /// Deletes the specified predicate.
     /// </summary>
     /// <param name="predicate"></param>
-    public virtual void Delete(Expression<Func<TEntity, bool>> predicate) => Delete(_dbSet.Where(predicate));
+    public virtual void Delete(Expression<Func<TEntity, bool>> predicate) => _dbSet.Where(predicate).ExecuteDelete();
+
+    /// <summary>
+    /// Deletes the specified predicate.
+    /// </summary>
+    /// <param name="predicate"></param>
+    public virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate) => await _dbSet.Where(predicate).ExecuteDeleteAsync();
 
     #endregion
 

@@ -335,6 +335,21 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> where TEnti
     void Update(IEnumerable<TEntity> entities);
 
     /// <summary>
+    /// Update
+    /// </summary>
+    /// <param name="predicate">predicate</param>
+    /// <param name="setPropertyCalls">set property calls</param>
+    void Update(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls);
+
+    /// <summary>
+    /// Update
+    /// </summary>
+    /// <param name="predicate">predicate</param>
+    /// <param name="setPropertyCalls">set property calls</param>
+    Task UpdateAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls);
+
+
+    /// <summary>
     /// Deletes the entity by the specified primary key.
     /// </summary>
     /// <param name="id">The primary key value.</param>
@@ -363,6 +378,12 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> where TEnti
     /// </summary>
     /// <param name="predicate"></param>
     void Delete(Expression<Func<TEntity, bool>> predicate);
+
+    /// <summary>
+    /// Soft deletes the entity by the specified predicate.
+    /// </summary>
+    /// <param name="predicate"></param>
+    Task DeleteAsync(Expression<Func<TEntity, bool>> predicate);
 
     /// <summary>
     /// Soft deletes the entity by the specified primary key.
