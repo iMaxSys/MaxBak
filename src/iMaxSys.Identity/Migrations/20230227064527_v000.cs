@@ -5,25 +5,25 @@
 namespace iMaxSys.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class v001 : Migration
+    public partial class v000 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "type",
-                table: "role",
-                type: "int",
+            migrationBuilder.AddColumn<long>(
+                name: "xpp_id",
+                table: "tenant_menu",
+                type: "bigint",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 0L);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "type",
-                table: "role");
+                name: "xpp_id",
+                table: "tenant_menu");
         }
     }
 }

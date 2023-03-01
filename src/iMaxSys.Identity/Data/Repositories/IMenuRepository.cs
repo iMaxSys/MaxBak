@@ -22,7 +22,7 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// <summary>
 /// 角色仓储接口
 /// </summary>
-public interface IMenuRepository : IIdentityRepository<DbMenu>
+public interface ITenantMenuRepository : IIdentityRepository<TenantMenu>
 {
     /// <summary>
     /// get

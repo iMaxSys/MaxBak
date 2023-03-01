@@ -25,6 +25,8 @@ public class TenantMenuConfiguration : TenantMasterEntityConfiguration<TenantMen
     {
         //基类配置
         base.Configures(builder);
+        //XppId
+        builder.Property(x => x.XppId).HasColumnName("xpp_id").IsRequired();
         //MenuId
         builder.Property(x => x.MenuId).HasColumnName("menu_id").IsRequired();
         //是否可见

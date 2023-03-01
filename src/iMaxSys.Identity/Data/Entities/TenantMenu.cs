@@ -23,6 +23,11 @@ namespace iMaxSys.Identity.Data.Entities;
 public class TenantMenu : TenantMasterEntity
 {
     /// <summary>
+    /// XppId
+    /// </summary>
+    public long XppId { get; set; }
+
+    /// <summary>
     /// 菜单Id
     /// </summary>
     public long MenuId { get; set; }

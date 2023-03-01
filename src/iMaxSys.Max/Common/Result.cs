@@ -23,7 +23,8 @@ public abstract class ResultBase
     /// <summary>
     /// 成功标志
     /// </summary>
-    public bool Success { get; set; } = false;
+    //public bool Success { get; set; } = false;
+
     /// <summary>
     /// 代码
     /// </summary>

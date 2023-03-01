@@ -29,13 +29,13 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// <summary>
 /// 菜单仓储
 /// </summary>
-public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
+public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuRepository
 {
     /// <summary>
     /// 构造
     /// </summary>
     /// <param name="context"></param>
-    public MenuRepository(IdentityContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context, mapper, option, cacheFactory)
+    public TenantMenuRepository(IdentityContext context, IMapper mapper, IOptions<MaxOption> option, ICacheFactory cacheFactory) : base(context, mapper, option, cacheFactory)
     {
     }
 
@@ -88,15 +88,15 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// <returns></returns>
     public async Task<DbMenu> FindAsync(long tenantId, long xppId, long id)
     {
-        var dbMenu = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == id);
+        var tenantMenu = await FirstOrDefaultAsync(x => x.TenantId == tenantId && x.XppId == xppId && x.Id == id, null, x => x.Include(y => y.Menu));
 
-        if (dbMenu is null)
+        if (tenantMenu is null)
         {
             throw new MaxException(ResultCode.MenuNotExits);
         }
         else
         {
-            return dbMenu;
+            return tenantMenu.Menu;
         }
     }
 
@@ -110,8 +110,14 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// <returns></returns>
     public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId)
     {
-        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId);
-        var menu = MakeMenu(list);
+        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId, null, x => x.Include(y => y.Menu));
+
+        if (list is null)
+        {
+            return null;
+        }
+
+        var menu = MakeMenu(list.Select(x => x.Menu).ToList());
         await Cache.SetAsync(GetXppMenuKey(tenantId, xppId), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
         return menu;
     }
@@ -125,12 +131,19 @@ public class MenuRepository : IdentityRepository<DbMenu>, IMenuRepository
     /// <returns></returns>
     public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role)
     {
-        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && role.MenuIds.Contains(x.Id), null, x => x.Include(y => y.Operations));
+        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && role.MenuIds.Contains(x.Id), null, x => x.Include(y => y.Menu).ThenInclude(z => z.Operations));
 
-        MenuModel menu = MakeMenu(list.ToList(), role.MenuIds, role.OperationIds);
+        if (list is null)
+        {
+            return null;
+        }
+
+        var menus = list.Select(x => x.Menu).ToList();
+
+        MenuModel menu = MakeMenu(menus, role.MenuIds, role.OperationIds);
         await Cache.SetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
 
-        var actions = MakeActionArray(list);
+        var actions = MakeActionArray(menus);
         //await Cache.DeleteAsync(GetRoleRoutersKey(tenantId, xppId, role.Id), _global);
         if (actions is not null && actions.Length > 0)
         {

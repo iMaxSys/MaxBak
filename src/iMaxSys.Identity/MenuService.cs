@@ -53,7 +53,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<MenuModel?> GetXppMenuAsync(long tenantId, long xppId)
     {
-        return await _unitOfWork.GetCustomRepository<IMenuRepository>().GetAsync(tenantId, xppId);
+        return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().GetAsync(tenantId, xppId);
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     public async Task<MenuModel?> GetRoleMenuAsync(long tenantId, long xppId, long roleId)
     {
         RoleModel role = await _roleService.GetAsync(tenantId, xppId, roleId);
-        return await _unitOfWork.GetCustomRepository<IMenuRepository>().GetAsync(tenantId, xppId, role);
+        return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().GetAsync(tenantId, xppId, role);
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId)
     {
-        return await _unitOfWork.GetCustomRepository<IMenuRepository>().RefreshAsync(tenantId, xppId);
+        return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().RefreshAsync(tenantId, xppId);
     }
 
     /// <summary>
@@ -119,7 +119,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role)
     {
-        return await _unitOfWork.GetCustomRepository<IMenuRepository>().RefreshAsync(tenantId, xppId, role);
+        return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().RefreshAsync(tenantId, xppId, role);
     }
 
     /// <summary>
@@ -133,6 +133,6 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     public async Task<bool> AllowAccessAsync(long tenantId, long xppId, long roleId, string router)
     {
         var role = await _roleService.GetAsync(tenantId, xppId, roleId);
-        return await _unitOfWork.GetCustomRepository<IMenuRepository>().AllowAccessAsync(tenantId, xppId, role, router);
+        return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().AllowAccessAsync(tenantId, xppId, role, router);
     }
 }

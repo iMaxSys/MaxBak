@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iMaxSys.Core.Data.EFCore;
 
@@ -11,15 +10,13 @@ using iMaxSys.Core.Data.EFCore;
 namespace iMaxSys.Core.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    [Migration("20221227085317_v000")]
-    partial class v000
+    partial class CoreContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("iMaxSys.Core.Data.Entities.Dict", b =>

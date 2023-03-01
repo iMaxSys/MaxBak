@@ -94,7 +94,13 @@ public class MemberService : IMemberService
     /// <exception cref="NotImplementedException"></exception>
     public Type GetType(int type = 0)
     {
-        throw new NotImplementedException();
+        switch (type)
+        {
+            case 0:
+                return typeof(Customer);
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     /// <summary>

@@ -21,19 +21,19 @@ namespace Kylin.Data.EFCore.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false),
                     count = table.Column<int>(type: "int", nullable: false, comment: "消费次数"),
                     amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false, comment: "消费总额"),
-                    incount = table.Column<int>(name: "in_count", type: "int", nullable: false, comment: "入场次数"),
-                    isdeleted = table.Column<bool>(name: "is_deleted", type: "tinyint(1)", nullable: false),
-                    createtime = table.Column<DateTime>(name: "create_time", type: "datetime(6)", nullable: false),
-                    creatorid = table.Column<long>(name: "creator_id", type: "bigint", nullable: false),
+                    in_count = table.Column<int>(type: "int", nullable: false, comment: "入场次数"),
+                    is_deleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    create_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    creator_id = table.Column<long>(type: "bigint", nullable: false),
                     creator = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    reviserid = table.Column<long>(name: "reviser_id", type: "bigint", nullable: false),
+                    reviser_id = table.Column<long>(type: "bigint", nullable: false),
                     reviser = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    revisetime = table.Column<DateTime>(name: "revise_time", type: "datetime(6)", nullable: false),
-                    groupid = table.Column<long>(name: "group_id", type: "bigint", nullable: false),
-                    companyid = table.Column<long>(name: "company_id", type: "bigint", nullable: false),
-                    storeid = table.Column<long>(name: "store_id", type: "bigint", nullable: false)
+                    revise_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    group_id = table.Column<long>(type: "bigint", nullable: false),
+                    company_id = table.Column<long>(type: "bigint", nullable: false),
+                    store_id = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {

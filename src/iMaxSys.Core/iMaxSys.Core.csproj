@@ -36,7 +36,7 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Remove="Migrations\20221222020235_v001.Designer.cs" />
     <Compile Remove="Migrations\20221202065509_v000.Designer.cs" />
-    <Compile Remove="Migrations\CoreContextModelSnapshot.cs" />
     <Compile Remove="Migrations\20221202065509_v000.cs" />
     <Compile Remove="Migrations\20221222020235_v001.cs" />
   </ItemGroup>

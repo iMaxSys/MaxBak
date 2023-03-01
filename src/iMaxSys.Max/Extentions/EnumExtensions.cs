@@ -47,7 +47,7 @@ public static class EnumExtensions
     {
         return new Result
         {
-            Success = value.GetHashCode() == MaxCode.Success.GetHashCode(),
+            //Success = value.GetHashCode() == MaxCode.Success.GetHashCode(),
             Code = value.GetHashCode(),
             Message = GetDescription(value),
         };
@@ -62,7 +62,7 @@ public static class EnumExtensions
     {
         return new Result
         {
-            Success = value.GetHashCode() == MaxCode.Success.GetHashCode(),
+            //Success = value.GetHashCode() == MaxCode.Success.GetHashCode(),
             Code = value.GetHashCode(),
             Message = GetDescription(value),
         };
@@ -77,7 +77,7 @@ public static class EnumExtensions
     {
         return new Result<T>
         {
-            Success = value.GetHashCode() == MaxCode.Success.GetHashCode(),
+            //Success = value.GetHashCode() == MaxCode.Success.GetHashCode(),
             Code = value.GetHashCode(),
             Message = GetDescription(value),
             Data = data

@@ -52,6 +52,7 @@ public static class MaxExtensions
         services.AddOptions();
         services.AddEndpointsApiExplorer();
 
+        /*
         services.AddCors(options =>
         {
             options.AddPolicy(name: "cors", builder =>
@@ -64,6 +65,7 @@ public static class MaxExtensions
                 //builder.WithOrigins("url from where you're trying to do the requests")
             });
         });
+        */
 
     }
 
@@ -72,7 +74,7 @@ public static class MaxExtensions
         MaxOption option = builder.ApplicationServices.GetService<IOptions<MaxOption>>()!.Value;
 
         //IdWorker初始
-        //IdWorker.Init(option.Network.ServerId, option.Network.DataCenterId);
+        IdWorker.Init(option.Network.ServerId, option.Network.DataCenterId);
 
         //core相关中间件
         CoreOption coreOption;
