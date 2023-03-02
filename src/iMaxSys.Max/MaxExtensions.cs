@@ -24,6 +24,7 @@ namespace iMaxSys.Max;
 public static class MaxExtensions
 {
     const string FXN = "Max";
+    const string CORS = "cors";
 
     public static void AddMax(this IServiceCollection services, IConfiguration configuration)
     {
@@ -52,20 +53,27 @@ public static class MaxExtensions
         services.AddOptions();
         services.AddEndpointsApiExplorer();
 
-        /*
         services.AddCors(options =>
         {
-            options.AddPolicy(name: "cors", builder =>
+            options.AddPolicy(CORS, policy =>
             {
-                //for when you're running on localhost
-                builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
-                .AllowAnyHeader().AllowAnyMethod();
-
-
-                //builder.WithOrigins("url from where you're trying to do the requests")
+                policy.AllowAnyOrigin().WithOrigins("http://localhost:5173", "http://localhost:9527").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
             });
         });
-        */
+
+
+        //services.AddCors(options =>
+        //{
+        //    options.AddPolicy(name: "cors", builder =>
+        //    {
+        //        //for when you're running on localhost
+        //        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "*.iynss.com")
+        //        .AllowAnyHeader().AllowAnyMethod();
+
+
+        //        //builder.WithOrigins("url from where you're trying to do the requests")
+        //    });
+        //});
 
     }
 
@@ -78,6 +86,7 @@ public static class MaxExtensions
 
         //core相关中间件
         CoreOption coreOption;
+
         if (coreAction is not null)
         {
             coreOption = new CoreOption();
@@ -88,10 +97,10 @@ public static class MaxExtensions
             coreOption = option.Core;
         }
 
-        //if (coreOption.UseHttpsRedirection)
-        //{
-        //    builder.UseHttpsRedirection();
-        //}
+        if (coreOption.UseHttpsRedirection)
+        {
+            builder.UseHttpsRedirection();
+        }
 
         if (coreOption.UseStaticFiles)
         {
@@ -103,12 +112,12 @@ public static class MaxExtensions
             builder.UseRouting();
         }
 
+        builder.UseCors(CORS);
+
         if (coreOption.UseAuthorization)
         {
             builder.UseAuthorization();
         }
-
-        builder.UseCors("cors");
 
         //异常中间件
         ExceptionHandlingOptions exOptions = new ExceptionHandlingOptions();
