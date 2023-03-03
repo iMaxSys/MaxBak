@@ -31,7 +31,6 @@ public class DictService : IDictService
     private readonly IMapper _mapper;
     private readonly MaxOption _option;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ICache _cache;
 
     /// <summary>
     /// 构造
@@ -39,12 +38,11 @@ public class DictService : IDictService
     /// <param name="mapper"></param>
     /// <param name="option"></param>
     /// <param name="unitOfWork"></param>
-    public DictService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<CoreContext, CoreReadOnlyContext> unitOfWork, ICacheFactory cacheFactory)
+    public DictService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<CoreContext, CoreReadOnlyContext> unitOfWork)
     {
         _mapper = mapper;
         _option = option.Value;
         _unitOfWork = unitOfWork;
-        _cache = cacheFactory.GetService();
     }
 
     /// <summary>

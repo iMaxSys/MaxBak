@@ -31,6 +31,12 @@ public enum ResultCode
     XppSnsIsInvalid = 103001,
 
     /// <summary>
+    /// 无效的租户
+    /// </summary>
+    [Description("无效的租户")]
+    TenantIsInvalid = 103002,
+
+    /// <summary>
     /// 字典已存在
     /// </summary>
     [Description("字典已存在")]

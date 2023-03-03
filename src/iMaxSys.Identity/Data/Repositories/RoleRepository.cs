@@ -46,12 +46,12 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<RoleModel> GetAsync(long tenantId, long xppId, long roleId)
+    public async Task<RoleResult> GetAsync(long tenantId, long xppId, long roleId)
     {
-        RoleModel roleModel;
+        RoleResult roleModel;
 
         //取缓存
-        IRole? role = await Cache.GetAsync<RoleModel>(GetRoleKey(tenantId, roleId), _global);
+        IRole? role = await Cache.GetAsync<RoleResult>(GetRoleKey(tenantId, roleId), _global);
 
         //为空则刷新
         if (role is null)
@@ -60,7 +60,7 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
         }
         else
         {
-            roleModel = (RoleModel)role;
+            roleModel = (RoleResult)role;
         }
 
         return roleModel;
@@ -117,7 +117,7 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<RoleModel> RefreshAsync(long tenantId, long xppId, long roleId)
+    public async Task<RoleResult> RefreshAsync(long tenantId, long xppId, long roleId)
     {
         var dbRole = await FindAsync(tenantId, xppId, roleId);
         return await RefreshAsync(tenantId, xppId, dbRole);
@@ -131,9 +131,9 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
     /// <param name="dbRole"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<RoleModel> RefreshAsync(long tenantId, long xppId, DbRole dbRole)
+    public async Task<RoleResult> RefreshAsync(long tenantId, long xppId, DbRole dbRole)
     {
-        RoleModel roleModel = Mapper.Map<RoleModel>(dbRole);
+        RoleResult roleModel = Mapper.Map<RoleResult>(dbRole);
         await Cache.SetAsync(GetRoleKey(tenantId, dbRole.Id), roleModel, new TimeSpan(0, Option.Identity.Expires, 0), _global);
         return roleModel;
     }

@@ -18,13 +18,8 @@ namespace iMaxSys.Max.Common;
 /// <summary>
 /// System Result
 /// </summary>
-public abstract class ResultBase
+public class Result
 {
-    /// <summary>
-    /// 成功标志
-    /// </summary>
-    //public bool Success { get; set; } = false;
-
     /// <summary>
     /// 代码
     /// </summary>
@@ -37,17 +32,6 @@ public abstract class ResultBase
     /// 详情
     /// </summary>
     public string? Detail { get; set; }
-}
-
-/// <summary>
-/// System Result
-/// </summary>
-public class Result : ResultBase
-{
-    /// <summary>
-    /// 数据
-    /// </summary>
-    //public virtual object? Data { get; set; }
 }
 
 /// <summary>

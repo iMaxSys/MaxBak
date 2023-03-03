@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
-//文件: LoginRequest.cs
-//摘要: 登录请求
+//文件: 获取角色请求.cs
+//摘要: GetRoleRequest
 //说明:
 //
 //当前：1.0
@@ -16,23 +16,13 @@ using iMaxSys.Max.Web.Mvc;
 namespace Kylin.Api.Admin.ViewModels;
 
 /// <summary>
-/// 登录请求
+/// 获取角色请求
 /// </summary>
-public class PasswordLoginRequest : Request
+public class GetRoleRequest : Request
 {
     /// <summary>
-    /// 用户名
+    /// Id
     /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 密码
-    /// </summary>
-    public string Password { get; set; } = string.Empty;
-
-    /// <summary>
-    /// SID
-    /// </summary>
-    public int SID { get; set; }
+    public long Id { get; set; }
 }
 

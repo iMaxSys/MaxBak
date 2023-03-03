@@ -20,9 +20,9 @@ namespace iMaxSys.Identity.Models;
 public class PasswordLoginModel
 {
     /// <summary>
-    /// XppSnsId
+    /// SID
     /// </summary>
-    public long XppSnsId { get; set; }
+    public long SID { get; set; }
 
     /// <summary>
     /// UserName
@@ -33,11 +33,6 @@ public class PasswordLoginModel
     /// Password
     /// </summary>
     public string Password { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Type
-    /// </summary>
-    public int Type { get; set; }
 
     /// <summary>
     /// IP

@@ -24,7 +24,7 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMap<LoginResult, LoginResponse>().ForMember(t => t.Expires, opt => opt.MapFrom(s => s.Expires.ToNormalString()));
-        CreateMap<RoleModel, RoleResponse>();
+        CreateMap<RoleResult, RoleResponse>();
         CreateMap<Role, RoleResponse>();
         CreateMap<MemberModel, MemberResponse>().ForMember(t => t.Role, opt => opt.MapFrom(s => s.Roles!.FirstOrDefault()));
         CreateMap<Department, DepartmentResponse>();

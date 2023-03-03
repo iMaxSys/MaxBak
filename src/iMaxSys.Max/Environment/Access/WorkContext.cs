@@ -52,9 +52,14 @@ public class WorkContext : IWorkContext
     public ISession Session { get => _session; }
 
     /// <summary>
-    /// XppInfo
+    /// Xpp information
     /// </summary>
     public Xpp Xpp { get; set; } = new();
+
+    /// <summary>
+    /// Tenant information
+    /// </summary>
+    public Tenant Tenant { get; set; } = new();
 
     /// <summary>
     /// IP

@@ -31,7 +31,7 @@ public interface IRoleRepository : IRepository<DbRole>
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<RoleModel> GetAsync(long tenantId, long xppId, long roleId);
+    Task<RoleResult> GetAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// find
@@ -58,7 +58,7 @@ public interface IRoleRepository : IRepository<DbRole>
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<RoleModel> RefreshAsync(long tenantId, long xppId, long roleId);
+    Task<RoleResult> RefreshAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// RefreshAsync
@@ -67,5 +67,5 @@ public interface IRoleRepository : IRepository<DbRole>
     /// <param name="xppId"></param>
     /// <param name="dbRole"></param>
     /// <returns></returns>
-    Task<RoleModel> RefreshAsync(long tenantId, long xppId, DbRole dbRole);
+    Task<RoleResult> RefreshAsync(long tenantId, long xppId, DbRole dbRole);
 }

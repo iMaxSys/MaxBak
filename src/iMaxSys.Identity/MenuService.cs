@@ -65,7 +65,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<MenuModel?> GetRoleMenuAsync(long tenantId, long xppId, long roleId)
     {
-        RoleModel role = await _roleService.GetAsync(tenantId, xppId, roleId);
+        RoleResult role = await _roleService.GetAsync(tenantId, xppId, roleId);
         return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().GetAsync(tenantId, xppId, role);
     }
 
@@ -106,7 +106,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <returns></returns>
     public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, long roleId)
     {
-        RoleModel role = await _roleService.GetAsync(tenantId, xppId, roleId);
+        RoleResult role = await _roleService.GetAsync(tenantId, xppId, roleId);
         return await RefreshAsync(tenantId, xppId, role);
     }
 

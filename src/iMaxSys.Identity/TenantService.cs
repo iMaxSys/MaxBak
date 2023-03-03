@@ -18,6 +18,33 @@ using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity;
 
+/// <summary>
+/// 租户服务
+/// </summary>
+public class TenantService : ITenantService
+{
+    public Task<Tenant> AddAsync(TenantModel model)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Tenant> GetAsync(long id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveAsync(long id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Tenant> UpdateAsync(TenantModel model)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+
 /*
 /// <summary>
 /// 租户服务

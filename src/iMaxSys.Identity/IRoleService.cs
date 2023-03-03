@@ -11,6 +11,7 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Collection;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Max.DependencyInjection;
 using iMaxSys.Identity.Models;
@@ -30,14 +31,14 @@ public interface IRoleService : IDependency
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<RoleModel> GetAsync(long tenantId, long xppId, long roleId);
+    Task<RoleResult> GetAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// get
     /// </summary>
     /// <param name="accessChain"></param>
     /// <returns></returns>
-    Task<RoleModel> GetAsync(IAccessChain accessChain);
+    Task<RoleResult> GetAsync(IAccessChain accessChain);
 
     /// <summary>
     /// refresh
@@ -46,7 +47,7 @@ public interface IRoleService : IDependency
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<RoleModel> RefreshAsync(long tenantId, long xppId, long roleId);
+    Task<RoleResult> RefreshAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// add
@@ -55,7 +56,7 @@ public interface IRoleService : IDependency
     /// <param name="xppId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<RoleModel> AddAsync(long tenantId, long xppId, RoleModel model);
+    Task<RoleResult> AddAsync(long tenantId, long xppId, RoleResult model);
 
     /// <summary>
     /// update
@@ -64,7 +65,7 @@ public interface IRoleService : IDependency
     /// <param name="xppId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<RoleModel> UpdateAsync(long tenantId, long xppId, RoleModel model);
+    Task<RoleResult> UpdateAsync(long tenantId, long xppId, RoleResult model);
 
     /// <summary>
     /// remove
@@ -76,9 +77,17 @@ public interface IRoleService : IDependency
     Task RemoveAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
-    /// 获取所有角色
+    /// 获取roles
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="name"></param>
     /// <returns></returns>
-    Task<List<RoleModel>> All(long tenantId);
+    Task<PagedList<RoleResult>> AllAsync(long tenantId, string name);
+
+    /// <summary>
+    /// 获取roles
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<PagedList<RoleResult>> GetListAsync(RolesRequest request);
 }

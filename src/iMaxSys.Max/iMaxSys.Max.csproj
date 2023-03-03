@@ -34,6 +34,8 @@
     <None Remove="Middlewares\" />
     <None Remove="Caching\" />
     <None Remove="Collection\Trees\" />
+    <None Remove="Linq\" />
+    <None Remove="Domain\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Net\Http\HttpClient.cs" />
@@ -55,5 +57,7 @@
     <Folder Include="Middlewares\" />
     <Folder Include="Caching\" />
     <Folder Include="Collection\Trees\" />
+    <Folder Include="Linq\" />
+    <Folder Include="Domain\" />
   </ItemGroup>
 </Project>

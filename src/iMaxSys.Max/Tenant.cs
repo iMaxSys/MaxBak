@@ -1,26 +1,27 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2025 Care Co.,Ltd.
+//Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: Tenant.cs
-//摘要: Tenant 
+//文件: ITenant.cs
+//摘要: ITenant
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2018-03-07
+//日期：2020-01-01
 //----------------------------------------------------------------
 
-using iMaxSys.Data.Entities;
 using iMaxSys.Max.Common.Enums;
 
-namespace iMaxSys.Core.Data.Entities;
+namespace iMaxSys.Max;
 
-/// <summary>
-/// Tenant
-/// </summary>
-public class Tenant : MasterEntity
+public class Tenant
 {
+    /// <summary>
+    /// Id
+    /// </summary>
+    public long Id { get; set; }
+
     /// <summary>
     /// 名称
     /// </summary>

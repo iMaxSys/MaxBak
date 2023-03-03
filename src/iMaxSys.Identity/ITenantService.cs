@@ -27,21 +27,21 @@ namespace iMaxSys.Identity
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<ITenant> GetAsync(long id);
+        Task<Tenant> GetAsync(long id);
 
         /// <summary>
         /// 新增租户
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<ITenant> AddAsync(TenantModel model);
+        Task<Tenant> AddAsync(TenantModel model);
 
         /// <summary>
         /// 更新租户
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<ITenant> UpdateAsync(TenantModel model);
+        Task<Tenant> UpdateAsync(TenantModel model);
 
         /// <summary>
         /// 移除租户

@@ -55,8 +55,7 @@ public class AuthController : MaxController
         model.UserName = request.UserName;
         model.Password = request.Password;
         model.IP = this.WorkContext.IP;
-        model.Type = request.Type;
-        model.XppSnsId = request.SID;
+        model.SID = request.SID;
         var result = await _authService.LoginAsync(model);
         var response = _mapper.Map<LoginResponse>(result);
         return Success(response);

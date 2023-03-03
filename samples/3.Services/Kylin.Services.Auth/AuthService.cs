@@ -107,7 +107,7 @@ public class AuthService : IAuthService
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<RoleModel> GetRoleAsync(long tenantId, long xppId, long roleId)
+    public async Task<RoleResult> GetRoleAsync(long tenantId, long xppId, long roleId)
     {
         return await _roleService.GetAsync(tenantId, xppId, roleId);
     }
@@ -117,7 +117,7 @@ public class AuthService : IAuthService
     /// </summary>
     /// <param name="accessChain"></param>
     /// <returns></returns>
-    public async Task<RoleModel> GetRoleAsync(IAccessChain accessChain)
+    public async Task<RoleResult> GetRoleAsync(IAccessChain accessChain)
     {
         return await _roleService.GetAsync(accessChain);
     }

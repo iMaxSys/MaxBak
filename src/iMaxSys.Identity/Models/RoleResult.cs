@@ -11,6 +11,7 @@
 //日期：2019-11-16
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Collection;
 using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity.Models;
@@ -18,6 +19,13 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 角色模型
 /// </summary>
-public class RoleModel : Role
+public class RoleResult : Role
+{
+}
+
+/// <summary>
+/// roles模型
+/// </summary>
+public class RolesResult : PagedList<RoleResult>
 {
 }

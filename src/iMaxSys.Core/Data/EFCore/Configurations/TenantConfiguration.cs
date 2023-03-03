@@ -38,6 +38,8 @@ public class TenantConfiguration : MasterEntityConfiguration<Tenant>
         builder.Property(x => x.QuickCode).HasColumnName("quick_code").HasMaxLength(50).IsRequired();
         //Description
         builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(255);
+        //Description
+        builder.Property(x => x.License).HasColumnName("license").HasMaxLength(50);
         //Level
         builder.Property(x => x.Level).HasColumnName("level").IsRequired();
         //Logo

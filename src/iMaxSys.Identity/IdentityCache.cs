@@ -151,7 +151,7 @@ public class IdentityCache : IIdentityCache
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<IRole?> GetRoleAsync(long tenantId, long xppId, long roleId) => await _cache.GetAsync<RoleModel>(GetRoleKey(tenantId, xppId, roleId), global);
+    public async Task<IRole?> GetRoleAsync(long tenantId, long xppId, long roleId) => await _cache.GetAsync<RoleResult>(GetRoleKey(tenantId, xppId, roleId), global);
 
     /// <summary>
     /// 设置角色

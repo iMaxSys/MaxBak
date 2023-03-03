@@ -35,15 +35,15 @@ namespace iMaxSys.Identity.Mappers
                 .ForMember(t => t.Roles, opt => opt.MapFrom(s => s.RoleMembers!.Select(x => x.Role)));
             CreateMap<MemberModel, DbMember>();
 
-            CreateMap<DbRole, RoleModel>()
+            CreateMap<DbRole, RoleResult>()
                 .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds == "0" ? new long[] { 0 } : s.MenuIds.ToLongArray())))
                 .ForMember(t => t.OperationIds, opt => opt.MapFrom(s => s.OperationIds == null ? null : (s.OperationIds == "0" ? new long[] { 0 } : s.OperationIds.ToLongArray())));
 
-            CreateMap<RoleModel, DbRole>()
+            CreateMap<RoleResult, DbRole>()
                 .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds[0] == 0 ? "0" : string.Join(",", s.MenuIds))))
                 .ForMember(t => t.OperationIds, opt => opt.MapFrom(s => s.OperationIds == null ? null : (s.OperationIds[0] == 0 ? "0" : string.Join(",", s.OperationIds))));
 
-            CreateMap<DbRole, IRole>().As<RoleModel>();
+            CreateMap<DbRole, IRole>().As<RoleResult>();
             CreateMap<DbDepartment, Department>();
             CreateMap<DbDepartment, IDepartment>().As<Department>();
             CreateMap<DepartmentModel, Department>();

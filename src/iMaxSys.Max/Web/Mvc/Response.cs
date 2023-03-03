@@ -15,26 +15,24 @@ using iMaxSys.Max.Common;
 
 namespace iMaxSys.Max.Web.Mvc;
 
+/// <summary>
+/// 响应接口
+/// </summary>
 public interface IResponse
 {
 }
 
-public interface IResponseBase
-{
-}
-
-
 /// <summary>
 /// 响应类
 /// </summary>
-public class Response : IResponse
+public abstract class Response : IResponse
 {
 }
 
 /// <summary>
-/// 响应范型类
+/// 响应范型接口
 /// </summary>
-public class Response<T> : Response
+public interface IResponse<T> : IResponse
 {
     /// <summary>
     /// 数据
@@ -43,15 +41,12 @@ public class Response<T> : Response
 }
 
 /// <summary>
-/// 响应类
-/// </summary>
-//public class Response : Result, IResponseBase
-//{
-//}
-
-/// <summary>
 /// 响应范型类
 /// </summary>
-//public class Response<T> : Result<T>, IResponseBase
-//{
-//}
+public abstract class Response<T> : Response, IResponse<T>
+{
+    /// <summary>
+    /// 数据
+    /// </summary>
+    public T? Data { get; set; }
+}

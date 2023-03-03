@@ -24,6 +24,9 @@ using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Data.Repositories;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
 using System;
+using iMaxSys.Max.Collection;
+using iMaxSys.Core.Data.Entities;
+using System.Linq;
 
 namespace iMaxSys.Identity;
 
@@ -56,7 +59,7 @@ public class RoleService : IRoleService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<RoleModel> GetAsync(long tenantId, long xppId, long roleId)
+    public async Task<RoleResult> GetAsync(long tenantId, long xppId, long roleId)
     {
         return await _unitOfWork.GetCustomRepository<IRoleRepository>().GetAsync(tenantId, xppId, roleId);
     }
@@ -66,7 +69,7 @@ public class RoleService : IRoleService
     /// </summary>
     /// <param name="accessChain"></param>
     /// <returns></returns>
-    public async Task<RoleModel> GetAsync(IAccessChain accessChain)
+    public async Task<RoleResult> GetAsync(IAccessChain accessChain)
     {
         if (accessChain.Member is null)
         {
@@ -88,7 +91,7 @@ public class RoleService : IRoleService
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<RoleModel> RefreshAsync(long tenantId, long xppId, long roleId)
+    public async Task<RoleResult> RefreshAsync(long tenantId, long xppId, long roleId)
     {
         return await _unitOfWork.GetCustomRepository<IRoleRepository>().RefreshAsync(tenantId, xppId, roleId);
     }
@@ -104,7 +107,7 @@ public class RoleService : IRoleService
     /// <param name="xppId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    public async Task<RoleModel> AddAsync(long tenantId, long xppId, RoleModel model)
+    public async Task<RoleResult> AddAsync(long tenantId, long xppId, RoleResult model)
     {
         //重名判断
         await CheckNameAsync(tenantId, xppId, model);
@@ -127,7 +130,7 @@ public class RoleService : IRoleService
     /// <param name="model"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<RoleModel> UpdateAsync(long tenantId, long xppId, RoleModel model)
+    public async Task<RoleResult> UpdateAsync(long tenantId, long xppId, RoleResult model)
     {
         //获取
         var role = await FindAsync(tenantId, xppId, model.Id);
@@ -177,7 +180,7 @@ public class RoleService : IRoleService
     /// <param name="xppId"></param>
     /// <param name="model"></param>
     /// <param name="dbRole"></param>
-    private DbRole SetRole(long tenantId, long xppId, RoleModel model)
+    private DbRole SetRole(long tenantId, long xppId, RoleResult model)
     {
         var dbRole = _mapper.Map<DbRole>(model);
         dbRole.TenantId = tenantId;
@@ -192,7 +195,7 @@ public class RoleService : IRoleService
     /// <param name="xppId"></param>
     /// <param name="model"></param>
     /// <param name="dbRole"></param>
-    private DbRole SetRole(long tenantId, long xppId, RoleModel model, DbRole dbRole)
+    private DbRole SetRole(long tenantId, long xppId, RoleResult model, DbRole dbRole)
     {
         _mapper.Map(model, dbRole);
         dbRole.TenantId = tenantId;
@@ -237,7 +240,7 @@ public class RoleService : IRoleService
     /// <param name="model"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    private async Task CheckNameAsync(long tenantId, long xppId, RoleModel model)
+    private async Task CheckNameAsync(long tenantId, long xppId, RoleResult model)
     {
         Expression<Func<DbRole, bool>> predicate = model.Id == 0 ? x => x.TenantId == tenantId && x.XppId == xppId && x.Name == model.Name : x => x.TenantId == tenantId && x.XppId == xppId && x.Id != model.Id && x.Name == model.Name;
 
@@ -252,12 +255,28 @@ public class RoleService : IRoleService
     /// all
     /// </summary>
     /// <param name="tenantId"></param>
+    /// <param name="name"></param>
     /// <returns></returns>
-    public async Task<List<RoleModel>> All(long tenantId)
+    public async Task<PagedList<RoleResult>> AllAsync(long tenantId, string? name = null)
     {
-        var roles = await _unitOfWork.GetRepository<DbRole>().AllAsync(x=>x.TenantId == tenantId);
-        return _mapper.Map<List<RoleModel>>(roles);
+        Expression<Func<DbRole, bool>> expression = x => x.TenantId == tenantId && !x.IsDeleted;
+        expression = expression.And(x=>x.Name.Contains(name!), !name.IsNullOrWhiteSpace());
+        var roles = await _unitOfWork.GetRepository<DbRole>().GetPagedListAsync(predicate: expression, orderBy: o => o.OrderBy(x => x.Name));
+        return _mapper.Map<PagedList<RoleResult>>(roles);
     }
 
     #endregion
+
+    /// <summary>
+    /// 获取roles
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public async Task<PagedList<RoleResult>> GetListAsync(RolesRequest request)
+    {
+        Expression<Func<DbRole, bool>> expression = x => x.TenantId == request.TenantId && x.XppId == request.XppId && !x.IsDeleted;
+        expression = expression.And(x => x.Name.Contains(request.Key!), request.Key.IsNullOrWhiteSpace());
+        var roles = await _unitOfWork.GetRepository<DbRole>().GetPagedListAsync(predicate: expression, orderBy: o => o.OrderBy(x => x.Name));
+        return _mapper.Map<PagedList<RoleResult>>(roles);
+    }
 }

@@ -21,10 +21,6 @@ namespace iMaxSys.Max.Web.Mvc;
 /// 分页响应范型类
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public abstract class PagingResponse<T> : ResultBase
+public abstract class PagingResponse<T> : PagedList<T>, IResponse
 {
-    /// <summary>
-    /// 分页数据
-    /// </summary>
-    public PagedList<T>? Data;
 }

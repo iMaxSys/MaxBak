@@ -190,7 +190,7 @@ public class MemberService : IMemberService
         }
 
         //获取xppSns
-        var xppSns = await _coreService.GetXppSnsAsync(model.XppSnsId);
+        var xppSns = await _coreService.GetXppSnsAsync(model.SID);
 
         if (xppSns is null)
         {
@@ -205,7 +205,7 @@ public class MemberService : IMemberService
         if (dbMember.RoleMembers?.Count > 0)
         {
             member.Roles = new List<iMaxSys.Max.Identity.Domain.Role>();
-            var role = await _roleService.GetAsync(dbMember.TenantId, model.XppSnsId, dbMember.RoleMembers.First().RoleId);
+            var role = await _roleService.GetAsync(dbMember.TenantId, model.SID, dbMember.RoleMembers.First().RoleId);
             if (role is not null)
             {
                 member.Roles.Add(role);
