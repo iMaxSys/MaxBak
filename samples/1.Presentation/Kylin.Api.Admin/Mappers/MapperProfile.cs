@@ -11,9 +11,10 @@
 //日期：2017-11-15
 //----------------------------------------------------------------
 
+using iMaxSys.Max;
 using iMaxSys.Max.Extentions;
-using iMaxSys.Identity.Models;
 using iMaxSys.Max.Identity.Domain;
+using iMaxSys.Identity.Models;
 
 using Kylin.Api.Admin.ViewModels;
 
@@ -23,6 +24,7 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
+        CreateMap<Tenant, GetTenantResponse>();
         CreateMap<LoginResult, LoginResponse>().ForMember(t => t.Expires, opt => opt.MapFrom(s => s.Expires.ToNormalString()));
         CreateMap<RoleResult, RoleResponse>();
         CreateMap<Role, RoleResponse>();

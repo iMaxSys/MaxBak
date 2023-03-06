@@ -26,7 +26,7 @@ public interface IAccessChain
     /// <summary>
     /// Member
     /// </summary>
-    IMember? Member { get; set; }
+    IMember Member { get; set; }
 
     /// <summary>
     /// User

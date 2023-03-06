@@ -12,16 +12,16 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max;
+using iMaxSys.Max.Options;
+using iMaxSys.Max.Caching;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Core.Models;
+using iMaxSys.Core.Common;
+using iMaxSys.Core.Data.EFCore;
 using iMaxSys.Core.Data.Repositories;
 using DbXpp = iMaxSys.Core.Data.Entities.Xpp;
 using DbXppSns = iMaxSys.Core.Data.Entities.XppSns;
 using DbTenant = iMaxSys.Core.Data.Entities.Tenant;
-using iMaxSys.Core.Data.EFCore;
-using iMaxSys.Max.Options;
-using iMaxSys.Max.Caching;
-using iMaxSys.Core.Common;
 
 namespace iMaxSys.Core.Data.Repositories;
 
@@ -45,7 +45,7 @@ public class TenantRepository : CoreReadOnlyRepository<DbTenant>, ITenantReposit
     }
 
     /// <summary>
-    /// 获取应用信息
+    /// 获取租户信息
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -66,23 +66,34 @@ public class TenantRepository : CoreReadOnlyRepository<DbTenant>, ITenantReposit
     /// <summary>
     /// 刷新全部租户信息
     /// </summary>
-    /// <param name="id"></param>
     /// <returns></returns>
-    public async Task RefreshAsync(long id)
+    public async Task RefreshAsync()
     {
         var tenants = await AllAsync(default);
         foreach (var item in tenants)
         {
-            await RefreshTenantAsync(item);
+            await RefreshAsync(item);
         }
     }
 
     /// <summary>
-    /// 刷新应用信息
+    /// 刷新租户信息
     /// </summary>
-    /// <param name="xpp"></param>
+    /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<Tenant> RefreshTenantAsync(DbTenant? dbTenant)
+    public async Task<Tenant> RefreshAsync(long id)
+    {
+        var tenant = await FirstOrDefaultAsync(x => x.Id == id);
+        return await RefreshAsync(tenant);
+    }
+
+    /// <summary>
+    /// 刷新刷新租户信息
+    /// </summary>
+    /// <param name="dbTenant"></param>
+    /// <returns></returns>
+    /// <exception cref="MaxException"></exception>
+    private async Task<Tenant> RefreshAsync(DbTenant? dbTenant)
     {
         if (dbTenant is null)
         {
@@ -95,7 +106,7 @@ public class TenantRepository : CoreReadOnlyRepository<DbTenant>, ITenantReposit
     }
 
     /// <summary>
-    /// 获取xpp key
+    /// 获取key
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

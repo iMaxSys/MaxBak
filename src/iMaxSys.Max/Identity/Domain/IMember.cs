@@ -217,6 +217,11 @@ public interface IMember
     bool IsOfficial { get; set; }
 
     /// <summary>
+    /// 是否登录
+    /// </summary>
+    bool IsLogin { get; set; }
+
+    /// <summary>
     /// 用户Id
     /// </summary>
     long UserId { get; set; }

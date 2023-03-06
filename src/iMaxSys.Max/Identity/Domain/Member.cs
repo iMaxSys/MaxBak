@@ -212,7 +212,12 @@ public class Member : IMember
     /// <summary>
     /// 是否正式
     /// </summary>
-    public bool IsOfficial { get; set; }
+    public bool IsOfficial { get; set; } = false;
+
+    /// <summary>
+    /// 是否登录
+    /// </summary>
+    public bool IsLogin { get; set; } = false;
 
     /// <summary>
     /// UserId

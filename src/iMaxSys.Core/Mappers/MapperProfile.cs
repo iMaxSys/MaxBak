@@ -22,6 +22,7 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
+        CreateMap<Tenant, iMaxSys.Max.Tenant>();
         CreateMap<Xpp, iMaxSys.Max.Xpp>();
         CreateMap<XppSns, iMaxSys.Max.XppSns> ();
         CreateMap<Dict, DictModel>();

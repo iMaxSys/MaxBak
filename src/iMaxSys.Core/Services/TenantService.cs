@@ -31,16 +31,23 @@ public class TenantService : ITenantService
 {
     private readonly IMapper _mapper;
     private readonly MaxOption _option;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICache _cache;
+    private readonly ITenantRepository _tenantRepository;
 
-    public TenantService()
-	{
-	}
+    public TenantService(IMapper mapper, IOptions<MaxOption> option, ITenantRepository tenantRepository)
+    {
+        _mapper = mapper;
+        _option = option.Value;
+        _tenantRepository = tenantRepository;
+    }
 
+    /// <summary>
+    /// 获取租户
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public Task<Tenant> GetAsync(long id)
     {
-        throw new NotImplementedException();
+        return _tenantRepository.GetAsync(id);
     }
 }
 

@@ -87,6 +87,11 @@ public class MemberResponse : Response
     public bool IsOfficial { get; set; }
 
     /// <summary>
+    /// 是否登录
+    /// </summary>
+    public bool IsLogin { get; set; }
+
+    /// <summary>
     /// 角色
     /// </summary>
     public RoleResponse Role { get; set; } = new();
@@ -95,5 +100,10 @@ public class MemberResponse : Response
     /// 部门
     /// </summary>
     public DepartmentResponse Department { get; set; } = new();
+
+    /// <summary>
+    /// 租户信息
+    /// </summary>
+    public GetTenantResponse Tenant { get; set; } = new();
 }
 

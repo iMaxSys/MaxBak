@@ -36,6 +36,7 @@ using iMaxSys.Sns.Common.Open;
 using MD5 = iMaxSys.Max.Security.Cryptography.MD5;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
 using DbMember = iMaxSys.Identity.Data.Entities.Member;
+using Member = iMaxSys.Max.Identity.Domain.Member;
 
 namespace iMaxSys.Identity;
 
@@ -52,13 +53,14 @@ public class MemberService : IMemberService
     private readonly ICoreService _coreService;
     private readonly IMenuService _menuService;
     private readonly IRoleService _roleService;
+    private readonly ITenantService _tenantService;
     private readonly ICheckCodeService _checkCodeService;
 
     private IUser? _user;
 
     #region 构造
 
-    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICoreService coreService, ICheckCodeService checkCodeService, IMenuService menuService, IRoleService roleService)
+    public MemberService(IMapper mapper, IOptions<MaxOption> option, IUnitOfWork<IdentityContext> unitOfWork, IUserService userProvider, ISnsFactory snsFactory, ICoreService coreService, ICheckCodeService checkCodeService, ITenantService tenantService, IRoleService roleService, IMenuService menuService)
     {
         _mapper = mapper;
         _option = option.Value;
@@ -67,8 +69,9 @@ public class MemberService : IMemberService
         _snsFactory = snsFactory;
         _coreService = coreService;
         _checkCodeService = checkCodeService;
-        _menuService = menuService;
         _roleService = roleService;
+        _tenantService = tenantService;
+        _menuService = menuService;
     }
 
     #endregion
@@ -152,6 +155,8 @@ public class MemberService : IMemberService
         _user = await LoginUserAsync(dbMember.Id, dbMember.UserId, dbMember.Type);
 
         var member = _mapper.Map<MemberModel>(dbMember);
+        member.IsLogin = true;
+
         return await RefreshAccessChainAsync(xppSns, member, accessConfig);
     }
 
@@ -200,6 +205,8 @@ public class MemberService : IMemberService
         _user = await LoginUserAsync(dbMember.Id, dbMember.UserId, dbMember.Type);
 
         var member = _mapper.Map<MemberModel>(dbMember);
+        member.Tenant = await _tenantService.GetAsync(member.TenantId);
+        member.IsLogin = true;
 
         //获取角色
         if (dbMember.RoleMembers?.Count > 0)
@@ -500,7 +507,7 @@ public class MemberService : IMemberService
         }
 
         //按memberId获取member
-        IMember? member = null;
+        IMember member = new Member();
         IUser? user = null;
 
         if (access.MemberId > -1)
@@ -514,6 +521,8 @@ public class MemberService : IMemberService
                 user = await _userService.GetAsync(access.UserId, access.Type);
             }
         }
+
+        member.Tenant = await _tenantService.GetAsync(member.TenantId);
 
         return new AccessChain
         {

@@ -26,7 +26,7 @@ public class AccessChain : IAccessChain
     /// <summary>
     /// Member
     /// </summary>
-    public IMember? Member { get; set; }
+    public IMember Member { get; set; } = new Member();
 
     /// <summary>
     /// User

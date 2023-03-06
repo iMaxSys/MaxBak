@@ -27,15 +27,22 @@ namespace iMaxSys.Core.Data.Repositories;
 public interface ITenantRepository : ICoreReadOnlyRepository<DbTenant>
 {
     /// <summary>
-    /// 获取应用信息
+    /// 获取租户信息
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<Tenant> GetAsync(long id);
 
     /// <summary>
-    /// 刷新全部应用信息
+    /// 刷新全部租户信息
     /// </summary>
     /// <returns></returns>
     Task RefreshAsync();
+
+    /// <summary>
+    /// 刷新租户信息
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<Tenant> RefreshAsync(long id);
 }

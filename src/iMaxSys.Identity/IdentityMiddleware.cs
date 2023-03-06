@@ -72,9 +72,7 @@ public class IdentityMiddleware
         {
             IMemberService memberService = context.RequestServices.GetRequiredService<IMemberService>();
             workContext.AccessChain = await memberService.CheckAsync($"{values[0]}", router.ToLower());
-
-            //ITenantService tenantService = context.RequestServices.GetRequiredService<ITenantService>();
-            //workContext.Tenant = await tenantService.GetAsync(workContext.AccessChain.Member.Tenant);
+            workContext.Tenant = workContext.AccessChain.Member.Tenant;
         }
     }
 }
