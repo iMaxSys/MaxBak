@@ -11,6 +11,7 @@
 //日期：2020-05-01
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Common.Domain;
 using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Identity.Models;
@@ -18,7 +19,7 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 登录结果
 /// </summary>
-public class LoginResult
+public class LoginResult : DomainResult
 {
     /// <summary>
     /// 令牌

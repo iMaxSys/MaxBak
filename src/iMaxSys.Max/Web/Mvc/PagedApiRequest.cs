@@ -16,7 +16,7 @@ namespace iMaxSys.Max.Web.Mvc;
 /// <summary>
 /// 分页请求
 /// </summary>
-public abstract class PagedRequest : Request
+public abstract class PagedApiRequest : ApiRequest
 {
     const int SIZE = 25;
 

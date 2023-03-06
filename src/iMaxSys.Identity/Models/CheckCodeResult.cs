@@ -11,12 +11,14 @@
 //日期：2019-11-16
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Common.Domain;
+
 namespace iMaxSys.Identity.Models;
 
 /// <summary>
-/// 验证码模型
+/// 验证码请求模型
 /// </summary>
-public class CheckCodeModel
+public class CheckCodeResult : DomainResult
 {
     /// <summary>
     /// Code

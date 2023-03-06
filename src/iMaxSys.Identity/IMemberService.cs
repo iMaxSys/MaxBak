@@ -29,14 +29,14 @@ public interface IMemberService : IDependency
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<IAccessChain> LoginAsync(CodeLoginModel model);
+    Task<IAccessChain> LoginAsync(CodeLoginRequest model);
 
     /// <summary>
     /// 密码登录
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<IAccessChain> LoginAsync(PasswordLoginModel model);
+    Task<IAccessChain> LoginAsync(PasswordLoginRequest model);
 
     /// <summary>
     /// login user
@@ -52,14 +52,14 @@ public interface IMemberService : IDependency
     /// </summary>
     /// <param name="registerModel"></param>
     /// <returns></returns>
-    Task<IAccessChain> RegisterAsync(RegisterModel registerModel);
+    Task<IAccessChain> RegisterAsync(RegisterRequest registerModel);
 
     /// <summary>
     /// RegisterUserAsync
     /// </summary>
     /// <param name="registerModel"></param>
     /// <returns></returns>
-    Task<IUser?> RegisterUserAsync(RegisterModel registerModel);
+    Task<IUser?> RegisterUserAsync(RegisterRequest registerModel);
 
     /// <summary>
     /// 登出
@@ -75,7 +75,7 @@ public interface IMemberService : IDependency
     /// <param name="xppId"></param>
     /// <param name="roleIds"></param>
     /// <returns></returns>
-    Task<IMember> AddAsync(MemberModel model, long xppId, long[]? roleIds);
+    Task<IMember> AddAsync(MemberResult model, long xppId, long[]? roleIds);
 
     /// <summary>
     /// 移除成员
@@ -105,7 +105,7 @@ public interface IMemberService : IDependency
     /// <param name="xppId"></param>
     /// <param name="roleIds"></param>
     /// <returns></returns>
-    Task<IMember> UpdateAsync(MemberModel model, long xppId, long[]? roleIds);
+    Task<IMember> UpdateAsync(MemberResult model, long xppId, long[]? roleIds);
 
     /// <summary>
     /// 获取AccessChain
@@ -146,7 +146,7 @@ public interface IMemberService : IDependency
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, MemberModel member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
+    Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, MemberResult member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null);
 
     /// <summary>
     /// 修改密码

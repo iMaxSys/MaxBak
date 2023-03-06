@@ -19,7 +19,7 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 菜单模型
 /// </summary>
-public class MenuModel : TreeNode
+public class MenuResult : TreeNode
 {
     /// <summary>
     /// 服务器端路由
@@ -34,10 +34,10 @@ public class MenuModel : TreeNode
     /// <summary>
     /// Menus
     /// </summary>
-    public LinkedList<MenuModel>? Children { get; set; }
+    public LinkedList<MenuResult>? Children { get; set; }
 
     /// <summary>
     /// Operations
     /// </summary>
-    public List<OperationModel>? Operations { get; set; }
+    public List<OperationResult>? Operations { get; set; }
 }

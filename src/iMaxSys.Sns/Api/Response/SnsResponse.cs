@@ -18,6 +18,6 @@ namespace iMaxSys.Sns.Api.Response;
 /// <summary>
 /// Sns应答
 /// </summary>
-public abstract class SnsResponse : IResponse
+public abstract class SnsResponse : IApiResponse
 {
 }

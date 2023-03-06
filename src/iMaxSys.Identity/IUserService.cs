@@ -51,7 +51,7 @@ public interface IUserService : IDependency
     /// </summary>
     /// <param name="registerModel"></param>
     /// <returns></returns>
-    Task<IUser?> RegisterAsync(RegisterModel registerModel);
+    Task<IUser?> RegisterAsync(RegisterRequest registerModel);
 
     /// <summary>
     /// login

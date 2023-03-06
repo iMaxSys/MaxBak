@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: CodeLoginRequest.cs
-//摘要: 代码登录请求
+//文件: PasswordLoginModel.cs
+//摘要: 密码登录请求
 //说明: 
 //
 //当前：1.0
@@ -11,32 +11,34 @@
 //日期：2020-05-01
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Common;
+
+using iMaxSys.Max.Common.Domain;
 
 namespace iMaxSys.Identity.Models;
 
 /// <summary>
-/// 代码登录请求
+/// 密码登录请求
 /// </summary>
-public class CodeLoginModel
+public class PasswordLoginRequest : DomainRequest
 {
     /// <summary>
-    /// sid
+    /// SID
     /// </summary>
-    public long Id { get; set; }
+    public long SID { get; set; }
 
     /// <summary>
-    /// Code
+    /// UserName
     /// </summary>
-    public string Code { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户类型
+    /// Password
     /// </summary>
-    public int Type { get; set; }
+    public string Password { get; set; } = string.Empty;
 
     /// <summary>
     /// IP
     /// </summary>
-    public string IP { get; set; } = Const.DEFAULT_IP;
+    public string IP { get; set; } = string.Empty;
 }
+

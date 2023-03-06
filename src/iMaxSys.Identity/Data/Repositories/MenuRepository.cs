@@ -47,10 +47,10 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     /// <param name="xppId"></param>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> GetAsync(long xppId, long tenantId)
+    public async Task<MenuResult?> GetAsync(long xppId, long tenantId)
     {
         //取缓存
-        MenuModel? menu = await Cache.GetAsync<MenuModel>(GetXppMenuKey(tenantId, xppId), _global);
+        MenuResult? menu = await Cache.GetAsync<MenuResult>(GetXppMenuKey(tenantId, xppId), _global);
 
         //为空则刷新
         if (menu is null)
@@ -61,10 +61,10 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
         return menu;
     }
 
-    public async Task<MenuModel?> GetAsync(long tenantId, long xppId, IRole role)
+    public async Task<MenuResult?> GetAsync(long tenantId, long xppId, IRole role)
     {
         //取缓存
-        MenuModel? menu = await Cache.GetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, role.Id), _global);
+        MenuResult? menu = await Cache.GetAsync<MenuResult>(GetRoleMenuKey(tenantId, xppId, role.Id), _global);
 
         //为空则刷新
         if (menu == null)
@@ -108,7 +108,7 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId)
+    public async Task<MenuResult?> RefreshAsync(long tenantId, long xppId)
     {
         var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId, null, x => x.Include(y => y.Menu));
 
@@ -129,7 +129,7 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role)
+    public async Task<MenuResult?> RefreshAsync(long tenantId, long xppId, IRole role)
     {
         var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId && role.MenuIds.Contains(x.Id), null, x => x.Include(y => y.Menu).ThenInclude(z => z.Operations));
 
@@ -140,8 +140,8 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
 
         var menus = list.Select(x => x.Menu).ToList();
 
-        MenuModel menu = MakeMenu(menus, role.MenuIds, role.OperationIds);
-        await Cache.SetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+        MenuResult menu = MakeMenu(menus, role.MenuIds, role.OperationIds);
+        await Cache.SetAsync<MenuResult>(GetRoleMenuKey(tenantId, xppId, role.Id), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
 
         var actions = MakeActionArray(menus);
         //await Cache.DeleteAsync(GetRoleRoutersKey(tenantId, xppId, role.Id), _global);
@@ -173,14 +173,14 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     /// </summary>
     /// <param name="list"></param>
     /// <returns></returns>
-    private MenuModel MakeMenu(IList<DbMenu> list)
+    private MenuResult MakeMenu(IList<DbMenu> list)
     {
         var tree = list.ToTree((parent, child) => child.ParentId == parent.Id);
-        MenuModel menu = Mapper.Map<MenuModel>(tree);
+        MenuResult menu = Mapper.Map<MenuResult>(tree);
         return menu;
     }
 
-    private MenuModel MakeMenu(List<DbMenu> list, long[] ids, long[] operationIds)
+    private MenuResult MakeMenu(List<DbMenu> list, long[] ids, long[] operationIds)
     {
         list.RemoveAll(x => !ids.Contains(x.Id));
         list.ForEach(x =>
@@ -189,7 +189,7 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
         });
 
         var tree = list.ToTree((parent, child) => child.ParentId == parent.Id);
-        var menu = Mapper.Map<MenuModel>(tree);
+        var menu = Mapper.Map<MenuResult>(tree);
         return menu;
     }
 

@@ -21,6 +21,6 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMap<LoginResult, LoginResponse>();
-        CreateMap<MemberModel, MemberResponse>();
+        CreateMap<MemberResult, MemberResponse>();
     }
 }

@@ -26,7 +26,7 @@ namespace iMaxSys.Identity;
 /// <summary>
 /// 菜单服务接口
 /// </summary>
-public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
+public interface IMenuService : ITreeService<DbMenu, MenuResult>, IDependency
 {
     /// <summary>
     /// 获取应用色菜单
@@ -34,7 +34,7 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<MenuModel?> GetXppMenuAsync(long tenantId, long xppId);
+    Task<MenuResult?> GetXppMenuAsync(long tenantId, long xppId);
 
     /// <summary>
     /// 获取角色菜单
@@ -43,7 +43,7 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<MenuModel?> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
+    Task<MenuResult?> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// 获取角色菜单
@@ -52,7 +52,7 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<MenuModel?> GetRoleMenuAsync(IAccessChain accessChain);
+    Task<MenuResult?> GetRoleMenuAsync(IAccessChain accessChain);
 
 
     /// <summary>
@@ -61,7 +61,7 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<MenuModel?> RefreshAsync(long tenantId, long xppId);
+    Task<MenuResult?> RefreshAsync(long tenantId, long xppId);
 
     /// <summary>
     /// 刷新应用角色菜单
@@ -70,7 +70,7 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<MenuModel?> RefreshAsync(long tenantId, long xppId, long roleId);
+    Task<MenuResult?> RefreshAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// 刷新应用角色菜单
@@ -79,7 +79,7 @@ public interface IMenuService : ITreeService<DbMenu, MenuModel>, IDependency
     /// <param name="xppId"></param>
     /// <param name="role"></param>
     /// <returns></returns>
-    Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role);
+    Task<MenuResult?> RefreshAsync(long tenantId, long xppId, IRole role);
 
     /// <summary>
     /// 是否允许访问路由

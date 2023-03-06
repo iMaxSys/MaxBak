@@ -30,10 +30,6 @@ public class RoleRequest : DomainRequest
 /// <summary>
 /// 获取roles请求
 /// </summary>
-public class RolesRequest : DomainPagedRequest
+public class RolesRequest : PagedDomainRequest
 {
-    /// <summary>
-    /// 名称
-    /// </summary>
-    public string? Name { get; set; } = string.Empty;
 }

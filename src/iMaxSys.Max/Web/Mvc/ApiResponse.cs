@@ -18,21 +18,21 @@ namespace iMaxSys.Max.Web.Mvc;
 /// <summary>
 /// 响应接口
 /// </summary>
-public interface IResponse
+public interface IApiResponse
 {
 }
 
 /// <summary>
 /// 响应类
 /// </summary>
-public abstract class Response : IResponse
+public abstract class ApiResponse : IApiResponse
 {
 }
 
 /// <summary>
 /// 响应范型接口
 /// </summary>
-public interface IResponse<T> : IResponse
+public interface IApiResponse<T> : IApiResponse
 {
     /// <summary>
     /// 数据
@@ -43,7 +43,7 @@ public interface IResponse<T> : IResponse
 /// <summary>
 /// 响应范型类
 /// </summary>
-public abstract class Response<T> : Response, IResponse<T>
+public abstract class ApiResponse<T> : ApiResponse, IApiResponse<T>
 {
     /// <summary>
     /// 数据

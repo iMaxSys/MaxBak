@@ -60,7 +60,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<MenuModel?> GetXppMenuAsync(long tenantId, long xppId);
+    Task<MenuResult?> GetXppMenuAsync(long tenantId, long xppId);
 
     /// <summary>
     /// 设置租户应用菜单
@@ -87,7 +87,7 @@ public interface IIdentityCache : ISingleton
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    Task<MenuModel?> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
+    Task<MenuResult?> GetRoleMenuAsync(long tenantId, long xppId, long roleId);
 
     /// <summary>
     /// 设置租户角色菜单

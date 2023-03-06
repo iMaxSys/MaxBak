@@ -108,7 +108,7 @@ public class CheckCodeService : ICheckCodeService
     /// <param name="memberId"></param>
     /// <param name="to"></param>
     /// <returns></returns>
-    public async Task<CheckCodeModel> MakeAsync(long sid, long tenantId, long bizId, string bizName, long memberId, string to)
+    public async Task<CheckCodeResult> MakeAsync(long sid, long tenantId, long bizId, string bizName, long memberId, string to)
     {
         //验证码请求频率检查, 如果存在有效的验证码, 则提示请求频率过快
         //bool has = await _checkCodeRepository.AnyAsync(x => (x.To == to || (x.MemberId > 0 && x.MemberId == memberId)) && x.Expires > DateTime.Now);
@@ -143,7 +143,7 @@ public class CheckCodeService : ICheckCodeService
         await _unitOfWork.SaveChangesAsync();
 
 
-        CheckCodeModel model = new()
+        CheckCodeResult result = new()
         {
             Code = checkCode.Code,
             Expires = checkCode.Expires,
@@ -151,9 +151,9 @@ public class CheckCodeService : ICheckCodeService
         };
 
         //同步或异步
-        CheckCodeCreatedHandler?.Invoke(model);
+        CheckCodeCreatedHandler?.Invoke(result);
 
-        return model;
+        return result;
     }
 }
 
@@ -162,4 +162,4 @@ public class CheckCodeService : ICheckCodeService
 /// </summary>
 /// <param name="model"></param>
 /// <returns></returns>
-public delegate Task CheckCodeCreatedHandler(CheckCodeModel model);
+public delegate Task CheckCodeCreatedHandler(CheckCodeResult result);

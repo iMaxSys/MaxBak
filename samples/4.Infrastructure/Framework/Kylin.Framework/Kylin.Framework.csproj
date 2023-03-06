@@ -15,5 +15,14 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\iMaxSys.Max\iMaxSys.Max.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Sns\iMaxSys.Sns.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Pay\iMaxSys.Pay.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Message\iMaxSys.Message.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Logging\iMaxSys.Logging.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Identity\iMaxSys.Identity.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Data\iMaxSys.Data.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Core\iMaxSys.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Caching\iMaxSys.Caching.csproj" />
+    <ProjectReference Include="..\..\..\..\src\iMaxSys.Bus\iMaxSys.Bus.csproj" />
   </ItemGroup>
 </Project>

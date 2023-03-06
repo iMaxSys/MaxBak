@@ -18,7 +18,7 @@ namespace Kylin.Api.Client.ViewModels;
 /// <summary>
 /// 登录应答
 /// </summary>
-public class LoginResponse : Response
+public class LoginResponse : ApiResponse
 {
     /// <summary>
     /// 令牌

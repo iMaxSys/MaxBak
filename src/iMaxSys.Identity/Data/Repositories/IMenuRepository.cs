@@ -30,7 +30,7 @@ public interface ITenantMenuRepository : IIdentityRepository<TenantMenu>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<MenuModel?> GetAsync(long tenantId, long xppId);
+    Task<MenuResult?> GetAsync(long tenantId, long xppId);
 
     /// <summary>
     /// get
@@ -39,7 +39,7 @@ public interface ITenantMenuRepository : IIdentityRepository<TenantMenu>
     /// <param name="xppId"></param>
     /// <param name="role"></param>
     /// <returns></returns>
-    Task<MenuModel?> GetAsync(long tenantId, long xppId, IRole role);
+    Task<MenuResult?> GetAsync(long tenantId, long xppId, IRole role);
 
     /// <summary>
     /// refresh
@@ -47,7 +47,7 @@ public interface ITenantMenuRepository : IIdentityRepository<TenantMenu>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    Task<MenuModel?> RefreshAsync(long tenantId, long xppId);
+    Task<MenuResult?> RefreshAsync(long tenantId, long xppId);
 
     /// <summary>
     /// refresh
@@ -56,7 +56,7 @@ public interface ITenantMenuRepository : IIdentityRepository<TenantMenu>
     /// <param name="xppId"></param>
     /// <param name="role"></param>
     /// <returns></returns>
-    Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role);
+    Task<MenuResult?> RefreshAsync(long tenantId, long xppId, IRole role);
 
     /// <summary>
     /// refresh

@@ -36,7 +36,7 @@ public interface ICheckCodeService : IDependency
     /// <param name="memberId"></param>
     /// <param name="to"></param>
     /// <returns></returns>
-    Task<CheckCodeModel> MakeAsync(long sid, long tenantId, long bizId, string bizName, long memberId, string to);
+    Task<CheckCodeResult> MakeAsync(long sid, long tenantId, long bizId, string bizName, long memberId, string to);
 
     /// <summary>
     /// 检查验证码

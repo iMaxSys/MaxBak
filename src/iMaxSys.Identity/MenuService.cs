@@ -29,7 +29,7 @@ namespace iMaxSys.Identity;
 /// <summary>
 /// 菜单服务
 /// </summary>
-public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
+public class MenuService : TreeService<DbMenu, MenuResult>, IMenuService
 {
     //身份缓存
     private readonly IRoleService _roleService;
@@ -51,7 +51,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> GetXppMenuAsync(long tenantId, long xppId)
+    public async Task<MenuResult?> GetXppMenuAsync(long tenantId, long xppId)
     {
         return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().GetAsync(tenantId, xppId);
     }
@@ -63,7 +63,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> GetRoleMenuAsync(long tenantId, long xppId, long roleId)
+    public async Task<MenuResult?> GetRoleMenuAsync(long tenantId, long xppId, long roleId)
     {
         RoleResult role = await _roleService.GetAsync(tenantId, xppId, roleId);
         return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().GetAsync(tenantId, xppId, role);
@@ -76,7 +76,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> GetRoleMenuAsync(IAccessChain accessChain)
+    public async Task<MenuResult?> GetRoleMenuAsync(IAccessChain accessChain)
     {
         if (accessChain.Member is null)
         {
@@ -92,7 +92,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId)
+    public async Task<MenuResult?> RefreshAsync(long tenantId, long xppId)
     {
         return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().RefreshAsync(tenantId, xppId);
     }
@@ -104,7 +104,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, long roleId)
+    public async Task<MenuResult?> RefreshAsync(long tenantId, long xppId, long roleId)
     {
         RoleResult role = await _roleService.GetAsync(tenantId, xppId, roleId);
         return await RefreshAsync(tenantId, xppId, role);
@@ -117,7 +117,7 @@ public class MenuService : TreeService<DbMenu, MenuModel>, IMenuService
     /// <param name="xppId"></param>
     /// <param name="role"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> RefreshAsync(long tenantId, long xppId, IRole role)
+    public async Task<MenuResult?> RefreshAsync(long tenantId, long xppId, IRole role)
     {
         return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().RefreshAsync(tenantId, xppId, role);
     }

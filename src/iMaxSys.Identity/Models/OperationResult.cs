@@ -19,6 +19,6 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 操作模型
 /// </summary>
-public class OperationModel : Operation
+public class OperationResult : Operation
 {
 }

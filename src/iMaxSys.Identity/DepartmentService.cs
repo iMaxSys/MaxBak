@@ -18,7 +18,7 @@ using iMaxSys.Identity.Data.Entities;
 
 namespace iMaxSys.Identity;
 
-public class DepartmentService : TreeService<Department, DepartmentModel>, IDepartmentService
+public class DepartmentService : TreeService<Department, DepartmentResult>, IDepartmentService
 {
     /// <summary>
     /// 构造

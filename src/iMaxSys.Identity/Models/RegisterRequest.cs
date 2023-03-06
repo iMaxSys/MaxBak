@@ -11,6 +11,7 @@
 //日期：2019-11-16
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Common.Domain;
 using iMaxSys.Max.Common.Enums;
 using iMaxSys.Max.Identity.Domain;
 
@@ -19,17 +20,12 @@ namespace iMaxSys.Identity.Models;
 /// <summary>
 /// 用户注册模型
 /// </summary>
-public class RegisterModel
+public class RegisterRequest : DomainRequest
 {
     /// <summary>
     /// Sid
     /// </summary>
-    public long XppSnsId { get; set; }
-
-    /// <summary>
-    /// TenantId
-    /// </summary>
-    public long TenantId { get; set; }
+    public long SID { get; set; }
 
     /// <summary>
     /// 推荐人Id
@@ -155,7 +151,7 @@ public class RegisterModel
     /// 构造
     /// </summary>
     /// <param name="mobile"></param>
-    public RegisterModel(long mobile, string ip)
+    public RegisterRequest(long mobile, string ip)
     {
         Mobile = mobile;
         IP = ip;

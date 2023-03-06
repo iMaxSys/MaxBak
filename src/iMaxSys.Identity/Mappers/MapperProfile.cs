@@ -31,9 +31,9 @@ namespace iMaxSys.Identity.Mappers
     {
         public MapperProfile()
         {
-            CreateMap<DbMember, MemberModel>()
+            CreateMap<DbMember, MemberResult>()
                 .ForMember(t => t.Roles, opt => opt.MapFrom(s => s.RoleMembers!.Select(x => x.Role)));
-            CreateMap<MemberModel, DbMember>();
+            CreateMap<MemberResult, DbMember>();
 
             CreateMap<DbRole, RoleResult>()
                 .ForMember(t => t.MenuIds, opt => opt.MapFrom(s => s.MenuIds == null ? null : (s.MenuIds == "0" ? new long[] { 0 } : s.MenuIds.ToLongArray())))
@@ -46,13 +46,13 @@ namespace iMaxSys.Identity.Mappers
             CreateMap<DbRole, IRole>().As<RoleResult>();
             CreateMap<DbDepartment, Department>();
             CreateMap<DbDepartment, IDepartment>().As<Department>();
-            CreateMap<DepartmentModel, Department>();
-            CreateMap<Department, DepartmentModel>();
-            CreateMap<MenuModel, DbMenu>();
-            CreateMap<DbMenu, MenuModel>();
-            CreateMap<DbOperation, OperationModel>();
-            CreateMap<OperationModel, DbOperation>();
-            CreateMap<DbOperation, IOperation>().As<OperationModel>();
+            CreateMap<DepartmentResult, Department>();
+            CreateMap<Department, DepartmentResult>();
+            CreateMap<MenuResult, DbMenu>();
+            CreateMap<DbMenu, MenuResult>();
+            CreateMap<DbOperation, OperationResult>();
+            CreateMap<OperationResult, DbOperation>();
+            CreateMap<DbOperation, IOperation>().As<OperationResult>();
 
             //CreateMap<ITree<DbMenu>, IMenu>()
             //   .ForMember(t => t.ServerRouter, opt => opt.MapFrom(s => s.Data.ServerRouter))
@@ -82,7 +82,7 @@ namespace iMaxSys.Identity.Mappers
             //   .ForMember(t => t.Operations, opt => opt.MapFrom(s => s.Data.Operations))
             //   .ForMember(t => t.Children, opt => opt.MapFrom(s => s.Children)).As<MenuModel>();
 
-            CreateMap<ITree<DbMenu>, MenuModel>()
+            CreateMap<ITree<DbMenu>, MenuResult>()
                .ForMember(t => t.ServerRouter, opt => opt.MapFrom(s => s.Data.ServerRouter))
                .ForMember(t => t.ClientRouter, opt => opt.MapFrom(s => s.Data.ClientRouter))
                .ForMember(t => t.Alias, opt => opt.MapFrom(s => s.Data.Alias))

@@ -34,14 +34,14 @@ public interface IAuthService : IDependency
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    Task<LoginResult> LoginAsync(CodeLoginModel request);
+    Task<LoginResult> LoginAsync(CodeLoginRequest request);
 
     /// <summary>
     /// 密码登录
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    Task<LoginResult> LoginAsync(PasswordLoginModel request);
+    Task<LoginResult> LoginAsync(PasswordLoginRequest request);
 
     /// <summary>
     /// 登出
@@ -80,5 +80,5 @@ public interface IAuthService : IDependency
     /// </summary>
     /// <param name="accessChain"></param>
     /// <returns></returns>
-    Task<MenuModel?> GetRoleMenuAsync(IAccessChain accessChain);
+    Task<MenuResult?> GetRoleMenuAsync(IAccessChain accessChain);
 }

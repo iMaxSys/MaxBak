@@ -86,12 +86,12 @@ public class MemberService : IMemberService
     /// <param name="code"></param>
     /// <param name="ip"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> LoginAsync(CodeLoginModel codeLoginModel)
+    public async Task<IAccessChain> LoginAsync(CodeLoginRequest request)
     {
         DbMember dbMember;
 
         //获取xppSns
-        var xppSns = await _coreService.GetXppSnsAsync(codeLoginModel.Id);
+        var xppSns = await _coreService.GetXppSnsAsync(request.SID);
 
         if (xppSns is null)
         {
@@ -105,8 +105,8 @@ public class MemberService : IMemberService
         //IAccessToken token = MakeAccessToken();
 
         //取访问配置
-        AccessConfig accessConfig = await GetAccessConfigAsync(xppSns, codeLoginModel.Code);
-        var memberExt = await _unitOfWork.GetRepository<MemberExt>().FirstOrDefaultAsync(x => x.XppSnsId == codeLoginModel.Id && x.OpenId == accessConfig.OpenId, null, x => x.Include(y => y.Member));
+        AccessConfig accessConfig = await GetAccessConfigAsync(xppSns, request.Code);
+        var memberExt = await _unitOfWork.GetRepository<MemberExt>().FirstOrDefaultAsync(x => x.XppSnsId == request.SID && x.OpenId == accessConfig.OpenId, null, x => x.Include(y => y.Member));
 
         //有表示已是会员,无进行快速注册,注册完成为非正式
         if (memberExt == null)
@@ -114,7 +114,7 @@ public class MemberService : IMemberService
             string salt = Guid.NewGuid().ToString().Replace("-", "");
             dbMember = new DbMember
             {
-                Type = codeLoginModel.Type,
+                Type = request.Type,
                 Start = now,
                 End = end,
                 XppSource = xppSns.Xpp.Source,
@@ -122,9 +122,9 @@ public class MemberService : IMemberService
                 Salt = salt,
                 Password = MakePassword(MaxRandom.Next().ToString().Right(6), salt),
                 JoinTime = now,
-                JoinIP = codeLoginModel.IP,
+                JoinIP = request.IP,
                 LastLogin = now,
-                LastIP = codeLoginModel.IP,
+                LastIP = request.IP,
                 IsOfficial = isOfficial,
                 Status = Status.Enable,
                 MemberExts = new List<MemberExt>()
@@ -133,7 +133,7 @@ public class MemberService : IMemberService
             //快速登录，自动注册扩展信息
             dbMember.MemberExts.Add(new MemberExt
             {
-                XppSnsId = codeLoginModel.Id,
+                XppSnsId = request.SID,
                 OpenId = accessConfig.OpenId,
                 UnionId = accessConfig.UnionId.IfNullOrEmpty(accessConfig.OpenId),
                 Expires = end,
@@ -146,7 +146,7 @@ public class MemberService : IMemberService
         else
         {
             dbMember = memberExt.Member;
-            dbMember.LastIP = codeLoginModel.IP;
+            dbMember.LastIP = request.IP;
             dbMember.LastLogin = now;
             await _unitOfWork.SaveChangesAsync();
             await CheckStatus(dbMember);
@@ -154,7 +154,7 @@ public class MemberService : IMemberService
 
         _user = await LoginUserAsync(dbMember.Id, dbMember.UserId, dbMember.Type);
 
-        var member = _mapper.Map<MemberModel>(dbMember);
+        var member = _mapper.Map<MemberResult>(dbMember);
         member.IsLogin = true;
 
         return await RefreshAccessChainAsync(xppSns, member, accessConfig);
@@ -169,7 +169,7 @@ public class MemberService : IMemberService
     /// <param name="ip"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<IAccessChain> LoginAsync(PasswordLoginModel model)
+    public async Task<IAccessChain> LoginAsync(PasswordLoginRequest model)
     {
         //用户名空检查
         if (string.IsNullOrWhiteSpace(model.UserName))
@@ -204,7 +204,7 @@ public class MemberService : IMemberService
 
         _user = await LoginUserAsync(dbMember.Id, dbMember.UserId, dbMember.Type);
 
-        var member = _mapper.Map<MemberModel>(dbMember);
+        var member = _mapper.Map<MemberResult>(dbMember);
         member.Tenant = await _tenantService.GetAsync(member.TenantId);
         member.IsLogin = true;
 
@@ -252,7 +252,7 @@ public class MemberService : IMemberService
     /// <param name="registerModel"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<IAccessChain> RegisterAsync(RegisterModel registerModel)
+    public async Task<IAccessChain> RegisterAsync(RegisterRequest registerModel)
     {
         bool needCheckCode = true;
 
@@ -265,7 +265,7 @@ public class MemberService : IMemberService
         }
 
         //获取xppSns
-        var xppSns = await _coreService.GetXppSnsAsync(registerModel.XppSnsId);
+        var xppSns = await _coreService.GetXppSnsAsync(registerModel.SID);
 
         if (xppSns is null)
         {
@@ -321,7 +321,7 @@ public class MemberService : IMemberService
         //检查验证码
         if (needCheckCode)
         {
-            await _checkCodeService.CheckAsync(registerModel.XppSnsId, BizSource.BindCheckCode.GetHashCode(), registerModel.Mobile.ToString(), registerModel.CheckCode);
+            await _checkCodeService.CheckAsync(registerModel.SID, BizSource.BindCheckCode.GetHashCode(), registerModel.Mobile.ToString(), registerModel.CheckCode);
         }
 
         //外接用户注册
@@ -345,7 +345,7 @@ public class MemberService : IMemberService
             accessConfig = await GetAccessConfigAsync(xppSns, registerModel.Code);
         }
 
-        var member = _mapper.Map<MemberModel>(dbMember);
+        var member = _mapper.Map<MemberResult>(dbMember);
         return await RefreshAccessChainAsync(xppSns, member, accessConfig);
     }
 
@@ -359,7 +359,7 @@ public class MemberService : IMemberService
     /// <param name="id"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    public async Task<IUser?> RegisterUserAsync(RegisterModel registerModel)
+    public async Task<IUser?> RegisterUserAsync(RegisterRequest registerModel)
     {
         if (_userService is not null)
         {
@@ -395,14 +395,14 @@ public class MemberService : IMemberService
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<IMember> AddAsync(MemberModel model, long xppId, long[]? roleIds)
+    public async Task<IMember> AddAsync(MemberResult model, long xppId, long[]? roleIds)
     {
         DbMember dbMember = new();
         SetNewMember(model, dbMember, xppId, roleIds);
         SetRoles(dbMember, roleIds, model.TenantId, xppId);
         await _unitOfWork.GetCustomRepository<IMemberRepository>().AddAsync(dbMember);
         await _unitOfWork.SaveChangesAsync();
-        return _mapper.Map<MemberModel>(dbMember);
+        return _mapper.Map<MemberResult>(dbMember);
     }
 
     #endregion
@@ -456,7 +456,7 @@ public class MemberService : IMemberService
     /// <param name="roleIds"></param>
     /// <returns></returns>
     /// <exception cref="MaxException"></exception>
-    public async Task<IMember> UpdateAsync(MemberModel model, long xppId, long[]? roleIds)
+    public async Task<IMember> UpdateAsync(MemberResult model, long xppId, long[]? roleIds)
     {
         //成员id判空
         if (model.Id == 0)
@@ -475,7 +475,7 @@ public class MemberService : IMemberService
         respoitory.Update(member);
         await _unitOfWork.SaveChangesAsync();
 
-        var result = _mapper.Map<MemberModel>(member);
+        var result = _mapper.Map<MemberResult>(member);
         await RefreshAsync(result);
         return result;
     }
@@ -591,7 +591,7 @@ public class MemberService : IMemberService
     /// <param name="accessConfig"></param>
     /// <param name="accessToken"></param>
     /// <returns></returns>
-    public async Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, MemberModel member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
+    public async Task<IAccessChain> RefreshAccessChainAsync(XppSns xppSns, MemberResult member, AccessConfig? accessConfig = null, IAccessToken? accessToken = null)
     {
         var token = accessToken ?? MakeAccessToken();
 
@@ -805,7 +805,7 @@ public class MemberService : IMemberService
     /// <param name="dbMember"></param>
     /// <param name="xppId"></param>
     /// <param name="roleIds"></param>
-    private static string SetNewMember(MemberModel model, DbMember dbMember, long xppId, long[]? roleIds)
+    private static string SetNewMember(MemberResult model, DbMember dbMember, long xppId, long[]? roleIds)
     {
         SetMember(model, dbMember, xppId, roleIds);
 
@@ -833,7 +833,7 @@ public class MemberService : IMemberService
     /// <param name="dbMember"></param>
     /// <param name="xppId"></param>
     /// <param name="roleIds"></param>
-    private static void SetMember(MemberModel model, DbMember dbMember, long xppId, long[]? roleIds)
+    private static void SetMember(MemberResult model, DbMember dbMember, long xppId, long[]? roleIds)
     {
         dbMember.UserId = model.UserId > 0 ? model.UserId : dbMember.Id;      //如无外接UserId,使用Member.Id
         dbMember.Mobile = model.Mobile;
@@ -878,7 +878,7 @@ public class MemberService : IMemberService
     /// <param name="snsSource"></param>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
-    private static string SetRegisterMember(RegisterModel model, IUser? user, DbMember dbMember, XppSource xppSource, SnsSource snsSource, long tenantId = 0, long xppId = 0)
+    private static string SetRegisterMember(RegisterRequest model, IUser? user, DbMember dbMember, XppSource xppSource, SnsSource snsSource, long tenantId = 0, long xppId = 0)
     {
         string password = model.Password ?? MaxRandom.Next().ToString().Right(6);
         DateTime end = DateTime.Now.AddYears(100);
@@ -912,7 +912,7 @@ public class MemberService : IMemberService
         model.OpenId?.IfNotNull(x =>
         {
             MemberExt ext = new MemberExt();
-            ext.XppSnsId = model.XppSnsId;
+            ext.XppSnsId = model.SID;
             ext.TenantId = model.TenantId;
             ext.OpenId = model.OpenId;
             ext.UnionId = model.UnionId ?? Guid.NewGuid().ToString().Replace("-", "");

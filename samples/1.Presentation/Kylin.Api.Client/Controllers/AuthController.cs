@@ -62,7 +62,7 @@ public class AuthController : MaxController
     }
 
     [HttpPost]
-    public async Task<Result<LoginResponse>> WeChatLiteLogin(CodeLoginModel reqeust)
+    public async Task<Result<LoginResponse>> WeChatLiteLogin(CodeLoginRequest reqeust)
     {
         reqeust.IP = WorkContext.IP;
         LoginResult result = await _authService.LoginAsync(reqeust);

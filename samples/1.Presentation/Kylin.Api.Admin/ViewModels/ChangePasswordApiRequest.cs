@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
-//文件: LoginRequest.cs
-//摘要: 登录请求
+//文件: ChangePasswordApiRequest.cs
+//摘要: 修改密码请求
 //说明:
 //
 //当前：1.0
@@ -17,9 +17,9 @@ using iMaxSys.Max.Web.Mvc;
 namespace Kylin.Api.Admin.ViewModels;
 
 /// <summary>
-/// 登录请求
+/// 修改密码请求
 /// </summary>
-public class ChangePasswordRequest : Request
+public class ChangePasswordApiRequest : ApiRequest
 {
     /// <summary>
     /// 用户名

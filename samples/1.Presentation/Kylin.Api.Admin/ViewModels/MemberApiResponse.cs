@@ -19,7 +19,7 @@ namespace Kylin.Api.Admin.ViewModels;
 /// <summary>
 /// 会员应答
 /// </summary>
-public class MemberResponse : Response
+public class MemberApiResponse : ApiResponse
 {
     /// <summary>
     /// Id
@@ -94,16 +94,16 @@ public class MemberResponse : Response
     /// <summary>
     /// 角色
     /// </summary>
-    public RoleResponse Role { get; set; } = new();
+    public RoleApiResponse Role { get; set; } = new();
 
     /// <summary>
     /// 部门
     /// </summary>
-    public DepartmentResponse Department { get; set; } = new();
+    public DepartmentApiResponse Department { get; set; } = new();
 
     /// <summary>
     /// 租户信息
     /// </summary>
-    public GetTenantResponse Tenant { get; set; } = new();
+    public TenantApiResponse Tenant { get; set; } = new();
 }
 

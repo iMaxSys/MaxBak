@@ -1,24 +1,24 @@
 ﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
+//Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
-//文件: MemberModel.cs
-//摘要: 成员模型
+//文件: DepartmentResponse.cs
+//摘要: 部门应答
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2019-11-16
+//日期：2022-04-26
 //----------------------------------------------------------------
 
+using iMaxSys.Max.Web.Mvc;
 using iMaxSys.Max.Common.Enums;
-using iMaxSys.Max.Identity.Domain;
 
-namespace iMaxSys.Identity.Models;
+namespace Kylin.Api.Admin.ViewModels;
 
 /// <summary>
-/// 成员模型
+/// 部门应答
 /// </summary>
-public class MemberModel : Member
+public class RolesApiResponse : PagedApiResponse<RoleApiResponse>
 {
 }

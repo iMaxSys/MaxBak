@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: DomainRequest.cs
-//摘要: 领域/服务请求
+//文件: PagedDomainResult.cs
+//摘要: 分页领域/服务请求结果
 //说明:
 //
 //当前：1.0
@@ -14,17 +14,8 @@
 namespace iMaxSys.Max.Common.Domain;
 
 /// <summary>
-/// 领域/服务请求
+/// 分页领域/服务请求结果
 /// </summary>
-public abstract class DomainRequest
+public abstract class PagedDomainResult<T> : PagedList<T>
 {
-    /// <summary>
-    /// 应用Id
-    /// </summary>
-    public long XppId { get; set; }
-
-    /// <summary>
-    /// 租户Id
-    /// </summary>
-    public long TenantId { get; set; }
 }

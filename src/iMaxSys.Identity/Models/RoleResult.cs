@@ -26,6 +26,6 @@ public class RoleResult : Role
 /// <summary>
 /// roles模型
 /// </summary>
-public class RolesResult : PagedList<RoleResult>
-{
-}
+//public class RolesResult : PagedList<RoleResult>
+//{
+//}

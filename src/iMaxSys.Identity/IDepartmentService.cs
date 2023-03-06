@@ -22,6 +22,6 @@ namespace iMaxSys.Identity;
 /// <summary>
 /// 部门服务接口
 /// </summary>
-public interface IDepartmentService : ITreeService<Department, DepartmentModel>, IDependency
+public interface IDepartmentService : ITreeService<Department, DepartmentResult>, IDependency
 {
 }

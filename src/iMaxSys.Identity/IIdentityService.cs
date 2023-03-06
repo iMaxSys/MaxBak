@@ -77,7 +77,7 @@ public interface IIdentityService : IDependency
     /// <param name="ip"></param>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<IMember> AddMemberAsync(MemberModel member, string ip, long tenantId = 0);
+    Task<IMember> AddMemberAsync(MemberResult member, string ip, long tenantId = 0);
 
     /// <summary>
     /// 更新成员
@@ -85,7 +85,7 @@ public interface IIdentityService : IDependency
     /// <param name="memberId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<IMember> UpdateMemberAsync(MemberModel member);
+    Task<IMember> UpdateMemberAsync(MemberResult member);
 
     /// <summary>
     /// 移除成员
@@ -126,7 +126,7 @@ public interface IIdentityService : IDependency
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task RegisterAsync(RegisterModel model);
+    Task RegisterAsync(RegisterRequest model);
 
     /// <summary>
     /// 登录:用户名&密码

@@ -19,7 +19,7 @@ namespace Kylin.Api.Admin.ViewModels;
 /// <summary>
 /// 部门应答
 /// </summary>
-public class DepartmentResponse : Response
+public class DepartmentApiResponse : ApiResponse
 {
     /// <summary>
 	/// Id

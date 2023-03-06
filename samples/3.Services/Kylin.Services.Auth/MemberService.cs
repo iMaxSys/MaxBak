@@ -87,6 +87,17 @@ public class MemberService : IMemberService
     }
 
     /// <summary>
+    /// 获取租户扩展
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public Task<object> GetTenantExtAsync(long id)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
     /// 获取类型
     /// </summary>
     /// <param name="type"></param>
@@ -131,7 +142,7 @@ public class MemberService : IMemberService
     /// <param name="registerModel"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<IUser?> RegisterAsync(RegisterModel registerModel)
+    public Task<IUser?> RegisterAsync(RegisterRequest registerModel)
     {
         throw new NotImplementedException();
     }

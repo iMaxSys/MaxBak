@@ -16,23 +16,13 @@ using iMaxSys.Max.Web.Mvc;
 namespace Kylin.Api.Admin.ViewModels;
 
 /// <summary>
-/// 登录请求
+/// 获取角色s请求
 /// </summary>
-public class PasswordLoginRequest : Request
+public class RolesApiRequest : PagedApiRequest
 {
-    /// <summary>
-    /// 用户名
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 密码
-    /// </summary>
-    public string Password { get; set; } = string.Empty;
-
-    /// <summary>
-    /// SID
-    /// </summary>
-    public int SID { get; set; }
+	/// <summary>
+	/// 名称
+	/// </summary>
+	public string Name { get; set; } = string.Empty;
 }
 

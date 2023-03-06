@@ -24,11 +24,11 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<Tenant, GetTenantResponse>();
-        CreateMap<LoginResult, LoginResponse>().ForMember(t => t.Expires, opt => opt.MapFrom(s => s.Expires.ToNormalString()));
-        CreateMap<RoleResult, RoleResponse>();
-        CreateMap<Role, RoleResponse>();
-        CreateMap<MemberModel, MemberResponse>().ForMember(t => t.Role, opt => opt.MapFrom(s => s.Roles!.FirstOrDefault()));
-        CreateMap<Department, DepartmentResponse>();
+        CreateMap<Tenant, TenantApiResponse>();
+        CreateMap<LoginResult, LoginApiResponse>().ForMember(t => t.Expires, opt => opt.MapFrom(s => s.Expires.ToNormalString()));
+        CreateMap<RoleResult, RoleApiResponse>();
+        CreateMap<Role, RoleApiResponse>();
+        CreateMap<MemberResult, MemberApiResponse>().ForMember(t => t.Role, opt => opt.MapFrom(s => s.Roles!.FirstOrDefault()));
+        CreateMap<Department, DepartmentApiResponse>();
     }
 }

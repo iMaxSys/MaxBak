@@ -93,6 +93,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kylin.Api.App", "samples\1.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMaxSys.Core", "src\iMaxSys.Core\iMaxSys.Core.csproj", "{4D4BAED7-A4AA-40B2-B6D1-67076B924EA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kylin.Services.Common", "samples\3.Services\Kylin.Services.Common\Kylin.Services.Common.csproj", "{7F4B4F1E-C272-4D8B-8DA5-E0A5CC3DB376}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,6 +225,10 @@ Global
 		{4D4BAED7-A4AA-40B2-B6D1-67076B924EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D4BAED7-A4AA-40B2-B6D1-67076B924EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D4BAED7-A4AA-40B2-B6D1-67076B924EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F4B4F1E-C272-4D8B-8DA5-E0A5CC3DB376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F4B4F1E-C272-4D8B-8DA5-E0A5CC3DB376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F4B4F1E-C272-4D8B-8DA5-E0A5CC3DB376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F4B4F1E-C272-4D8B-8DA5-E0A5CC3DB376}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -265,6 +271,7 @@ Global
 		{0ACDCFB8-DF37-4C68-B5D3-83F92DE12C33} = {E2AB0109-23CC-4DE8-A972-D3C53D295A96}
 		{BAA59FDC-4F03-4F66-BD59-C3B9D6DE3779} = {6FA3A2E2-ADEA-4E0C-8F30-C4732B99EF8F}
 		{4D4BAED7-A4AA-40B2-B6D1-67076B924EA0} = {CA024A85-61CD-4B4D-8FBD-850D98173DBC}
+		{7F4B4F1E-C272-4D8B-8DA5-E0A5CC3DB376} = {D2933E3E-87AF-432C-A8C3-D7A72D3D9538}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9599EFE6-02BB-4FFA-9003-F76130B9C83D}

@@ -49,15 +49,15 @@ public class AuthController : MaxController
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<Result<LoginResponse>> Login(PasswordLoginRequest request)
+    public async Task<Result<LoginApiResponse>> Login(PasswordLoginApiRequest request)
     {
-        PasswordLoginModel model = new();
+        PasswordLoginRequest model = new();
         model.UserName = request.UserName;
         model.Password = request.Password;
         model.IP = this.WorkContext.IP;
         model.SID = request.SID;
         var result = await _authService.LoginAsync(model);
-        var response = _mapper.Map<LoginResponse>(result);
+        var response = _mapper.Map<LoginApiResponse>(result);
         return Success(response);
     }
 
@@ -73,32 +73,32 @@ public class AuthController : MaxController
     }
 
     [HttpPost]
-    public async Task<Result> ChangePassword(ChangePasswordRequest request)
+    public async Task<Result> ChangePassword(ChangePasswordApiRequest request)
     {
         await _authService.ChangePasswordAsync(AccessChain.Member!.Id, request.OldPassword, request.NewPassword);
         return Success();
     }
 
     [HttpPost]
-    public async Task<Result<MemberResponse>> GetMember()
+    public async Task<Result<MemberApiResponse>> GetMember()
     {
         var member = await _authService.GetMemberAsync(AccessChain.AccessSession.MemberId);
-        MemberResponse response = _mapper.Map<MemberResponse>(member);
+        MemberApiResponse response = _mapper.Map<MemberApiResponse>(member);
         return Success(response);
     }
 
     [HttpPost]
-    public async Task<Result<MenuModel?>> GetMenu()
+    public async Task<Result<MenuResult?>> GetMenu()
     {
         var menu = await _authService.GetRoleMenuAsync(AccessChain);
         return Success(menu);
     }
 
     [HttpPost]
-    public async Task<Result<RoleResponse>> GetRole()
+    public async Task<Result<RoleApiResponse>> GetRole()
     {
         long xppId = AccessChain.AccessSession.XppId;
         var role = await _authService.GetRoleAsync(AccessChain);
-        return Success(_mapper.Map<RoleResponse>(role));
+        return Success(_mapper.Map<RoleApiResponse>(role));
     }
 }

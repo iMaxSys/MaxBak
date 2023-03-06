@@ -49,7 +49,7 @@ public class AuthService : IAuthService
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<LoginResult> LoginAsync(CodeLoginModel request)
+    public async Task<LoginResult> LoginAsync(CodeLoginRequest request)
     {
         IAccessChain accessChain = await _memberService.LoginAsync(request);
 
@@ -66,7 +66,7 @@ public class AuthService : IAuthService
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<LoginResult> LoginAsync(PasswordLoginModel request)
+    public async Task<LoginResult> LoginAsync(PasswordLoginRequest request)
     {
         IAccessChain accessChain = await _memberService.LoginAsync(request);
 
@@ -127,7 +127,7 @@ public class AuthService : IAuthService
     /// </summary>
     /// <param name="accessChain"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> GetRoleMenuAsync(IAccessChain accessChain)
+    public async Task<MenuResult?> GetRoleMenuAsync(IAccessChain accessChain)
     {
         return await _menuService.GetRoleMenuAsync(accessChain);
     }

@@ -2,7 +2,7 @@
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: DomainRequest.cs
+//文件: PagedDomainRequest.cs
 //摘要: 领域/服务请求分页请求
 //说明:
 //
@@ -16,7 +16,7 @@ namespace iMaxSys.Max.Common.Domain;
 /// <summary>
 /// 领域/服务请求分页请求
 /// </summary>
-public abstract class DomainPagedRequest : DomainRequest
+public abstract class PagedDomainRequest : DomainRequest
 {
     /// <summary>
     /// 关键字

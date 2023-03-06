@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
-//文件: 获取角色请求.cs
-//摘要: GetRoleRequest
+//文件: LoginResponse.cs
+//摘要: 登录应答
 //说明:
 //
 //当前：1.0
@@ -16,13 +16,22 @@ using iMaxSys.Max.Web.Mvc;
 namespace Kylin.Api.Admin.ViewModels;
 
 /// <summary>
-/// 获取角色请求
+/// 登录应答
 /// </summary>
-public class GetRoleRequest : Request
+public class LoginApiResponse : ApiResponse
 {
     /// <summary>
-    /// Id
+    /// 令牌
     /// </summary>
-    public long Id { get; set; }
-}
+    public string Token { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 过期时间
+    /// </summary>
+    public string Expires { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 信息
+    /// </summary>
+    public MemberApiResponse? Member { get; set; }
+}

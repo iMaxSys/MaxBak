@@ -19,7 +19,7 @@ namespace Kylin.Api.Client.ViewModels;
 /// <summary>
 /// 会员应答
 /// </summary>
-public class MemberResponse : Response
+public class MemberResponse : ApiResponse
 {
     /// <summary>
     /// Id

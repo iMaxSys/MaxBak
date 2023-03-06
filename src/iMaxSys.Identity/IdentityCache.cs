@@ -72,7 +72,7 @@ public class IdentityCache : IIdentityCache
     /// <param name="tenantId"></param>
     /// <param name="memberId"></param>
     /// <returns></returns>
-    public async Task<IMember?> GetMemberAsync(long tenantId, long memberId) => await _cache.GetAsync<MemberModel>(GetMemberKey(tenantId, memberId), global);
+    public async Task<IMember?> GetMemberAsync(long tenantId, long memberId) => await _cache.GetAsync<MemberResult>(GetMemberKey(tenantId, memberId), global);
 
     /// <summary>
     /// SetMemberAsync
@@ -96,7 +96,7 @@ public class IdentityCache : IIdentityCache
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> GetXppMenuAsync(long tenantId, long xppId) => await _cache.GetAsync<MenuModel>(GetXppMenuKey(tenantId, xppId), global);
+    public async Task<MenuResult?> GetXppMenuAsync(long tenantId, long xppId) => await _cache.GetAsync<MenuResult>(GetXppMenuKey(tenantId, xppId), global);
 
     /// <summary>
     /// 设置租户应用菜单
@@ -123,7 +123,7 @@ public class IdentityCache : IIdentityCache
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    public async Task<MenuModel?> GetRoleMenuAsync(long tenantId, long xppId, long roleId) => await _cache.GetAsync<MenuModel>(GetRoleMenuKey(tenantId, xppId, roleId), global);
+    public async Task<MenuResult?> GetRoleMenuAsync(long tenantId, long xppId, long roleId) => await _cache.GetAsync<MenuResult>(GetRoleMenuKey(tenantId, xppId, roleId), global);
 
     /// <summary>
     /// 设置租户角色菜单

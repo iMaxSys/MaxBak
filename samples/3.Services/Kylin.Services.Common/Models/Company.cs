@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2025 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: IMemberService.cs
-//摘要: 用户服务接口
+//文件: CompanyResult.cs
+//摘要: 公司
 //说明: 
 //
 //当前：1.0
@@ -11,15 +11,14 @@
 //日期：2022-10-15
 //----------------------------------------------------------------
 
-using iMaxSys.Max.DependencyInjection;
-using iMaxSys.Core.Services;
-using iMaxSys.Identity;
+using iMaxSys.Max.Common.Enums;
 
-namespace Kylin.Services.Auth;
+namespace Kylin.Services.Common.Models;
 
 /// <summary>
-/// 用户服务接口
+/// 公司
 /// </summary>
-public interface IMemberService : IDependency, IUserService, ICoreExtService
+public class Company : Organization
 {
 }
+

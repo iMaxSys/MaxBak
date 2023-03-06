@@ -19,7 +19,7 @@ namespace Kylin.Api.Admin.ViewModels;
 /// <summary>
 /// 角色应答
 /// </summary>
-public class GetTenantResponse : Response
+public class TenantApiResponse : ApiResponse
 {
     /// <summary>
     /// Id

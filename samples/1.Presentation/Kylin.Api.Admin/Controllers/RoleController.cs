@@ -32,11 +32,11 @@ public class RoleController : MaxController
     private readonly KylinOption _kylinOption;
     private readonly IRoleService _roleService;
 
-    public RoleController(IMapper mapper, IOptions<KylinOption> kylinOption, IRoleService authService)
+    public RoleController(IMapper mapper, IOptions<KylinOption> kylinOption, IRoleService roleService)
     {
         _mapper = mapper;
         _kylinOption = kylinOption.Value;
-        _roleService = authService;
+        _roleService = roleService;
     }
 
     /// <summary>
@@ -45,19 +45,17 @@ public class RoleController : MaxController
     /// <param name="request"></param>
     /// <returns></returns>
     //[HttpPost]
-    //public async Task<Result<GetRoleResponse>> GetList(GetRolesRequest request)
+    //public async Task<Result<RoleApiResponse>> GetList(RolesApiRequest request)
     //{
-    //    RolesRequest rolesRequest = new();
-    //    rolesRequest.Name = request.Name;
-    //    rolesRequest.XppId = WorkContext.Xpp.Id;
-    //    rolesRequest.TenantId = WorkContext.;
-    //    PasswordLoginModel model = new();
-    //    model.UserName = request.UserName;
-    //    model.Password = request.Password;
-    //    model.IP = this.WorkContext.IP;
-    //    model.SID = request.SID;
-    //    var result = await _authService.LoginAsync(model);
-    //    var response = _mapper.Map<LoginResponse>(result);
+    //    RolesRequest rolesRequest = new()
+    //    {
+    //        Key = request.Name,
+    //        XppId = WorkContext.Xpp.Id,
+    //        TenantId = WorkContext.Tenant.Id
+    //    };
+
+    //    var result = await _roleService.GetListAsync(rolesRequest);
+    //    var response = _mapper.Map<LoginApiResponse>(result);
     //    return Success(response);
     //}
 }
