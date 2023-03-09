@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
-//文件: LoginRequest.cs
-//摘要: 登录请求
+//文件: MenuApiResponse.cs
+//摘要: 菜单应答
 //说明:
 //
 //当前：1.0
@@ -12,27 +12,22 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Web.Mvc;
+using iMaxSys.Max.Common.Enums;
 
 namespace Kylin.Api.Admin.ViewModels;
 
 /// <summary>
-/// 登录请求
+/// 菜单应答
 /// </summary>
-public class PasswordLoginApiRequest : ApiRequest
+public class MenuApiResponse : ApiResponse
 {
     /// <summary>
-    /// SID
+    /// MenuIds
     /// </summary>
-    public long SID { get; set; }
+    public string[]? MenuIds { get; set; }
 
     /// <summary>
-    /// 用户名
+    /// operationIds
     /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 密码
-    /// </summary>
-    public string Password { get; set; } = string.Empty;
+    public string[]? operationIds { get; set; }
 }
-

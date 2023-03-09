@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
-//文件: RoleResponse.cs
-//摘要: 角色应答
+//文件: RoleModelApiRequest.cs
+//摘要: 角色请求
 //说明:
 //
 //当前：1.0
@@ -17,17 +17,12 @@ using iMaxSys.Max.Common.Enums;
 namespace Kylin.Api.Admin.ViewModels;
 
 /// <summary>
-/// 角色应答
+/// 更新角色请求
 /// </summary>
-public class RoleApiResponse : ApiResponse
+public abstract class RoleModelApiRequest : ApiRequest
 {
     /// <summary>
-    /// Id
-    /// </summary>
-    public long Id { get; set; } = -1;
-
-    /// <summary>
-    /// 名称
+    /// 名称(必填项)
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
@@ -54,12 +49,12 @@ public class RoleApiResponse : ApiResponse
     /// <summary>
     /// MenuIds
     /// </summary>
-    public string[]? MenuIds { get; set; }
+    public string? MenuIds { get; set; }
 
     /// <summary>
     /// OperationIds
     /// </summary>
-    public string[]? OperationIds { get; set; }
+    public string? OperationIds { get; set; }
 
     /// <summary>
     /// 启用日期

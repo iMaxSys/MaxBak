@@ -220,6 +220,13 @@ public static class UtilityExtensions
     public static string ToDateString(this DateTime dateTime) => dateTime.ToString(FORMAT_DATE);
 
     /// <summary>
+    /// 格式化普通格式日期字符串
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <returns></returns>
+    public static string? ToDateString(this DateTime? dateTime) => dateTime?.ToString(FORMAT_DATE);
+
+    /// <summary>
     /// 格式化中文日期字符串
     /// </summary>
     /// <param name="dateTime"></param>

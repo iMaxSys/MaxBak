@@ -17,6 +17,7 @@ using iMaxSys.Max.Web.Mvc;
 using iMaxSys.Max.Exceptions;
 using iMaxSys.Core.Models;
 using iMaxSys.Core.Services;
+using iMaxSys.Max.Collection;
 using iMaxSys.Identity;
 using iMaxSys.Identity.Models;
 
@@ -26,6 +27,9 @@ using Kylin.Api.Admin.ViewModels;
 
 namespace Kylin.Api.Client.Controllers;
 
+/// <summary>
+/// 角色
+/// </summary>
 public class RoleController : MaxController
 {
     private readonly IMapper _mapper;
@@ -44,18 +48,74 @@ public class RoleController : MaxController
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    //[HttpPost]
-    //public async Task<Result<RoleApiResponse>> GetList(RolesApiRequest request)
-    //{
-    //    RolesRequest rolesRequest = new()
-    //    {
-    //        Key = request.Name,
-    //        XppId = WorkContext.Xpp.Id,
-    //        TenantId = WorkContext.Tenant.Id
-    //    };
+    [HttpPost]
+    public async Task<Result<PagedList<RoleApiResponse>>> GetList([FromBody] RolesApiRequest request)
+    {
+        RolesRequest rolesRequest = new()
+        {
+            XppId = WorkContext.Xpp.Id,
+            TenantId = WorkContext.Tenant.Id,
+            Key = request.Name,
+            Index = request.Index,
+            Size = request.Size,
+        };
 
-    //    var result = await _roleService.GetListAsync(rolesRequest);
-    //    var response = _mapper.Map<LoginApiResponse>(result);
-    //    return Success(response);
-    //}
+        var result = await _roleService.GetListAsync(rolesRequest);
+        var response = _mapper.Map<PagedList<RoleApiResponse>>(result);
+        return Success(response);
+    }
+
+    /// <summary>
+    /// 获取角色
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<Result<RoleApiResponse>> Get([FromBody] RoleApiRequest request)
+    {
+        RoleRequest roleRequest = new()
+        {
+            XppId = WorkContext.Xpp.Id,
+            TenantId = WorkContext.Tenant.Id,
+            Id = request.Id
+        };
+
+        var result = await _roleService.GetAsync(roleRequest);
+        var response = _mapper.Map<RoleApiResponse>(result);
+        return Success(response);
+    }
+
+    /// <summary>
+    /// 新增角色
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<Result<RoleApiResponse>> Add([FromBody] AddRoleApiRequest request)
+    {
+        var model = _mapper.Map<AddRoleRequest>(request);
+        model.XppId = WorkContext.Xpp.Id;
+        model.TenantId = WorkContext.Tenant.Id;
+
+        var result = await _roleService.AddAsync(model);
+        var response = _mapper.Map<RoleApiResponse>(result);
+        return Success(response);
+    }
+
+    /// <summary>
+    /// 修改角色
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<Result<RoleApiResponse>> Update([FromBody] UpdateRoleApiRequest request)
+    {
+        var model = _mapper.Map<UpdateRoleRequest>(request);
+        model.XppId = WorkContext.Xpp.Id;
+        model.TenantId = WorkContext.Tenant.Id;
+
+        var result = await _roleService.UpdateAsync(model);
+        var response = _mapper.Map<RoleApiResponse>(result);
+        return Success(response);
+    }
 }

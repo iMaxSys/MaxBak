@@ -29,6 +29,14 @@ namespace iMaxSys.Identity;
 public interface IMenuService : ITreeService<DbMenu, MenuResult>, IDependency
 {
     /// <summary>
+    /// 获取应用角色菜单Ids
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    Task<MenuIdsResult?> GetXppMenuIdsAsync(long tenantId, long xppId);
+
+    /// <summary>
     /// 获取应用色菜单
     /// </summary>
     /// <param name="tenantId"></param>

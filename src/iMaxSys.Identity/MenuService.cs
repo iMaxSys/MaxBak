@@ -46,6 +46,18 @@ public class MenuService : TreeService<DbMenu, MenuResult>, IMenuService
     }
 
     /// <summary>
+    /// 获取应用角色菜单Ids
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    public async Task<MenuIdsResult?> GetXppMenuIdsAsync(long tenantId, long xppId)
+    {
+        var menu = await GetXppMenuAsync(tenantId, xppId);
+        menu.
+    }
+
+    /// <summary>
     /// 获取应用色菜单
     /// </summary>
     /// <param name="tenantId"></param>

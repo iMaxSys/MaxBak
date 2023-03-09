@@ -23,6 +23,7 @@ using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 using iMaxSys.Core.Data.Entities;
+using System.Collections.Generic;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -110,7 +111,7 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     /// <returns></returns>
     public async Task<MenuResult?> RefreshAsync(long tenantId, long xppId)
     {
-        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId, null, x => x.Include(y => y.Menu));
+        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId, null, x => x.Include(y => y.Menu).ThenInclude(x => x.Operations));
 
         if (list is null)
         {
@@ -119,6 +120,10 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
 
         var menu = MakeMenu(list.Select(x => x.Menu).ToList());
         await Cache.SetAsync(GetXppMenuKey(tenantId, xppId), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+
+        var ids = GetIdsAsync(list.Select(x=>x.Menu));
+        await Cache.SetAsync(GetXppMenuIdsKey(tenantId, xppId), ids, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+
         return menu;
     }
 
@@ -253,12 +258,44 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     }
 
     /// <summary>
+    /// GetIdsAsync
+    /// </summary>
+    /// <param name="menus"></param>
+    /// <returns></returns>
+    private static MenuIdsResult GetIdsAsync(IEnumerable<DbMenu> menus)
+    {
+        List<long> ids = new();
+        foreach (var menu in menus)
+        {
+            var os = menu.Operations?.Select(x => x.Id);
+            if (os is not null && os.Any())
+            {
+                ids.AddRange(os.ToArray());
+            }
+        }
+
+        MenuIdsResult menuIdsResult = new MenuIdsResult();
+        menuIdsResult.MenuIds = menus.Select(x => x.Id).ToArray();
+        menuIdsResult.OperationIds = ids.ToArray();
+
+        return menuIdsResult;
+    }
+
+    /// <summary>
     /// 获取应用菜单key
     /// </summary>
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    private string GetXppMenuKey(long tenantId, long xppId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}";
+    private string GetXppMenuKey(long tenantId, long xppId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}m";
+
+    /// <summary>
+    /// 获取应用菜单key
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    private string GetXppMenuIdsKey(long tenantId, long xppId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}i";
 
     /// <summary>
     /// 获取角色菜单key

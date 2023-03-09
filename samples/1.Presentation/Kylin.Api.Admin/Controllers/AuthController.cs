@@ -26,6 +26,9 @@ using Kylin.Api.Admin.ViewModels;
 
 namespace Kylin.Api.Client.Controllers;
 
+/// <summary>
+/// 授权
+/// </summary>
 public class AuthController : MaxController
 {
     private readonly IMapper _mapper;
@@ -72,6 +75,11 @@ public class AuthController : MaxController
         return Success();
     }
 
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<Result> ChangePassword(ChangePasswordApiRequest request)
     {
@@ -79,6 +87,10 @@ public class AuthController : MaxController
         return Success();
     }
 
+    /// <summary>
+    /// 获取成员
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<Result<MemberApiResponse>> GetMember()
     {
@@ -87,6 +99,10 @@ public class AuthController : MaxController
         return Success(response);
     }
 
+    /// <summary>
+    /// 获取菜单
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<Result<MenuResult?>> GetMenu()
     {
@@ -94,6 +110,10 @@ public class AuthController : MaxController
         return Success(menu);
     }
 
+    /// <summary>
+    /// 获取角色
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<Result<RoleApiResponse>> GetRole()
     {

@@ -44,4 +44,7 @@ public static class PagedListExtension
     /// <param name="indexFrom">The start index value.</param>
     /// <returns>An instance of the inherited from <see cref="IPagedList{T}"/> interface.</returns>
     public static IPagedList<T> ToPagedList<T>(this IEnumerable<T> source, int index, int size) => new PagedList<T>(source, index, size);
+
+
+    public static PagedList<K> ToPagedList<T, K>(this IPagedList<T> source, IList<K> result) => new PagedList<K>(result, source.Index, source.Size, source.Total);
 }

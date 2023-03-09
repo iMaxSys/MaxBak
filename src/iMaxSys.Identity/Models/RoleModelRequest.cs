@@ -1,31 +1,26 @@
-﻿//----------------------------------------------------------------
-//Copyright (C) 2016-2022 Co.,Ltd.
+﻿//Copyright (C) 2016-2022 iMaxSys Co.,Ltd.
 //All rights reserved.
 //
-//文件: RoleResponse.cs
-//摘要: 角色应答
+//文件: RoleModel.cs
+//摘要: 角色模型
 //说明:
 //
 //当前：1.0
 //作者：陶剑扬
-//日期：2022-04-26
+//日期：2019-11-16
 //----------------------------------------------------------------
 
-using iMaxSys.Max.Web.Mvc;
+using iMaxSys.Max.Common.Domain;
 using iMaxSys.Max.Common.Enums;
+using iMaxSys.Max.Identity.Domain;
 
-namespace Kylin.Api.Admin.ViewModels;
+namespace iMaxSys.Identity.Models;
 
 /// <summary>
-/// 角色应答
+/// 角色模型请求
 /// </summary>
-public class RoleApiResponse : ApiResponse
+public class RoleModelRequest : DomainRequest
 {
-    /// <summary>
-    /// Id
-    /// </summary>
-    public long Id { get; set; } = -1;
-
     /// <summary>
     /// 名称
     /// </summary>
@@ -54,12 +49,12 @@ public class RoleApiResponse : ApiResponse
     /// <summary>
     /// MenuIds
     /// </summary>
-    public string[]? MenuIds { get; set; }
+    public string? MenuIds { get; set; }
 
     /// <summary>
     /// OperationIds
     /// </summary>
-    public string[]? OperationIds { get; set; }
+    public string? OperationIds { get; set; }
 
     /// <summary>
     /// 启用日期
@@ -76,4 +71,3 @@ public class RoleApiResponse : ApiResponse
     /// </summary>
     public Status Status { get; set; }
 }
-

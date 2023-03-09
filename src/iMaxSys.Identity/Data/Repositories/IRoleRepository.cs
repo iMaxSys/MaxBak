@@ -13,9 +13,9 @@
 
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Data.Repositories;
+using iMaxSys.Identity.Models;
 using iMaxSys.Identity.Data.Entities;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
-using iMaxSys.Identity.Models;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -50,6 +50,24 @@ public interface IRoleRepository : IRepository<DbRole>
     /// <param name="roleId"></param>
     /// <returns></returns>
     Task RemoveAsync(long tenantId, long xppId, long roleId);
+
+    /// <summary>
+    /// 更新角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="dbRole"></param>
+    /// <returns></returns>
+    Task<RoleResult> UpdateAsync(long tenantId, long xppId, DbRole dbRole);
+
+    /// <summary>
+    /// 新增角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="dbRole"></param>
+    /// <returns></returns>
+    Task<RoleResult> AddAsync(long tenantId, long xppId, DbRole dbRole);
 
     /// <summary>
     /// RefreshAsync

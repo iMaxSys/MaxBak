@@ -21,6 +21,7 @@ using iMaxSys.Identity;
 using Kylin.Data.EFCore;
 using Kylin.Framework.Options;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureServices(builder.Services, builder.Configuration);
@@ -59,6 +60,10 @@ static void ConfigureServices(IServiceCollection services, ConfigurationManager 
                   }
              }, Array.Empty<string>() }
          });
+
+        //注释
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        option.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), true);
     });
 
     services.AddKylinDataAccess(configuration);

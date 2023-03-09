@@ -41,7 +41,7 @@ public abstract class PagedDomainRequest : DomainRequest
     /// <summary>
     /// 页大小
     /// </summary>
-    public int Size { get; set; } = 100;
+    public int Size { get; set; } = 50;
 
     /// <summary>
     /// 排序字段

@@ -21,6 +21,7 @@ using iMaxSys.Identity.Common;
 using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
+using Microsoft.Extensions.Logging;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -87,6 +88,40 @@ public class RoleRepository : IdentityRepository<DbRole>, IRoleRepository
         {
             return dbRole;
         }
+    }
+
+    #endregion
+
+    #region UpdateAsync
+
+    /// <summary>
+    /// 更新角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="dbRole"></param>
+    /// <returns></returns>
+    public async Task<RoleResult> UpdateAsync(long tenantId, long xppId, DbRole dbRole)
+    {
+        var role = Update(dbRole);
+        return await RefreshAsync(tenantId, xppId, dbRole);
+    }
+
+    #endregion
+
+    #region endregion
+
+    /// <summary>
+    /// 新增角色
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="dbRole"></param>
+    /// <returns></returns>
+    public async Task<RoleResult> AddAsync(long tenantId, long xppId, DbRole dbRole)
+    {
+        var role = await AddAsync(dbRole);
+        return await RefreshAsync(tenantId, xppId, dbRole);
     }
 
     #endregion

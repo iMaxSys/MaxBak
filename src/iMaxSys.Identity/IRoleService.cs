@@ -56,16 +56,14 @@ public interface IRoleService : IDependency
     /// <param name="xppId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<RoleResult> AddAsync(long tenantId, long xppId, RoleResult model);
+    Task<RoleResult> AddAsync(AddRoleRequest request);
 
     /// <summary>
     /// update
     /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="xppId"></param>
-    /// <param name="model"></param>
+    /// <param name="request"></param>
     /// <returns></returns>
-    Task<RoleResult> UpdateAsync(long tenantId, long xppId, RoleResult model);
+    Task<RoleResult> UpdateAsync(UpdateRoleRequest request);
 
     /// <summary>
     /// remove
@@ -90,4 +88,11 @@ public interface IRoleService : IDependency
     /// <param name="request"></param>
     /// <returns></returns>
     Task<PagedList<RoleResult>> GetListAsync(RolesRequest request);
+
+    /// <summary>
+    /// 获取role
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<RoleResult> GetAsync(RoleRequest request);
 }

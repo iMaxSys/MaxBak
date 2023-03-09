@@ -2,8 +2,8 @@
 //Copyright (C) 2016-2022 Co.,Ltd.
 //All rights reserved.
 //
-//文件: LoginRequest.cs
-//摘要: 登录请求
+//文件: UpdateRoleApiRequest.cs
+//摘要: 更新角色请求
 //说明:
 //
 //当前：1.0
@@ -12,27 +12,17 @@
 //----------------------------------------------------------------
 
 using iMaxSys.Max.Web.Mvc;
+using iMaxSys.Max.Common.Enums;
 
 namespace Kylin.Api.Admin.ViewModels;
 
 /// <summary>
-/// 登录请求
+/// 更新角色请求
 /// </summary>
-public class PasswordLoginApiRequest : ApiRequest
+public class UpdateRoleApiRequest : RoleModelApiRequest
 {
     /// <summary>
-    /// SID
+    /// Id
     /// </summary>
-    public long SID { get; set; }
-
-    /// <summary>
-    /// 用户名
-    /// </summary>
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 密码
-    /// </summary>
-    public string Password { get; set; } = string.Empty;
+    public long Id { get; set; } = -1;
 }
-

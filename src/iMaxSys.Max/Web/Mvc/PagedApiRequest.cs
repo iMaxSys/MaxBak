@@ -16,9 +16,9 @@ namespace iMaxSys.Max.Web.Mvc;
 /// <summary>
 /// 分页请求
 /// </summary>
-public abstract class PagedApiRequest : ApiRequest
+public class PagedApiRequest : ApiRequest
 {
-    const int SIZE = 25;
+    const int SIZE = 100;
 
     int _index;
     int _size = SIZE;
@@ -39,7 +39,7 @@ public abstract class PagedApiRequest : ApiRequest
     }
 
     /// <summary>
-    /// 大小(1-25)
+    /// 页大小
     /// </summary>
     public int Size
     {
