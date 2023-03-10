@@ -22,6 +22,7 @@ global using System.Threading.Tasks;
 global using System.Linq.Expressions;
 global using System.Collections.Concurrent;
 global using System.Text.Json.Serialization;
+global using System.ComponentModel.DataAnnotations;
 
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Http;

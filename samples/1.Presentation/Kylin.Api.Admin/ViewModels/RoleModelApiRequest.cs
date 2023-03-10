@@ -24,6 +24,7 @@ public abstract class RoleModelApiRequest : ApiRequest
     /// <summary>
     /// 名称(必填项)
     /// </summary>
+    [Required(ErrorMessage = "角色名称为必填项")]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
@@ -69,6 +70,6 @@ public abstract class RoleModelApiRequest : ApiRequest
     /// <summary>
     /// 状态
     /// </summary>
-    public Status Status { get; set; }
+    public Status Status { get; set; } = Status.Enable;
 }
 

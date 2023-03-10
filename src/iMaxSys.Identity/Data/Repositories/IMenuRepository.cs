@@ -42,6 +42,14 @@ public interface ITenantMenuRepository : IIdentityRepository<TenantMenu>
     Task<MenuResult?> GetAsync(long tenantId, long xppId, IRole role);
 
     /// <summary>
+    /// getIds
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    Task<MenuIdsResult?> GetIdsAsync(long tenantId, long xppId);
+
+    /// <summary>
     /// refresh
     /// </summary>
     /// <param name="tenantId"></param>

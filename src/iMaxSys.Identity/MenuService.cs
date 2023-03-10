@@ -53,8 +53,7 @@ public class MenuService : TreeService<DbMenu, MenuResult>, IMenuService
     /// <returns></returns>
     public async Task<MenuIdsResult?> GetXppMenuIdsAsync(long tenantId, long xppId)
     {
-        var menu = await GetXppMenuAsync(tenantId, xppId);
-        menu.
+        return await _unitOfWork.GetCustomRepository<ITenantMenuRepository>().GetIdsAsync(tenantId, xppId);
     }
 
     /// <summary>

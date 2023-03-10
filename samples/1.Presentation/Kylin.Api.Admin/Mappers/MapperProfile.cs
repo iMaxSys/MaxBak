@@ -39,5 +39,6 @@ public class MapperProfile : Profile
 
         CreateMap<UpdateRoleApiRequest, UpdateRoleRequest>();
         CreateMap<AddRoleApiRequest, AddRoleRequest>();
+        CreateMap<MenuIdsResult, MenuIdsApiResponse>();
     }
 }

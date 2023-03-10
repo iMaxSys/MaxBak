@@ -19,7 +19,7 @@ namespace Kylin.Api.Admin.ViewModels;
 /// <summary>
 /// 菜单应答
 /// </summary>
-public class MenuApiResponse : ApiResponse
+public class MenuIdsApiResponse : ApiResponse
 {
     /// <summary>
     /// MenuIds

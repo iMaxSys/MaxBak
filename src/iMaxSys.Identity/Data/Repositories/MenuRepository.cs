@@ -24,6 +24,8 @@ using iMaxSys.Identity.Data.Entities;
 using DbMenu = iMaxSys.Identity.Data.Entities.Menu;
 using iMaxSys.Core.Data.Entities;
 using System.Collections.Generic;
+using System;
+using System.Collections;
 
 namespace iMaxSys.Identity.Data.Repositories;
 
@@ -32,6 +34,11 @@ namespace iMaxSys.Identity.Data.Repositories;
 /// </summary>
 public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuRepository
 {
+    protected const string TAG_IDS = "i";
+    protected const string TAG_ROUTER = "r";
+    protected const string TAG_XPPMENU = "m";
+    protected const string TAG_ROLEMENU = "m";
+
     /// <summary>
     /// 构造
     /// </summary>
@@ -74,6 +81,20 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
         }
 
         return menu;
+    }
+
+    public async Task<MenuIdsResult?> GetIdsAsync(long tenantId, long xppId)
+    {
+        //取缓存
+        MenuIdsResult? ids = await Cache.GetAsync<MenuIdsResult>(GetXppMenuIdsKey(tenantId, xppId), _global);
+
+        //为空则刷新
+        if (ids == null)
+        {
+            ids = await RefreshIdsAsync(tenantId, xppId);
+        }
+
+        return ids;
     }
 
     #endregion
@@ -121,10 +142,55 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
         var menu = MakeMenu(list.Select(x => x.Menu).ToList());
         await Cache.SetAsync(GetXppMenuKey(tenantId, xppId), menu, new TimeSpan(0, Option.Identity.Expires, 0), _global);
 
-        var ids = GetIdsAsync(list.Select(x=>x.Menu));
-        await Cache.SetAsync(GetXppMenuIdsKey(tenantId, xppId), ids, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+        await RefreshIdsAsync(tenantId, xppId, list.Select(x => x.Menu));
 
         return menu;
+    }
+
+    /// <summary>
+    /// RefreshIdsAsync
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <returns></returns>
+    public async Task<MenuIdsResult?> RefreshIdsAsync(long tenantId, long xppId)
+    {
+        var list = await AllAsync(x => x.TenantId == tenantId && x.XppId == xppId, null, x => x.Include(y => y.Menu).ThenInclude(x => x.Operations));
+
+        if (list is null)
+        {
+            return null;
+        }
+
+        return await RefreshIdsAsync(tenantId, xppId, list.Select(x => x.Menu));
+    }
+
+    /// <summary>
+    /// RefreshIdsAsync
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
+    /// <param name="menus"></param>
+    /// <returns></returns>
+    private async Task<MenuIdsResult?> RefreshIdsAsync(long tenantId, long xppId, IEnumerable<DbMenu> menus)
+    {
+        List<long> ids = new();
+        foreach (var menu in menus)
+        {
+            var os = menu.Operations?.Select(x => x.Id);
+            if (os is not null && os.Any())
+            {
+                ids.AddRange(os.ToArray());
+            }
+        }
+
+        MenuIdsResult menuIdsResult = new MenuIdsResult();
+        menuIdsResult.MenuIds = menus.Select(x => x.Id).ToArray();
+        menuIdsResult.OperationIds = ids.ToArray();
+
+        await Cache.SetAsync(GetXppMenuIdsKey(tenantId, xppId), menuIdsResult, new TimeSpan(0, Option.Identity.Expires, 0), _global);
+
+        return menuIdsResult;
     }
 
     /// <summary>
@@ -258,28 +324,12 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     }
 
     /// <summary>
-    /// GetIdsAsync
+    /// 获取应用菜单key
     /// </summary>
-    /// <param name="menus"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="xppId"></param>
     /// <returns></returns>
-    private static MenuIdsResult GetIdsAsync(IEnumerable<DbMenu> menus)
-    {
-        List<long> ids = new();
-        foreach (var menu in menus)
-        {
-            var os = menu.Operations?.Select(x => x.Id);
-            if (os is not null && os.Any())
-            {
-                ids.AddRange(os.ToArray());
-            }
-        }
-
-        MenuIdsResult menuIdsResult = new MenuIdsResult();
-        menuIdsResult.MenuIds = menus.Select(x => x.Id).ToArray();
-        menuIdsResult.OperationIds = ids.ToArray();
-
-        return menuIdsResult;
-    }
+    private string GetXppMenuKey(long tenantId, long xppId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{TAG_XPPMENU}";
 
     /// <summary>
     /// 获取应用菜单key
@@ -287,15 +337,7 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     /// <param name="tenantId"></param>
     /// <param name="xppId"></param>
     /// <returns></returns>
-    private string GetXppMenuKey(long tenantId, long xppId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}m";
-
-    /// <summary>
-    /// 获取应用菜单key
-    /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="xppId"></param>
-    /// <returns></returns>
-    private string GetXppMenuIdsKey(long tenantId, long xppId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}i";
+    private string GetXppMenuIdsKey(long tenantId, long xppId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{TAG_IDS}";
 
     /// <summary>
     /// 获取角色菜单key
@@ -304,7 +346,7 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    private string GetRoleMenuKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}{Cache.Separator}m";
+    private string GetRoleMenuKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}{Cache.Separator}{TAG_ROLEMENU}";
 
     /// <summary>
     /// 获取角色路由key
@@ -313,5 +355,5 @@ public class TenantMenuRepository : IdentityRepository<TenantMenu>, ITenantMenuR
     /// <param name="xppId"></param>
     /// <param name="roleId"></param>
     /// <returns></returns>
-    private string GetRoleRoutersKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}{Cache.Separator}r";
+    private string GetRoleRoutersKey(long tenantId, long xppId, long roleId) => $"{_tagMenu}{xppId}{Cache.Separator}{tenantId}{Cache.Separator}{roleId}{Cache.Separator}{TAG_ROUTER}";
 }

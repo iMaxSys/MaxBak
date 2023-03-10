@@ -36,6 +36,7 @@
     <None Remove="Collection\Trees\" />
     <None Remove="Linq\" />
     <None Remove="Domain\" />
+    <None Remove="Web\Mvc\Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Net\Http\HttpClient.cs" />
@@ -59,5 +60,6 @@
     <Folder Include="Collection\Trees\" />
     <Folder Include="Linq\" />
     <Folder Include="Domain\" />
+    <Folder Include="Web\Mvc\Filters\" />
   </ItemGroup>
 </Project>

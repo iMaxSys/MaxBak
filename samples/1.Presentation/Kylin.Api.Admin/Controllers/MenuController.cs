@@ -44,24 +44,15 @@ public class MenuController : MaxController
     }
 
     /// <summary>
-    /// 获取租户菜单
+    /// 获取租户菜单ids
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<Result<MenuApiResponse>> GetTenantMenu()
+    public async Task<Result<MenuIdsApiResponse>> Get()
     {
-        RolesRequest rolesRequest = new()
-        {
-            XppId = WorkContext.Xpp.Id,
-            TenantId = WorkContext.Tenant.Id,
-            Key = request.Name,
-            Index = request.Index,
-            Size = request.Size,
-        };
-
-        var result = await _menuService.GetListAsync(rolesRequest);
-        var response = _mapper.Map<PagedList<RoleApiResponse>>(result);
+        var result = await _menuService.GetXppMenuIdsAsync(WorkContext.Tenant.Id, WorkContext.Xpp.Id);
+        var response = _mapper.Map<MenuIdsApiResponse>(result);
         return Success(response);
     }
 }
