@@ -24,6 +24,8 @@ using iMaxSys.Identity.Data.EFCore;
 using iMaxSys.Identity.Data.Entities;
 using iMaxSys.Identity.Data.Repositories;
 using DbRole = iMaxSys.Identity.Data.Entities.Role;
+using iMaxSys.Data.Repositories;
+using StackExchange.Redis;
 
 namespace iMaxSys.Identity;
 
@@ -108,10 +110,12 @@ public class RoleService : IRoleService
     {
         //重名判断
         await CheckNameAsync(request.TenantId, request.XppId, request);
-        var dbRole = SetRole(request.TenantId, request.XppId, request);
-        await _unitOfWork.GetCustomRepository<IRoleRepository>().AddAsync(dbRole);
+        var role = SetRole(request.TenantId, request.XppId, request);
+        var reporitory = _unitOfWork.GetCustomRepository<IRoleRepository>();
+        await reporitory.AddAsync(role);
         await _unitOfWork.SaveChangesAsync();
-        return _mapper.Map<RoleResult>(dbRole);
+
+        return await reporitory.RefreshAsync(request.TenantId, request.XppId, role);
     }
 
     #endregion
@@ -133,8 +137,6 @@ public class RoleService : IRoleService
 
         //重名判断
         await CheckNameAsync(request.TenantId, request.XppId, request, request.Id);
-
-        //更新
         role = SetRole(request.TenantId, request.XppId, request, role);
         var reporitory = _unitOfWork.GetCustomRepository<IRoleRepository>();
         reporitory.Update(role);

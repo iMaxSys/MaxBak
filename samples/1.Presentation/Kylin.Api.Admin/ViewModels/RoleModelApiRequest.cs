@@ -30,21 +30,25 @@ public abstract class RoleModelApiRequest : ApiRequest
     /// <summary>
     /// 别名
     /// </summary>
+    [StringLength(50, ErrorMessage = "别名不能超过{1}个字符")]
     public string Alias { get; set; } = String.Empty;
 
     /// <summary>
     /// 代码
     /// </summary>
+    [StringLength(50, ErrorMessage = "代码不能超过{1}个字符")]
     public string Code { get; set; } = String.Empty;
 
     /// <summary>
     /// 快速代码
     /// </summary>
+    [StringLength(50, ErrorMessage = "快速代码不能超过{1}个字符")]
     public string QuickCode { get; set; } = String.Empty;
 
     /// <summary>
     /// 描述
     /// </summary>
+    [StringLength(50, ErrorMessage = "描述不能超过{1}个字符")]
     public string? Descripton { get; set; }
 
     /// <summary>

@@ -211,29 +211,27 @@ public class MemberRepository : IdentityRepository<DbMember>, IMemberRepository
         {
             return null;
         }
-        else
+
+        //按mid获取member
+        IMember? member = null;
+        if (access.MemberId > 0)
         {
-            //按mid获取member
-            IMember? member = null;
-            if (access.MemberId > 0)
-            {
-                member = await Cache.GetAsync<Max.Identity.Domain.Member>($"{_tagMember}{access.MemberId}", true);
-                var type = _userService.GetType(member?.Type ?? 0);
-            }
-
-            IUser? user = null;
-            if (member is not null && member.UserId > 0)
-            {
-                user = await GetUserAsync(member.UserId, member.Type) as IUser;
-            }
-
-            return new AccessChain
-            {
-                AccessSession = access,
-                Member = member,
-                User = user
-            };
+            member = await Cache.GetAsync<Max.Identity.Domain.Member>($"{_tagMember}{access.MemberId}", true);
+            //var type = _userService.GetType(member?.Type ?? 0);
         }
+
+        IUser? user = null;
+        if (member is not null && member.UserId > 0)
+        {
+            user = await GetUserAsync(member.UserId, member.Type) as IUser;
+        }
+
+        return new AccessChain
+        {
+            AccessSession = access,
+            Member = member ?? new Member(),
+            User = user
+        };
     }
 
     /// <summary>
