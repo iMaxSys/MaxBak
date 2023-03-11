@@ -63,7 +63,7 @@ public class AccessSession : IAccessSession
     /// <summary>
     /// Token
     /// </summary>
-    public string? Token { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
 
     /// <summary>
     /// Token过期时间

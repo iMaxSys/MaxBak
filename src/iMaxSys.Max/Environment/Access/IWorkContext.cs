@@ -56,7 +56,7 @@ namespace iMaxSys.Max.Environment.Access
         /// </summary>
         /// <typeparam name="T">The type of service object to get.</typeparam>
         /// <returns></returns>
-        T GetService<T>();
+        T? GetService<T>();
 
         /// <summary>
         /// Get service of type

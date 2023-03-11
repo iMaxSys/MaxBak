@@ -10,7 +10,8 @@
 //作者：陶剑扬
 //日期：2017-11-15
 //----------------------------------------------------------------
- 
+
+using iMaxSys.Max.Common;
 using iMaxSys.Max.Identity.Domain;
 
 namespace iMaxSys.Max.Environment.Access;
@@ -24,12 +25,12 @@ public class WorkContext : IWorkContext
     private readonly IApplication _application;
     private readonly ISession _session;
 
-    private IAccessChain? _accessChain;
+    private IAccessChain _accessChain;
 
     /// <summary>
     /// 访问链
     /// </summary>
-    public IAccessChain? AccessChain
+    public IAccessChain AccessChain
     {
         get
         {
@@ -64,7 +65,7 @@ public class WorkContext : IWorkContext
     /// <summary>
     /// IP
     /// </summary>
-    public string? IP { get; set; }
+    public string IP { get; set; }
 
     /// <summary>
     /// 构造
@@ -77,7 +78,8 @@ public class WorkContext : IWorkContext
         _httpContextAccessor = httpContextAccessor;
         _application = application;
         _session = session;
-        IP = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+        _accessChain = new AccessChain() ;
+        IP = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? Const.DEFAULT_IP;
     }
 
     /// <summary>

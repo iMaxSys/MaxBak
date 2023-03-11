@@ -36,6 +36,12 @@ public class RoleController : MaxController
     private readonly KylinOption _kylinOption;
     private readonly IRoleService _roleService;
 
+    /// <summary>
+    /// 角色
+    /// </summary>
+    /// <param name="mapper"></param>
+    /// <param name="kylinOption"></param>
+    /// <param name="roleService"></param>
     public RoleController(IMapper mapper, IOptions<KylinOption> kylinOption, IRoleService roleService)
     {
         _mapper = mapper;

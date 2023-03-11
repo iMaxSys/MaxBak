@@ -13,16 +13,22 @@
 
 using iMaxSys.Max;
 using iMaxSys.Max.Extentions;
+using iMaxSys.Max.Collection;
 using iMaxSys.Max.Identity.Domain;
 using iMaxSys.Identity.Models;
 
 using Kylin.Api.Admin.ViewModels;
-using iMaxSys.Max.Collection;
 
 namespace Kylin.Api.Admin.Mappers;
 
+/// <summary>
+/// MapperProfile
+/// </summary>
 public class MapperProfile : Profile
 {
+    /// <summary>
+    /// MapperProfile
+    /// </summary>
     public MapperProfile()
     {
         CreateMap<Tenant, TenantApiResponse>();

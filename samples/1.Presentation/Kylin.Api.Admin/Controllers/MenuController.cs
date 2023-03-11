@@ -36,6 +36,12 @@ public class MenuController : MaxController
     private readonly KylinOption _kylinOption;
     private readonly IMenuService _menuService;
 
+    /// <summary>
+    /// 菜单
+    /// </summary>
+    /// <param name="mapper"></param>
+    /// <param name="kylinOption"></param>
+    /// <param name="menuService"></param>
     public MenuController(IMapper mapper, IOptions<KylinOption> kylinOption, IMenuService menuService)
     {
         _mapper = mapper;
@@ -46,7 +52,6 @@ public class MenuController : MaxController
     /// <summary>
     /// 获取租户菜单ids
     /// </summary>
-    /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
     public async Task<Result<MenuIdsApiResponse>> Get()

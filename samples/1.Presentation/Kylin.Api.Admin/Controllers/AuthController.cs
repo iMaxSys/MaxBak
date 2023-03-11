@@ -37,6 +37,14 @@ public class AuthController : MaxController
     private readonly IAuthService _authService;
     private readonly IMenuService _menuService;
 
+    /// <summary>
+    /// 授权
+    /// </summary>
+    /// <param name="mapper"></param>
+    /// <param name="option"></param>
+    /// <param name="kylinOption"></param>
+    /// <param name="authService"></param>
+    /// <param name="menuService"></param>
     public AuthController(IMapper mapper, IOptions<MaxOption> option, IOptions<KylinOption> kylinOption, IAuthService authService, IMenuService menuService)
     {
         _mapper = mapper;
